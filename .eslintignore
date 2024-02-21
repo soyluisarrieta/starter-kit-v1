@@ -1,4 +1,5 @@
 node_modules
 src/vite-env.d.ts
 .eslintrc.cjs
+tailwind.config.js
 vite.config.ts
