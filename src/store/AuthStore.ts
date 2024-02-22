@@ -1,17 +1,10 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
-interface User {
-  id: string
-  name: string
-  lastname: string
-  email: string
-}
-
 interface AuthStore {
-  user?: User
+  user?: UserAuth
   isAuth: boolean
-  setUser: (user: User) => void
+  setUser: (user: UserAuth) => void
   logout: () => void
 }
 
