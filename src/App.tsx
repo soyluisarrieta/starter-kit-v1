@@ -1,12 +1,21 @@
-import { Button } from '@/components/ui/button'
-import { Toaster } from '@/components/ui/sonner'
+import { Route, Switch } from 'wouter'
+import MasterLayout from '@/components/layouts/MasterLayout'
+import PublicLayout from '@/components/layouts/PublicLayout'
+import AdminLayout from '@/components/layouts/AdminLayout'
+import LoginPage from '@/components/pages/LoginPage'
+import DashboardPage from '@/components/pages/DashboardPage'
 
 export default function App (): JSX.Element {
   return (
-    <div className="min-h-screen flex flex-col justify-center items-center">
-      Hello world
-      <Button>Shadcn</Button>
-      <Toaster />
-    </div>
+    <MasterLayout>
+      <Switch>
+        <PublicLayout>
+          <Route path="/" component={LoginPage} />
+        </PublicLayout>
+        <AdminLayout>
+          <Route path="/" component={DashboardPage} />
+        </AdminLayout>
+      </Switch>
+    </MasterLayout>
   )
 }
