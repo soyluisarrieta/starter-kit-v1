@@ -3,7 +3,7 @@ import { persist } from 'zustand/middleware'
 
 interface AuthStore {
   isAuth: boolean
-  profile?: null | UserAuth
+  profile: null | UserAuth
   setProfile: (user: UserAuth) => void
   logout: () => void
 }
