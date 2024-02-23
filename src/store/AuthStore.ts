@@ -2,17 +2,17 @@ import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
 interface AuthStore {
-  user?: null | UserAuth
   isAuth: boolean
-  setUser: (user: UserAuth) => void
+  profile?: null | UserAuth
+  setProfile: (user: UserAuth) => void
   logout: () => void
 }
 
 export const useAuthStore = create<AuthStore>()(
   persist((set) => ({
-    user: null,
+    profile: null,
     isAuth: false,
-    setUser: (user) => { set(() => ({ user, isAuth: true })) },
+    setProfile: (user) => { set(() => ({ user, isAuth: true })) },
     logout: () => { set(() => ({ user: null, isAuth: false })) }
   }), { name: 'user' })
 )
