@@ -17,9 +17,14 @@ export const useAuthStore = create<AuthStore>()(
   }), { name: 'user' })
 )
 
-export const useSessionVerified = create((set) => ({
+interface SessionStore {
+  sessionVerified: boolean
+  setSessionVerified: (isSessionVerified: boolean) => void
+}
+
+export const useSessionVerified = create<SessionStore>((set) => ({
   sessionVerified: false,
-  setSessionVerified: (isSessionVerified: boolean) => {
+  setSessionVerified: (isSessionVerified) => {
     set(() => ({ sessionVerified: isSessionVerified }))
   }
 }))
