@@ -2,7 +2,7 @@ import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
 interface AuthStore {
-  user?: UserAuth
+  user?: null | UserAuth
   isAuth: boolean
   setUser: (user: UserAuth) => void
   logout: () => void
@@ -10,21 +10,16 @@ interface AuthStore {
 
 export const useAuthStore = create<AuthStore>()(
   persist((set) => ({
-    user: undefined,
+    user: null,
     isAuth: false,
-
-    setUser: (user) => {
-      set(() => ({
-        user,
-        isAuth: true
-      }))
-    },
-
-    logout: () => {
-      set(() => ({
-        user: undefined,
-        isAuth: false
-      }))
-    }
+    setUser: (user) => { set(() => ({ user, isAuth: true })) },
+    logout: () => { set(() => ({ user: null, isAuth: false })) }
   }), { name: 'user' })
 )
+
+export const useSessionVerified = create((set) => ({
+  sessionVerified: false,
+  setSessionVerified: (isSessionVerified: boolean) => {
+    set(() => ({ sessionVerified: isSessionVerified }))
+  }
+}))
