@@ -1,3 +1,5 @@
+declare module 'nprogress';
+
 // Components
 interface ComponentProps {
   children: React.ReactNode
@@ -5,11 +7,23 @@ interface ComponentProps {
 }
 
 // Auth
-interface UserAuth {
-  id: string
+interface Credentials {
+  email: string
+  password: string
+}
+
+interface User {
   name: string
   lastname: string
-  email: string
+  gender?: 'male' | 'female' | 'other'
+}
+
+interface ProfileAuth extends Credentials {
+  id: string
+}
+
+interface RegisterForm extends User, Credentials {
+  password_confirmation: string
 }
 
 // Colors
