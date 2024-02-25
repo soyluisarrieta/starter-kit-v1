@@ -18,30 +18,46 @@ export default function App (): JSX.Element {
   return (
     <MasterLayout>
       <Switch>
-      {routes.map(({ path, component }) => {
-        const numberComponents = Object.keys(component).length
-        const components = layoutOrder.map((layoutPriorized) => {
-          const Layout = layouts[layoutPriorized](isAuth)
-          if (!Layout) {
-            if (numberComponents === 1 && location === path) {
-              setLocation('/ingresar', { state: { from: location }, replace: true })
+        {/* Recorrer todas las rutas */}
+        {routes.map(({ path, component }) => {
+          // Obtener número de componenetes de una sola ruta
+          const numberComponents = Object.keys(component).length
+          // Iterar componentes de una sola ruta pero en orden de prioridad
+          const components = layoutOrder.map((layoutPrioritized) => {
+            // Evaluar el layout priorizado
+            const Layout = layouts[layoutPrioritized](isAuth)
+            if (!Layout) {
+              // Si el Layout es falsy, verificar si no cuenta con componentes alternativos
+              // Pero también verificar si es exactamente la ruta actual
+              if (numberComponents === 1 && location === path) {
+                // Redireccionar al login en caso de que sea único componente
+                // Ejem: /usuarios
+                setLocation('/ingresar', { state: { from: location }, replace: true })
+              }
+
+              // Si se omite el condicional anterior, entonces evaluar
+              // la siguiente ruta basandose en el orden de prioridad
+              return null
             }
-            return null
-          }
 
-          const Component = component[layoutPriorized] || null
-          if (!Component) return null
+            // Si se obtuvo un layout correctamente
+            // Obtener su correspondiente componente
+            const Component = component[layoutPrioritized] || null
+            if (!Component) return null
+            // Ejem: Layout: "public", Component: HomePage
 
-          return (
+            // La ruta es definitivamente única
+            // Ejem: "/"
+            return (
               <Route path={path} key={path}>
                 <Layout>
                   <Component />
                 </Layout>
               </Route>
-          )
-        })
-        return components.filter(Boolean)
-      })}
+            )
+          })
+          return components.filter(Boolean)
+        })}
 
         <Route>404: No such page!</Route>
       </Switch>

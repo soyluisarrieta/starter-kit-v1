@@ -13,12 +13,14 @@ interface ILayout {
 type LayoutComponent = React.FC<ILayout> | null
 export type LayoutMap = Record<string, (isAuth?: boolean) => LayoutComponent | false>
 
+// Mapa de layouts
 export const layouts: LayoutMap = {
   private: (isAuth) => isAuth ? AdminLayout : false,
   guest: () => GuestLayout,
   public: () => PublicLayout
 }
 
+// Orden de prioridad
 export const layoutOrder = ['private', 'guest', 'public']
 
 interface Route {
@@ -27,6 +29,7 @@ interface Route {
   redirectTo?: string
 }
 
+// Rutas
 export const routes: Route[] = [
   { path: '/', component: { public: HomePage, private: DashboardPage } },
   { path: '/ingresar', component: { guest: LoginPage } },
