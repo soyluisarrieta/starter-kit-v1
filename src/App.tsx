@@ -17,7 +17,7 @@ export default function App (): JSX.Element {
   }
 
   // Routing
-  const allRoutes = routes.map(({ path, component }) => {
+  const routing = routes.map(({ path, component }) => {
     // Obtener número de componenetes de una sola ruta
     const numberComponents = Object.keys(component).length
     // Iterar componentes de una sola ruta pero en orden de prioridad
@@ -60,7 +60,7 @@ export default function App (): JSX.Element {
   return (
     <MasterLayout>
       <Switch>
-        {allRoutes}
+        {routing}
         <Route component={NotFoundPage} />
       </Switch>
     </MasterLayout>
