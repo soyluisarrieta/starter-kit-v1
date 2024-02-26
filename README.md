@@ -123,7 +123,7 @@ El código se divide en módulos separados según su funcionalidad, lo que facil
 ```bash
     📂 src/
     ├── 🧩 components/
-    │   ├── 📁 layout/ # Componentes de layout
+    │   ├── 📁 layout/ # Componentes de layout generales
     │   │   ├── AdminLayout.tsx
     │   │   ├── GuestLayout.tsx
     │   │   ├── MasterLayout.tsx
@@ -145,18 +145,18 @@ El código se divide en módulos separados según su funcionalidad, lo que facil
     │   │   ├── select.tsx
     │   │   └── ...
     │   │
-    │   ├── 📁 modules/ # Componentes específicos de módulos
+    │   ├── 📁 modules/ # Componentes específicos de módulos para mostrar en las páginas
     │   │   └── ...
     │   │
-    │   └── 📁 icons/ # Componentes de iconos y logos personalizados
+    │   └── 📁 icons/ # Componentes de logos e iconos personalizados
     │
     ├── 🧲 hooks/ # Hooks personalizados
     │   ├── useAuth.ts
     │   ├── useCheckAuth.ts
-    │   ├── useMediaQuery.tsx
+    │   ├── useMediaQuery.ts
     │   └── ...
     │
-    ├── 📚 lib/ # Configuraciones y utilidades
+    ├── 📚 lib/ # Configuraciones de librerías y utilidades
     │   ├── axios.ts
     │   ├── react-query.ts
     │   ├── utils.ts
