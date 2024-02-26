@@ -1,5 +1,5 @@
 import { Route, Switch, useLocation } from 'wouter'
-import { layoutOrder, layouts, routes } from '@/lib/wouter/router'
+import { layoutOrder, layouts, routes } from '@/lib/wouter-routes'
 import { useCheckAuth } from '@/hooks/useCheckAuth'
 import { useAuth } from '@/hooks/useAuth'
 import Authenticating from '@/components/pages/Authenticating'
