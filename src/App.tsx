@@ -4,6 +4,7 @@ import { useCheckAuth } from '@/hooks/useCheckAuth'
 import { useAuth } from '@/hooks/useAuth'
 import Authenticating from '@/components/pages/Authenticating'
 import MasterLayout from '@/components/layouts/MasterLayout'
+import NotFoundPage from '@/components/pages/Errors/NotFoundPage'
 
 export default function App (): JSX.Element {
   const isSessionVerified = useCheckAuth()
@@ -59,7 +60,7 @@ export default function App (): JSX.Element {
           return components.filter(Boolean)
         })}
 
-        <Route>404: No such page!</Route>
+        <Route component={NotFoundPage} />
       </Switch>
     </MasterLayout>
   )
