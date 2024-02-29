@@ -29,13 +29,13 @@ export default function LoginPage (): JSX.Element {
         <Label htmlFor='email'>Correo electrónico</Label>
         <Input id='email' {...register('email')} />
         {errors.email && (
-          <div role="alert">{errors.email.message}</div>
+          <div role="alert">{errors.email.message?.toString()}</div>
         )}
 
         <Label htmlFor='password'>Contraseña</Label>
         <Input id='password' type='password' {...register('password')} />
         {errors.password && (
-          <div role="alert">{errors.password.message}</div>
+          <div role="alert">{errors.password.message?.toString()}</div>
         )}
 
         <Button type='submit'>Ingresar</Button>
