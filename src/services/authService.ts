@@ -5,7 +5,7 @@ export const csrfService = async (): Promise<void> => {
 }
 
 export const profileService = async (): Promise<ProfileAuth> => {
-  const response = await axios.get('/profile')
+  const response = await axios.get('/api/profile')
   return response.data
 }
 
