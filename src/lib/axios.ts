@@ -12,8 +12,7 @@ const axios = Axios.create({
   headers: { Accept: 'application/json' },
   timeout: 60000,
   withCredentials: true,
-  xsrfCookieName: 'XSRF-TOKEN',
-  xsrfHeaderName: 'X-XSRF-TOKEN'
+  withXSRFToken: true
 })
 
 axios.interceptors.response.use(null, async (err) => {
