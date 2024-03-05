@@ -1,7 +1,7 @@
 import Axios, { type AxiosError } from 'axios'
 
 interface ErrorProps {
-  status: number
+  status: undefined | number
   original: AxiosError
   validation: Record<string, string>
   message: null | string
@@ -30,6 +30,25 @@ axios.interceptors.response.use(null, async (err) => {
     }
   } else {
     error.message = 'Algo salió mal. Por favor, inténtelo de nuevo más tarde.'
+  }
+
+  switch (error.status) {
+    case 422:
+      for (const field in err.response.data.errors) {
+        error.validation[field] = err.responsne.data.errors[field][0]
+      }
+      break
+    case 403:
+      error.message = 'No tienes permitido hacer eso.'
+      break
+    case 401:
+      error.message = 'Por favor vuelve a iniciar sesión.'
+      break
+    case 500:
+      error.message = 'Algo salió muy mal. Lo siento.'
+      break
+    default:
+      error.message = 'Algo salió mal. Por favor, inténtelo de nuevo más tarde.'
   }
 
   return await Promise.reject(error)
