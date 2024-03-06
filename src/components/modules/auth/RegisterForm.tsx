@@ -78,7 +78,7 @@ export default function RegisterForm (): JSX.Element {
         register={register}
         error={errors.password_confirmation}
       />
-      <Button type='submit'>Ingresar</Button>
+      <Button type='submit'>Registrarse</Button>
     </form>
   )
 }
