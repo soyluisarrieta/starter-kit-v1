@@ -3,6 +3,7 @@ import { logoutService, profileService } from '@/services/authService'
 import { useAuthStore } from '@/store/AuthStore'
 import { toast } from 'sonner'
 import { MESSAGE } from '@/constants'
+import { useEffect, useState } from 'react'
 
 interface AuthHook {
   isAuth: boolean
@@ -12,6 +13,7 @@ interface AuthHook {
 }
 
 export function useAuth (): AuthHook {
+  const [isAuth, setIsAuth] = useState(false)
   const { profile, setProfile } = useAuthStore()
 
   // Fn: Get user data from API
@@ -39,8 +41,12 @@ export function useAuth (): AuthHook {
     }
   }
 
+  useEffect(() => {
+    setIsAuth(typeof profile === 'object')
+  }, [profile])
+
   return {
-    isAuth: !(typeof profile === 'object'),
+    isAuth,
     profile,
     logout,
     getProfile

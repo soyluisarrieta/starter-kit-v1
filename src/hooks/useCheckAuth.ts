@@ -1,5 +1,6 @@
 import { axiosPublic } from '@/lib/axios'
 import { useAuthStore, useSessionVerified } from '@/store/AuthStore'
+import { type AxiosResponse } from 'axios'
 import nProgress from 'nprogress'
 import { useEffect } from 'react'
 
@@ -10,8 +11,8 @@ export function useCheckAuth (): boolean {
   const checkAuthentication = async (): Promise<void> => {
     nProgress.start()
     try {
-      const userData: ProfileAuth = await axiosPublic('/api/user')
-      setProfile(userData)
+      const response: AxiosResponse<ProfileAuth> = await axiosPublic('/api/user')
+      setProfile(response.data)
     } catch (err) {
       console.warn(err)
       setProfile(null)
@@ -22,9 +23,7 @@ export function useCheckAuth (): boolean {
   }
 
   useEffect(() => {
-    setTimeout(() => {
-      !sessionVerified && checkAuthentication()
-    }, 1000)
+    !sessionVerified && checkAuthentication()
   }, [])
 
   return sessionVerified
