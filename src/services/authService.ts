@@ -18,10 +18,5 @@ export const loginService = async (credentials: Credentials): Promise<ProfileAut
 }
 
 export const registerService = async (userData: RegisterForm): Promise<ProfileAuth> => {
-  const { passwordConfirmation, ...otherUserData } = userData
-  const requestUserData = {
-    ...otherUserData,
-    password_confirmation: passwordConfirmation
-  }
-  return await axios.post('/register', requestUserData)
+  return await axios.post('/register', userData)
 }

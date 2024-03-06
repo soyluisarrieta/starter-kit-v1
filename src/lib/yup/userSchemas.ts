@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import yup from '@/lib/yup'
 
 // Validations
@@ -7,7 +8,7 @@ export const name = yup
   .max(50, 'El nombre no puede exceder de 50 caracteres.')
   .required('El nombre es obligatorio.')
 
-export const lastname = yup
+export const last_name = yup
   .string()
   .min(3, 'El apellido debe contener al menos 3 caracteres')
   .max(50, 'El apellido no puede exceder de 50 caracteres.')
@@ -56,7 +57,7 @@ export const password = yup
   .required('La contraseña es obligatoria.')
   .matches(/\d/, 'La contraseña debe contener al menos un número')
 
-export const passwordConfirmation = yup
+export const password_confirmation = yup
   .string()
   .oneOf([yup.ref('password'), undefined], 'Las contraseñas no coinciden.')
   .required('La confirmación de la contraseña es obligatoria.')
@@ -68,8 +69,8 @@ export const loginSchema = yup.object({
 })
 export const registerSchema = yup.object({
   name,
-  lastname,
+  last_name,
   email,
   password,
-  passwordConfirmation
+  password_confirmation
 })

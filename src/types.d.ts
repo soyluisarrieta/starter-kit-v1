@@ -14,7 +14,7 @@ interface Credentials {
 
 interface User {
   name: string
-  lastname: string
+  last_name: string
   gender?: 'male' | 'female' | 'other'
 }
 
@@ -23,7 +23,7 @@ interface ProfileAuth extends Credentials {
 }
 
 interface RegisterForm extends User, Credentials {
-  passwordConfirmation: string
+  password_confirmation: string
 }
 
 // Colors

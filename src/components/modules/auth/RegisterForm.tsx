@@ -14,10 +14,10 @@ export default function RegisterForm (): JSX.Element {
   const { getProfile } = useAuth()
   const initialValues: RegisterForm = {
     name: '',
-    lastname: '',
+    last_name: '',
     email: '',
     password: '',
-    passwordConfirmation: ''
+    password_confirmation: ''
   }
 
   const resolver = useYupValidationResolver(registerSchema)
@@ -53,10 +53,10 @@ export default function RegisterForm (): JSX.Element {
         error={errors.name}
       />
       <FormField
-        id='lastname'
+        id='last_name'
         label='Apellido'
         register={register}
-        error={errors.lastname}
+        error={errors.last_name}
       />
       <FormField
         id='email'
@@ -72,11 +72,11 @@ export default function RegisterForm (): JSX.Element {
         error={errors.password}
       />
       <FormField
-        id='passwordConfirmation'
+        id='password_confirmation'
         label='Confirmar contraseña'
         type='password'
         register={register}
-        error={errors.passwordConfirmation}
+        error={errors.password_confirmation}
       />
       <Button type='submit'>Ingresar</Button>
     </form>
