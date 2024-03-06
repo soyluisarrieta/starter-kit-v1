@@ -62,4 +62,15 @@ export const passwordConfirmation = yup
   .required('La confirmación de la contraseña es obligatoria.')
 
 // Schemas
-export const loginSchema = yup.object({ email, password })
+export const loginSchema = yup.object({
+  email,
+  password
+})
+export const registerSchema = yup.object({
+  name,
+  lastname,
+  email,
+  password,
+  password_confirmation:
+  passwordConfirmation
+})
