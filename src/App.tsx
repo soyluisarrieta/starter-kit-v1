@@ -28,7 +28,8 @@ export default function App (): JSX.Element {
       if (!Layout) {
         // Si el Layout es falsy, verificar si no cuenta con componentes alternativos
         // Pero también verificar si es exactamente la ruta actual
-        if (numberComponents === 1 && location === path) {
+        // Pero también verificar si el layout de la ruta es "guest"
+        if (numberComponents === 1 && location === path && !component.guest) {
           // Redireccionar al login en caso de que sea único componente
           // Ejem: /usuarios
           setLocation('/ingresar', { state: { from: location }, replace: true })
