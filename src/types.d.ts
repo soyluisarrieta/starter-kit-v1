@@ -23,7 +23,7 @@ interface ProfileAuth extends Credentials {
 }
 
 interface RegisterForm extends User, Credentials {
-  password_confirmation: string
+  passwordConfirmation: string
 }
 
 // Colors

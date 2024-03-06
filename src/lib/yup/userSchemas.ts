@@ -71,6 +71,5 @@ export const registerSchema = yup.object({
   lastname,
   email,
   password,
-  password_confirmation:
   passwordConfirmation
 })

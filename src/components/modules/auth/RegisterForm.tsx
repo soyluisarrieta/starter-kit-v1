@@ -17,7 +17,7 @@ export default function RegisterForm (): JSX.Element {
     lastname: '',
     email: '',
     password: '',
-    password_confirmation: ''
+    passwordConfirmation: ''
   }
 
   const resolver = useYupValidationResolver(registerSchema)
@@ -72,11 +72,11 @@ export default function RegisterForm (): JSX.Element {
         error={errors.password}
       />
       <FormField
-        id='password_confirmation'
+        id='passwordConfirmation'
         label='Confirmar contraseña'
         type='password'
         register={register}
-        error={errors.password_confirmation}
+        error={errors.passwordConfirmation}
       />
       <Button type='submit'>Ingresar</Button>
     </form>
