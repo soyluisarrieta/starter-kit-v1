@@ -1,5 +1,5 @@
 import nProgress from 'nprogress'
-import { csrfService, logoutService, profileService, registerService } from '@/services/authService'
+import { logoutService, profileService } from '@/services/authService'
 import { useAuthStore } from '@/store/AuthStore'
 import { toast } from 'sonner'
 import { MESSAGE } from '@/constants'
@@ -8,7 +8,6 @@ interface AuthHook {
   isAuth: boolean
   profile: null | ProfileAuth
   getProfile: () => Promise<void>
-  register: (userData: RegisterForm) => void
   logout: () => void
 }
 
@@ -23,21 +22,6 @@ export function useAuth (): AuthHook {
     } catch (err) {
       console.warn(err)
       setProfile(null)
-    }
-  }
-
-  // Fn: Send register user data to API
-  const register = async (userData: RegisterForm): Promise<void> => {
-    nProgress.start()
-    try {
-      await csrfService()
-      await registerService(userData)
-      await getProfile()
-      toast(MESSAGE.WELCOME, { position: 'top-right', duration: 5000 })
-    } catch (err) {
-      console.warn(err)
-    } finally {
-      nProgress.done()
     }
   }
 
@@ -58,7 +42,6 @@ export function useAuth (): AuthHook {
   return {
     isAuth: !(typeof profile === 'object'),
     profile,
-    register,
     logout,
     getProfile
   }
