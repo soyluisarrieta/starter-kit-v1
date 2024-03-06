@@ -1,10 +1,11 @@
 import { Route, Switch, useLocation } from 'wouter'
-import { layoutOrder, layouts, routes } from '@/lib/wouter-routes'
+import { layoutOrder, layouts } from '@/lib/wouter/layouts'
 import { useCheckAuth } from '@/hooks/useCheckAuth'
 import { useAuth } from '@/hooks/useAuth'
 import Authenticating from '@/components/pages/Authenticating'
 import MasterLayout from '@/components/layouts/MasterLayout'
 import NotFoundPage from '@/components/pages/Errors/NotFoundPage'
+import { routes } from '@/lib/wouter/routes'
 
 export default function App (): JSX.Element {
   const isSessionVerified = useCheckAuth()
