@@ -21,6 +21,10 @@ export default function LoginForm (): JSX.Element {
     defaultValues: initialValues
   })
 
+  const from: string = (history.state?.from) !== undefined
+    ? history.state.from
+    : '/'
+
   // Fn: Send login credentials to API
   const onLogin = async (credentials: Credentials): Promise<void> => {
     nProgress.start()
@@ -29,9 +33,7 @@ export default function LoginForm (): JSX.Element {
       await loginService(credentials)
       nProgress.inc(0.4)
       await getProfile()
-      const from: string = (history.state?.from) !== undefined
-        ? history.state.from
-        : '/'
+
       navigate(from)
       toast(MESSAGE.WELCOME, { position: 'top-right', duration: 5000 })
     } catch (err: any) {
