@@ -1,68 +1,43 @@
-import { Route, Switch, useLocation } from 'wouter'
-import { layoutOrder, layouts } from '@/lib/wouter/layouts'
-import { useCheckAuth } from '@/hooks/useCheckAuth'
-import { useAuth } from '@/hooks/useAuth'
-import Authenticating from '@/components/pages/Authenticating'
+import { Route, Switch } from 'wouter'
 import MasterLayout from '@/components/layouts/MasterLayout'
 import NotFoundPage from '@/components/pages/Errors/NotFoundPage'
-import { routes } from '@/lib/wouter/routes'
+import DashboardPage from '@/components/pages/DashboardPage'
+import UsersPage from '@/components/pages/UsersPage'
+import AdminLayout from '@/components/layouts/AdminLayout'
+import LoginPage from '@/components/pages/LoginPage'
+import RegisterPage from '@/components/pages/RegisterPage'
+import GuestLayout from '@/components/layouts/GuestLayout'
 
 export default function App (): JSX.Element {
-  const isSessionVerified = useCheckAuth()
-  const { isAuth } = useAuth()
-  const [location, setLocation] = useLocation()
+  const guestRoutes = [
+    { path: '/ingresar', component: LoginPage },
+    { path: '/registrarse', component: RegisterPage }
+  ]
 
-  // Checking authentication
-  if (isAuth && !isSessionVerified) {
-    return <Authenticating />
-  }
-
-  // Routing
-  const routing = routes.map(({ path, component }) => {
-    // Obtener número de componenetes de una sola ruta
-    const numberComponents = Object.keys(component).length
-    // Iterar componentes de una sola ruta pero en orden de prioridad
-    const components = layoutOrder.map((layoutPrioritized) => {
-      // Evaluar el layout priorizado
-      const Layout = layouts[layoutPrioritized](isAuth)
-      if (!Layout) {
-        // Si el Layout es falsy, verificar si no cuenta con componentes alternativos
-        // Pero también verificar si es exactamente la ruta actual
-        // Pero también verificar si el layout de la ruta es "guest"
-        if (numberComponents === 1 && location === path && !component.guest) {
-          // Redireccionar al login en caso de que sea único componente
-          // Ejem: /usuarios
-          setLocation('/ingresar', { state: { from: location }, replace: true })
-        }
-
-        // Si se omite el condicional anterior, entonces evaluar
-        // la siguiente ruta basandose en el orden de prioridad
-        return null
-      }
-
-      // Si se obtuvo un layout correctamente
-      // Obtener su correspondiente componente
-      const Component = component[layoutPrioritized] || null
-      if (!Component) return null
-      // Ejem: Layout: "public", Component: HomePage
-
-      // La ruta es definitivamente única
-      // Ejem: "/"
-      return (
-        <Route path={path} key={path}>
-          <Layout>
-            <Component />
-          </Layout>
-        </Route>
-      )
-    })
-    return components.filter(Boolean)
-  })
+  const protectedRoutes = [
+    { path: '/', component: DashboardPage },
+    { path: '/usuarios', component: UsersPage }
+  ]
 
   return (
     <MasterLayout>
       <Switch>
-        {routing}
+        {guestRoutes.map(({ path, component: Component }) => (
+          <Route key={path} path={path}>
+            <GuestLayout>
+              <Component />
+            </GuestLayout>
+          </Route>
+        ))}
+
+        {protectedRoutes.map(({ path, component: Component }) => (
+          <Route key={path} path={path}>
+            <AdminLayout>
+              <Component />
+            </AdminLayout>
+          </Route>
+        ))}
+
         <Route component={NotFoundPage} />
       </Switch>
     </MasterLayout>
