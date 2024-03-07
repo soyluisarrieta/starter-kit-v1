@@ -10,14 +10,14 @@ export default function AdminLayout ({ children }: ComponentProps): JSX.Element 
   const [location] = useLocation()
 
   // Checking authentication
-  if (!isAuth && !isSessionVerified) {
+  if (!isSessionVerified && !isAuth) {
     return <Authenticating />
   }
 
-  // Checking if user is not authenticated
-  if (!isAuth && isSessionVerified) {
+  // Redirect if user is not authenticated
+  if (!isAuth) {
     return (
-      <Redirect to='/ingresar' state={{ from: location }} />
+      <Redirect to='/ingresar' state={{ from: location }} replace />
     )
   }
 
