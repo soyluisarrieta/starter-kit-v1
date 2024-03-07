@@ -34,7 +34,7 @@ export default function LoginForm (): JSX.Element {
       nProgress.inc(0.4)
       await getProfile()
 
-      navigate(from)
+      navigate(from, { replace: true })
       toast(MESSAGE.WELCOME, { position: 'top-right', duration: 5000 })
     } catch (err: any) {
       console.warn(err)
