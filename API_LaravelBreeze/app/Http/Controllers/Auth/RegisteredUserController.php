@@ -29,7 +29,7 @@ class RegisteredUserController extends Controller
             'address' => ['nullable', 'string', 'max:255'],
             'avatar' => ['nullable', 'string', 'max:50'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
-            'password' => ['required', 'confirmed', Password::min(8)->letters()->numbers()],
+            'password' => ['required', 'confirmed', Rules\Password::min(8)->letters()->numbers()],
         ]);
 
         $user = User::create([
