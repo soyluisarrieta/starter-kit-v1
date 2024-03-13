@@ -74,3 +74,4 @@ export const registerSchema = yup.object({
   password,
   password_confirmation
 })
+export const forgotPwSchema = yup.object({ email })
