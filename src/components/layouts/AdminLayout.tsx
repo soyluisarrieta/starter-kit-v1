@@ -1,4 +1,4 @@
-import Authenticating from '@/components/pages/Authenticating'
+import Authenticating from '@/components/pages/Auth/AuthLoader'
 import { Button } from '@/components/ui/button'
 import { useAuth } from '@/hooks/useAuth'
 import { useCheckAuth } from '@/hooks/useCheckAuth'

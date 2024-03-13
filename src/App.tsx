@@ -4,8 +4,8 @@ import NotFoundPage from '@/components/pages/Errors/NotFoundPage'
 import DashboardPage from '@/components/pages/DashboardPage'
 import UsersPage from '@/components/pages/UsersPage'
 import AdminLayout from '@/components/layouts/AdminLayout'
-import LoginPage from '@/components/pages/LoginPage'
-import RegisterPage from '@/components/pages/RegisterPage'
+import LoginPage from '@/components/pages/Auth/LoginPage'
+import RegisterPage from '@/components/pages/Auth/RegisterPage'
 import GuestLayout from '@/components/layouts/GuestLayout'
 
 export default function App (): JSX.Element {
