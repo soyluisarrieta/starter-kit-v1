@@ -20,3 +20,7 @@ export const loginService = async (credentials: Credentials): Promise<ProfileAut
 export const registerService = async (userData: RegisterForm): Promise<ProfileAuth> => {
   return await axios.post('/register', userData)
 }
+
+export const forgotPwService = async (email: { email: string }): Promise<void> => {
+  await axios.post('/forgot-password', email)
+}
