@@ -107,7 +107,7 @@ export default function RegisterForm (): JSX.Element {
                   </FormItem>
                   <FormItem className="flex items-center space-x-3 space-y-0">
                     <FormControl>
-                      <RadioGroupItem value="other2" />
+                      <RadioGroupItem value="other" />
                     </FormControl>
                     <FormLabel className="font-normal">Otro</FormLabel>
                   </FormItem>
