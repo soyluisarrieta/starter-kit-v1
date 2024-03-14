@@ -28,6 +28,8 @@ export default function ForgotPassword (): JSX.Element {
     } catch (err: any) {
       console.warn(err)
       handleValidationErrors(err, form.setError)
+    } finally {
+      nProgress.done()
     }
   }
 
