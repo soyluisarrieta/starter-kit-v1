@@ -16,6 +16,14 @@ export default function LoginPage (): JSX.Element {
           </Button>
         </Link>
       </div>
+
+      <div>
+        <Link to='/recuperar-contrasena'>
+          <Button variant='link'>
+          ¿Olvidaste la contraseña?
+          </Button>
+        </Link>
+      </div>
     </main>
   )
 }
