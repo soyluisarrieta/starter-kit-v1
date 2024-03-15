@@ -8,12 +8,14 @@ import LoginPage from '@/components/pages/Auth/LoginPage'
 import RegisterPage from '@/components/pages/Auth/RegisterPage'
 import GuestLayout from '@/components/layouts/GuestLayout'
 import ForgotPasswordPage from '@/components/pages/Auth/ForgotPasswordPage'
+import ResetPasswordPage from '@/components/pages/Auth/ResetPasswordPage'
 
 export default function App (): JSX.Element {
   const guestRoutes = [
     { path: '/ingresar', component: LoginPage },
     { path: '/registrarse', component: RegisterPage },
-    { path: '/recuperar-contrasena', component: ForgotPasswordPage }
+    { path: '/recuperar-contrasena', component: ForgotPasswordPage },
+    { path: '/restablecer-contrasena/:token', component: ResetPasswordPage }
   ]
 
   const protectedRoutes = [
