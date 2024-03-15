@@ -1,56 +1,40 @@
 import nProgress from 'nprogress'
 import { Button } from '@/components/ui/button'
 import { useAuth } from '@/hooks/useAuth'
-import { useYupValidationResolver } from '@/lib/yup/useYupValidationResolver'
 import { registerSchema } from '@/lib/yup/userSchemas'
-import { useForm } from 'react-hook-form'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { csrfService, registerService } from '@/services/authService'
-import { toast } from 'sonner'
+import { registerService } from '@/services/authService'
 import { MESSAGE } from '@/constants'
-import { handleValidationErrors } from '@/lib/utils/handleValidationErrors'
+import { useFormHandler } from '@/hooks/useFormHandler'
 
 export default function RegisterForm (): JSX.Element {
   const { getProfile } = useAuth()
 
-  // Form config
-  const form = useForm({
-    resolver: useYupValidationResolver(registerSchema),
-    defaultValues: {
-      name: '',
-      last_name: '',
-      gender: undefined,
-      email: '',
-      password: '',
-      password_confirmation: ''
+  const defaultValues = {
+    name: '',
+    last_name: '',
+    gender: undefined,
+    email: '',
+    password: '',
+    password_confirmation: ''
+  }
+
+  const { form, onSubmit } = useFormHandler({
+    schema: registerSchema,
+    defaultValues,
+    successMessage: MESSAGE.WELCOME,
+    request: async (data: RegisterForm): Promise<void> => {
+      await registerService(data)
+      nProgress.inc(0.4)
+      await getProfile()
     }
   })
 
-  // Fn: Send register user data to API
-  const onRegister = async (userData: RegisterForm): Promise<void> => {
-    nProgress.start()
-
-    try {
-      await csrfService()
-      await registerService(userData)
-      nProgress.inc(0.4)
-      await getProfile()
-      toast(MESSAGE.WELCOME, { position: 'top-right', duration: 5000 })
-    } catch (err) {
-      console.warn(err)
-      handleValidationErrors(err, form.setError)
-      form.resetField('password')
-      form.resetField('password_confirmation')
-    } finally {
-      nProgress.done()
-    }
-  }
-
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onRegister)}>
+      <form onSubmit={onSubmit}>
         <FormField
           control={form.control}
           name="name"
