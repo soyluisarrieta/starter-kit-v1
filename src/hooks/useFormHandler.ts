@@ -12,7 +12,7 @@ interface FormHandlerProps {
   withCsrf?: boolean
   schema: AnyObjectSchema
   request: (data: any) => Promise<any>
-  onError?: () => Promise<void>
+  onError?: ({ form, error }: { form?: UseFormReturn, error?: any }) => void
   onFinally?: () => Promise<void>
   successMessage?: string
   redirectTo?: string
@@ -62,10 +62,10 @@ export function useFormHandler ({
       if (redirectTo) {
         navigate(redirectTo, { replace: true })
       }
-    } catch (err) {
-      console.warn(err)
-      handleValidationErrors(err, form.setError)
-      onError && await onError()
+    } catch (error) {
+      console.warn(error)
+      handleValidationErrors(error, form.setError)
+      onError && onError({ form, error })
     } finally {
       nProgress.done()
       setIsLoading(false)
