@@ -1,57 +1,38 @@
-import nProgress from 'nprogress'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { handleValidationErrors } from '@/lib/utils/handleValidationErrors'
-import { useYupValidationResolver } from '@/lib/yup/useYupValidationResolver'
 import { forgotPwSchema } from '@/lib/yup/userSchemas'
-import { csrfService, forgotPwService } from '@/services/authService'
-import { useForm } from 'react-hook-form'
+import { forgotPwService } from '@/services/authService'
 import { Button } from '@/components/ui/button'
 import { useState, useEffect } from 'react'
 import { TimerIcon } from 'lucide-react'
+import { useFormHandler } from '@/hooks/useFormHandler'
 
 export default function ForgotPasswordForm (): JSX.Element {
   const [isSent, setIsSent] = useState(false)
-  const [counter, setCounter] = useState(60) // Nuevo estado para el contador
+  const [counter, setCounter] = useState(60)
 
   useEffect(() => {
-    let timer: NodeJS.Timeout
-    if (isSent && counter > 0) {
-      timer = setInterval(() => { setCounter(counter - 1) }, 1000)
-    }
-    return () => {
-      if (timer) {
-        clearInterval(timer)
-      }
-    }
-  }, [isSent, counter])
+    if (!counter) return
+    const intervalId = setInterval(() => {
+      setCounter(counter - 1)
+    }, 1000)
+    return () => { clearInterval(intervalId) }
+  }, [counter])
 
   // Form config
-  const form = useForm({
-    resolver: useYupValidationResolver(forgotPwSchema),
-    defaultValues: { email: '' }
-  })
-
-  // Fn: Send forgot password to API
-  const onForgotPassword = async (email: { email: string }): Promise<void> => {
-    nProgress.start()
-    try {
-      await csrfService()
+  const { form, onSubmit } = useFormHandler({
+    schema: forgotPwSchema,
+    defaultValues: { email: '' },
+    request: async (email: { email: string }) => {
       await forgotPwService(email)
-      form.reset()
       setIsSent(true)
-    } catch (err: any) {
-      console.warn(err)
-      handleValidationErrors(err, form.setError)
-    } finally {
-      nProgress.done()
     }
-  }
+  })
 
   return !isSent
     ? (
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onForgotPassword)}>
+        <form onSubmit={onSubmit}>
           <FormField
             control={form.control}
             name='email'
