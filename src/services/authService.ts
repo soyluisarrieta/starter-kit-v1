@@ -24,3 +24,7 @@ export const registerService = async (userData: RegisterForm): Promise<ProfileAu
 export const forgotPwService = async (email: { email: string }): Promise<void> => {
   await axios.post('/forgot-password', email)
 }
+
+export const resetPwService = async (data: { token: string, email: string, password: string, password_confirmation: string }): Promise<void> => {
+  await axios.post('/reset-password', data)
+}
