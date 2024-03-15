@@ -1,6 +1,5 @@
 import { FORBIDDEN, INTERNAL_SERVER_ERROR, UNAUTHORIZED, UNPROCESSABLE_ENTITY } from '@/constants'
 import Axios, { type AxiosError } from 'axios'
-import { toast } from 'sonner'
 
 export interface ErrorProps {
   status: undefined | number
@@ -9,17 +8,14 @@ export interface ErrorProps {
   message: null | string
 }
 
-// Axios configurations
-const config = {
+// Axios instances
+const axios = Axios.create({
   baseURL: import.meta.env.VITE_BACKEND_URL_LOCAL as string,
   headers: { Accept: 'application/json' },
   timeout: 60000,
-  withCredentials: true
-}
-
-// Axios instances
-const axiosPrivate = Axios.create({ ...config, withXSRFToken: true })
-export const axiosPublic = Axios.create(config)
+  withCredentials: true,
+  withXSRFToken: true
+})
 
 // fn: Error handler usign axios private interceptors
 const parseAxiosError = (err: AxiosError): ErrorProps => {
@@ -39,6 +35,7 @@ const parseAxiosError = (err: AxiosError): ErrorProps => {
           error.validation[field] = responseData.errors[field][0]
         }
       }
+      error.message = responseData?.message
       break
     case FORBIDDEN:
       error.message = 'No tienes permitido hacer eso.'
@@ -57,15 +54,9 @@ const parseAxiosError = (err: AxiosError): ErrorProps => {
 }
 
 // Interceptors
-axiosPublic.interceptors.response.use(null, async (err: AxiosError) => {
+axios.interceptors.response.use(null, async (err: AxiosError) => {
   const errors = parseAxiosError(err)
   return await Promise.reject(errors)
 })
 
-axiosPrivate.interceptors.response.use(null, async (err: AxiosError) => {
-  const errors = parseAxiosError(err)
-  errors.message?.length && toast.error(errors.message)
-  return await Promise.reject(errors)
-})
-
-export default axiosPrivate
+export default axios
