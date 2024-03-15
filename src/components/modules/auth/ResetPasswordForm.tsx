@@ -39,8 +39,8 @@ export default function ResetPasswordForm (): JSX.Element {
       await resetPwService({ token, email, ...passwords })
     },
     onError: ({ form }) => {
-      form?.resetField('password')
-      form?.resetField('password_confirmation')
+      form.resetField('password')
+      form.resetField('password_confirmation')
     }
   })
 

@@ -12,7 +12,7 @@ interface FormHandlerProps {
   withCsrf?: boolean
   schema: AnyObjectSchema
   request: (data: any) => Promise<any>
-  onError?: ({ form, error }: { form?: UseFormReturn, error?: any }) => void
+  onError?: ({ form, error }: { form: UseFormReturn, error: any }) => void
   onFinally?: () => Promise<void>
   successMessage?: string
   redirectTo?: string

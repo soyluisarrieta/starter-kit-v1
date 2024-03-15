@@ -33,7 +33,7 @@ export default function LoginForm (): JSX.Element {
       await getProfile()
     },
     onError: ({ form }) => {
-      form?.setValue('password', '')
+      form.resetField('password')
     }
   })
 

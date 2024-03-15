@@ -29,6 +29,10 @@ export default function RegisterForm (): JSX.Element {
       await registerService(data)
       nProgress.inc(0.4)
       await getProfile()
+    },
+    onError: ({ form }) => {
+      form.resetField('password')
+      form.resetField('password_confirmation')
     }
   })
 
