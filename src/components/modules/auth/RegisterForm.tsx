@@ -25,7 +25,7 @@ export default function RegisterForm (): JSX.Element {
     schema: registerSchema,
     defaultValues,
     successMessage: MESSAGE.WELCOME,
-    request: async (data: RegisterForm): Promise<void> => {
+    request: async (data: RegisterForm) => {
       await registerService(data)
       nProgress.inc(0.4)
       await getProfile()

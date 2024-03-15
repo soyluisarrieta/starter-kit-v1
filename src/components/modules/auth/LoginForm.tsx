@@ -27,7 +27,7 @@ export default function LoginForm (): JSX.Element {
     successMessage: MESSAGE.WELCOME,
     defaultValues,
     redirectTo: from,
-    request: async (credentials: Credentials): Promise<void> => {
+    request: async (credentials: Credentials) => {
       await loginService(credentials)
       nProgress.inc(0.4)
       await getProfile()
