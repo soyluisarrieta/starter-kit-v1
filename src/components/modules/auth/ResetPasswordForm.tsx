@@ -1,16 +1,11 @@
-import nProgress from 'nprogress'
 import { Button } from '@/components/ui/button'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { useYupValidationResolver } from '@/lib/yup/useYupValidationResolver'
 import { resetPwSchema } from '@/lib/yup/userSchemas'
-import { useForm } from 'react-hook-form'
 import { Link, useParams, useSearch } from 'wouter'
-import { csrfService, resetPwService } from '@/services/authService'
-import { handleValidationErrors } from '@/lib/utils/handleValidationErrors'
-import { toast } from 'sonner'
-import { navigate } from 'wouter/use-browser-location'
+import { resetPwService } from '@/services/authService'
 import { ErrorBlock } from '@/components/ui/error-block'
+import { useFormHandler } from '@/hooks/useFormHandler'
 
 export default function ResetPasswordForm (): JSX.Element {
   const { token } = useParams()
@@ -30,37 +25,28 @@ export default function ResetPasswordForm (): JSX.Element {
     )
   }
 
-  // Form config
-  const form = useForm({
-    resolver: useYupValidationResolver(resetPwSchema),
-    defaultValues: {
-      password: '',
-      password_confirmation: ''
-    },
-    reValidateMode: 'onSubmit'
-  })
-
-  // fn: Send new password to API
-  const onResetPassoword = async (passwords: { password: string, password_confirmation: string }): Promise<void> => {
-    nProgress.start()
-    try {
-      await csrfService()
-      await resetPwService({ token, email, ...passwords })
-      toast.success('Su contraseña ha sido restablecida', { position: 'top-right', duration: 5000 })
-      navigate('/ingresar', { replace: true })
-    } catch (err: any) {
-      console.warn(err)
-      handleValidationErrors(err, form.setError)
-      form.resetField('password')
-      form.resetField('password_confirmation')
-    } finally {
-      nProgress.done()
-    }
+  const defaultValues = {
+    password: '',
+    password_confirmation: ''
   }
+
+  const { form, onSubmit } = useFormHandler({
+    schema: resetPwSchema,
+    defaultValues,
+    successMessage: 'Su contraseña se ha restablecido exitosamente.',
+    redirectTo: '/ingresar',
+    request: async (passwords: { password: string, password_confirmation: string }) => {
+      await resetPwService({ token, email, ...passwords })
+    },
+    onError: ({ form }) => {
+      form?.resetField('password')
+      form?.resetField('password_confirmation')
+    }
+  })
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onResetPassoword)}>
+      <form onSubmit={form.handleSubmit(onSubmit)}>
         <ErrorBlock
           message={String(form.formState.errors.email?.message)}
           errorState={Boolean(form.formState.errors.email)}
