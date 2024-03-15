@@ -1,4 +1,4 @@
-import { axiosPublic } from '@/lib/axios'
+import axios from '@/lib/axios'
 import { useAuthStore, useSessionVerified } from '@/store/AuthStore'
 import { type AxiosResponse } from 'axios'
 import nProgress from 'nprogress'
@@ -11,7 +11,7 @@ export function useCheckAuth (): boolean {
   const checkAuthentication = async (): Promise<void> => {
     nProgress.start()
     try {
-      const response: AxiosResponse<ProfileAuth> = await axiosPublic('/api/user')
+      const response: AxiosResponse<ProfileAuth> = await axios('/api/user')
       setProfile(response.data)
     } catch (err) {
       console.warn(err)
