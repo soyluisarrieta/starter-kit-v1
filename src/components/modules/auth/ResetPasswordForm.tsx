@@ -35,6 +35,7 @@ export default function ResetPasswordForm (): JSX.Element {
     defaultValues,
     successMessage: 'Su contraseña se ha restablecido exitosamente.',
     redirectTo: '/ingresar',
+    formConfig: { reValidateMode: 'onSubmit' },
     request: async (passwords: { password: string, password_confirmation: string }) => {
       await resetPwService({ token, email, ...passwords })
     },
