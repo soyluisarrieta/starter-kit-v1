@@ -41,6 +41,8 @@ export default function RegisterForm (): JSX.Element {
     } catch (err) {
       console.warn(err)
       handleValidationErrors(err, form.setError)
+      form.resetField('password')
+      form.resetField('password_confirmation')
     } finally {
       nProgress.done()
     }

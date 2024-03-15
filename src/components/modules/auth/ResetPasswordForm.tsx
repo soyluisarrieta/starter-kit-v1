@@ -36,7 +36,8 @@ export default function ResetPasswordForm (): JSX.Element {
     defaultValues: {
       password: '',
       password_confirmation: ''
-    }
+    },
+    reValidateMode: 'onSubmit'
   })
 
   // fn: Send new password to API
@@ -50,6 +51,8 @@ export default function ResetPasswordForm (): JSX.Element {
     } catch (err: any) {
       console.warn(err)
       handleValidationErrors(err, form.setError)
+      form.resetField('password')
+      form.resetField('password_confirmation')
     } finally {
       nProgress.done()
     }

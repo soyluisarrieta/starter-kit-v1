@@ -43,6 +43,7 @@ export default function LoginForm (): JSX.Element {
     } catch (err: any) {
       console.warn(err)
       handleValidationErrors(err, form.setError)
+      form.setValue('password', '')
     } finally {
       nProgress.done()
     }
