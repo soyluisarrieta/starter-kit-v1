@@ -24,7 +24,6 @@ export default function AdminLayout ({ children }: ComponentProps): JSX.Element 
   // User authenticated
   return (
     <>
-      <h1>AdminLayout</h1>
       {children}
       <Button variant='destructive' onClick={logout}>
           Cerrar sesión

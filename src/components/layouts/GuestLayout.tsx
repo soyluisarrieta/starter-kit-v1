@@ -14,7 +14,6 @@ export default function GuestLayout ({ children }: ComponentProps): JSX.Element 
   // User is not authenticated
   return (
     <>
-      <h1>GuestLayout</h1>
       {children}
     </>
   )
