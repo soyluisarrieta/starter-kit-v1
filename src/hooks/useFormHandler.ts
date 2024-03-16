@@ -2,11 +2,11 @@ import { handleValidationErrors } from '@/lib/utils/handleValidationErrors'
 import { useYupValidationResolver } from '@/lib/yup/useYupValidationResolver'
 import { csrfService } from '@/services/authService'
 import nProgress from 'nprogress'
-import { useState } from 'react'
 import { type UseFormReturn, type UseFormProps, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { navigate } from 'wouter/use-browser-location'
 import { type AnyObjectSchema } from 'yup'
+import { useMutation } from 'react-query'
 
 interface FormHandlerProps {
   withCsrf?: boolean
@@ -38,9 +38,6 @@ export function useFormHandler ({
   defaultValues,
   formConfig
 }: FormHandlerProps): FormHandler {
-  const [isLoading, setIsLoading] = useState(false)
-  const [response, setResponse] = useState<any>(null)
-
   // Form config
   const form = useForm({
     resolver: useYupValidationResolver(schema),
@@ -48,35 +45,40 @@ export function useFormHandler ({
     ...formConfig
   })
 
-  // fn: Handle submit
-  const onSubmit = form.handleSubmit(async (data: Record<string, any>): Promise<void> => {
-    nProgress.start()
-    setIsLoading(true)
-    try {
-      if (withCsrf) { await csrfService() }
-      const res = await request(data)
-      setResponse(res)
+  // Use mutation
+  const mutation = useMutation(request, {
+    // success
+    onSuccess: () => {
       if (successMessage) {
         toast.success(successMessage, { duration: 5000 })
       }
       if (redirectTo) {
         navigate(redirectTo, { replace: true })
       }
-    } catch (error) {
-      console.warn(error)
+    },
+    // catch
+    onError: (error: any) => {
       handleValidationErrors(error, form.setError)
       onError && onError({ form, error })
-    } finally {
+    },
+    // finally
+    onSettled: async () => {
       nProgress.done()
-      setIsLoading(false)
       onFinally && await onFinally()
     }
+  })
+
+  // fn: Handle submit
+  const onSubmit = form.handleSubmit(async (data: Record<string, any>): Promise<void> => {
+    nProgress.start()
+    if (withCsrf) { await csrfService() }
+    mutation.mutate(data)
   })
 
   return {
     form,
     onSubmit,
-    response,
-    isLoading
+    response: mutation.data,
+    isLoading: mutation.isLoading
   }
 }
