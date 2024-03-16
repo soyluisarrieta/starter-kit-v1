@@ -38,6 +38,7 @@ export default function ResetPasswordForm (): JSX.Element {
     formConfig: { reValidateMode: 'onSubmit' },
     request: async (passwords: { password: string, password_confirmation: string }) => {
       await resetPwService({ token, email, ...passwords })
+      window.localStorage.setItem('passwordChanged', 'true')
     },
     onError: ({ form }) => {
       form.resetField('password')

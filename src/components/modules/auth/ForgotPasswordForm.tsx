@@ -6,11 +6,13 @@ import { Button } from '@/components/ui/button'
 import { useState, useEffect } from 'react'
 import { TimerIcon } from 'lucide-react'
 import { useFormHandler } from '@/hooks/useFormHandler'
+import { navigate } from 'wouter/use-browser-location'
 
 export default function ForgotPasswordForm (): JSX.Element {
   const [isSent, setIsSent] = useState(false)
   const [counter, setCounter] = useState(60)
 
+  // Counter
   useEffect(() => {
     if (!counter) return
     const intervalId = setInterval(() => {
@@ -18,6 +20,20 @@ export default function ForgotPasswordForm (): JSX.Element {
     }, 1000)
     return () => { clearInterval(intervalId) }
   }, [counter])
+
+  // Redirect if password changed
+  useEffect(() => {
+    const handleStorageChange = (e: StorageEvent): void => {
+      if (e.key === 'passwordChanged' && e.newValue === 'true') {
+        window.localStorage.removeItem('passwordChanged')
+        navigate('/ingresar')
+      }
+    }
+    window.addEventListener('storage', handleStorageChange)
+    return () => {
+      window.removeEventListener('storage', handleStorageChange)
+    }
+  }, [])
 
   // Form config
   const { form, onSubmit } = useFormHandler({
