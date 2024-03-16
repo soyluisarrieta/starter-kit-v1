@@ -79,7 +79,7 @@ Este Kit Starter utiliza las siguientes tecnologías con las versiones más actu
 | 8 | [🌐Axios](https://axios-http.com/) | Cliente HTTP basado en promesas utilizado para realizar peticiones HTTP a servidores, lo que facilita la interacción con API. |
 | 9 | [🐻Zustand](https://zustand-demo.pmnd.rs/) | Pequeña, rápida y escalable librería de gestión de estado que permite administrar el estado de la aplicación de manera sencilla y efectiva. |
 | 10 | [⚙️React_Query](https://tanstack.com/query/latest/docs/react/overview) | Biblioteca de gestión de datos que simplifica la gestión del estado global y las solicitudes a APIs, mejorando la eficiencia y la experiencia del usuario. |
-| 11 | [📋Formik](https://formik.org/) | Biblioteca para la gestión de formularios que simplifica la validación, el seguimiento de cambios y la obtención de datos de formularios de manera eficiente. |
+| 11 | [📋React Hook Form](https://react-hook-form.com/) | Biblioteca de formularios eficiente y flexible para la gestión de formularios en React. |
 | 12 | [🔍Yup](https://github.com/jquense/yup) | Biblioteca de validación utilizada comúnmente con Formik para definir esquemas de validación de datos en formularios. |
 | 13 | [⭐Lucide_Icons](https://lucide.dev/icons/) | Colección de iconos ligeros y minimalistas para aplicaciones web. |
 | 14 | [⏳nProgress](https://ricostacruz.com/nprogress/) | Biblioteca para loader o barra de progreso delgadas como YouTube. |
@@ -90,10 +90,10 @@ Este Kit Starter utiliza las siguientes tecnologías con las versiones más actu
 
 - ### Sistema de login
 
-  - [ ] Formularios de inicio de sesión ~~y registro~~.
-  - [ ] Cerrar sesión.
+  - [x] Formularios de inicio de sesión y registro.
+  - [x] Cerrar sesión.
   - [ ] Cambiar contraseña.
-  - [ ] Recuperación contraseña.
+  - [x] Recuperación contraseña.
   - [ ] Recordar usuario.
   - [ ] Integración con Gmail.
 
@@ -123,32 +123,39 @@ El código se divide en módulos separados según su funcionalidad, lo que facil
 ```bash
     📂 src/
     ├── 🧩 components/
+    │   ├── 📁 icons/ # Componentes iconos en SVG personalizados
+    │   │   ├── LogoEmpresa.tsx
+    │   │   └── IconoEmpresa.tsx
+    │   │
     │   ├── 📁 layout/ # Componentes de layout generales
     │   │   ├── AdminLayout.tsx
     │   │   ├── GuestLayout.tsx
-    │   │   ├── MasterLayout.tsx
-    │   │   └── PublicLayout.tsx
+    │   │   └── MasterLayout.tsx
+    │   │
+    │   ├── 📁 modules/ # Componentes de layout generales
+    │   │   ├── 📁 auth/
+    │   │   ├── 📁
+    │   │   └── ...
     │   │
     │   ├── 📁 pages/ # Componentes de página
     │   │   ├── Authenticating.tsx
     │   │   ├── DashboardPage.tsx
     │   │   ├── HomePage.tsx
-    │   │   ├── LoginPage.tsx
     │   │   ├── UserPage.tsx
-    │   │   └── 📁 errors/ # Componentes de error
+    │   │   ├── 📁 Auth/
+    │   │   │   ├── AuthLoader.tsx
+    │   │   │   ├── LoginPage.tsx
+    │   │   │   └── ...
+    │   │   │
+    │   │   └── 📁 Errors/ # Componentes de error
     │   │       └── NotFound.tsx
     │   │
-    │   ├── 📁 ui/ # Componentes de interfaz de usuario reutilizables
-    │   │   ├── button.tsx
-    │   │   ├── card.tsx
-    │   │   ├── drawer.tsx
-    │   │   ├── select.tsx
-    │   │   └── ...
-    │   │
-    │   ├── 📁 modules/ # Componentes específicos de módulos para mostrar en las páginas
-    │   │   └── ...
-    │   │
-    │   └── 📁 icons/ # Componentes de logos e iconos personalizados
+    │   └── 📁 ui/ # Componentes de interfaz de usuario reutilizables
+    │       ├── button.tsx
+    │       ├── card.tsx
+    │       ├── drawer.tsx
+    │       ├── select.tsx
+    │       └── ...
     │
     ├── 🧲 hooks/ # Hooks personalizados
     │   ├── useAuth.ts
