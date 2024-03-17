@@ -29,6 +29,9 @@ class User extends Authenticatable
         'avatar',
         'email',
         'password',
+        'sso_id',
+        'sso_service',
+        'email_verified_at',
     ];
 
     /**
