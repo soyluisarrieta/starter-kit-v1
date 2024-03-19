@@ -24,7 +24,7 @@ class RegisteredUserController extends Controller
             'name' => ['required', 'string', 'alpha', 'max:25'],
             'last_name' => ['required', 'string', 'alpha', 'max:25'],
             'birthdate' => ['nullable', 'date'],
-            'gender' => ['nullable', 'in:male,female,other'],
+            'gender' => ['required', 'in:male,female,other'],
             'phone' => ['nullable', 'numeric', 'max:10'],
             'address' => ['nullable', 'string', 'max:255'],
             'avatar' => ['nullable', 'string', 'max:50'],
