@@ -27,6 +27,7 @@ export default function LoginForm (): JSX.Element {
     successMessage: MESSAGE.WELCOME,
     defaultValues,
     redirectTo: from,
+    formConfig: { reValidateMode: 'onSubmit' },
     request: async (credentials: Credentials) => {
       await loginService(credentials)
       nProgress.inc(0.4)
@@ -68,7 +69,11 @@ export default function LoginForm (): JSX.Element {
           )}
         />
 
-        <Button type='submit'>Ingresar</Button>
+        <Button to='/recuperar-contrasena' variant='link'>
+          ¿Olvidaste la contraseña?
+        </Button>
+
+        <Button className='w-full mt-4' type='submit' size={'lg'}>Ingresar</Button>
       </form>
     </Form>
   )
