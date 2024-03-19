@@ -25,6 +25,7 @@ export default function RegisterForm (): JSX.Element {
     schema: registerSchema,
     defaultValues,
     successMessage: MESSAGE.WELCOME,
+    formConfig: { reValidateMode: 'onSubmit' },
     request: async (data: RegisterForm) => {
       await registerService(data)
       nProgress.inc(0.4)
@@ -71,15 +72,14 @@ export default function RegisterForm (): JSX.Element {
           control={form.control}
           name="gender"
           render={({ field }) => (
-            <FormItem className="space-y-3">
+            <FormItem className="space-y-2">
               <FormLabel>Género</FormLabel>
               <FormControl>
                 <RadioGroup
                   onValueChange={field.onChange}
                   defaultValue={field.value}
-                  className="flex flex-col space-y-1"
                 >
-                  <FormItem className="flex items-center space-x-3 space-y-0">
+                  <FormItem className="flex items-center space-x-3 mb-0">
                     <FormControl>
                       <RadioGroupItem value="male" />
                     </FormControl>
@@ -87,7 +87,7 @@ export default function RegisterForm (): JSX.Element {
                       Masculino
                     </FormLabel>
                   </FormItem>
-                  <FormItem className="flex items-center space-x-3 space-y-0">
+                  <FormItem className="flex items-center space-x-3 mb-0">
                     <FormControl>
                       <RadioGroupItem value="female" />
                     </FormControl>
@@ -95,7 +95,7 @@ export default function RegisterForm (): JSX.Element {
                       Femenino
                     </FormLabel>
                   </FormItem>
-                  <FormItem className="flex items-center space-x-3 space-y-0">
+                  <FormItem className="flex items-center space-x-3 mb-0">
                     <FormControl>
                       <RadioGroupItem value="other" />
                     </FormControl>
@@ -150,7 +150,7 @@ export default function RegisterForm (): JSX.Element {
           )}
         />
 
-        <Button type='submit'>Registrarse</Button>
+        <Button className='w-full mt-4' type='submit' size='lg'>Registrarse</Button>
       </form>
     </Form>
   )
