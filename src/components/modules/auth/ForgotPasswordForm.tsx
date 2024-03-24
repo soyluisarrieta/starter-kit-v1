@@ -5,9 +5,12 @@ import { forgotPwService } from '@/services/authService'
 import { Button } from '@/components/ui/button'
 import { useFormHandler } from '@/hooks/useFormHandler'
 
-interface Props { setIsLinkSent: (isSent: boolean) => void }
+interface Props {
+  setIsLinkSent: (isSent: boolean) => void
+  resetCounter?: () => void
+}
 
-export default function ForgotPasswordForm ({ setIsLinkSent }: Props): JSX.Element {
+export default function ForgotPasswordForm ({ setIsLinkSent, resetCounter }: Props): JSX.Element {
   // Form config
   const { form, onSubmit } = useFormHandler({
     schema: forgotPwSchema,
@@ -15,6 +18,7 @@ export default function ForgotPasswordForm ({ setIsLinkSent }: Props): JSX.Eleme
     request: async (email: { email: string }) => {
       await forgotPwService(email)
       setIsLinkSent(true)
+      resetCounter && resetCounter()
     }
   })
 

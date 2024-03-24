@@ -32,6 +32,8 @@ export default function ForgotPasswordPage (): JSX.Element {
     }
   })
 
+  const resetCounter = (): void => { setCounter(60) }
+
   return (
     <main className='min-h-screen flex flex-col justify-center items-center p-5'>
       <Card className='max-w-md w-full'>
@@ -53,15 +55,20 @@ export default function ForgotPasswordPage (): JSX.Element {
               <div className='flex items-center'>
                 <Button
                   disabled={counter !== 0}
-                  onClick={() => { setCounter(60) }}
+                  onClick={resetCounter}
                 >
-                  Volver a intentar
+                  {counter === 0 ? ('Volver a intentar') : ('Revisa tu correo')}
                 </Button>
-                {counter !== 0 && (<><TimerIcon className='ml-3 mr-1' size={16} /> {counter} </>)}
+                {counter !== 0 && (
+                  <><TimerIcon className='ml-3 mr-1' size={16} /> {counter}</>
+                )}
               </div>
               )
             : (
-              <ForgotPasswordForm setIsLinkSent={setIsLinkSent} />
+              <ForgotPasswordForm
+                resetCounter={resetCounter}
+                setIsLinkSent={setIsLinkSent}
+              />
               )}
         </CardContent>
       </Card>
