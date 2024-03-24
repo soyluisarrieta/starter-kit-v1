@@ -10,7 +10,7 @@ import GuestLayout from '@/components/layouts/GuestLayout'
 import ForgotPasswordPage from '@/components/pages/Auth/ForgotPasswordPage'
 import ResetPasswordPage from '@/components/pages/Auth/ResetPasswordPage'
 
-export default function App (): JSX.Element {
+export default function Router (): JSX.Element {
   const guestRoutes = [
     { path: '/ingresar', component: LoginPage },
     { path: '/registrarse', component: RegisterPage },
