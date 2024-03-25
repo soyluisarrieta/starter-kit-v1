@@ -1,4 +1,5 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import BackdropBlur from '@/components/ui/backdrop-blur'
 import { Button } from '@/components/ui/button'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
@@ -29,10 +30,10 @@ interface SidebarProps {
 
 export default function Sidebar ({ className, menuItems, user, onLogout }: SidebarProps): JSX.Element {
   const { isMobile } = useScreenSize()
-  const mobileClasses = isMobile && 'fixed'
+  const mobileClasses = isMobile && 'w-screen fixed flex'
 
   return (
-    <div className={cn('w-screen', mobileClasses)}>
+    <div className={cn(mobileClasses)}>
       <ScrollArea className={cn('h-screen bg-background overflow-y-auto border-r relative', className)} style={{ maxWidth: 270 }}>
         <div className='h-screen min-h-fit flex flex-col '>
           <div className='flex-grow-0 py-4 px-6'>
@@ -124,6 +125,9 @@ export default function Sidebar ({ className, menuItems, user, onLogout }: Sideb
           </div>
         </div>
       </ScrollArea>
+      {isMobile && (
+        <BackdropBlur className='flex-1' onClick={() => { alert('Closing sidebar') }} />
+      )}
     </div>
   )
 }
