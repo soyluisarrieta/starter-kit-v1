@@ -1,3 +1,9 @@
+const API = import.meta.env.VITE_BACKEND_URL_LOCAL
+
+export const IMAGES = {
+  AVATARS: API + '/avatar'
+}
+
 export const DOC_URL = 'https://paylusestudio.com/'
 
 export const COPYRIGHT = {

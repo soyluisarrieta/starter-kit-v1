@@ -2,7 +2,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
-import { COPYRIGHT, DOC_URL } from '@/constants'
+import { COPYRIGHT, DOC_URL, IMAGES } from '@/constants'
 import { cn } from '@/lib/utils'
 import { getYear } from 'date-fns'
 import { BellIcon, HelpCircleIcon, type LucideIcon, HistoryIcon, SettingsIcon, LogOutIcon } from 'lucide-react'
@@ -62,12 +62,14 @@ export default function Sidebar ({ className, menuItems, user, onLogout }: Sideb
         <div className="w-full flex items-center gap-1 p-4">
           <Link to='/ajustes/perfil'>
             <Avatar>
-              <AvatarImage src="https://github.com/shadcn.png" />
-              <AvatarFallback className='bg-primary text-primary-foreground'>CN</AvatarFallback>
+              <AvatarImage src={user?.avatar && IMAGES.AVATARS + user.avatar} />
+              <AvatarFallback className='bg-primary text-primary-foreground'>
+                {user?.name[0]}{user?.last_name[0]}
+              </AvatarFallback>
             </Avatar>
           </Link>
           <div className='flex-1 text-left pl-1 whitespace-nowrap overflow-hidden'>
-            <h2 className="text-base font-semibold -mb-1 text-ellipsis overflow-hidden" title={`${user?.name} ${user?.name}`}>
+            <h2 className="text-base font-semibold -mb-1 text-ellipsis overflow-hidden" title={`${user?.name} ${user?.last_name}`}>
                 {user?.name} {user?.last_name}
             </h2>
             <span className="block text-muted-foreground text-ellipsis overflow-hidden" style={{ fontSize: 11 }} title={user?.email}>
