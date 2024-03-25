@@ -1,3 +1,10 @@
+export const DOC_URL = 'https://paylusestudio.com/'
+
+export const COPYRIGHT = {
+  NAME: 'Paylus Estudio',
+  URL: 'https://paylusestudio.com/'
+}
+
 export const MESSAGE = {
   WELCOME: '¡Bienvenido a tu panel administrativo!',
   LOGOUT: 'Sesión finalizada correctamente',
