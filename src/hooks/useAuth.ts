@@ -1,8 +1,8 @@
 import nProgress from 'nprogress'
 import { logoutService, profileService } from '@/services/authService'
 import { useAuthStore } from '@/store/AuthStore'
-import { toast } from 'sonner'
 import { MESSAGE } from '@/constants'
+import { toast } from 'react-toastify'
 
 interface AuthHook {
   isAuth: boolean
@@ -31,7 +31,7 @@ export function useAuth (): AuthHook {
     try {
       await logoutService()
       setProfile(null)
-      toast.success(MESSAGE.LOGOUT, { position: 'top-right' })
+      toast.success(MESSAGE.LOGOUT)
     } catch (err) {
       console.warn(err)
     } finally {

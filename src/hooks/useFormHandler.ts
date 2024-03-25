@@ -3,10 +3,10 @@ import { useYupValidationResolver } from '@/lib/yup/useYupValidationResolver'
 import { csrfService } from '@/services/authService'
 import nProgress from 'nprogress'
 import { type UseFormReturn, type UseFormProps, useForm } from 'react-hook-form'
-import { toast } from 'sonner'
 import { navigate } from 'wouter/use-browser-location'
 import { type AnyObjectSchema } from 'yup'
 import { useMutation } from 'react-query'
+import { toast } from 'react-toastify'
 
 interface FormHandlerProps {
   withCsrf?: boolean
@@ -50,7 +50,7 @@ export function useFormHandler ({
     // success
     onSuccess: () => {
       if (successMessage) {
-        toast.success(successMessage, { duration: 5000 })
+        toast.success(successMessage)
       }
       if (redirectTo) {
         navigate(redirectTo, { replace: true })
