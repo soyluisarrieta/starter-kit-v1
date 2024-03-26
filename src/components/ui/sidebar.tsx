@@ -6,6 +6,7 @@ import { Separator } from '@/components/ui/separator'
 import { COPYRIGHT, DOC_URL, IMAGES } from '@/constants'
 import { useScreenSize } from '@/hooks/useScreenSize'
 import { cn } from '@/lib/utils'
+import { useSidebarStore } from '@/store/SidebarStore'
 import { getYear } from 'date-fns'
 import { BellIcon, HelpCircleIcon, type LucideIcon, HistoryIcon, SettingsIcon, LogOutIcon } from 'lucide-react'
 import { Link } from 'wouter'
@@ -30,12 +31,18 @@ interface SidebarProps {
 
 export default function Sidebar ({ className, menuItems, user, onLogout }: SidebarProps): JSX.Element {
   const { isMobile } = useScreenSize()
+  const { sidebarOpen, toggleSidebar } = useSidebarStore()
+
   const mobileClasses = isMobile && 'w-screen fixed flex'
 
   return (
-    <div className={cn(mobileClasses)}>
-      <ScrollArea className={cn('h-screen bg-background overflow-y-auto border-r relative', className)} style={{ maxWidth: 270 }}>
-        <div className='h-screen min-h-fit flex flex-col '>
+    <div className={cn(mobileClasses, !sidebarOpen && isMobile && 'pointer-events-none')}>
+      {isMobile && sidebarOpen && (
+        <BackdropBlur className={'absolute inset-0'} onClick={() => { toggleSidebar() }} />
+      )}
+
+      <ScrollArea className={cn('h-screen bg-background overflow-y-auto border-r relative transition -left-px', className, isMobile && !sidebarOpen && ' -translate-x-full')} style={{ maxWidth: 270 }}>
+        <div className='h-screen min-h-fit flex flex-col'>
           <div className='flex-grow-0 py-4 px-6'>
             LOGO
           </div>
@@ -125,9 +132,6 @@ export default function Sidebar ({ className, menuItems, user, onLogout }: Sideb
           </div>
         </div>
       </ScrollArea>
-      {isMobile && (
-        <BackdropBlur className='flex-1' onClick={() => { alert('Closing sidebar') }} />
-      )}
     </div>
   )
 }
