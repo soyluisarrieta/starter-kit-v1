@@ -35,9 +35,9 @@ export function useScreenSize (): {
 
   return {
     screenSize,
-    smScreen: screenSize.width < 640,
-    mdScreen: screenSize.width < 768,
-    lgScreen: screenSize.width < 1024,
+    smScreen: screenSize.width >= 640,
+    mdScreen: screenSize.width >= 768,
+    lgScreen: screenSize.width >= 1024,
     xlScreen: screenSize.width >= 1280
   }
 }
