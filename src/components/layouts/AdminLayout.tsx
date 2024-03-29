@@ -1,9 +1,8 @@
 import Authenticating from '@/components/pages/Auth/AuthLoader'
-import { Button } from '@/components/ui/button'
 import Sidebar from '@/components/ui/sidebar'
 import { useAuth } from '@/hooks/useAuth'
 import { useCheckAuth } from '@/hooks/useCheckAuth'
-import { HomeIcon, LogOutIcon, Settings2Icon } from 'lucide-react'
+import { HomeIcon } from 'lucide-react'
 import { Redirect, useLocation } from 'wouter'
 
 export default function AdminLayout ({ children }: ComponentProps): JSX.Element {
@@ -24,7 +23,7 @@ export default function AdminLayout ({ children }: ComponentProps): JSX.Element 
   }
 
   // Sidebar menu items
-  const sidebar = [
+  const sidebarItems = [
     {
       title: 'Título',
       items: [
@@ -47,9 +46,9 @@ export default function AdminLayout ({ children }: ComponentProps): JSX.Element 
 
   // User authenticated
   return (
-    <div className='h-screen flex'>
+    <div className='h-dvh flex overflow-hidden'>
       <Sidebar
-        menuItems={sidebar}
+        menuItems={sidebarItems}
         user={profile}
         onLogout={logout}
       />
