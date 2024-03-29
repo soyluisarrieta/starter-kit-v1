@@ -14,8 +14,10 @@ function getCurrentDimension (): Dimension {
 
 export function useScreenSize (): {
   screenSize: Dimension
-  isMobile: boolean
-  isDesktop: boolean
+  smScreen: boolean
+  mdScreen: boolean
+  lgScreen: boolean
+  xlScreen: boolean
 } {
   const [screenSize, setScreenSize] = useState(getCurrentDimension)
 
@@ -31,8 +33,11 @@ export function useScreenSize (): {
     }
   }, [])
 
-  const isMobile = screenSize.width < 768
-  const isDesktop = screenSize.width >= 768
-
-  return { screenSize, isMobile, isDesktop }
+  return {
+    screenSize,
+    smScreen: screenSize.width < 640,
+    mdScreen: screenSize.width < 768,
+    lgScreen: screenSize.width < 1024,
+    xlScreen: screenSize.width >= 1280
+  }
 }
