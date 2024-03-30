@@ -9,6 +9,8 @@ import RegisterPage from '@/components/pages/Auth/RegisterPage'
 import GuestLayout from '@/components/layouts/GuestLayout'
 import ForgotPasswordPage from '@/components/pages/Auth/ForgotPasswordPage'
 import ResetPasswordPage from '@/components/pages/Auth/ResetPasswordPage'
+import SettingsPage from '@/components/pages/SettingsPage'
+import ProfilePage from '@/components/pages/Auth/ProfilePage'
 
 export default function Router (): JSX.Element {
   const guestRoutes = [
@@ -20,7 +22,9 @@ export default function Router (): JSX.Element {
 
   const protectedRoutes = [
     { path: '/', component: DashboardPage },
-    { path: '/usuarios', component: UsersPage }
+    { path: '/usuarios', component: UsersPage },
+    { path: '/ajustes', component: SettingsPage },
+    { path: '/ajustes/perfil', component: ProfilePage }
   ]
 
   return (
