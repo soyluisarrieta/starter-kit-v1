@@ -3,6 +3,7 @@ import BackdropBlur from '@/components/ui/backdrop-blur'
 import { Button } from '@/components/ui/button'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { COPYRIGHT, DOC_URL, IMAGES } from '@/constants'
 import { useScreenSize } from '@/hooks/useScreenSize'
 import { cn } from '@/lib/utils'
@@ -41,9 +42,16 @@ export default function Sidebar ({ menuItems, user, onLogout }: SidebarProps): J
           <div className='h-dvh min-h-fit flex flex-col'>
             <div className='flex-grow-0 py-4 px-2.5 flex items-center'>
               <div className={cn('w-full transition-[width] duration-200', isSidebarOpen ? 'flex-1' : 'w-0 overflow-hidden')}>LOGO</div>
-              <Button variant='outline' onClick={toggleSidebar}>
-                <MenuIcon />
-              </Button>
+              <Tooltip delayDuration={0} disableHoverableContent>
+                <TooltipTrigger asChild>
+                  <Button variant='outline' onClick={toggleSidebar}>
+                    <MenuIcon />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent className='select-none pointer-events-none' side='right' sideOffset={14}>
+                  {isSidebarOpen ? 'Cerrar' : 'Abrir'} menú
+                </TooltipContent>
+              </Tooltip>
             </div>
 
             <div className={cn('w-full transition-[width] duration-200 space-y-5 py-4 px-2.5 flex-1', !isSidebarOpen && 'w-[76px]')}>
@@ -53,16 +61,26 @@ export default function Sidebar ({ menuItems, user, onLogout }: SidebarProps): J
                   <ul className="space-y-1">
                     {section.items.map((item, idx) => (
                       <li key={idx}>
-                        <Button
-                          variant={index === 0 && idx === 0 ? 'default' : 'ghost'}
-                          className='w-full'
-                          to={item.link}
-                        >
-                          {item.Icon && <item.Icon className='min-w-fit' size={22} strokeWidth={1.5} />}
-                          <span className={cn('w-full transition-all duration-200 overflow-hidden flex-1', isSidebarOpen ? 'ml-1' : 'flex-1 opacity-0')}>
-                            {item.title}
-                          </span>
-                        </Button>
+                        <Tooltip delayDuration={0} disableHoverableContent>
+                          <TooltipTrigger asChild>
+                            <Link
+                              className={
+                                cn('inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 text-primary hover:bg-primary/5 h-10 px-4 py-2',
+                                  'w-full', index === 0 && idx === 0 ? 'bg-primary text-primary-foreground hover:bg-primary/90' : 'ghost')
+                              }
+                              to={item.link}
+                            >
+                              {item.Icon && <item.Icon className='min-w-fit' size={22} strokeWidth={1.5} />}
+                              <span className={cn('w-full transition-all duration-200 overflow-hidden flex-1', isSidebarOpen ? 'ml-1' : 'flex-1 opacity-0')}>
+                                {item.title}
+                              </span>
+                            </Link>
+                          </TooltipTrigger>
+                          {!isSidebarOpen && (
+                            <TooltipContent className='select-none pointer-events-none' side='right' sideOffset={16}>
+                              {item.title}
+                            </TooltipContent>)}
+                        </Tooltip>
                       </li>
                     ))}
                   </ul>
@@ -74,14 +92,22 @@ export default function Sidebar ({ menuItems, user, onLogout }: SidebarProps): J
               <Separator orientation='horizontal' />
 
               <div className="w-full flex items-center gap-1 p-4">
-                <Link to='/ajustes/perfil'>
-                  <Avatar className='outline outline-2 outline-primary outline-offset-2 ml-0.5'>
-                    <AvatarImage src={user?.avatar && IMAGES.AVATARS + user.avatar} />
-                    <AvatarFallback className='bg-primary text-primary-foreground'>
-                      {user?.name[0]}{user?.last_name[0]}
-                    </AvatarFallback>
-                  </Avatar>
-                </Link>
+                <Tooltip delayDuration={0} disableHoverableContent>
+                  <TooltipTrigger asChild>
+                    <Link to='/ajustes/perfil'>
+                      <Avatar className='outline outline-2 outline-primary outline-offset-2 ml-0.5'>
+                        <AvatarImage src={user?.avatar && IMAGES.AVATARS + user.avatar} />
+                        <AvatarFallback className='bg-primary text-primary-foreground'>
+                          {user?.name[0]}{user?.last_name[0]}
+                        </AvatarFallback>
+                      </Avatar>
+                    </Link>
+                  </TooltipTrigger>
+                  {!isSidebarOpen && (
+                    <TooltipContent className='select-none pointer-events-none ' side='right' sideOffset={24}>
+                      Perfil
+                    </TooltipContent>)}
+                </Tooltip>
 
                 <div className={cn('w-full transition-[width_opacity] duration-200 flex', !isSidebarOpen && 'w-0 opacity-0')}>
                   <div className='flex-1 text-left pl-2 whitespace-nowrap overflow-hidden'>
@@ -116,14 +142,22 @@ export default function Sidebar ({ menuItems, user, onLogout }: SidebarProps): J
                     </a>
                   </div>
                 </div>
-                <Button
-                  variant='outline'
-                  className="w-full"
-                  onClick={onLogout}
-                >
-                  <LogOutIcon className='min-w-fit' size={20} strokeWidth={1.75} />
-                  <span className={cn('w-auto transition-all duration-200 overflow-hidden', !isSidebarOpen ? 'w-0 opacity-0' : 'ml-1')}>Salir</span>
-                </Button>
+                <Tooltip delayDuration={0} disableHoverableContent>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant='outline'
+                      className="w-full"
+                      onClick={onLogout}
+                    >
+                      <LogOutIcon className='min-w-fit' size={20} strokeWidth={1.75} />
+                      <span className={cn('w-auto transition-all duration-200 overflow-hidden', !isSidebarOpen ? 'w-0 opacity-0' : 'ml-1')}>Salir</span>
+                    </Button>
+                  </TooltipTrigger>
+                  {!isSidebarOpen && (
+                    <TooltipContent className='select-none pointer-events-none ' side='right' sideOffset={22}>
+                      Salir
+                    </TooltipContent>)}
+                </Tooltip>
               </div>
 
               <Separator orientation='horizontal' />
