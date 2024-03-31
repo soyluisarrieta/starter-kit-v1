@@ -9,7 +9,7 @@ import { useScreenSize } from '@/hooks/useScreenSize'
 import { cn } from '@/lib/utils'
 import { useSidebarStore } from '@/store/SidebarStore'
 import { getYear } from 'date-fns'
-import { BellIcon, HelpCircleIcon, type LucideIcon, HistoryIcon, SettingsIcon, LogOutIcon, MenuIcon } from 'lucide-react'
+import { HelpCircleIcon, type LucideIcon, HistoryIcon, SettingsIcon, LogOutIcon, Settings2Icon, ChevronsLeftIcon } from 'lucide-react'
 import { Link } from 'wouter'
 
 interface MenuItem {
@@ -37,24 +37,15 @@ export default function Sidebar ({ menuItems, user, onLogout }: SidebarProps): J
     <>
       {!lgScreen && <BackdropBlur className={cn('fixed inset-0 z-10 transition-all duration-200', !isSidebarOpen && 'pointer-events-none')} onClick={() => { isSidebarOpen && toggleSidebar() }} style={{ opacity: isSidebarOpen ? 1 : 0 }} />}
 
-      <aside className={cn('w-10/12 lg:w-72 max-w-72 fixed lg:relative z-10 transition-[width] duration-200 overflow-hidden', !isSidebarOpen && 'w-0 lg:w-[76px]')}>
-        <ScrollArea className='w-full h-dvh bg-background overflow-y-auto border-r'>
-          <div className='h-dvh min-h-fit flex flex-col'>
-            <div className='flex-grow-0 py-4 px-2.5 flex items-center'>
-              <div className={cn('w-full transition-[width] duration-200', isSidebarOpen ? 'flex-1' : 'w-0 overflow-hidden')}>LOGO</div>
-              <Tooltip delayDuration={0} disableHoverableContent>
-                <TooltipTrigger asChild>
-                  <Button variant='outline' onClick={toggleSidebar}>
-                    <MenuIcon />
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent className='select-none pointer-events-none' side='right' sideOffset={14}>
-                  {isSidebarOpen ? 'Cerrar' : 'Abrir'} menú
-                </TooltipContent>
-              </Tooltip>
-            </div>
+      <aside className={cn('w-10/12 lg:w-72 max-w-72 fixed lg:relative z-10 transition-[width] duration-200', !isSidebarOpen && 'w-0 lg:w-[76px]')}>
+        <Button size='icon' className='w-fit h-fit p-1.5 absolute z-10 top-12 right-0 translate-x-1/2 rounded-full' onClick={toggleSidebar}>
+          <ChevronsLeftIcon className={cn('transition-transform duration-200', !isSidebarOpen && '-rotate-180')} size={16} />
+        </Button>
 
-            <div className={cn('w-full transition-[width] duration-200 space-y-5 py-4 px-2.5 flex-1', !isSidebarOpen && 'w-[76px]')}>
+        <ScrollArea className='w-full h-dvh bg-background overflow-y-auto border-r relative'>
+          <div className='h-dvh min-h-fit flex flex-col'>
+            <div className={cn('w-full transition-[width] duration-200 space-y-5 py-4 px-3 flex-1', !isSidebarOpen && 'w-[76px]')}>
+              <div>LOGO</div>
               {menuItems.map((section, index) => (
                 <div key={index}>
                   {section.title && (<h2 className={cn('mb-2 px-2 sm:text-lg font-semibold tracking-tight transition-opacity duration-200 relative', lgScreen && !isSidebarOpen && 'left-0 opacity-0')}>{section.title}</h2>)}
@@ -103,10 +94,9 @@ export default function Sidebar ({ menuItems, user, onLogout }: SidebarProps): J
                       </Avatar>
                     </Link>
                   </TooltipTrigger>
-                  {!isSidebarOpen && (
-                    <TooltipContent className='select-none pointer-events-none ' side='right' sideOffset={24}>
-                      Perfil
-                    </TooltipContent>)}
+                  <TooltipContent className='select-none pointer-events-none ' sideOffset={7}>
+                    Perfil
+                  </TooltipContent>
                 </Tooltip>
 
                 <div className={cn('w-full transition-[width_opacity] duration-200 flex', !isSidebarOpen && 'w-0 opacity-0')}>
@@ -118,9 +108,16 @@ export default function Sidebar ({ menuItems, user, onLogout }: SidebarProps): J
                       {user?.email}
                     </span>
                   </div>
-                  <Button size='icon' variant='ghost' className='h-auto rounded-full aspect-square opacity-90 hover:opacity-100' to='/ajustes'>
-                    <SettingsIcon size={20} strokeWidth={1.5} />
-                  </Button>
+                  <Tooltip delayDuration={0} disableHoverableContent>
+                    <TooltipTrigger>
+                      <Button size='icon' variant='ghost' className='h-auto rounded-full aspect-square opacity-90 hover:opacity-100' to='/ajustes'>
+                        <Settings2Icon size={20} strokeWidth={1.5} />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent className='select-none pointer-events-none'>
+                      Preferencias
+                    </TooltipContent>
+                  </Tooltip>
                 </div>
               </div>
 
@@ -129,17 +126,38 @@ export default function Sidebar ({ menuItems, user, onLogout }: SidebarProps): J
               <div className={cn('w-full transition-[width] duration-200 overflow-hidden px-4 flex items-center', !isSidebarOpen && 'w-[76px]', (!lgScreen || isSidebarOpen) && 'gap-2')}>
                 <div className={cn('w-full transition-[width] duration-200 overflow-hidden min-w-fit', !isSidebarOpen && 'w-0 min-w-0')}>
                   <div className='min-w-fit py-3 opacity-85 hover:opacity-100 flex gap-2'>
-                    <Button variant='outline' size='icon' className="active:opacity-50">
-                      <BellIcon className='min-w-fit' size={20} strokeWidth={1.75} />
-                    </Button>
-                    <Button variant='outline' size='icon' className="active:opacity-50" to='/historial'>
-                      <HistoryIcon className='min-w-fit' size={20} strokeWidth={1.75} />
-                    </Button>
-                    <a href={DOC_URL} target='_blank' rel="noreferrer">
-                      <Button variant='outline' size='icon' className="active:opacity-50">
-                        <HelpCircleIcon className='min-w-fit' size={20} strokeWidth={1.75} />
-                      </Button>
-                    </a>
+                    <Tooltip delayDuration={0} disableHoverableContent>
+                      <TooltipTrigger>
+                        <Button variant='outline' size='icon' className="active:opacity-50" to='/ajustes'>
+                          <SettingsIcon className='min-w-fit' size={20} strokeWidth={1.75} />
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent className='select-none pointer-events-none' side='top'>
+                        Ajustes
+                      </TooltipContent>
+                    </Tooltip>
+                    <Tooltip delayDuration={0} disableHoverableContent>
+                      <TooltipTrigger>
+                        <Button variant='outline' size='icon' className="active:opacity-50" to='/historial'>
+                          <HistoryIcon className='min-w-fit' size={20} strokeWidth={1.75} />
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent className='select-none pointer-events-none' side='top'>
+                        Historial
+                      </TooltipContent>
+                    </Tooltip>
+                    <Tooltip delayDuration={0} disableHoverableContent>
+                      <TooltipTrigger asChild>
+                        <a href={DOC_URL} target='_blank' rel="noreferrer">
+                          <Button variant='outline' size='icon' className="active:opacity-50">
+                            <HelpCircleIcon className='min-w-fit' size={20} strokeWidth={1.75} />
+                          </Button>
+                        </a>
+                      </TooltipTrigger>
+                      <TooltipContent className='select-none pointer-events-none' side='top'>
+                        Ayuda
+                      </TooltipContent>
+                    </Tooltip>
                   </div>
                 </div>
                 <Tooltip delayDuration={0} disableHoverableContent>
@@ -164,7 +182,7 @@ export default function Sidebar ({ menuItems, user, onLogout }: SidebarProps): J
 
               <div className='flex-grow-0 flex gap-1 text-muted-foreground py-2 px-4 whitespace-nowrap' style={{ fontSize: 11 }}>
                 <span>© {getYear(Date())}</span>
-                <span className={cn('w-full transition-[width] duration-200 overflow-hidden', !isSidebarOpen && 'w-0')}> - <a className='font-semibold text-muted-foreground hover:underline underline-offset-2' href={COPYRIGHT.URL} target='_blank' rel="noreferrer">{COPYRIGHT.NAME}</a></span>
+                <span className={cn('w-full transition-all duration-200 overflow-hidden', !isSidebarOpen && 'w-0')}> - <a className='font-semibold text-muted-foreground hover:underline underline-offset-2' href={COPYRIGHT.URL} target='_blank' rel="noreferrer">{COPYRIGHT.NAME}</a></span>
               </div>
             </div>
           </div>
