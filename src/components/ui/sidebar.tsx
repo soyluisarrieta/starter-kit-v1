@@ -38,14 +38,31 @@ export default function Sidebar ({ menuItems, user, onLogout }: SidebarProps): J
       {!lgScreen && <BackdropBlur className={cn('fixed inset-0 z-10 transition-all duration-200', !isSidebarOpen && 'pointer-events-none')} onClick={() => { isSidebarOpen && toggleSidebar() }} style={{ opacity: isSidebarOpen ? 1 : 0 }} />}
 
       <aside className={cn('w-10/12 lg:w-72 max-w-72 fixed lg:relative z-10 transition-[width] duration-200', !isSidebarOpen && 'w-0 lg:w-[76px]')}>
-        <Button size='icon' className='w-fit h-fit p-1.5 absolute z-10 top-12 right-0 translate-x-1/2 rounded-full' onClick={toggleSidebar}>
+        <Button size='icon' className='w-fit h-fit p-1.5 absolute z-10 top-16 right-0 translate-x-1/2 rounded-full active:scale-90' onClick={toggleSidebar}>
           <ChevronsLeftIcon className={cn('transition-transform duration-200', !isSidebarOpen && '-rotate-180')} size={16} />
         </Button>
 
         <ScrollArea className='w-full h-dvh bg-background overflow-y-auto border-r relative'>
           <div className='h-dvh min-h-fit flex flex-col'>
             <div className={cn('w-full transition-[width] duration-200 space-y-5 py-4 px-3 flex-1', !isSidebarOpen && 'w-[76px]')}>
-              <div>LOGO</div>
+              <Link to='/' asChild>
+                <div className='w-fit h-12 flex items-center cursor-pointer transition-transform active:scale-95 hover:opacity-85'>
+                    <div className={cn('h-full flex justify-center items-center flex-shrink-0 ml-0.5')}>
+                      <svg className='h-full cursor-pointer' fill='none' viewBox='0 0 32 32'>
+                        <path
+                          clipRule='evenodd'
+                          d='M17.6482 10.1305L15.8785 7.02583L7.02979 22.5499H10.5278L17.6482 10.1305ZM19.8798 14.0457L18.11 17.1983L19.394 19.4511H16.8453L15.1056 22.5499H24.7272L19.8798 14.0457Z'
+                          fill='currentColor'
+                          fillRule='evenodd'
+                        />
+                      </svg>
+                    </div>
+                    <div className={cn('transition-all duration-200 overflow-hidden font-semibold text-xl select-none', !isSidebarOpen && lgScreen && 'opacity-0')}>
+                      ACME
+                    </div>
+                </div>
+              </Link>
+
               {menuItems.map((section, index) => (
                 <div key={index}>
                   {section.title && (<h2 className={cn('mb-2 px-2 sm:text-lg font-semibold tracking-tight transition-opacity duration-200 relative', lgScreen && !isSidebarOpen && 'left-0 opacity-0')}>{section.title}</h2>)}
@@ -62,7 +79,7 @@ export default function Sidebar ({ menuItems, user, onLogout }: SidebarProps): J
                               to={item.link}
                             >
                               {item.Icon && <item.Icon className='min-w-fit' size={22} strokeWidth={1.5} />}
-                              <span className={cn('w-full transition-all duration-200 overflow-hidden flex-1', isSidebarOpen ? 'ml-1' : 'flex-1 opacity-0')}>
+                              <span className={cn('w-full transition-all duration-200 overflow-hidden flex-1', isSidebarOpen ? 'ml-1' : 'opacity-0')}>
                                 {item.title}
                               </span>
                             </Link>
