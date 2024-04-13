@@ -1,8 +1,8 @@
+import { Icons } from '@/components/icons'
 import Authenticating from '@/components/pages/Auth/AuthLoader'
 import Sidebar from '@/components/ui/sidebar'
 import { useAuth } from '@/hooks/useAuth'
 import { useCheckAuth } from '@/hooks/useCheckAuth'
-import { HomeIcon } from 'lucide-react'
 import { Redirect, useLocation } from 'wouter'
 
 export default function AdminLayout ({ children }: ComponentProps): JSX.Element {
@@ -27,19 +27,19 @@ export default function AdminLayout ({ children }: ComponentProps): JSX.Element 
     {
       title: 'Título',
       items: [
-        { Icon: HomeIcon, title: 'Inicio', link: '/' },
-        { Icon: HomeIcon, title: 'Inicio', link: '/otro' },
-        { Icon: HomeIcon, title: 'Inicio', link: '/otro' },
-        { Icon: HomeIcon, title: 'Inicio', link: '/otro' }
+        { Icon: Icons.Home, title: 'Inicio', link: '/' },
+        { Icon: Icons.Home, title: 'Inicio', link: '/otro' },
+        { Icon: Icons.Home, title: 'Inicio', link: '/otro' },
+        { Icon: Icons.Home, title: 'Inicio', link: '/otro' }
       ]
     },
     {
       title: 'Título',
       items: [
-        { Icon: HomeIcon, title: 'Inicio', link: '/otro' },
-        { Icon: HomeIcon, title: 'Inicio', link: '/otro' },
-        { Icon: HomeIcon, title: 'Inicio', link: '/otro' },
-        { Icon: HomeIcon, title: 'Inicio', link: '/otro' }
+        { Icon: Icons.Home, title: 'Inicio', link: '/otro' },
+        { Icon: Icons.Home, title: 'Inicio', link: '/otro' },
+        { Icon: Icons.Home, title: 'Inicio', link: '/otro' },
+        { Icon: Icons.Home, title: 'Inicio', link: '/otro' }
       ]
     }
   ]

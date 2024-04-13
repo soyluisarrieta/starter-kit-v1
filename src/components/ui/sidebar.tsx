@@ -1,3 +1,4 @@
+import { Icon } from '@/components/icons'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import BackdropBlur from '@/components/ui/backdrop-blur'
 import { Button } from '@/components/ui/button'
@@ -9,13 +10,18 @@ import { useScreenSize } from '@/hooks/useScreenSize'
 import { cn } from '@/lib/utils'
 import { useSidebarStore } from '@/store/SidebarStore'
 import { getYear } from 'date-fns'
-import { HelpCircleIcon, type LucideIcon, HistoryIcon, SettingsIcon, LogOutIcon, Settings2Icon, ChevronsLeftIcon } from 'lucide-react'
+import { HelpCircleIcon, HistoryIcon, SettingsIcon, LogOutIcon, ChevronsLeftIcon } from 'lucide-react'
+import { useState } from 'react'
+import { type IconType } from 'react-icons/lib'
 import { Link } from 'wouter'
 
 interface MenuItem {
   title: string
   link: string
-  Icon?: LucideIcon
+  Icon: {
+    solid: IconType
+    outline: IconType
+  }
 }
 
 interface MenuSection {
@@ -30,6 +36,7 @@ interface SidebarProps {
 }
 
 export default function Sidebar ({ menuItems, user, onLogout }: SidebarProps): JSX.Element {
+  const [hoveredItem, setHoveredItem] = useState<null | MenuItem>(null)
   const { isSidebarOpen, toggleSidebar } = useSidebarStore()
   const { lgScreen } = useScreenSize()
 
@@ -65,7 +72,7 @@ export default function Sidebar ({ menuItems, user, onLogout }: SidebarProps): J
 
               {menuItems.map((section, index) => (
                 <div key={index}>
-                  {section.title && (<h2 className={cn('mb-2 px-2 sm:text-lg font-semibold tracking-tight transition-opacity duration-200 relative', lgScreen && !isSidebarOpen && 'left-0 opacity-0')}>{section.title}</h2>)}
+                  {section.title && (<h2 className={cn('mb-2 px-2 sm:text-md font-semibold tracking-tight transition-opacity duration-200 relative', lgScreen && !isSidebarOpen && 'left-0 opacity-0')}>{section.title}</h2>)}
                   <ul className="space-y-1">
                     {section.items.map((item, idx) => (
                       <li key={idx}>
@@ -73,13 +80,22 @@ export default function Sidebar ({ menuItems, user, onLogout }: SidebarProps): J
                           <TooltipTrigger asChild>
                             <Link
                               className={
-                                cn('opacity-80 hover:opacity-100 inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 text-primary hover:bg-primary/5 h-10 px-4 py-2',
-                                  'w-full', index === 0 && idx === 0 ? 'opacity-100 hover:bg-primary/90' : 'ghost')
+                                cn('relative opacity-80 hover:opacity-100 inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 text-muted-foreground hover:text-white hover:bg-primary h-10 px-4 py-2',
+                                  'w-full', index === 0 && idx === 0 ? 'text-primary opacity-100 before:w-1 before:h-full before:rounded-full before:bg-primary before:absolute before:-left-3' : 'ghost')
                               }
                               to={item.link}
+                              onMouseEnter={() => { setHoveredItem(item) }}
+                              onMouseLeave={() => { setHoveredItem(null) }}
                             >
-                              {item.Icon && <item.Icon className='min-w-fit' size={22} strokeWidth={1.5} />}
-                              <span className={cn('w-full transition-all duration-200 overflow-hidden flex-1', isSidebarOpen ? 'ml-1' : 'opacity-0')}>
+                              <Icon
+                                component={item.Icon}
+                                variant={hoveredItem === item ? 'solid' : 'outline'}
+                                size={20}
+                              />
+                              <span className={
+                                cn('w-full transition-none transition-opacity duration-200 overflow-hidden flex-1 ml-1',
+                                  !isSidebarOpen && 'opacity-0')}
+                              >
                                 {item.title}
                               </span>
                             </Link>
@@ -128,7 +144,7 @@ export default function Sidebar ({ menuItems, user, onLogout }: SidebarProps): J
                   <Tooltip delayDuration={0} disableHoverableContent>
                     <TooltipTrigger>
                       <Button size='icon' variant='ghost' className='h-auto rounded-full aspect-square opacity-90 hover:opacity-100' to='/ajustes'>
-                        <Settings2Icon size={20} strokeWidth={1.5} />
+                        <SettingsIcon size={20} strokeWidth={1.5} />
                       </Button>
                     </TooltipTrigger>
                     <TooltipContent className='select-none pointer-events-none'>
@@ -143,16 +159,6 @@ export default function Sidebar ({ menuItems, user, onLogout }: SidebarProps): J
               <div className={cn('w-full transition-[width] duration-200 overflow-hidden px-4 flex items-center', !isSidebarOpen && 'w-[76px]', (!lgScreen || isSidebarOpen) && 'gap-2')}>
                 <div className={cn('w-full transition-[width] duration-200 overflow-hidden min-w-fit', !isSidebarOpen && 'w-0 min-w-0')}>
                   <div className='min-w-fit py-3 opacity-85 hover:opacity-100 flex gap-2'>
-                    <Tooltip delayDuration={0} disableHoverableContent>
-                      <TooltipTrigger>
-                        <Button variant='outline' size='icon' className="active:opacity-50" to='/ajustes'>
-                          <SettingsIcon className='min-w-fit' size={20} strokeWidth={1.75} />
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent className='select-none pointer-events-none' side='top'>
-                        Ajustes
-                      </TooltipContent>
-                    </Tooltip>
                     <Tooltip delayDuration={0} disableHoverableContent>
                       <TooltipTrigger>
                         <Button variant='outline' size='icon' className="active:opacity-50" to='/historial'>
