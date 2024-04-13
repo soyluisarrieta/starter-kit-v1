@@ -46,14 +46,14 @@ export default function AdminLayout ({ children }: ComponentProps): JSX.Element 
 
   // User authenticated
   return (
-    <div className='h-dvh flex overflow-hidden'>
+    <div className='h-dvh flex overflow-hidden' style={{ backgroundColor: '#f5f5fd' }}>
       <Sidebar
         menuItems={sidebarItems}
         user={profile}
         onLogout={logout}
       />
 
-      <div className='flex-1 overflow-y-auto bg-muted'>
+      <div className='flex-1 overflow-y-auto'>
         {children}
       </div>
     </div>

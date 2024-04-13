@@ -38,11 +38,11 @@ export default function Sidebar ({ menuItems, user, onLogout }: SidebarProps): J
       {!lgScreen && <BackdropBlur className={cn('fixed inset-0 z-10 transition-all duration-200', !isSidebarOpen && 'pointer-events-none')} onClick={() => { isSidebarOpen && toggleSidebar() }} style={{ opacity: isSidebarOpen ? 1 : 0 }} />}
 
       <aside className={cn('w-10/12 lg:w-72 max-w-72 fixed lg:relative z-10 transition-[width] duration-200', !isSidebarOpen && 'w-0 lg:w-[76px]')}>
-        <Button size='icon' className='w-fit h-fit p-1.5 absolute z-10 top-16 right-0 translate-x-1/2 rounded-full active:scale-90' onClick={toggleSidebar}>
+        <Button size='icon' className='w-fit h-fit bg-background hover:bg-foreground text-foreground hover:text-background shadow-md p-1 absolute z-10 top-16 right-0 translate-x-1/2 rounded-full active:scale-90' onClick={toggleSidebar}>
           <ChevronsLeftIcon className={cn('transition-transform duration-200', !isSidebarOpen && '-rotate-180')} size={16} />
         </Button>
 
-        <ScrollArea className='w-full h-dvh bg-background overflow-y-auto border-r relative'>
+        <ScrollArea className='w-full h-dvh shadow-inner overflow-y-auto relative' style={{ backgroundColor: '#ececf6' }}>
           <div className='h-dvh min-h-fit flex flex-col'>
             <div className={cn('w-full transition-[width] duration-200 space-y-5 py-4 px-3 flex-1', !isSidebarOpen && 'w-[76px]')}>
               <Link to='/' asChild>
@@ -73,8 +73,8 @@ export default function Sidebar ({ menuItems, user, onLogout }: SidebarProps): J
                           <TooltipTrigger asChild>
                             <Link
                               className={
-                                cn('inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 text-primary hover:bg-primary/5 h-10 px-4 py-2',
-                                  'w-full', index === 0 && idx === 0 ? 'bg-primary text-primary-foreground hover:bg-primary/90' : 'ghost')
+                                cn('opacity-80 hover:opacity-100 inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 text-primary hover:bg-primary/5 h-10 px-4 py-2',
+                                  'w-full', index === 0 && idx === 0 ? 'opacity-100 hover:bg-primary/90' : 'ghost')
                               }
                               to={item.link}
                             >
