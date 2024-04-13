@@ -36,7 +36,6 @@ interface SidebarProps {
 }
 
 export default function Sidebar ({ menuItems, user, onLogout }: SidebarProps): JSX.Element {
-  const [hoveredItem, setHoveredItem] = useState<null | MenuItem>(null)
   const { isSidebarOpen, toggleSidebar } = useSidebarStore()
   const { lgScreen } = useScreenSize()
 
@@ -49,7 +48,7 @@ export default function Sidebar ({ menuItems, user, onLogout }: SidebarProps): J
           <ChevronsLeftIcon className={cn('transition-transform duration-200', !isSidebarOpen && '-rotate-180')} size={16} />
         </Button>
 
-        <ScrollArea className='w-full h-dvh shadow-inner overflow-y-auto relative' style={{ backgroundColor: '#ececf6' }}>
+        <ScrollArea scrollHideDelay={100000} className='w-full h-dvh shadow-inner overflow-y-auto relative' style={{ backgroundColor: '#ececf6' }}>
           <div className='h-dvh min-h-fit flex flex-col'>
             <div className={cn('w-full transition-[width] duration-200 space-y-5 py-4 px-3 flex-1', !isSidebarOpen && 'w-[76px]')}>
               <Link to='/' asChild>
@@ -80,16 +79,14 @@ export default function Sidebar ({ menuItems, user, onLogout }: SidebarProps): J
                           <TooltipTrigger asChild>
                             <Link
                               className={
-                                cn('h-10 relative opacity-80 hover:opacity-100 inline-flex items-center justify-center whitespace-nowrap rounded-md text-muted-foreground hover:text-white text-sm font-medium ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-primary px-4 py-2',
+                                cn('h-10 relative opacity-80 hover:opacity-95 inline-flex items-center justify-center whitespace-nowrap rounded-md hover:bg-primary/10 text-muted-foreground hover:text-primary text-sm font-medium ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 px-4 py-2',
                                   'w-full', index === 0 && idx === 0 ? 'text-primary opacity-100 before:w-1 before:h-full before:rounded-full before:bg-primary before:absolute before:-left-3' : 'ghost')
                               }
                               to={item.link}
-                              onMouseEnter={() => { setHoveredItem(item) }}
-                              onMouseLeave={() => { setHoveredItem(null) }}
                             >
                               <Icon
                                 component={item.Icon}
-                                variant={hoveredItem === item ? 'solid' : 'outline'}
+                                variant='outline'
                                 size={18}
                               />
                               <span
