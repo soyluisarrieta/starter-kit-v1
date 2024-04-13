@@ -1,4 +1,4 @@
-import { IoCloseOutline, IoNotificationsOutline, IoTimeOutline, IoCameraOutline, IoHelpCircleOutline, IoGrid, IoGridOutline } from 'react-icons/io5'
+import { IoCloseOutline, IoNotificationsOutline, IoTimeOutline, IoCameraOutline, IoHelpCircleOutline } from 'react-icons/io5'
 import { FaRegEyeSlash, FaRegEye, FaXTwitter } from 'react-icons/fa6'
 import { TbLayoutSidebarLeftCollapse, TbLayoutSidebarLeftExpand } from 'react-icons/tb'
 import { MdOutlineDarkMode, MdOutlineLightMode } from 'react-icons/md'
@@ -9,23 +9,12 @@ import { PiCalendarBlank, PiHandshakeDuotone } from 'react-icons/pi'
 import { VscSettings } from 'react-icons/vsc'
 import { LiaAsteriskSolid } from 'react-icons/lia'
 import { FaUser } from 'react-icons/fa'
+import { GridCustomIcon } from '@/components/icons/Sidebar'
 import { type IconBaseProps, type IconType } from 'react-icons/lib'
-
-interface IconProps extends IconBaseProps {
-  component: IconType | { solid?: IconType, outline?: IconType }
-  variant?: 'solid' | 'outline'
-}
-
-export const Icon = ({ component, variant, ...rest }: IconProps): JSX.Element | null => {
-  const IconToRender = typeof component === 'object'
-    ? component[variant ?? 'solid']
-    : component
-  return !IconToRender ? null : <IconToRender {...rest} />
-}
 
 export const Icons = {
   // Commons
-  Home: { solid: IoGrid, outline: IoGridOutline },
+  Home: { ...GridCustomIcon },
   User: AiOutlineUser,
   UserSolid: FaUser,
   Close: IoCloseOutline,
@@ -53,3 +42,34 @@ export const Icons = {
   Camera: IoCameraOutline,
   ShieldAuthSolid: BsShieldLockFill
 }
+
+interface IconProps extends IconBaseProps {
+  component: IconType | { solid?: IconType, outline?: IconType }
+  variant?: 'solid' | 'outline'
+}
+
+export const Icon = ({ component, variant, ...rest }: IconProps): JSX.Element | null => {
+  const IconToRender = typeof component === 'object'
+    ? component[variant ?? 'solid']
+    : component
+  return !IconToRender ? null : <IconToRender {...rest} />
+}
+
+export const SVGCustomIcon = ({ size, color, style, children, ...props }: IconBaseProps): JSX.Element => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    xmlSpace="preserve"
+    width={size ?? '1em'}
+    height={size ?? '1em'}
+    viewBox="0 0 24 24"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    fill="currentColor"
+    style={{ overflow: 'visible', ...style }}
+    {...props}
+  >
+    {children}
+  </svg>
+)

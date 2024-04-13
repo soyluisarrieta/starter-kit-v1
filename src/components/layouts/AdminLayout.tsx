@@ -1,4 +1,4 @@
-import { Icons } from '@/components/icons'
+import { Icons } from '@/components/icons/Icons'
 import Authenticating from '@/components/pages/Auth/AuthLoader'
 import Sidebar from '@/components/ui/sidebar'
 import { useAuth } from '@/hooks/useAuth'

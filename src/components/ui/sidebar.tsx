@@ -1,4 +1,4 @@
-import { Icon } from '@/components/icons'
+import { Icon } from '@/components/icons/Icons'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import BackdropBlur from '@/components/ui/backdrop-blur'
 import { Button } from '@/components/ui/button'
@@ -80,7 +80,7 @@ export default function Sidebar ({ menuItems, user, onLogout }: SidebarProps): J
                           <TooltipTrigger asChild>
                             <Link
                               className={
-                                cn('relative opacity-80 hover:opacity-100 inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 text-muted-foreground hover:text-white hover:bg-primary h-10 px-4 py-2',
+                                cn('h-10 relative opacity-80 hover:opacity-100 inline-flex items-center justify-center whitespace-nowrap rounded-md text-muted-foreground hover:text-white text-sm font-medium ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-primary px-4 py-2',
                                   'w-full', index === 0 && idx === 0 ? 'text-primary opacity-100 before:w-1 before:h-full before:rounded-full before:bg-primary before:absolute before:-left-3' : 'ghost')
                               }
                               to={item.link}
@@ -90,11 +90,11 @@ export default function Sidebar ({ menuItems, user, onLogout }: SidebarProps): J
                               <Icon
                                 component={item.Icon}
                                 variant={hoveredItem === item ? 'solid' : 'outline'}
-                                size={20}
+                                size={18}
                               />
-                              <span className={
-                                cn('w-full transition-none transition-opacity duration-200 overflow-hidden flex-1 ml-1',
-                                  !isSidebarOpen && 'opacity-0')}
+                              <span
+                                className={cn('w-full overflow-hidden flex-1', isSidebarOpen ? 'ml-2' : 'opacity-0')}
+                                style={{ transition: 'opacity 200ms ease, margin 200ms ease' }}
                               >
                                 {item.title}
                               </span>
