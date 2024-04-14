@@ -1,4 +1,4 @@
-import { Icon } from '@/components/icons/Icons'
+import { Icon, icons } from '@/components/icons/Icons'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import BackdropBlur from '@/components/ui/backdrop-blur'
 import { Button } from '@/components/ui/button'
@@ -9,11 +9,10 @@ import { COPYRIGHT, DOC_URL, IMAGES } from '@/constants'
 import { useScreenSize } from '@/hooks/useScreenSize'
 import { cn } from '@/lib/utils'
 import { useSidebarStore } from '@/store/SidebarStore'
+import { useThemeStore } from '@/store/ThemeStore'
 import { getYear } from 'date-fns'
-import { HelpCircleIcon, HistoryIcon, SettingsIcon, LogOutIcon, ChevronsLeftIcon } from 'lucide-react'
-import { useState } from 'react'
-import { type IconType } from 'react-icons/lib'
 import { Link } from 'wouter'
+import { type IconType } from 'react-icons/lib'
 
 interface MenuItem {
   title: string
@@ -38,34 +37,35 @@ interface SidebarProps {
 export default function Sidebar ({ menuItems, user, onLogout }: SidebarProps): JSX.Element {
   const { isSidebarOpen, toggleSidebar } = useSidebarStore()
   const { lgScreen } = useScreenSize()
+  const { darkMode } = useThemeStore()
 
   return (
     <>
       {!lgScreen && <BackdropBlur className={cn('fixed inset-0 z-10 transition-all duration-200', !isSidebarOpen && 'pointer-events-none')} onClick={() => { isSidebarOpen && toggleSidebar() }} style={{ opacity: isSidebarOpen ? 1 : 0 }} />}
 
       <aside className={cn('w-10/12 lg:w-72 max-w-72 fixed lg:relative z-10 transition-[width] duration-200', !isSidebarOpen && 'w-0 lg:w-[76px]')}>
-        <Button size='icon' className='w-fit h-fit bg-background hover:bg-foreground text-foreground hover:text-background shadow-md p-1 absolute z-10 top-16 right-0 translate-x-1/2 rounded-full active:scale-90' onClick={toggleSidebar}>
-          <ChevronsLeftIcon className={cn('transition-transform duration-200', !isSidebarOpen && '-rotate-180')} size={16} />
+        <Button size='icon' className='w-fit h-fit bg-card hover:bg-foreground text-foreground hover:text-background shadow-md dark:shadow-black p-1.5 absolute z-10 top-16 right-0 translate-x-1/2 rounded-full active:scale-90' onClick={toggleSidebar}>
+          <Icon element={icons.CaretDouble} className={cn('transition-transform duration-200', !isSidebarOpen && '-rotate-180')} size={13} />
         </Button>
 
-        <ScrollArea scrollHideDelay={100000} className='w-full h-dvh shadow-inner overflow-y-auto relative' style={{ backgroundColor: '#ececf6' }}>
+        <ScrollArea className='w-full h-dvh shadow-inner relative' style={{ backgroundColor: darkMode ? '#040208' : '#ececf6' }}>
           <div className='h-dvh min-h-fit flex flex-col'>
             <div className={cn('w-full transition-[width] duration-200 space-y-5 py-4 px-3 flex-1', !isSidebarOpen && 'w-[76px]')}>
               <Link to='/' asChild>
                 <div className='w-fit h-12 flex items-center cursor-pointer transition-transform active:scale-95 hover:opacity-85'>
-                    <div className={cn('h-full flex justify-center items-center flex-shrink-0 ml-0.5')}>
-                      <svg className='h-full cursor-pointer' fill='none' viewBox='0 0 32 32'>
-                        <path
-                          clipRule='evenodd'
-                          d='M17.6482 10.1305L15.8785 7.02583L7.02979 22.5499H10.5278L17.6482 10.1305ZM19.8798 14.0457L18.11 17.1983L19.394 19.4511H16.8453L15.1056 22.5499H24.7272L19.8798 14.0457Z'
-                          fill='currentColor'
-                          fillRule='evenodd'
-                        />
-                      </svg>
-                    </div>
-                    <div className={cn('transition-all duration-200 overflow-hidden font-semibold text-xl select-none', !isSidebarOpen && lgScreen && 'opacity-0')}>
-                      ACME
-                    </div>
+                  <div className={cn('h-full flex justify-center items-center flex-shrink-0 ml-0.5')}>
+                    <svg className='h-full cursor-pointer' fill='none' viewBox='0 0 32 32'>
+                      <path
+                        clipRule='evenodd'
+                        d='M17.6482 10.1305L15.8785 7.02583L7.02979 22.5499H10.5278L17.6482 10.1305ZM19.8798 14.0457L18.11 17.1983L19.394 19.4511H16.8453L15.1056 22.5499H24.7272L19.8798 14.0457Z'
+                        fill='currentColor'
+                        fillRule='evenodd'
+                      />
+                    </svg>
+                  </div>
+                  <div className={cn('transition-all duration-200 overflow-hidden font-semibold text-xl select-none', !isSidebarOpen && lgScreen && 'opacity-0')}>
+                    ACME
+                  </div>
                 </div>
               </Link>
 
@@ -85,7 +85,7 @@ export default function Sidebar ({ menuItems, user, onLogout }: SidebarProps): J
                               to={item.link}
                             >
                               <Icon
-                                component={item.Icon}
+                                element={item.Icon}
                                 variant='outline'
                                 size={18}
                               />
@@ -141,11 +141,11 @@ export default function Sidebar ({ menuItems, user, onLogout }: SidebarProps): J
                   <Tooltip delayDuration={0} disableHoverableContent>
                     <TooltipTrigger>
                       <Button size='icon' variant='ghost' className='h-auto rounded-full aspect-square opacity-90 hover:opacity-100' to='/ajustes'>
-                        <SettingsIcon size={20} strokeWidth={1.5} />
+                        <Icon element={icons.Settings} size={20} />
                       </Button>
                     </TooltipTrigger>
                     <TooltipContent className='select-none pointer-events-none'>
-                      Preferencias
+                      Ajustes
                     </TooltipContent>
                   </Tooltip>
                 </div>
@@ -154,28 +154,38 @@ export default function Sidebar ({ menuItems, user, onLogout }: SidebarProps): J
               <Separator orientation='horizontal' />
 
               <div className={cn('w-full transition-[width] duration-200 overflow-hidden px-4 flex items-center', !isSidebarOpen && 'w-[76px]', (!lgScreen || isSidebarOpen) && 'gap-2')}>
-                <div className={cn('w-full transition-[width] duration-200 overflow-hidden min-w-fit', !isSidebarOpen && 'w-0 min-w-0')}>
-                  <div className='min-w-fit py-3 opacity-85 hover:opacity-100 flex gap-2'>
+                <div className={cn('w-full transition-[width] duration-200 min-w-fit', !isSidebarOpen && 'w-0 min-w-0 overflow-hidden')}>
+                  <div className='min-w-fit py-3 opacity-90 hover:opacity-100 flex gap-2'>
                     <Tooltip delayDuration={0} disableHoverableContent>
                       <TooltipTrigger>
-                        <Button variant='outline' size='icon' className="active:opacity-50" to='/historial'>
-                          <HistoryIcon className='min-w-fit' size={20} strokeWidth={1.75} />
+                        <Button variant='outline' size='icon' className="active:opacity-50" to='/registros-de-actualizaciones'>
+                          <Icon element={icons.ChangeLog} className='min-w-fit' size={20} strokeWidth={1.6} />
                         </Button>
                       </TooltipTrigger>
                       <TooltipContent className='select-none pointer-events-none' side='top'>
-                        Historial
+                        Actualizaciones
+                      </TooltipContent>
+                    </Tooltip>
+                    <Tooltip delayDuration={0} disableHoverableContent>
+                      <TooltipTrigger>
+                        <Button variant='outline' size='icon' className="active:opacity-50" to='/movimientos'>
+                          <Icon element={icons.Historical} className='min-w-fit' size={20} strokeWidth={1.6} />
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent className='select-none pointer-events-none' side='top'>
+                        Movimientos
                       </TooltipContent>
                     </Tooltip>
                     <Tooltip delayDuration={0} disableHoverableContent>
                       <TooltipTrigger asChild>
                         <a href={DOC_URL} target='_blank' rel="noreferrer">
                           <Button variant='outline' size='icon' className="active:opacity-50">
-                            <HelpCircleIcon className='min-w-fit' size={20} strokeWidth={1.75} />
+                            <Icon element={icons.Help} className='min-w-fit' size={20} strokeWidth={1.6} />
                           </Button>
                         </a>
                       </TooltipTrigger>
                       <TooltipContent className='select-none pointer-events-none' side='top'>
-                        Ayuda
+                        Centro de ayuda
                       </TooltipContent>
                     </Tooltip>
                   </div>
@@ -187,7 +197,7 @@ export default function Sidebar ({ menuItems, user, onLogout }: SidebarProps): J
                       className="w-full"
                       onClick={onLogout}
                     >
-                      <LogOutIcon className='min-w-fit' size={20} strokeWidth={1.75} />
+                      <Icon element={icons.Logout} className='min-w-fit' size={20} strokeWidth={1.7} />
                       <span className={cn('w-auto transition-all duration-200 overflow-hidden', !isSidebarOpen ? 'w-0 opacity-0' : 'ml-1')}>Salir</span>
                     </Button>
                   </TooltipTrigger>

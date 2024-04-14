@@ -1,34 +1,36 @@
-import { IoCloseOutline, IoNotificationsOutline, IoTimeOutline, IoCameraOutline, IoHelpCircleOutline } from 'react-icons/io5'
+import { IoCloseOutline, IoNotificationsOutline, IoCameraOutline, IoHelpBuoyOutline } from 'react-icons/io5'
 import { FaRegEyeSlash, FaRegEye, FaXTwitter } from 'react-icons/fa6'
-import { TbLayoutSidebarLeftCollapse, TbLayoutSidebarLeftExpand } from 'react-icons/tb'
-import { MdOutlineDarkMode, MdOutlineLightMode } from 'react-icons/md'
+import { TbHistoryToggle, TbLayoutSidebarLeftCollapse, TbLayoutSidebarLeftExpand, TbLicense } from 'react-icons/tb'
 import { BiLogoGoogle } from 'react-icons/bi'
 import { BsFacebook, BsGithub, BsShieldLockFill } from 'react-icons/bs'
 import { AiOutlineUser, AiOutlineLine } from 'react-icons/ai'
-import { PiCalendarBlank, PiHandshakeDuotone } from 'react-icons/pi'
-import { VscSettings } from 'react-icons/vsc'
+import { PiCalendarBlank, PiCaretDoubleLeftBold, PiHandshakeDuotone, PiMoonStarsDuotone, PiSunDimDuotone } from 'react-icons/pi'
 import { LiaAsteriskSolid } from 'react-icons/lia'
 import { FaUser } from 'react-icons/fa'
 import { GridCustomIcon } from '@/components/icons/Sidebar'
+import { FiLogIn, FiLogOut, FiSettings } from 'react-icons/fi'
 import { type IconBaseProps, type IconType } from 'react-icons/lib'
 
-export const Icons = {
+export const icons = {
   // Commons
   Home: { ...GridCustomIcon },
   User: AiOutlineUser,
   UserSolid: FaUser,
   Close: IoCloseOutline,
-  Historical: IoTimeOutline,
+  Historical: TbHistoryToggle,
   Notifications: IoNotificationsOutline,
   Calendar: PiCalendarBlank,
-  Settings: VscSettings,
+  Settings: FiSettings,
   Asterisc: LiaAsteriskSolid,
-  Help: IoHelpCircleOutline,
+  Help: IoHelpBuoyOutline,
+  ChangeLog: TbLicense,
+  Login: FiLogIn,
+  Logout: FiLogOut,
 
   // Toggle
   Eye: { Open: FaRegEyeSlash, Close: FaRegEye },
   Sidebar: { Collapse: TbLayoutSidebarLeftCollapse, Expand: TbLayoutSidebarLeftExpand },
-  ThemeMode: { Dark: MdOutlineDarkMode, Light: MdOutlineLightMode },
+  ThemeMode: { Dark: PiMoonStarsDuotone, Light: PiSunDimDuotone },
 
   // Brands
   Google: BiLogoGoogle,
@@ -40,18 +42,19 @@ export const Icons = {
   Line: AiOutlineLine,
   Handshake: PiHandshakeDuotone,
   Camera: IoCameraOutline,
-  ShieldAuthSolid: BsShieldLockFill
+  ShieldAuthSolid: BsShieldLockFill,
+  CaretDouble: PiCaretDoubleLeftBold
 }
 
 interface IconProps extends IconBaseProps {
-  component: IconType | { solid?: IconType, outline?: IconType }
+  element: IconType | { solid?: IconType, outline?: IconType }
   variant?: 'solid' | 'outline'
 }
 
-export const Icon = ({ component, variant, ...rest }: IconProps): JSX.Element | null => {
-  const IconToRender = typeof component === 'object'
-    ? component[variant ?? 'solid']
-    : component
+export const Icon = ({ element, variant, ...rest }: IconProps): JSX.Element | null => {
+  const IconToRender = typeof element === 'object'
+    ? element[variant ?? 'solid']
+    : element
   return !IconToRender ? null : <IconToRender {...rest} />
 }
 
