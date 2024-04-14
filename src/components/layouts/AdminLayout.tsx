@@ -7,19 +7,23 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Separator } from '@/components/ui/separator'
 import Sidebar from '@/components/ui/sidebar'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { useAuth } from '@/hooks/useAuth'
 import { useCheckAuth } from '@/hooks/useCheckAuth'
+import { useScreenSize } from '@/hooks/useScreenSize'
 import { cn } from '@/lib/utils'
 import { useThemeStore } from '@/store/ThemeStore'
 import { format } from 'date-fns'
+import { useState } from 'react'
 import { Redirect, useLocation } from 'wouter'
 
 export default function AdminLayout ({ children }: ComponentProps): JSX.Element {
+  const [toggleOptions, setToggleOptions] = useState(false)
+
   const isSessionVerified = useCheckAuth()
   const { isAuth, logout, profile } = useAuth()
   const [location] = useLocation()
   const { darkMode, setDarkMode } = useThemeStore()
+  const { xlScreen, mdScreen } = useScreenSize()
 
   // Checking authentication
   if (!isSessionVerified && !isAuth) {
@@ -63,37 +67,35 @@ export default function AdminLayout ({ children }: ComponentProps): JSX.Element 
         onLogout={logout}
       />
 
-      <div className='w-full h-dvh flex-1 overflow-y-auto flex justify-between items-center'>
-        <div className='w-full h-full flex flex-col'>
-          <header className='flex items-center py-4 px-6'>
-            <Breadcrumb className='h-10 flex items-center'>
-              <BreadcrumbList>
-                <BreadcrumbItem>
-                  <BreadcrumbLink href="/">Home</BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbSeparator />
-                <BreadcrumbItem>
-                  <BreadcrumbLink href="/components">Components</BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbSeparator />
-                <BreadcrumbItem>
-                  <BreadcrumbPage>Breadcrumb</BreadcrumbPage>
-                </BreadcrumbItem>
-              </BreadcrumbList>
-            </Breadcrumb>
-          </header>
-          <div className='h-full'>
-            CONTENIDO PRINCIPAL
-            {children}
-          </div>
-        </div>
+      <div className='w-full h-dvh flex-1 overflow-y-auto flex flex-col justify-between items-center'>
+        <header className='w-full flex items-center gap-1 p-4'>
+          <Breadcrumb className={cn('max-w-0 transition-[max-width] duration-300 h-10 overflow-hidden flex-1 flex items-center', (!toggleOptions || mdScreen) && 'max-w-full')}>
+            <BreadcrumbList className='w-fit flex-nowrap'>
+              <BreadcrumbItem>
+                <BreadcrumbLink href="/">Home</BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem>
+                <BreadcrumbLink href="/components">Components</BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem>
+                <BreadcrumbPage>Breadcrumb</BreadcrumbPage>
+              </BreadcrumbItem>
+            </BreadcrumbList>
+          </Breadcrumb>
 
-        <div className='h-full py-4'>
-          <Separator orientation='vertical' />
-        </div>
+          {!mdScreen && (
+            <Button
+              variant='ghost'
+              size='icon'
+              onClick={() => { setToggleOptions(!toggleOptions) }}
+            >
+              <Icon element={icons.DotsVertical} size={20} />
+            </Button>
+          )}
 
-        <div className='w-96 h-full flex flex-col'>
-          <header className='w-full flex justify-end items-center gap-1 p-4'>
+          <div className={cn('w-0 transition-all duration-300 overflow-hidden flex justify-end items-center gap-1', mdScreen ? 'w-fit' : (toggleOptions && 'w-full'))}>
             <Popover>
               <PopoverTrigger asChild>
                 <Button
@@ -122,7 +124,9 @@ export default function AdminLayout ({ children }: ComponentProps): JSX.Element 
                 <TabsTrigger className='h-full' value="dark"><Icon size={18} element={icons.ThemeMode.Dark} /></TabsTrigger>
               </TabsList>
             </Tabs>
+          </div>
 
+          <div className='min-w-fit'>
             <Button
               variant='outline'
               size='icon'
@@ -130,24 +134,17 @@ export default function AdminLayout ({ children }: ComponentProps): JSX.Element 
             >
               <Icon element={icons.Notifications} variant='outline' size={20} />
             </Button>
+          </div>
+        </header>
 
-            <Tooltip delayDuration={0} disableHoverableContent>
-              <TooltipTrigger>
-                <Button
-                  variant='outline'
-                  size='icon'
-                  className='bg-card border-0 dark:border shadow-sm hover:bg-card hover:shadow-md transition-all duration-200 hover:border-muted-foreground/50 hover:text-muted-foreground'
-                >
-                  <Icon element={icons.AnaliticPanel} size={20} />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent className='select-none pointer-events-none text-center' side='top'>
-                Panel de<br />analíticas
-              </TooltipContent>
-            </Tooltip>
-          </header>
-          <div className='h-full'>
-            ANALÍTICAS
+        <div className={cn('w-full h-full flex flex-col', xlScreen && ' flex-row')}>
+          <div className={cn('w-full p-4 order-last', xlScreen && 'order-first')}>
+            CONTENIDO PRINCIPAL
+            {children}
+          </div>
+          <Separator orientation={xlScreen ? 'vertical' : 'horizontal'} />
+          <div className='w-full max-w-lg p-4'>
+            ANALITICAS
           </div>
         </div>
       </div>
