@@ -1,10 +1,10 @@
-import { IoCloseOutline, IoNotificationsOutline, IoCameraOutline, IoHelpBuoyOutline } from 'react-icons/io5'
+import { IoCloseOutline, IoNotificationsOutline, IoCameraOutline, IoHelpBuoyOutline, IoNotifications } from 'react-icons/io5'
 import { FaRegEyeSlash, FaRegEye, FaXTwitter } from 'react-icons/fa6'
-import { TbHistoryToggle, TbLayoutSidebarLeftCollapse, TbLayoutSidebarLeftExpand, TbLicense } from 'react-icons/tb'
+import { TbHistoryToggle, TbLicense } from 'react-icons/tb'
 import { BiLogoGoogle } from 'react-icons/bi'
 import { BsFacebook, BsGithub, BsShieldLockFill } from 'react-icons/bs'
 import { AiOutlineUser, AiOutlineLine } from 'react-icons/ai'
-import { PiCalendarBlank, PiCaretDoubleLeftBold, PiHandshakeDuotone, PiMoonStarsDuotone, PiSunDimDuotone } from 'react-icons/pi'
+import { PiCalendarBlank, PiCaretDoubleLeftBold, PiHandshakeDuotone, PiMoonStarsDuotone, PiProjectorScreenChart, PiSunDimDuotone } from 'react-icons/pi'
 import { LiaAsteriskSolid } from 'react-icons/lia'
 import { FaUser } from 'react-icons/fa'
 import { GridCustomIcon } from '@/components/icons/Sidebar'
@@ -18,7 +18,7 @@ export const icons = {
   UserSolid: FaUser,
   Close: IoCloseOutline,
   Historical: TbHistoryToggle,
-  Notifications: IoNotificationsOutline,
+  Notifications: { solid: IoNotifications, outline: IoNotificationsOutline },
   Calendar: PiCalendarBlank,
   Settings: FiSettings,
   Asterisc: LiaAsteriskSolid,
@@ -29,7 +29,6 @@ export const icons = {
 
   // Toggle
   Eye: { Open: FaRegEyeSlash, Close: FaRegEye },
-  Sidebar: { Collapse: TbLayoutSidebarLeftCollapse, Expand: TbLayoutSidebarLeftExpand },
   ThemeMode: { Dark: PiMoonStarsDuotone, Light: PiSunDimDuotone },
 
   // Brands
@@ -43,7 +42,8 @@ export const icons = {
   Handshake: PiHandshakeDuotone,
   Camera: IoCameraOutline,
   ShieldAuthSolid: BsShieldLockFill,
-  CaretDouble: PiCaretDoubleLeftBold
+  CaretDouble: PiCaretDoubleLeftBold,
+  AnaliticPanel: PiProjectorScreenChart
 }
 
 interface IconProps extends IconBaseProps {
