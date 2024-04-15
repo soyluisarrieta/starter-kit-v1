@@ -9,7 +9,6 @@ import { COPYRIGHT, DOC_URL, IMAGES } from '@/constants'
 import { useScreenSize } from '@/hooks/useScreenSize'
 import { cn } from '@/lib/utils'
 import { useSidebarStore } from '@/store/SidebarStore'
-import { useThemeStore } from '@/store/ThemeStore'
 import { getYear } from 'date-fns'
 import { Link } from 'wouter'
 import { type IconType } from 'react-icons/lib'
@@ -37,18 +36,17 @@ interface SidebarProps {
 export default function Sidebar ({ menuItems, user, onLogout }: SidebarProps): JSX.Element {
   const { isSidebarOpen, toggleSidebar } = useSidebarStore()
   const { lgScreen } = useScreenSize()
-  const { darkMode } = useThemeStore()
 
   return (
     <>
       {!lgScreen && <BackdropBlur className={cn('fixed inset-0 z-10 transition-all duration-200', !isSidebarOpen && 'pointer-events-none')} onClick={() => { isSidebarOpen && toggleSidebar() }} style={{ opacity: isSidebarOpen ? 1 : 0 }} />}
 
-      <aside className={cn('w-10/12 lg:w-72 max-w-72 fixed lg:relative z-10 transition-[width] duration-200', !isSidebarOpen && 'w-0 lg:w-[76px]')}>
-        <Button size='icon' className='w-fit h-fit bg-card hover:bg-foreground text-foreground hover:text-background shadow-md dark:shadow-black p-1.5 absolute z-10 top-16 right-0 translate-x-1/2 rounded-full active:scale-90' onClick={toggleSidebar}>
+      <aside className={cn('w-10/12 lg:w-72 max-w-72 fixed lg:relative z-10 transition-[width] duration-200 bg-background', !isSidebarOpen && 'w-0 lg:w-[76px]')}>
+        <Button size='icon' className='w-fit h-fit bg-card hover:bg-foreground text-foreground hover:text-background shadow-md dark:shadow-black/70 p-1.5 absolute z-10 top-16 right-0 translate-x-1/2 rounded-full active:scale-90' onClick={toggleSidebar}>
           <Icon element={icons.CaretDouble} className={cn('transition-transform duration-200', !isSidebarOpen && '-rotate-180')} size={13} />
         </Button>
 
-        <ScrollArea className='w-full h-dvh shadow-inner relative' style={{ backgroundColor: darkMode ? '#040208' : '#ececf6' }}>
+        <ScrollArea className='w-full h-dvh shadow-inner relative bg-blue-900/5 dark:bg-black/15 border-r border-card/50'>
           <div className='h-dvh min-h-fit flex flex-col'>
             <div className={cn('w-full transition-[width] duration-200 space-y-5 py-4 px-3 flex-1', !isSidebarOpen && 'w-[76px]')}>
               <Link to='/' asChild>
@@ -168,12 +166,12 @@ export default function Sidebar ({ menuItems, user, onLogout }: SidebarProps): J
                     </Tooltip>
                     <Tooltip delayDuration={0} disableHoverableContent>
                       <TooltipTrigger>
-                        <Button variant='outline' size='icon' className="active:opacity-50" to='/movimientos'>
+                        <Button variant='outline' size='icon' className="active:opacity-50" to='/historial'>
                           <Icon element={icons.Historical} className='min-w-fit' size={20} strokeWidth={1.6} />
                         </Button>
                       </TooltipTrigger>
                       <TooltipContent className='select-none pointer-events-none' side='top'>
-                        Movimientos
+                        Historial
                       </TooltipContent>
                     </Tooltip>
                     <Tooltip delayDuration={0} disableHoverableContent>
