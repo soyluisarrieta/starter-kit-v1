@@ -148,7 +148,7 @@ export default function AdminLayout ({ metricsPanel: MetricsPanel, children }: P
           {MetricsPanel && (
             <>
               <Separator orientation={xlScreen ? 'vertical' : 'horizontal'} />
-              <div className='w-full max-w-lg p-4'>
+              <div className='w-full xl:max-w-lg p-4'>
                 <MetricsPanel />
               </div>
             </>

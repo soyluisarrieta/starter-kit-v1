@@ -14,18 +14,18 @@ export default function CardIconMetric ({ icon, title, description, url }: Props
   const Wrapper = url ? Link : Fragment
   return (
     <Wrapper to={url ?? '#' + title} asChild>
-      <Card className='cursor-pointer group hover:brightness-110 border-none rounded-xl'>
+      <Card className='cursor-pointer group bg-transparent hover:bg-card hover:brightness-125 border-none rounded-xl'>
         <CardContent className='p-6 flex items-center gap-4'>
-          <div className='size-14 border border-muted rounded-full p-3'>
+          <div className='xl:size-14 size-12 border border-muted rounded-full p-3'>
             <Icon element={icon} size='100%' />
           </div>
-          <div className='flex-1'>
-            <h4 className='text-xl'>{title}</h4>
+          <div className='flex-1 flex flex-col'>
+            <h3 className='text-xl xl:text-2xl font-semibold'>{title}</h3>
             <small className='text-muted-foreground'>{description}</small>
           </div>
-          <div>
+          {url && <div className=''>
             <Icon element={icons.Caret} className='-scale-x-100 transition-transform translate-x-1.5 group-hover:translate-x-2 opacity-30 group-hover:opacity-90' size='18' />
-          </div>
+          </div>}
         </CardContent>
       </Card>
     </Wrapper>
