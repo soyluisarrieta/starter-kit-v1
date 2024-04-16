@@ -8,7 +8,7 @@ export default function MasterLayout ({ children }: ComponentProps): JSX.Element
       {children}
       <ToastContainer
         className="
-          w-auto h-dvh font-bold transform-none right-40 left-40
+          w-auto font-bold transform-none right-40 left-40
           [&_.Toastify\_\_toast--info]:bg-blue-600 [&_.Toastify\_\_toast--info]:text-white [&_.Toastify\_\_toast--info_.Toastify\_\_toast-icon>svg]:fill-white [&_.Toastify\_\_toast--info_.Toastify\_\_progress-bar]:bg-blue-900
           [&_.Toastify\_\_toast--success]:bg-green-500 [&_.Toastify\_\_toast--success]:text-green-950 [&_.Toastify\_\_toast--success_.Toastify\_\_toast-icon>svg]:fill-green-950 [&_.Toastify\_\_toast--success_.Toastify\_\_progress-bar]:bg-green-800
           [&_.Toastify\_\_toast--warning]:bg-amber-300 [&_.Toastify\_\_toast--warning]:text-amber-900 [&_.Toastify\_\_toast--warning_.Toastify\_\_toast-icon>svg]:fill-amber-800 [&_.Toastify\_\_toast--warning_.Toastify\_\_progress-bar]:bg-amber-600
