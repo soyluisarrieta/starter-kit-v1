@@ -4,7 +4,7 @@ import { TbHistoryToggle, TbLicense } from 'react-icons/tb'
 import { BiLogoGoogle } from 'react-icons/bi'
 import { BsFacebook, BsGithub } from 'react-icons/bs'
 import { AiOutlineUser } from 'react-icons/ai'
-import { PiCalendarBlank, PiCaretDoubleLeftBold, PiMoonStarsDuotone, PiProjectorScreenChart, PiSunDimDuotone } from 'react-icons/pi'
+import { PiCalendarBlank, PiCaretDoubleLeftBold, PiCaretLeft, PiMoonStarsDuotone, PiProjectorScreenChart, PiSunDimDuotone } from 'react-icons/pi'
 import { LiaAsteriskSolid } from 'react-icons/lia'
 import { FaUser } from 'react-icons/fa'
 import { GridCustomIcon } from '@/components/icons/Sidebar'
@@ -40,11 +40,12 @@ export const icons = {
   Twitter: FaXTwitter,
 
   // Others
+  Caret: PiCaretLeft,
   CaretDouble: PiCaretDoubleLeftBold,
   AnaliticPanel: PiProjectorScreenChart
 }
 
-interface IconProps extends IconBaseProps {
+export interface IconProps extends IconBaseProps {
   element: IconType | { solid?: IconType, outline?: IconType }
   variant?: 'solid' | 'outline'
 }
