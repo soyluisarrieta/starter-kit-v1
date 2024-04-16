@@ -1,25 +1,12 @@
-import { Button } from '@/components/ui/button'
 import { useAuth } from '@/hooks/useAuth'
-import { Link } from 'wouter'
 
 export default function DashboardPage (): JSX.Element {
   const { profile } = useAuth()
 
   return (
     <main>
-      <p className='font-light text-4xl'>¡Hey, {profile?.name}!</p>
-      <p className='font-bold text-4xl'>Bienvenid{profile?.gender_letter} de vuelta</p>
-
-      <div className='w-96 m-5 p-5 border-2 border-zinc-500 rounded bg-zinc-900 text-zinc-100'>
-        {profile && Object.entries(profile).map(([key, value]) => (
-          <p key={key}>{`${key}: ${value}`}<br /></p>
-        ))}
-      </div>
-
-      <br />
-      <Link to='/usuarios'>
-        <Button>Usuarios</Button>
-      </Link>
+      <p className='font-light text-4xl mb-1 opacity-60'>¡Hey, {profile?.name}!</p>
+      <p className='font-semibold text-4xl opacity-90'>Bienvenid{profile?.gender_letter} de vuelta</p>
     </main>
   )
 }

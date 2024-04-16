@@ -1,5 +1,5 @@
 import { Icon, icons } from '@/components/icons/Icons'
-import Authenticating from '@/components/pages/Auth/AuthLoader'
+import Authenticating from '@/components/pages/auth/AuthLoader'
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb'
 import { Button } from '@/components/ui/button'
 import { Calendar } from '@/components/ui/calendar'
@@ -16,7 +16,11 @@ import { format } from 'date-fns'
 import { useState } from 'react'
 import { Redirect, useLocation } from 'wouter'
 
-export default function AdminLayout ({ children }: ComponentProps): JSX.Element {
+interface Props extends ComponentProps {
+  metricsPanel: React.ComponentType | undefined
+}
+
+export default function AdminLayout ({ metricsPanel: MetricsPanel, children }: Props): JSX.Element {
   const [toggleOptions, setToggleOptions] = useState(false)
 
   const isSessionVerified = useCheckAuth()
@@ -141,10 +145,14 @@ export default function AdminLayout ({ children }: ComponentProps): JSX.Element 
           <div className={cn('w-full p-4 order-last', xlScreen && 'order-first')}>
             {children}
           </div>
-          <Separator orientation={xlScreen ? 'vertical' : 'horizontal'} />
-          <div className='w-full max-w-lg p-4'>
-            ANALITICAS
-          </div>
+          {MetricsPanel && (
+            <>
+              <Separator orientation={xlScreen ? 'vertical' : 'horizontal'} />
+              <div className='w-full max-w-lg p-4'>
+                <MetricsPanel />
+              </div>
+            </>
+          )}
         </div>
       </div>
     </div>
