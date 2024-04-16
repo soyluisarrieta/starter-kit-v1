@@ -15,8 +15,10 @@ interface Credentials {
 interface User {
   name: string
   last_name: string
+  full_name: string
   birthdate?: string
   gender?: 'male' | 'female' | 'other'
+  gender_letter?: 'o' | 'a' | '@'
   phone?: string
   address?: string
   avatar?: string

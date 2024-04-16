@@ -1,6 +1,5 @@
-import axios from '@/lib/axios'
+import { profileService } from '@/services/authService'
 import { useAuthStore, useSessionVerified } from '@/store/AuthStore'
-import { type AxiosResponse } from 'axios'
 import nProgress from 'nprogress'
 import { useEffect } from 'react'
 
@@ -11,8 +10,8 @@ export function useCheckAuth (): boolean {
   const checkAuthentication = async (): Promise<void> => {
     nProgress.start()
     try {
-      const response: AxiosResponse<ProfileAuth> = await axios('/api/user')
-      setProfile(response.data)
+      const user = await profileService()
+      setProfile(user)
     } catch (err) {
       console.warn(err)
       setProfile(null)

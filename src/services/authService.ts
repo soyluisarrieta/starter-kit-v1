@@ -5,8 +5,26 @@ export const csrfService = async (): Promise<void> => {
 }
 
 export const profileService = async (): Promise<ProfileAuth> => {
-  const response = await axios.get('/api/user')
-  return response.data
+  const { data: user } = await axios.get('/api/user')
+  const fullName = `${user.name} ${user.last_name}`
+  const genderLetter = user.gender === 'female' ? 'a' : (user.gender === 'male' ? 'o' : '@')
+  return {
+    id: user.id,
+    name: user.name,
+    last_name: user.last_name,
+    full_name: fullName,
+    birthdate: user.birthdate,
+    gender: user.gender,
+    gender_letter: genderLetter,
+    phone: user.phone,
+    address: user.address,
+    avatar: user.avatar,
+    email: user.email,
+    last_activity: user.last_activity,
+    created_at: user.created_at,
+    updated_at: user.updated_at,
+    active: user.active
+  }
 }
 
 export const logoutService = async (): Promise<void> => {

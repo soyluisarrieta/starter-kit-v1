@@ -6,9 +6,9 @@ export default function DashboardPage (): JSX.Element {
   const { profile } = useAuth()
 
   return (
-    <div>
+    <main>
       <p className='font-light text-4xl'>¡Hey, {profile?.name}!</p>
-      <p className='font-bold text-4xl'>Bienvenido de vuelta</p>
+      <p className='font-bold text-4xl'>Bienvenid{profile?.gender_letter} de vuelta</p>
 
       <div className='w-96 m-5 p-5 border-2 border-zinc-500 rounded bg-zinc-900 text-zinc-100'>
         {profile && Object.entries(profile).map(([key, value]) => (
@@ -20,6 +20,6 @@ export default function DashboardPage (): JSX.Element {
       <Link to='/usuarios'>
         <Button>Usuarios</Button>
       </Link>
-    </div>
+    </main>
   )
 }
