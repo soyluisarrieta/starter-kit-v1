@@ -88,7 +88,7 @@ export default function Sidebar ({ menuItems, user, onLogout }: SidebarProps): J
                                 size={18}
                               />
                               <span
-                                className={cn('w-full overflow-hidden flex-1', isSidebarOpen ? 'ml-2' : 'opacity-0')}
+                                className={cn('w-full overflow-hidden flex-1 font-bold', isSidebarOpen ? 'ml-2' : 'opacity-0')}
                                 style={{ transition: 'opacity 200ms ease, margin 200ms ease' }}
                               >
                                 {item.title}

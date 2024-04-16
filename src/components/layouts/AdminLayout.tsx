@@ -139,7 +139,6 @@ export default function AdminLayout ({ children }: ComponentProps): JSX.Element 
 
         <div className={cn('w-full h-full flex flex-col', xlScreen && ' flex-row')}>
           <div className={cn('w-full p-4 order-last', xlScreen && 'order-first')}>
-            CONTENIDO PRINCIPAL
             {children}
           </div>
           <Separator orientation={xlScreen ? 'vertical' : 'horizontal'} />
