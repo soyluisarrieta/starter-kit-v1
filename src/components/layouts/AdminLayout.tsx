@@ -73,7 +73,7 @@ export default function AdminLayout ({ metricsPanel: MetricsPanel, children }: P
 
       <div className='w-full h-dvh flex-1 overflow-y-auto flex flex-col justify-between items-center'>
         <header className='w-full flex items-center gap-1 p-4'>
-          <Breadcrumb className={cn('max-w-0 transition-[max-width] duration-300 h-10 overflow-hidden flex-1 flex items-center', (!toggleOptions || mdScreen) && 'max-w-full')}>
+          <Breadcrumb className={cn('max-w-0 transition-[max-width] duration-200 h-10 overflow-hidden flex-1 flex items-center', (!toggleOptions || mdScreen) && 'max-w-full')}>
             <BreadcrumbList className='w-fit flex-nowrap'>
               <BreadcrumbItem>
                 <BreadcrumbLink href="/">Home</BreadcrumbLink>
@@ -99,7 +99,7 @@ export default function AdminLayout ({ metricsPanel: MetricsPanel, children }: P
             </Button>
           )}
 
-          <div className={cn('w-0 transition-all duration-300 overflow-hidden flex justify-end items-center gap-1', mdScreen ? 'w-fit' : (toggleOptions && 'w-full'))}>
+          <div className={cn('w-0 transition-all duration-200 overflow-hidden flex justify-end items-center gap-1', mdScreen ? 'w-fit' : (toggleOptions && 'w-full'))}>
             <Popover>
               <PopoverTrigger asChild>
                 <Button

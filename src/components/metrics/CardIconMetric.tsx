@@ -15,7 +15,7 @@ export default function CardIconMetric ({ icon, title, description, url }: Props
   return (
     <Wrapper to={url ?? '#' + title} asChild>
       <Card className='cursor-pointer group bg-transparent hover:bg-card hover:brightness-125 border-none rounded-xl'>
-        <CardContent className='p-6 flex items-center gap-4'>
+        <CardContent className='p-5 flex items-center gap-4'>
           <div className='xl:size-14 size-12 border border-muted rounded-full p-3'>
             <Icon element={icon} size='100%' />
           </div>
