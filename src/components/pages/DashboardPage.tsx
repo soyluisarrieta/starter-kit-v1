@@ -24,14 +24,14 @@ export default function DashboardPage (): JSX.Element {
     },
     legend: {
       position: 'right',
-      fontSize: '16',
       itemMargin: {
         horizontal: 0,
         vertical: 5
       },
       formatter (legendName) {
-        return `<span class="text-white">${legendName}<span>`
-      }
+        return `<span class="text-muted-foreground text-xl ml-1 pr-10">${legendName}<span>`
+      },
+      offsetY: 20
     }
   }
 

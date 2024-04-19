@@ -1,29 +1,29 @@
 import { icons } from '@/components/icons/Icons'
-import CardIconMetric from '@/components/metrics/CardIconMetric'
+import CardIconWidget from '@/components/widgets/CardIconWidget'
 
-export default function DashboardMetrics (): JSX.Element {
+export default function DashboardWidget (): JSX.Element {
   return (
     <div className='px-6'>
-      <h2 className='text-2xl font-semibold'>Métricas</h2>
+      <h2 className='text-2xl font-semibold'>Actividades generales</h2>
       <div className='py-4'>
         <div className='w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-1 items-center gap-2'>
-          <CardIconMetric
+          <CardIconWidget
             url='/usuarios'
             title='$143.624'
             description='Tu saldo bancario'
             icon={icons.User}
           />
-          <CardIconMetric
+          <CardIconWidget
             title='1.240'
             description='Transacciones sin categoría'
             icon={icons.Asterisc}
           />
-          <CardIconMetric
+          <CardIconWidget
             title='147'
             description='Empleados trabajan hoy'
             icon={icons.Calendar}
           />
-          <CardIconMetric
+          <CardIconWidget
             title='$3.287,49'
             description='Gasto con tarjeta de esta semana'
             icon={icons.Calendar}

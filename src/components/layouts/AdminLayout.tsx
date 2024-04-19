@@ -17,10 +17,10 @@ import { useState } from 'react'
 import { Redirect, useLocation } from 'wouter'
 
 interface Props extends ComponentProps {
-  metricsPanel: React.ComponentType | undefined
+  widgets: React.ComponentType | undefined
 }
 
-export default function AdminLayout ({ metricsPanel: MetricsPanel, children }: Props): JSX.Element {
+export default function AdminLayout ({ widgets: Widgets, children }: Props): JSX.Element {
   const [toggleOptions, setToggleOptions] = useState(false)
 
   const isSessionVerified = useCheckAuth()
@@ -145,11 +145,11 @@ export default function AdminLayout ({ metricsPanel: MetricsPanel, children }: P
           <div className={cn('w-full p-4 order-last', xlScreen && 'order-first')}>
             {children}
           </div>
-          {MetricsPanel && (
+          {Widgets && (
             <>
               <Separator orientation={xlScreen ? 'vertical' : 'horizontal'} />
               <div className='w-full xl:max-w-lg p-4'>
-                <MetricsPanel />
+                <Widgets />
               </div>
             </>
           )}

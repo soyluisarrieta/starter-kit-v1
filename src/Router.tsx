@@ -2,7 +2,7 @@ import { Route, Switch } from 'wouter'
 import MasterLayout from '@/components/layouts/MasterLayout'
 import NotFoundPage from '@/components/pages/errors/NotFoundPage'
 import DashboardPage from '@/components/pages/DashboardPage'
-import DashboardMetrics from '@/components/modules/dashboard/DashboardMetrics'
+import DashboardWidget from '@/components/modules/dashboard/DashboardWidget'
 import UsersPage from '@/components/pages/UsersPage'
 import AdminLayout from '@/components/layouts/AdminLayout'
 import LoginPage from '@/components/pages/auth/LoginPage'
@@ -22,7 +22,7 @@ export default function Router (): JSX.Element {
   ]
 
   const protectedRoutes = [
-    { path: '/', component: DashboardPage, metrics: DashboardMetrics },
+    { path: '/', component: DashboardPage, widgets: DashboardWidget },
     { path: '/usuarios', component: UsersPage },
     { path: '/ajustes', component: SettingsPage },
     { path: '/ajustes/perfil', component: ProfilePage }
@@ -39,9 +39,9 @@ export default function Router (): JSX.Element {
           </Route>
         ))}
 
-        {protectedRoutes.map(({ path, component: Component, metrics }) => (
+        {protectedRoutes.map(({ path, component: Component, widgets }) => (
           <Route key={path} path={path}>
-            <AdminLayout metricsPanel={metrics}>
+            <AdminLayout widgets={widgets}>
               <Component />
             </AdminLayout>
           </Route>

@@ -10,7 +10,7 @@ interface Props {
   url?: string
 }
 
-export default function CardIconMetric ({ icon, title, description, url }: Props): JSX.Element {
+export default function CardIconWidget ({ icon, title, description, url }: Props): JSX.Element {
   return (
     <Wrapper component={url ? Link : undefined} to={url ?? '#' + title} asChild>
       <Card className='cursor-pointer group bg-transparent hover:bg-card hover:brightness-125 border-none rounded-xl'>
