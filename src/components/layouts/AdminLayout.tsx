@@ -4,7 +4,6 @@ import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbP
 import { Button } from '@/components/ui/button'
 import { Calendar } from '@/components/ui/calendar'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
-import { Separator } from '@/components/ui/separator'
 import Sidebar from '@/components/ui/sidebar'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { useAuth } from '@/hooks/useAuth'
@@ -146,12 +145,9 @@ export default function AdminLayout ({ widgets: Widgets, children }: Props): JSX
             {children}
           </div>
           {Widgets && (
-            <>
-              <Separator orientation={xlScreen ? 'vertical' : 'horizontal'} />
-              <div className='w-full xl:max-w-lg p-4'>
-                <Widgets />
-              </div>
-            </>
+            <div className='w-full xl:max-w-md p-4'>
+              <Widgets />
+            </div>
           )}
         </div>
       </div>

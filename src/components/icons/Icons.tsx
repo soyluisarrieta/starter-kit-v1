@@ -1,5 +1,5 @@
 import { IoCloseOutline, IoNotificationsOutline, IoHelpBuoyOutline, IoNotifications } from 'react-icons/io5'
-import { FaRegEyeSlash, FaRegEye, FaXTwitter } from 'react-icons/fa6'
+import { FaRegEyeSlash, FaRegEye, FaXTwitter, FaArrowTrendUp, FaArrowTrendDown } from 'react-icons/fa6'
 import { TbHistoryToggle, TbLicense } from 'react-icons/tb'
 import { BiLogoGoogle } from 'react-icons/bi'
 import { BsFacebook, BsGithub } from 'react-icons/bs'
@@ -32,6 +32,7 @@ export const icons = {
   // Toggle
   Eye: { Open: FaRegEyeSlash, Close: FaRegEye },
   ThemeMode: { Dark: PiMoonStarsDuotone, Light: PiSunDimDuotone },
+  ArrowTrend: { Up: FaArrowTrendUp, Down: FaArrowTrendDown },
 
   // Brands
   Google: BiLogoGoogle,

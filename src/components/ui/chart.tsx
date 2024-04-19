@@ -1,7 +1,7 @@
 import { type ApexOptions } from 'apexcharts'
 import Chart from 'react-apexcharts'
 
-interface ApexChartProps {
+export interface ApexChartProps {
   type?:
   | 'line'
   | 'area'
