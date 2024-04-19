@@ -23,6 +23,7 @@ interface ApexChartProps {
   width?: string | number
   height?: string | number
   options?: ApexOptions
+  className?: string
 }
 
 const ApexChart = ({ ...props }: ApexChartProps): JSX.Element => {
