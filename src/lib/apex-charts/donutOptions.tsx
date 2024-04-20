@@ -1,6 +1,9 @@
 import { type ApexOptions } from 'apexcharts'
 
 export const donutOptions: ApexOptions = {
+  chart: {
+    fontFamily: 'Lato'
+  },
   plotOptions: {
     pie: {
       donut: {
@@ -39,8 +42,10 @@ export const donutOptions: ApexOptions = {
       horizontal: 0,
       vertical: 4
     },
+    fontWeight: 500,
+    fontSize: '16',
     formatter (legendName) {
-      return `<span class="text-muted-foreground text-lg ml-1 pr-10">${legendName}<span>`
+      return `<span class="text-muted-foreground ml-1 pr-10">${legendName}<span>`
     },
     offsetY: 20
   }

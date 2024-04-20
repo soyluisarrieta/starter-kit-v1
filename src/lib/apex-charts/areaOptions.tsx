@@ -2,7 +2,8 @@ import { type ApexOptions } from 'apexcharts'
 
 export const areaSparklineOptions: ApexOptions = {
   chart: {
-    sparkline: { enabled: true }
+    sparkline: { enabled: true },
+    fontFamily: 'Lato'
   },
   stroke: {
     curve: 'smooth',
