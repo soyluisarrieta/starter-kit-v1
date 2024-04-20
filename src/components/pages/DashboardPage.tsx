@@ -1,5 +1,5 @@
 import ApexChart from '@/components/ui/chart'
-import CardTrend from '@/components/widgets/CardTrend'
+import CardTrendWidget from '@/components/widgets/CardTrendWidget'
 import { useAuth } from '@/hooks/useAuth'
 import { donutOptions } from '@/lib/apex-charts/donutOptions'
 
@@ -20,22 +20,22 @@ export default function DashboardPage (): JSX.Element {
       </div>
       <div className='flex flex-col 2xl:flex-row gap-4'>
         <div className='w-full grid sm:grid-cols-2 gap-4'>
-          <CardTrend
+          <CardTrendWidget
             title='Ingresos'
             value={{ before: '1000', after: '1094' }}
             series={areaSeries}
           />
-          <CardTrend
+          <CardTrendWidget
             title='Ingresos'
             value={{ before: '1000', after: '994' }}
             series={areaSeries}
           />
-          <CardTrend
+          <CardTrendWidget
             title='Ingresos'
             value={{ before: '1000', after: '894' }}
             series={areaSeries}
           />
-          <CardTrend
+          <CardTrendWidget
             title='Ingresos'
             value={{ before: '1000', after: '1034' }}
             series={areaSeries}

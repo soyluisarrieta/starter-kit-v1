@@ -39,7 +39,7 @@ export default function CardTrend ({ title, value, ...props }: Props): JSX.Eleme
     }
   }
   return (
-    <div className='max-h-40 p-5 bg-card rounded-lg flex items-end justify-between'>
+    <div className='max-h-40 p-5 bg-card rounded-lg flex items-end justify-between overflow-hidden'>
       <div className='w-fit h-full flex flex-col'>
         <span className='text-lg opacity-70 font-light tracking-wide'>{title}</span>
         <strong className='grow text-3xl font-semibold'>{value.after}</strong>
