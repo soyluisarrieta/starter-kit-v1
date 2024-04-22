@@ -12,6 +12,8 @@ import { useSidebarStore } from '@/store/SidebarStore'
 import { getYear } from 'date-fns'
 import { Link } from 'wouter'
 import { type IconType } from 'react-icons/lib'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
+import { DropdownMenuArrow } from '@radix-ui/react-dropdown-menu'
 
 interface MenuItem {
   title: string
@@ -113,14 +115,38 @@ export default function Sidebar ({ menuItems, user, onLogout }: SidebarProps): J
               <div className="w-full flex items-center gap-1 p-4">
                 <Tooltip delayDuration={0} disableHoverableContent>
                   <TooltipTrigger asChild>
-                    <Link to='/ajustes/perfil'>
-                      <Avatar className='outline outline-2 outline-primary outline-offset-2 ml-0.5'>
-                        <AvatarImage src={user?.avatar && IMAGES.AVATARS + user.avatar} />
-                        <AvatarFallback className='bg-primary text-primary-foreground'>
-                          {user?.name[0]}{user?.last_name[0]}
-                        </AvatarFallback>
-                      </Avatar>
-                    </Link>
+                    <DropdownMenu open={isSidebarOpen ? false : undefined}>
+                      <DropdownMenuTrigger asChild>
+                        <Avatar className='outline outline-2 outline-primary outline-offset-2 ml-0.5 cursor-pointer hover:brightness-125'>
+                          <AvatarImage src={user?.avatar && IMAGES.AVATARS + user.avatar} />
+                          <AvatarFallback className='bg-primary text-primary-foreground'>
+                            {user?.name[0]}{user?.last_name[0]}
+                          </AvatarFallback>
+                        </Avatar>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent className='w-52 mb-2' sideOffset={24} side='right' align='start'>
+                        <DropdownMenuLabel>Mi cuenta</DropdownMenuLabel>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem className='cursor-pointer'>
+                          <Icon size={16} element={icons.User} className='mr-2' /> Perfil
+                        </DropdownMenuItem>
+                        <DropdownMenuItem className='cursor-pointer'>
+                          <Icon size={16} element={icons.Settings} className='mr-2' /> Ajustes
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem className='cursor-pointer'>
+                          <Icon size={16} element={icons.ChangeLog} className='mr-2' /> Actualizaciones
+                        </DropdownMenuItem>
+                        <DropdownMenuItem className='cursor-pointer'>
+                          <Icon size={16} element={icons.Historical} className='mr-2' /> Historial
+                        </DropdownMenuItem>
+                        <DropdownMenuItem className='cursor-pointer'>
+                          <Icon size={16} element={icons.Help} className='mr-2' /> Ayuda
+                        </DropdownMenuItem>
+                        <DropdownMenuArrow className='fill-popover' />
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+
                   </TooltipTrigger>
                   <TooltipContent className='select-none pointer-events-none ' sideOffset={7}>
                     Perfil
