@@ -1,15 +1,11 @@
 import ApexChart from '@/components/ui/chart'
 import CardTrendWidget from '@/components/widgets/CardTrendWidget'
 import { useAuth } from '@/hooks/useAuth'
-import { useScreenSize } from '@/hooks/useScreenSize'
 import { donutOptions } from '@/lib/apex-charts/donutOptions'
-import { lineOptions } from '@/lib/apex-charts/lineOptions'
-import { mergeObjects } from '@/lib/utils/handleObjects'
 import { type ApexOptions } from 'apexcharts'
 
 export default function DashboardPage (): JSX.Element {
   const { profile } = useAuth()
-  const { mdScreen } = useScreenSize()
 
   const series = [{
     name: 'Sales1',
@@ -19,25 +15,63 @@ export default function DashboardPage (): JSX.Element {
     data: [9, 2, 7, 9, 5, 13, 9, 17, 2, 7, 5]
   }]
 
-  const lineChartOptions: ApexOptions = {
-    xaxis: {
-      categories: ['8/11/2000', '9/11/2000', '10/11/2000', '11/11/2000', '12/11/2000', '1/11/2001', '2/11/2001', '3/11/2001', '4/11/2001', '5/11/2001', '6/11/2001'],
-      labels: {
-        formatter: function (_, timestamp, opts) {
-          if (timestamp !== undefined) {
-            return opts.dateFormatter(new Date(timestamp), mdScreen ? 'dd MMM' : 'MMM')
-          }
-        }
-      }
-    }
-  }
-
   const areaSeries = [{
     name: 'BasicAreaChart',
     data: [7, 4, 6, 10, 14, 7, 5, 9, 10, 15, 13, 18]
   }]
 
   const donutSeries = [44, 55, 41, 17, 15]
+
+  const lineOptions: ApexOptions = {
+    chart: {
+      height: 350,
+      type: 'line',
+      fontFamily: 'Lato',
+      background: 'transparent',
+      toolbar: { show: false },
+      zoom: { enabled: false },
+      offsetY: -30
+    },
+    legend: {
+      itemMargin: { horizontal: 10 },
+      position: 'top',
+      horizontalAlign: 'right',
+      labels: { colors: 'hsl(var(--card-foreground))' },
+      fontWeight: 500,
+      fontSize: '16'
+    },
+    stroke: {
+      width: 3.7,
+      curve: 'smooth'
+    },
+    xaxis: {
+      type: 'datetime',
+      axisBorder: { show: false },
+      categories: ['8/11/2000', '9/11/2000', '10/11/2000', '11/11/2000', '12/11/2000', '1/11/2001', '2/11/2001', '3/11/2001', '4/11/2001', '5/11/2001', '6/11/2001'],
+      labels: {
+        style: { colors: 'hsl(var(--muted-foreground))' },
+        formatter: function (_, timestamp, opts) {
+          if (timestamp !== undefined) {
+            return opts.dateFormatter(new Date(timestamp), 'dd MMM')
+          }
+        }
+      }
+    },
+    yaxis: {
+      min: 0,
+      labels: {
+        style: { colors: 'hsl(var(--muted-foreground))' }
+      }
+    },
+    tooltip: {
+      theme: 'dark'
+    },
+    grid: {
+      borderColor: 'hsl(var(--muted-foreground) / 18%)',
+      strokeDashArray: 5,
+      padding: { top: 10 }
+    }
+  }
   return (
     <main>
       <div className='mb-7'>
@@ -85,11 +119,11 @@ export default function DashboardPage (): JSX.Element {
           <div className='w-full max-w-full animate-in'>
             <strong className='grow text-2xl font-semibold'>Análisis de pedidos</strong>
             <ApexChart
-              options={mergeObjects(lineChartOptions, lineOptions)}
+              options={lineOptions}
               series={series}
               type="line"
               width='100%'
-              height={350}
+              height={300}
             />
           </div>
         </div>
