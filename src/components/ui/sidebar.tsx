@@ -117,7 +117,7 @@ export default function Sidebar ({ menuItems, user, onLogout }: SidebarProps): J
                   <TooltipTrigger asChild>
                     <DropdownMenu open={isSidebarOpen ? false : undefined}>
                       <DropdownMenuTrigger asChild>
-                        <Avatar className='outline outline-2 outline-primary outline-offset-2 ml-0.5 cursor-pointer hover:brightness-125'>
+                        <Avatar className={cn('outline outline-2 outline-primary outline-offset-2 ml-0.5', !isSidebarOpen && 'cursor-pointer hover:brightness-125')}>
                           <AvatarImage src={user?.avatar && IMAGES.AVATARS + user.avatar} />
                           <AvatarFallback className='bg-primary text-primary-foreground'>
                             {user?.name[0]}{user?.last_name[0]}
@@ -128,36 +128,40 @@ export default function Sidebar ({ menuItems, user, onLogout }: SidebarProps): J
                         <DropdownMenuLabel>Mi cuenta</DropdownMenuLabel>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem className='cursor-pointer'>
-                          <Icon size={16} element={icons.User} className='mr-2' /> Perfil
+                          <Link className='flex' to='/ajustes/perfil'><Icon size={16} element={icons.User} className='mr-2' />Perfil</Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem className='cursor-pointer'>
-                          <Icon size={16} element={icons.Settings} className='mr-2' /> Ajustes
+                          <Link className='flex' to='/ajustes'><Icon size={16} element={icons.Settings} className='mr-2' />Ajustes</Link>
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem className='cursor-pointer'>
-                          <Icon size={16} element={icons.ChangeLog} className='mr-2' /> Actualizaciones
+                          <Link className='flex' to='/actualizaciones'><Icon size={16} element={icons.ChangeLog} className='mr-2' />Actualizaciones</Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem className='cursor-pointer'>
-                          <Icon size={16} element={icons.Historical} className='mr-2' /> Historial
+                          <Link className='flex' to='/historial'><Icon size={16} element={icons.Historical} className='mr-2' />Historial</Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem className='cursor-pointer'>
-                          <Icon size={16} element={icons.Help} className='mr-2' /> Ayuda
+                          <a className='flex' href={DOC_URL} target='_blank' rel="noreferrer">
+                            <Icon size={16} element={icons.Help} className='mr-2' />Ayuda
+                          </a>
                         </DropdownMenuItem>
                         <DropdownMenuArrow className='fill-popover' />
                       </DropdownMenuContent>
                     </DropdownMenu>
 
                   </TooltipTrigger>
-                  <TooltipContent className='select-none pointer-events-none ' sideOffset={7}>
+                  <TooltipContent className='select-none pointer-events-none' sideOffset={7}>
                     Perfil
                   </TooltipContent>
                 </Tooltip>
 
                 <div className={cn('w-full transition-[width_opacity] duration-200 flex', !isSidebarOpen && 'w-0 opacity-0')}>
                   <div className='flex-1 text-left pl-2 whitespace-nowrap overflow-hidden'>
-                    <h2 className="text-base font-semibold -mb-1 text-ellipsis overflow-hidden" title={`${user?.name} ${user?.last_name}`}>
-                      {user?.name} {user?.last_name}
-                    </h2>
+                      <h2 className="text-base font-semibold -mb-1 text-ellipsis overflow-hidden" title='Mi perfil'>
+                        <Link to='/ajustes/perfil'>
+                          {user?.name} {user?.last_name}
+                        </Link>
+                      </h2>
                     <span className="block text-muted-foreground text-ellipsis overflow-hidden" style={{ fontSize: 11 }} title={user?.email}>
                       {user?.email}
                     </span>
@@ -182,7 +186,7 @@ export default function Sidebar ({ menuItems, user, onLogout }: SidebarProps): J
                   <div className='min-w-fit py-3 opacity-90 hover:opacity-100 flex gap-2'>
                     <Tooltip delayDuration={0} disableHoverableContent>
                       <TooltipTrigger>
-                        <Button variant='outline' size='icon' className="active:opacity-50" to='/registros-de-actualizaciones'>
+                        <Button variant='outline' size='icon' className="active:opacity-50" to='/actualizaciones'>
                           <Icon element={icons.ChangeLog} className='min-w-fit' size={20} strokeWidth={1.6} />
                         </Button>
                       </TooltipTrigger>
