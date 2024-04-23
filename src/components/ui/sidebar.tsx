@@ -126,7 +126,7 @@ export default function Sidebar ({ menuItems, user, onLogout }: SidebarProps): J
                     <DropdownMenuLabel>Mi cuenta</DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem className='cursor-pointer'>
-                      <Link className='flex' to='/ajustes/perfil'><Icon size={16} element={icons.User} className='mr-2' />Perfil</Link>
+                      <Link className='flex' to='/perfil'><Icon size={16} element={icons.User} className='mr-2' />Perfil</Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem className='cursor-pointer'>
                       <Link className='flex' to='/ajustes'><Icon size={16} element={icons.Settings} className='mr-2' />Ajustes</Link>
@@ -150,7 +150,7 @@ export default function Sidebar ({ menuItems, user, onLogout }: SidebarProps): J
                 <div className={cn('w-full transition-[width_opacity] duration-200 flex', !isSidebarOpen && 'w-0 opacity-0')}>
                   <div className='flex-1 text-left pl-2 whitespace-nowrap overflow-hidden'>
                     <h2 className="text-base font-semibold -mb-1 text-ellipsis overflow-hidden" title='Mi perfil'>
-                      <Link to='/ajustes/perfil'>
+                      <Link to='/perfil'>
                         {user?.name} {user?.last_name}
                       </Link>
                     </h2>
