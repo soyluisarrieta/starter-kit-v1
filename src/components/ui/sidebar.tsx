@@ -113,55 +113,47 @@ export default function Sidebar ({ menuItems, user, onLogout }: SidebarProps): J
               <Separator orientation='horizontal' />
 
               <div className="w-full flex items-center gap-1 p-4">
-                <Tooltip delayDuration={0} disableHoverableContent>
-                  <TooltipTrigger asChild>
-                    <DropdownMenu open={isSidebarOpen ? false : undefined}>
-                      <DropdownMenuTrigger asChild>
-                        <Avatar className={cn('outline outline-2 outline-primary outline-offset-2 ml-0.5', !isSidebarOpen && 'cursor-pointer hover:brightness-125')}>
-                          <AvatarImage src={user?.avatar && IMAGES.AVATARS + user.avatar} />
-                          <AvatarFallback className='bg-primary text-primary-foreground'>
-                            {user?.name[0]}{user?.last_name[0]}
-                          </AvatarFallback>
-                        </Avatar>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent className='w-52 mb-2' sideOffset={24} side='right' align='start'>
-                        <DropdownMenuLabel>Mi cuenta</DropdownMenuLabel>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem className='cursor-pointer'>
-                          <Link className='flex' to='/ajustes/perfil'><Icon size={16} element={icons.User} className='mr-2' />Perfil</Link>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem className='cursor-pointer'>
-                          <Link className='flex' to='/ajustes'><Icon size={16} element={icons.Settings} className='mr-2' />Ajustes</Link>
-                        </DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem className='cursor-pointer'>
-                          <Link className='flex' to='/actualizaciones'><Icon size={16} element={icons.ChangeLog} className='mr-2' />Actualizaciones</Link>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem className='cursor-pointer'>
-                          <Link className='flex' to='/historial'><Icon size={16} element={icons.Historical} className='mr-2' />Historial</Link>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem className='cursor-pointer'>
-                          <a className='flex' href={DOC_URL} target='_blank' rel="noreferrer">
-                            <Icon size={16} element={icons.Help} className='mr-2' />Ayuda
-                          </a>
-                        </DropdownMenuItem>
-                        <DropdownMenuArrow className='fill-popover' />
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-
-                  </TooltipTrigger>
-                  <TooltipContent className='select-none pointer-events-none' sideOffset={7}>
-                    Perfil
-                  </TooltipContent>
-                </Tooltip>
+                <DropdownMenu open={isSidebarOpen ? false : undefined}>
+                  <DropdownMenuTrigger>
+                    <Avatar className={cn('outline outline-2 outline-primary outline-offset-2 ml-0.5', !isSidebarOpen && 'cursor-pointer hover:brightness-125')}>
+                      <AvatarImage src={user?.avatar && IMAGES.AVATARS + user.avatar} />
+                      <AvatarFallback className='bg-primary text-primary-foreground'>
+                        {user?.name[0]}{user?.last_name[0]}
+                      </AvatarFallback>
+                    </Avatar>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className='w-52 mb-2' sideOffset={24} side='right' align='start'>
+                    <DropdownMenuLabel>Mi cuenta</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem className='cursor-pointer'>
+                      <Link className='flex' to='/ajustes/perfil'><Icon size={16} element={icons.User} className='mr-2' />Perfil</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem className='cursor-pointer'>
+                      <Link className='flex' to='/ajustes'><Icon size={16} element={icons.Settings} className='mr-2' />Ajustes</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem className='cursor-pointer'>
+                      <Link className='flex' to='/actualizaciones'><Icon size={16} element={icons.ChangeLog} className='mr-2' />Actualizaciones</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem className='cursor-pointer'>
+                      <Link className='flex' to='/historial'><Icon size={16} element={icons.Historical} className='mr-2' />Historial</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem className='cursor-pointer'>
+                      <a className='flex' href={DOC_URL} target='_blank' rel="noreferrer">
+                        <Icon size={16} element={icons.Help} className='mr-2' />Ayuda
+                      </a>
+                    </DropdownMenuItem>
+                    <DropdownMenuArrow className='fill-popover' />
+                  </DropdownMenuContent>
+                </DropdownMenu>
 
                 <div className={cn('w-full transition-[width_opacity] duration-200 flex', !isSidebarOpen && 'w-0 opacity-0')}>
                   <div className='flex-1 text-left pl-2 whitespace-nowrap overflow-hidden'>
-                      <h2 className="text-base font-semibold -mb-1 text-ellipsis overflow-hidden" title='Mi perfil'>
-                        <Link to='/ajustes/perfil'>
-                          {user?.name} {user?.last_name}
-                        </Link>
-                      </h2>
+                    <h2 className="text-base font-semibold -mb-1 text-ellipsis overflow-hidden" title='Mi perfil'>
+                      <Link to='/ajustes/perfil'>
+                        {user?.name} {user?.last_name}
+                      </Link>
+                    </h2>
                     <span className="block text-muted-foreground text-ellipsis overflow-hidden" style={{ fontSize: 11 }} title={user?.email}>
                       {user?.email}
                     </span>
