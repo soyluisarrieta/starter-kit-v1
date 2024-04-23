@@ -10,7 +10,8 @@ import HistoricalPage from '@/components/pages/HistoricalPage'
 import SettingsPage from '@/components/pages/SettingsPage'
 import UsersPage from '@/components/pages/UsersPage'
 import ProfilePage from '@/components/pages/auth/ProfilePage'
-import AccountSettings from '@/components/modules/settings/AccountSettings'
+import ProfileSettings from '@/components/modules/settings/ProfileSettings'
+import AuthSettings from '@/components/modules/settings/AuthSettings'
 
 export interface RouteConfig {
   path: string
@@ -39,7 +40,8 @@ export const protectedRoutes: RouteConfig[] = [
     component: SettingsPage,
     nest: [
       { path: '/generales', component: GeneralSettings },
-      { path: '/mi-cuenta', component: AccountSettings }
+      { path: '/perfil', component: ProfileSettings },
+      { path: '/autenticacion', component: AuthSettings }
     ]
   },
 
