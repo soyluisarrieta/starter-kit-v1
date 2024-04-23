@@ -6,6 +6,22 @@ interface ComponentProps {
   className?: string
 }
 
+// Routing
+interface RouteConfig {
+  path: string
+  component: React.ComponentType<any>
+  children?: RouteConfig[]
+}
+
+interface ProtectedRouteConfig extends RouteConfig {
+  widgets?: React.ComponentType<any>
+}
+
+interface GuestRouteConfig {
+  path: string
+  component: React.ComponentType<any>
+}
+
 // Auth
 interface Credentials {
   email: string

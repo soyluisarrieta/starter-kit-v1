@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client'
 import { TooltipProvider } from '@/components/ui/tooltip.tsx'
 import { QueryClientProvider } from 'react-query'
 import { queryClient } from '@/lib/react-query.ts'
-import Router from './Router.tsx'
+import Router from './routing/Router.tsx'
 
 import './global.css'
 import './lib/nProgress.css'
