@@ -117,7 +117,7 @@ export default function AdminLayout ({ widgets: Widgets, children }: Props): JSX
             </Popover>
 
             <Tabs
-              defaultValue={darkMode ? 'dark' : 'light'}
+              value={darkMode ? 'dark' : 'light'}
               onValueChange={(theme) => { setDarkMode(theme === 'dark') }}
               className='bg-card shadow-sm border'
               asChild
