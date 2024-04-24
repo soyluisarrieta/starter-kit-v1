@@ -3,17 +3,16 @@ import { FaRegEyeSlash, FaRegEye, FaXTwitter, FaArrowTrendUp, FaArrowTrendDown }
 import { TbHistoryToggle, TbLicense } from 'react-icons/tb'
 import { BiLogoGoogle } from 'react-icons/bi'
 import { BsFacebook, BsGithub } from 'react-icons/bs'
-import { AiOutlineUser } from 'react-icons/ai'
+import { AiOutlineHome, AiOutlineUser } from 'react-icons/ai'
 import { PiCalendarBlank, PiCaretDoubleLeftBold, PiCaretLeft, PiMoonStarsDuotone, PiProjectorScreenChart, PiSunDimDuotone } from 'react-icons/pi'
 import { LiaAsteriskSolid } from 'react-icons/lia'
 import { FaUser } from 'react-icons/fa'
-import { GridCustomIcon } from '@/components/icons/Sidebar'
 import { FiLogIn, FiLogOut, FiMoreVertical, FiSettings } from 'react-icons/fi'
 import { type IconBaseProps, type IconType } from 'react-icons/lib'
 
 export const icons = {
   // Commons
-  Home: { ...GridCustomIcon },
+  Home: AiOutlineHome,
   User: AiOutlineUser,
   UserSolid: FaUser,
   Close: IoCloseOutline,

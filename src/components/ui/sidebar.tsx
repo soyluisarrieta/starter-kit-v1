@@ -18,10 +18,7 @@ import { DropdownMenuArrow } from '@radix-ui/react-dropdown-menu'
 interface MenuItem {
   title: string
   link: string
-  Icon: {
-    solid: IconType
-    outline: IconType
-  }
+  Icon: IconType
 }
 
 interface MenuSection {
@@ -85,9 +82,10 @@ export default function Sidebar ({ menuItems, user, onLogout }: SidebarProps): J
                               to={item.link}
                             >
                               <Icon
+                                className='min-w-fit'
                                 element={item.Icon}
                                 variant='outline'
-                                size={18}
+                                size={24}
                               />
                               <span
                                 className={cn('w-full overflow-hidden flex-1 font-bold', isSidebarOpen ? 'ml-2' : 'opacity-0')}
@@ -125,20 +123,20 @@ export default function Sidebar ({ menuItems, user, onLogout }: SidebarProps): J
                   <DropdownMenuContent className='w-52 mb-2' sideOffset={24} side='right' align='start'>
                     <DropdownMenuLabel>Mi cuenta</DropdownMenuLabel>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem className='cursor-pointer'>
+                    <DropdownMenuItem className='cursor-pointer' asChild>
                       <Link className='flex' to='/perfil'><Icon size={16} element={icons.User} className='mr-2' />Perfil</Link>
                     </DropdownMenuItem>
-                    <DropdownMenuItem className='cursor-pointer'>
+                    <DropdownMenuItem className='cursor-pointer' asChild>
                       <Link className='flex' to='/ajustes'><Icon size={16} element={icons.Settings} className='mr-2' />Ajustes</Link>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem className='cursor-pointer'>
+                    <DropdownMenuItem className='cursor-pointer' asChild>
                       <Link className='flex' to='/actualizaciones'><Icon size={16} element={icons.ChangeLog} className='mr-2' />Actualizaciones</Link>
                     </DropdownMenuItem>
-                    <DropdownMenuItem className='cursor-pointer'>
+                    <DropdownMenuItem className='cursor-pointer' asChild>
                       <Link className='flex' to='/historial'><Icon size={16} element={icons.Historical} className='mr-2' />Historial</Link>
                     </DropdownMenuItem>
-                    <DropdownMenuItem className='cursor-pointer'>
+                    <DropdownMenuItem className='cursor-pointer' asChild>
                       <a className='flex' href={DOC_URL} target='_blank' rel="noreferrer">
                         <Icon size={16} element={icons.Help} className='mr-2' />Ayuda
                       </a>
