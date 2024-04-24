@@ -1,8 +1,9 @@
 import { Icon, icons } from '@/components/icons/Icons'
 import Authenticating from '@/components/pages/auth/AuthLoader'
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb'
+import { Breadcrumb, BreadcrumbEllipsis, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb'
 import { Button } from '@/components/ui/button'
 import { Calendar } from '@/components/ui/calendar'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import Sidebar from '@/components/ui/sidebar'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
@@ -10,23 +11,30 @@ import { useAuth } from '@/hooks/useAuth'
 import { useCheckAuth } from '@/hooks/useCheckAuth'
 import { useScreenSize } from '@/hooks/useScreenSize'
 import { cn } from '@/lib/utils'
+import { buildBreadcrumb } from '@/lib/utils/others'
 import { useThemeStore } from '@/store/ThemeStore'
 import { format } from 'date-fns'
 import { useState } from 'react'
-import { Redirect, useLocation } from 'wouter'
+import { PiChartDonutDuotone, PiHouseDuotone } from 'react-icons/pi'
+import { Link, Redirect, useLocation } from 'wouter'
+import { usePathname } from 'wouter/use-browser-location'
 
 interface Props extends ComponentProps {
   widgets: React.ComponentType | undefined
 }
 
+const ITEMS_IN_BREADCRUMB = 3
+
 export default function AdminLayout ({ widgets: Widgets, children }: Props): JSX.Element {
   const [toggleOptions, setToggleOptions] = useState(false)
+  const [breadcrumbOpen, setBreadcrumbOpen] = useState(false)
 
   const isSessionVerified = useCheckAuth()
   const { isAuth, logout, profile } = useAuth()
   const [location] = useLocation()
   const { darkMode, setDarkMode } = useThemeStore()
   const { xlScreen, mdScreen } = useScreenSize()
+  const breadcrumbItems = buildBreadcrumb(usePathname())
 
   // Checking authentication
   if (!isSessionVerified && !isAuth) {
@@ -44,19 +52,19 @@ export default function AdminLayout ({ widgets: Widgets, children }: Props): JSX
   const sidebarItems = [
     {
       items: [
-        { Icon: icons.Home, title: 'Tablero general', link: '/' },
-        { Icon: icons.Home, title: 'Otra opción', link: '/otro' },
-        { Icon: icons.Home, title: 'Otra opción', link: '/otro' },
-        { Icon: icons.Home, title: 'Otra opción', link: '/otro' }
+        { Icon: PiHouseDuotone, title: 'Inicio', link: '/' },
+        { Icon: PiChartDonutDuotone, title: 'Otra opción', link: '/otro' },
+        { Icon: PiChartDonutDuotone, title: 'Otra opción', link: '/otro' },
+        { Icon: PiChartDonutDuotone, title: 'Otra opción', link: '/otro' }
       ]
     },
     {
       title: 'Título',
       items: [
-        { Icon: icons.Home, title: 'Otra opción', link: '/otro' },
-        { Icon: icons.Home, title: 'Otra opción', link: '/otro' },
-        { Icon: icons.Home, title: 'Otra opción', link: '/otro' },
-        { Icon: icons.Home, title: 'Otra opción', link: '/otro' }
+        { Icon: PiChartDonutDuotone, title: 'Otra opción', link: '/otro' },
+        { Icon: PiChartDonutDuotone, title: 'Otra opción', link: '/otro' },
+        { Icon: PiChartDonutDuotone, title: 'Otra opción', link: '/otro' },
+        { Icon: PiChartDonutDuotone, title: 'Otra opción', link: '/otro' }
       ]
     }
   ]
@@ -74,17 +82,61 @@ export default function AdminLayout ({ widgets: Widgets, children }: Props): JSX
         <header className='w-full flex items-center gap-1 p-4'>
           <Breadcrumb className={cn('max-w-0 transition-[max-width] duration-200 h-10 overflow-hidden flex-1 flex items-center', (!toggleOptions || mdScreen) && 'max-w-full')}>
             <BreadcrumbList className='w-fit flex-nowrap'>
-              <BreadcrumbItem>
-                <BreadcrumbLink href="/">Home</BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbSeparator />
-              <BreadcrumbItem>
-                <BreadcrumbLink href="/components">Components</BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbSeparator />
-              <BreadcrumbItem>
-                <BreadcrumbPage>Breadcrumb</BreadcrumbPage>
-              </BreadcrumbItem>
+              {Boolean(breadcrumbItems.length) && (
+                <>
+                  <BreadcrumbItem>
+                    <Link to='/'><Icon element={PiHouseDuotone} size={20} /></Link>
+                  </BreadcrumbItem>
+                  <ul><BreadcrumbSeparator /></ul>
+                </>
+              )}
+              {breadcrumbItems.length > ITEMS_IN_BREADCRUMB
+                ? (
+                  <>
+                    <BreadcrumbItem>
+                      <DropdownMenu open={breadcrumbOpen} onOpenChange={setBreadcrumbOpen}>
+                        <DropdownMenuTrigger
+                          className="flex items-center gap-1"
+                          aria-label="Toggle menu"
+                        >
+                          <BreadcrumbEllipsis className="h-4 w-4" />
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="start">
+                          {breadcrumbItems.slice(1, -2).map((item, index) => (
+                            <DropdownMenuItem key={index}>
+                              <Link to={item.href ? item.href : '#'}>
+                                {item.label}
+                              </Link>
+                            </DropdownMenuItem>
+                          ))}
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                      <ul><BreadcrumbSeparator /></ul>
+                    </BreadcrumbItem>
+                  </>
+                  )
+                : null}
+              {breadcrumbItems.slice(-ITEMS_IN_BREADCRUMB + 1).map((item, index) => (
+                <BreadcrumbItem key={index}>
+                  {item.href
+                    ? (
+                      <>
+                        <BreadcrumbLink
+                          asChild
+                          className="max-w-20 truncate md:max-w-none"
+                        >
+                          <Link href={item.href}>{item.label}</Link>
+                        </BreadcrumbLink>
+                        <ul><BreadcrumbSeparator /></ul>
+                      </>
+                      )
+                    : (
+                      <BreadcrumbPage className="max-w-20 truncate md:max-w-none">
+                        {item.label}
+                      </BreadcrumbPage>
+                      )}
+                </BreadcrumbItem>
+              ))}
             </BreadcrumbList>
           </Breadcrumb>
 
