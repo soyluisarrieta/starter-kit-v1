@@ -10,8 +10,7 @@ export default function SettingsPage ({ children }: ComponentProps): JSX.Element
 
   const navItems = [
     { title: 'Generales', path: '/ajustes/generales' },
-    { title: 'Perfil', path: '/ajustes/perfil' },
-    { title: 'Autenticación', path: '/ajustes/autenticacion' }
+    { title: 'Perfil', path: '/ajustes/perfil' }
   ]
 
   return (
@@ -21,8 +20,8 @@ export default function SettingsPage ({ children }: ComponentProps): JSX.Element
         <p className='text-muted-foreground mb-7'>Puedes personalizar diversas configuraciones según tus necesidades y preferencias.</p>
       </div>
 
-      <ScrollArea className='bg-card/70 rounded-t-md lg:rounded-md lg:py-1'>
-        <div className={'mb-4 flex lg:flex-col items-center lg:items-start border-b-2 lg:border-b-0'}>
+      <ScrollArea className='h-fit bg-card/70 rounded-t-md lg:rounded-md lg:py-1'>
+        <div className={'mb-3 lg:mb-1 flex lg:flex-col items-center lg:items-start border-b-2 lg:border-b-0'}>
           {navItems.map(({ title, path }, index) => (
             <Link
               href={path}
@@ -41,7 +40,7 @@ export default function SettingsPage ({ children }: ComponentProps): JSX.Element
         <ScrollBar orientation="horizontal" />
       </ScrollArea>
 
-      <div className="w-full lg:col-span-1 bg-card/70 rounded-b-md lg:rounded-md px-6 pb-4 lg:py-2">
+      <div className="w-full min-h-fit lg:col-span-1 bg-card/70 rounded-b-md lg:rounded-md px-6 [&>div]:border-b [&>div:last-child]:border-b-0">
         {children}
       </div>
     </main>
