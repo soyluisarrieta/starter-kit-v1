@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
+import { MAX_FILE_SIZE } from '@/constants'
+import { isValidFileType } from '@/lib/utils/others'
 import yup from '@/lib/yup'
 
 // Validations
@@ -40,6 +42,15 @@ export const adultBirthdate = yup
     ), 'Debes tener al menos 18 años.'
   )
 
+export const avatar = yup
+  .mixed<File>()
+  .test('is-valid-avatar-type', 'Tipo de archivo de avatar no válido', (value) => isValidFileType(value?.name.toLowerCase(), 'image'))
+  .test('is-valid-size', `El tamaño máximo permitido es ${MAX_FILE_SIZE / 1024} KB`, value => value && value.size <= MAX_FILE_SIZE)
+
+export const birthdate = yup
+  .date()
+  .max(new Date(), 'La fecha de nacimiento no puede ser en el futuro.')
+
 export const email = yup
   .string()
   .email('Correo electrónico inválido.')
@@ -67,6 +78,7 @@ export const loginSchema = yup.object({
   email,
   password
 })
+
 export const registerSchema = yup.object({
   name,
   last_name,
@@ -75,8 +87,23 @@ export const registerSchema = yup.object({
   password,
   password_confirmation
 })
-export const forgotPwSchema = yup.object({ email })
+
+export const forgotPwSchema = yup.object({
+  email
+})
+
 export const resetPwSchema = yup.object({
   password,
   password_confirmation
+})
+
+export const profileSchema = yup.object({
+  name,
+  last_name,
+  email,
+  gender,
+  birthdate,
+  address,
+  phone,
+  avatar
 })
