@@ -7,6 +7,8 @@ import { navigate } from 'wouter/use-browser-location'
 import { type AnyObjectSchema } from 'yup'
 import { useMutation } from 'react-query'
 import { toast } from 'react-toastify'
+import { useEffect } from 'react'
+import { useFormStore } from '@/store/FormStore'
 
 interface FormHandlerProps {
   withCsrf?: boolean
@@ -17,6 +19,7 @@ interface FormHandlerProps {
   successMessage?: string
   redirectTo?: string
   defaultValues?: Record<string, any>
+  timestamps?: { updatedAt?: string, createdAt?: string }
   formConfig?: UseFormProps
 }
 
@@ -36,8 +39,17 @@ export function useFormHandler ({
   successMessage = '',
   redirectTo,
   defaultValues,
+  timestamps,
   formConfig
 }: FormHandlerProps): FormHandler {
+  const {
+    isFormModified,
+    setIsFormModified,
+    setOnSubmit,
+    setOnReset,
+    setTimestamps
+  } = useFormStore()
+
   // Form config
   const form = useForm({
     resolver: useYupValidationResolver(schema),
@@ -74,6 +86,19 @@ export function useFormHandler ({
     if (withCsrf) { await csrfService() }
     mutation.mutate(data)
   })
+
+  // Set onSubmit and onReset handlers store
+  useEffect(() => {
+    setOnSubmit(onSubmit)
+    setOnReset(() => { form.reset() })
+    timestamps && setTimestamps(timestamps)
+  }, [])
+
+  // Set store when form is dirty
+  useEffect(() => {
+    const isFormDirty = form.formState.isDirty
+    isFormModified !== isFormDirty && setIsFormModified(isFormDirty)
+  }, [form.formState.isDirty])
 
   return {
     form,
