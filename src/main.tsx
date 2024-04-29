@@ -4,9 +4,13 @@ import { TooltipProvider } from '@/components/ui/tooltip.tsx'
 import { QueryClientProvider } from 'react-query'
 import { queryClient } from '@/lib/react-query.ts'
 import Router from './routing/Router.tsx'
+import moment from 'moment'
+import 'moment/dist/locale/es'
 
 import './global.css'
 import './lib/nProgress.css'
+
+moment.locale('es')
 
 const darkModeItem = window.localStorage.getItem('dark_mode')
 const theme = darkModeItem ? JSON.parse(darkModeItem) : null
