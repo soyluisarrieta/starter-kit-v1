@@ -22,3 +22,8 @@ export const UNPROCESSABLE_ENTITY = 422
 export const FORBIDDEN = 403
 export const UNAUTHORIZED = 401
 export const INTERNAL_SERVER_ERROR = 500
+
+// File configs
+export const MAX_FILE_SIZE = 102400 * 7 // 700KB
+export const VALID_FILE_EXT: Record<string, string[]> = { image: ['jpg', 'jpeg', 'png', 'webp'] }
+export const ACCEPTED_IMAGES = VALID_FILE_EXT.image.map(ext => `.${ext}`).join(',')

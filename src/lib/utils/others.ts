@@ -1,3 +1,5 @@
+import { VALID_FILE_EXT } from '@/constants'
+
 export function buildBreadcrumb (pathname: string): Array<{ href: string | undefined, label: string }> {
   const formattedPathname = pathname.split('/').filter(Boolean)
 
@@ -11,4 +13,9 @@ export function buildBreadcrumb (pathname: string): Array<{ href: string | undef
   })
 
   return breadcrumbItemsFormatted
+}
+
+export function isValidFileType (fileName: (string | undefined), fileType: string): boolean {
+  const fileExt = fileName?.split('.').pop() ?? ''
+  return VALID_FILE_EXT[fileType].includes(fileExt)
 }
