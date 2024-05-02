@@ -9,18 +9,24 @@ import { profileSchema } from '@/lib/yup/userSchemas'
 
 export default function ProfileSettings (): JSX.Element {
   const { profile } = useAuth()
+  const defaultValues = {
+    name: profile?.name,
+    last_name: profile?.last_name,
+    email: profile?.email,
+    gender: profile?.gender,
+    birthdate: profile?.birthdate,
+    phone: profile?.phone,
+    avatar: profile?.avatar
+  }
+
   const { form } = useFormHandler({
+    formHeader: {
+      title: 'Perfil de Usuario',
+      description: 'Administra tu información personal y preferencias de cuenta.'
+    },
     schema: profileSchema,
     successMessage: 'Perfil actualizado con éxito.',
-    defaultValues: {
-      name: profile?.name,
-      last_name: profile?.last_name,
-      email: profile?.email,
-      gender: profile?.gender,
-      birthdate: profile?.birthdate,
-      phone: profile?.phone,
-      avatar: profile?.avatar
-    },
+    defaultValues,
     timestamps: {
       updatedAt: profile?.updated_at,
       createdAt: profile?.created_at
