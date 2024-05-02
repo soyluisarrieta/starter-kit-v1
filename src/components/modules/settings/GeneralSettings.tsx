@@ -1,10 +1,23 @@
+import { useEffect } from 'react'
 import { Icon, icons } from '@/components/icons/Icons'
 import CardSettingSection from '@/components/modules/settings/CardSettingSection'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { useFormStore } from '@/store/FormStore'
 import { useThemeStore } from '@/store/ThemeStore'
 
 export default function GeneralSettings (): JSX.Element {
   const { darkMode, setDarkMode } = useThemeStore()
+  const { setFormHeader, setTimestamps } = useFormStore()
+
+  useEffect(() => {
+    setFormHeader({
+      title: 'Ajustes generales',
+      description: 'Puedes personalizar configuraciones según tus preferencias.'
+    })
+    setTimestamps({
+      updatedAt: '2024-12-27T20:31:01.000000Z' // 👈 Crear un timestamp para Ajustes generales
+    })
+  }, [])
 
   return (
     <>
