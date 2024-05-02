@@ -10,7 +10,14 @@ import moment from 'moment'
 export default function SettingsPage ({ children }: ComponentProps): JSX.Element {
   const pathname = usePathname()
   const { lgScreen } = useScreenSize()
-  const { onSubmitExists, isFormModified, timestamps, onSubmit, onReset } = useFormStore()
+  const {
+    formHeader,
+    onSubmitExists,
+    isFormModified,
+    timestamps,
+    onSubmit,
+    onResetForm
+  } = useFormStore()
   const navItems = [
     { title: 'Generales', path: '/ajustes/generales' },
     { title: 'Perfil', path: '/ajustes/perfil' }
@@ -19,61 +26,53 @@ export default function SettingsPage ({ children }: ComponentProps): JSX.Element
   return (
     <main className="relative p-0 grid lg:gap-2" style={{ gridTemplateColumns: lgScreen ? '18rem 1fr' : '1fr' }}>
       <div className='col-span-full'>
-        <h1 className='font-semibold text-4xl opacity-90 mb-3'>Ajustes</h1>
-        <p className='text-muted-foreground mb-7'>Puedes personalizar diversas configuraciones según tus necesidades y preferencias.</p>
+        <h1 className='font-semibold text-4xl opacity-90 mb-3'>{formHeader.title}</h1>
+        <p className='text-muted-foreground mb-4'>{formHeader.description}</p>
       </div>
 
       {!lgScreen && timestamps && (
         <div className='grid sm:grid-cols-[auto_1fr] gap-2 sm:gap-5 whitespace-nowrap border-t lg:border-0 py-4 lg:pb-0 text-sm'>
           {timestamps.updatedAt && (
-            <div className='flex justify-between sm:justify-start gap-2'>
+            <div className='h-10 flex justify-between sm:justify-start items-center gap-2'>
               <span className='text-muted-foreground'>Última actualización:</span>
               <span className='capitalize font-semibold'>{moment(timestamps.updatedAt).format('MMM Do YYYY, h:mm A')}</span>
-            </div>
-          )}
-          {timestamps.createdAt && (
-            <div className='flex justify-between sm:justify-start gap-2'>
-              <span className='text-muted-foreground'>Creado:</span>
-              <span className='capitalize font-semibold'>{moment(timestamps.createdAt).format('MMM Do YYYY, h:mm A')}</span>
             </div>
           )}
         </div>
       )}
 
-      <div className='col-span-full bg-background border-y sticky top-0 z-20 py-4 flex flex-col lg:flex-row justify-between lg:items-center'>
-        {lgScreen && (
-          <div className='flex-1 grid sm:grid-cols-[auto_1fr] gap-2 sm:gap-5 whitespace-nowrap border-b lg:border-0 pb-6 lg:pb-0 text-sm'>
-            {timestamps.updatedAt && (
-              <div className='flex justify-start gap-2'>
-                <span className='text-muted-foreground'>Última actualización:</span>
-                <span className='capitalize font-semibold'>{moment(timestamps.updatedAt).format('MMM Do YYYY, h:mm A')}</span>
-              </div>
-            )}
-            {timestamps.createdAt && (
-              <div className='flex justify-start gap-2'>
-                <span className='text-muted-foreground'>Creado:</span>
-                <span className='capitalize font-semibold'>{moment(timestamps.createdAt).format('MMM Do YYYY, h:mm A')}</span>
-              </div>
+      {(lgScreen || isFormModified || onSubmitExists) && (
+        <div className='col-span-full bg-background border-y sticky top-0 z-20 py-4 flex flex-col lg:flex-row justify-between lg:items-center'>
+          {lgScreen && (
+            <div className='flex-1 grid sm:grid-cols-[auto_1fr] gap-2 sm:gap-5 whitespace-nowrap border-b lg:border-0 pb-6 lg:pb-0 text-sm'>
+              {timestamps.updatedAt && (
+                <div className='h-10 flex justify-start items-center gap-2'>
+                  <span className='text-muted-foreground'>Última actualización:</span>
+                  <span className='capitalize font-semibold'>{moment(timestamps.updatedAt).format('MMM Do YYYY, h:mm A')}</span>
+                </div>
+              )}
+            </div>
+          )}
+          <div className='space-x-2 pt-0'>
+            {isFormModified && (
+              <Button
+                onClick={onResetForm}
+                variant='outline'
+              >
+                Reiniciar
+              </Button>)}
+            {onSubmitExists && (
+              <Button
+                onClick={onSubmit}
+                disabled={!isFormModified}
+                variant='default'
+              >
+                {isFormModified ? 'Guardar' : 'Sin modificar'}
+              </Button>
             )}
           </div>
-        )}
-        <div className='space-x-2 pt-0'>
-          {isFormModified && (
-            <Button
-              onClick={onReset}
-              variant='outline'
-            >
-              Reiniciar
-            </Button>)}
-          <Button
-            onClick={onSubmit}
-            disabled={onSubmitExists || !isFormModified}
-            variant={onSubmitExists || !isFormModified ? 'secondary' : 'default'}
-          >
-            {onSubmitExists || isFormModified ? 'Guardar' : 'Sin cambios'}
-          </Button>
         </div>
-      </div>
+      )}
 
       <ScrollArea className='h-fit'>
         <div className={'flex lg:flex-col items-center lg:items-start border-b-2 lg:border-b-0'}>
