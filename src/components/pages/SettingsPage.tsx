@@ -81,7 +81,7 @@ export default function SettingsPage ({ children }: ComponentProps): JSX.Element
               href={path}
               key={path}
               className={cn(
-                'lg:w-full flex items-center justify-center lg:justify-normal px-4 py-3 border-b-2 lg:border-b-0 lg:border-r-2 text-center lg:text-start hover:text-primary transition-colors -mb-0.5',
+                'lg:w-full flex items-center justify-center lg:justify-normal px-4 py-3 border-b-2 lg:border-b-0 lg:border-r-2 text-center lg:text-start hover:text-primary transition-colors',
                 pathname?.startsWith(path) || (index === 0 && pathname === '/ajustes')
                   ? 'border-primary text-primary'
                   : 'text-muted-foreground'
