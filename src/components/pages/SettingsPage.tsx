@@ -26,8 +26,8 @@ export default function SettingsPage ({ children }: ComponentProps): JSX.Element
   return (
     <main className="relative p-0 grid lg:gap-2" style={{ gridTemplateColumns: lgScreen ? '18rem 1fr' : '1fr' }}>
       <div className='col-span-full'>
-        <h1 className='font-semibold text-4xl opacity-90 mb-3'>{formHeader.title}</h1>
-        <p className='text-muted-foreground mb-4'>{formHeader.description}</p>
+        <h1 className='font-semibold text-4xl opacity-90 mb-3'>{formHeader?.title}</h1>
+        <p className='text-muted-foreground mb-4'>{formHeader?.description}</p>
       </div>
 
       {!lgScreen && timestamps && (
