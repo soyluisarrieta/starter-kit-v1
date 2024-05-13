@@ -26,7 +26,7 @@ export default function SettingsPage ({ children }: ComponentProps): JSX.Element
   return (
     <main className="relative p-0 grid lg:gap-2" style={{ gridTemplateColumns: lgScreen ? '18rem 1fr' : '1fr' }}>
       <div className='col-span-full'>
-        <h1 className='font-semibold text-4xl opacity-90 mb-3'>{formHeader?.title}</h1>
+        <h1 className='font-semibold text-4xl mb-3'>{formHeader?.title}</h1>
         <p className='text-muted-foreground mb-4'>{formHeader?.description}</p>
       </div>
 
@@ -75,7 +75,7 @@ export default function SettingsPage ({ children }: ComponentProps): JSX.Element
       )}
 
       <ScrollArea className='h-fit'>
-        <div className={'flex lg:flex-col items-center lg:items-start border-b-2 lg:border-b-0'}>
+        <div className={'flex lg:flex-col items-center lg:items-start'}>
           {navItems.map(({ title, path }, index) => (
             <Link
               href={path}
@@ -94,7 +94,7 @@ export default function SettingsPage ({ children }: ComponentProps): JSX.Element
         <ScrollBar orientation="horizontal" />
       </ScrollArea>
 
-      <div className="w-full min-h-fit lg:col-span-1 bg-card/70 rounded-b-md lg:rounded-md">
+      <div className="w-full h-fit lg:col-span-1 bg-card/70 rounded-b-md lg:rounded-md">
         {children}
       </div>
     </main>
