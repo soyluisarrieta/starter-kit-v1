@@ -14,8 +14,8 @@ export default function ProfileSettings (): JSX.Element {
     last_name: profile?.last_name,
     email: profile?.email,
     gender: profile?.gender,
-    birthdate: profile?.birthdate,
-    phone: profile?.phone,
+    birthdate: profile?.birthdate ?? '',
+    phone: profile?.phone ?? '',
     avatar: profile?.avatar
   }
 
@@ -195,7 +195,7 @@ export default function ProfileSettings (): JSX.Element {
               render={({ field }) => (
                 <FormItem className='w-full'>
                   <FormControl>
-                    <Input placeholder={profile?.phone} {...field} />
+                    <Input placeholder={profile?.phone ?? 'Opcional'} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
