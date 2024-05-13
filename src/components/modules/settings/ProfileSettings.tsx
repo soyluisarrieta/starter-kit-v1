@@ -6,9 +6,12 @@ import { ACCEPTED_IMAGES } from '@/constants'
 import { useAuth } from '@/hooks/useAuth'
 import { useFormHandler } from '@/hooks/useFormHandler'
 import { profileSchema } from '@/lib/yup/userSchemas'
+import { useState } from 'react'
 
 export default function ProfileSettings (): JSX.Element {
   const { profile } = useAuth()
+  const [genderLetterSelected, setGenderLetterSelected] = useState(profile?.gender_letter)
+
   const defaultValues = {
     name: profile?.name,
     last_name: profile?.last_name,
@@ -96,7 +99,7 @@ export default function ProfileSettings (): JSX.Element {
         <div className='grid md:grid-cols-2 gap-4 p-6'>
           <div>
             <h3 className='font-semibold text-lg'>Imagen de perfil</h3>
-            <p className='font-normal leading-snug text-muted-foreground'>Opcionalmente, puede añadir una imagen de perfil</p>
+            <p className='font-normal leading-snug text-muted-foreground'>Opcionalmente, puede añadir una imagen de perfil.</p>
           </div>
           <div className='flex gap-2'>
             <FormField
@@ -123,6 +126,7 @@ export default function ProfileSettings (): JSX.Element {
         <div className='grid md:grid-cols-2 gap-4 p-6'>
           <div>
             <h3 className='font-semibold text-lg'>Género</h3>
+            <p className='font-normal leading-snug text-muted-foreground'>Se usa para identificarl{genderLetterSelected} en la aplicación, ej: Bienvenid{genderLetterSelected}</p>
           </div>
           <div className='flex gap-2'>
             <FormField
@@ -132,7 +136,10 @@ export default function ProfileSettings (): JSX.Element {
                 <FormItem className="space-y-2">
                   <FormControl>
                     <RadioGroup
-                      onValueChange={field.onChange}
+                      onValueChange={(genderValue) => {
+                        field.onChange(genderValue)
+                        setGenderLetterSelected(genderValue === 'male' ? 'o' : genderValue === 'female' ? 'a' : '@')
+                      }}
                       defaultValue={field.value}
                     >
                       <FormItem className="flex items-center space-x-3 mb-0">
