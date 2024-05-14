@@ -1,3 +1,4 @@
+import DatePicker from '@/components/ui/datepicker'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
@@ -98,6 +99,29 @@ export default function ProfileSettings (): JSX.Element {
         <div className='px-6'><Separator /></div>
         <div className='grid md:grid-cols-2 gap-4 p-6'>
           <div>
+            <h3 className='font-semibold text-lg'>Fecha de nacimiento</h3>
+          </div>
+          <div className='flex gap-2'>
+            <FormField
+              control={form.control}
+              name='birthdate'
+              render={({ field }) => (
+                <FormItem className='w-full'>
+                  <FormControl>
+                    <DatePicker
+                      onChange={field.onChange}
+                      value={field.value}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+        </div>
+        <div className='px-6'><Separator /></div>
+        <div className='grid md:grid-cols-2 gap-4 p-6'>
+          <div>
             <h3 className='font-semibold text-lg'>Imagen de perfil</h3>
             <p className='font-normal leading-snug text-muted-foreground'>Opcionalmente, puede añadir una imagen de perfil.</p>
           </div>
@@ -165,26 +189,6 @@ export default function ProfileSettings (): JSX.Element {
                         <FormLabel className="font-normal">Otro</FormLabel>
                       </FormItem>
                     </RadioGroup>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-        </div>
-        <div className='px-6'><Separator /></div>
-        <div className='grid md:grid-cols-2 gap-4 p-6'>
-          <div>
-            <h3 className='font-semibold text-lg'>Fecha de nacimiento</h3>
-          </div>
-          <div className='flex gap-2'>
-            <FormField
-              control={form.control}
-              name='birthdate'
-              render={({ field }) => (
-                <FormItem className='w-full'>
-                  <FormControl>
-                    <Input placeholder={profile?.birthdate} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
