@@ -1,9 +1,11 @@
 declare module 'nprogress';
 
 // Components
-interface ComponentProps {
-  children: React.ReactNode
+interface ClassNameProp {
   className?: string
+}
+interface ComponentProps extends ClassNameProp {
+  children: React.ReactNode
 }
 
 // Auth
