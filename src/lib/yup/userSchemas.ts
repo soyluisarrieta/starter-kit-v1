@@ -23,11 +23,13 @@ export const gender = yup
 
 export const address = yup
   .string()
+  .nullable()
   .min(3, 'La dirección debe contener al menos 3 caracteres')
   .max(100, 'La dirección no puede exceder de 100 caracteres.')
 
 export const phone = yup
   .string()
+  .nullable().transform((val, ori) => val === '' ? null : ori)
   .matches(/^[0-9]+$/, 'Número de teléfono no válido')
   .min(10, 'El número de teléfono debe contener al menos 10 dígitos')
   .max(15, 'El número de teléfono no puede exceder de 15 dígitos.')
@@ -44,11 +46,13 @@ export const adultBirthdate = yup
 
 export const avatar = yup
   .mixed<File>()
-  .test('is-valid-avatar-type', 'Tipo de archivo de avatar no válido', (value) => isValidFileType(value?.name.toLowerCase(), 'image'))
-  .test('is-valid-size', `El tamaño máximo permitido es ${MAX_FILE_SIZE / 1024} KB`, value => value && value.size <= MAX_FILE_SIZE)
+  .nullable()
+  .test('is-valid-avatar-type', 'Tipo de archivo de avatar no válido', (value) => value === null || isValidFileType(value?.name.toLowerCase(), 'image'))
+  .test('is-valid-size', `El tamaño máximo permitido es ${MAX_FILE_SIZE / 1024} KB`, value => value === null || (value && value.size <= MAX_FILE_SIZE))
 
 export const birthdate = yup
   .date()
+  .nullable()
   .max(new Date(), 'La fecha de nacimiento no puede ser en el futuro.')
 
 export const email = yup
