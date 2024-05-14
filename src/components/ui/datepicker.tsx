@@ -52,7 +52,7 @@ export default function DatePicker ({ value, onChange, placeholder }: Props): JS
       <PopoverContent align="start" className="w-auto p-0 bg-background">
         <div className="flex items-center justify-between py-4 px-2 border-b border-muted -mb-3">
           <div className="w-full flex items-center justify-around gap-1">
-            <Button className='w-7' size="icon" variant="ghost" onClick={handleNextMonth}>
+            <Button className='w-7' size="icon" variant="ghost" onClick={handlePreviousMonth}>
               <ChevronLeftIcon className="h-4 w-4" />
             </Button>
             <Select
@@ -90,7 +90,7 @@ export default function DatePicker ({ value, onChange, placeholder }: Props): JS
                 ))}
               </SelectContent>
             </Select>
-            <Button className='w-7' size="icon" variant="ghost" onClick={handlePreviousMonth}>
+            <Button className='w-7' size="icon" variant="ghost" onClick={handleNextMonth}>
               <ChevronRightIcon className="h-4 w-4" />
             </Button>
           </div>
