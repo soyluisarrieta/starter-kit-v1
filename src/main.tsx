@@ -1,5 +1,5 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
+import { StrictMode } from 'react'
+import { createRoot } from 'react-dom/client'
 import { TooltipProvider } from '@/components/ui/tooltip.tsx'
 import { QueryClientProvider } from 'react-query'
 import { queryClient } from '@/lib/react-query.ts'
@@ -7,7 +7,7 @@ import Router from './routing/Router.tsx'
 import moment from 'moment'
 import 'moment/dist/locale/es'
 
-import './global.css'
+import './index.css'
 import './lib/nProgress.css'
 
 moment.locale('es')
@@ -22,12 +22,12 @@ if (theme && theme.state.darkMode !== undefined) {
   rootClasses.add('dark')
 }
 
-ReactDOM.createRoot(document.getElementById('root') as HTMLDivElement).render(
-  <React.StrictMode>
+createRoot(document.getElementById('root') as HTMLDivElement).render(
+  <StrictMode>
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <Router />
       </TooltipProvider>
     </QueryClientProvider>
-  </React.StrictMode>
+  </StrictMode>
 )

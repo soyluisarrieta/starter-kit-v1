@@ -7,36 +7,20 @@ import { resetPwService } from '@/services/authService'
 import { ErrorBlock } from '@/components/ui/error-block'
 import { useFormHandler } from '@/hooks/useFormHandler'
 
-export default function ResetPasswordForm (): JSX.Element {
-  const { token } = useParams()
-  const params = new URLSearchParams(useSearch())
-  const email = params.get('email')
-
-  // Validating if typeof is string
-  if (typeof token !== 'string' || typeof email !== 'string') {
-    return (
-      <div className="error-container">
-        <h2>¡Ups! Algo salió mal</h2>
-        <p>No pudimos identificarte con el token y correo electrónico.</p>
-        <Link href='/recuperar-contrasena'>
-          <Button>Inténtalo de nuevo</Button>
-        </Link>
-      </div>
-    )
-  }
-
+const ResetPasswordFormContent = ({ token, email }: { token: string, email: string }): JSX.Element => {
   const defaultValues = {
     password: '',
     password_confirmation: ''
   }
 
   const { form, onSubmit } = useFormHandler({
+    formHeader: { title: 'Restablecer contraseña' },
     schema: resetPwSchema,
     defaultValues,
     successMessage: 'Su contraseña se ha restablecido exitosamente.',
     redirectTo: '/ingresar',
     formConfig: { reValidateMode: 'onSubmit' },
-    request: async (passwords: { password: string, password_confirmation: string }) => {
+    request: async (passwords) => {
       await resetPwService({ token, email, ...passwords })
       window.localStorage.setItem('passwordChanged', 'true')
     },
@@ -86,4 +70,24 @@ export default function ResetPasswordForm (): JSX.Element {
       </form>
     </Form>
   )
+}
+
+export default function ResetPasswordForm (): JSX.Element {
+  const { token } = useParams()
+  const params = new URLSearchParams(useSearch())
+  const email = params.get('email')
+
+  if (typeof token !== 'string' || typeof email !== 'string') {
+    return (
+      <div className="error-container">
+        <h2>¡Ups! Algo salió mal</h2>
+        <p>No pudimos identificarte con el token y correo electrónico.</p>
+        <Link href='/recuperar-contrasena'>
+          <Button>Inténtalo de nuevo</Button>
+        </Link>
+      </div>
+    )
+  }
+
+  return <ResetPasswordFormContent token={token} email={email} />
 }

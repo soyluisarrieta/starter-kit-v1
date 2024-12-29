@@ -14,7 +14,8 @@ interface Props {
 }
 
 export default function CardSettingSection ({ htmlFor, title, description, className, defaultChecked = false, onChange, children }: Props): JSX.Element {
-  const idCardSection = htmlFor ?? useId()
+  const generateId = useId()
+  const idCardSection = htmlFor ?? generateId
   return (
     <div className={cn('flex items-center justify-between space-x-10 p-6', className)}>
       <Label htmlFor={idCardSection} className="flex flex-col space-y-1">

@@ -15,28 +15,28 @@ export default function GeneralSettings (): JSX.Element {
       description: 'Puedes personalizar configuraciones según tus preferencias.'
     })
     setTimestamps({
-      updatedAt: '2024-12-27T20:31:01.000000Z' // 👈 Crear un timestamp para Ajustes generales
+      updatedAt: '2024-12-27T20:31:01.000000Z'
     })
   }, [])
 
   return (
     <>
-    <CardSettingSection
-      title='Modos de visualización'
-      description='Cambia egún tus preferencias de iluminación y comodidad visual.'
-    >
-      <Tabs
-        value={darkMode ? 'dark' : 'light'}
-        onValueChange={(theme) => { setDarkMode(theme === 'dark') }}
-        className='bg-card shadow-sm border'
-        asChild
+      <CardSettingSection
+        title='Modos de visualización'
+        description='Cambia egún tus preferencias de iluminación y comodidad visual.'
       >
-        <TabsList>
-          <TabsTrigger className='h-full' value="light"><Icon size={18} element={icons.ThemeMode.Light} /></TabsTrigger>
-          <TabsTrigger className='h-full' value="dark"><Icon size={18} element={icons.ThemeMode.Dark} /></TabsTrigger>
-        </TabsList>
-      </Tabs>
-    </CardSettingSection>
+        <Tabs
+          value={darkMode ? 'dark' : 'light'}
+          onValueChange={(theme) => { setDarkMode(theme === 'dark') }}
+          className='bg-card shadow-sm border'
+          asChild
+        >
+          <TabsList>
+            <TabsTrigger className='h-full' value="light"><Icon size={18} element={icons.ThemeMode.Light} /></TabsTrigger>
+            <TabsTrigger className='h-full' value="dark"><Icon size={18} element={icons.ThemeMode.Dark} /></TabsTrigger>
+          </TabsList>
+        </Tabs>
+      </CardSettingSection>
     </>
   )
 }

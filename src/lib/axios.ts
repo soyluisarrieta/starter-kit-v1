@@ -28,27 +28,30 @@ const parseAxiosError = (err: AxiosError): ErrorProps => {
 
   const responseData = err.response?.data as Record<string, any> | null
 
-  switch (error.status) {
-    case UNPROCESSABLE_ENTITY:
+  const errorMessages = {
+    [UNPROCESSABLE_ENTITY]: () => {
       if (responseData?.errors) {
         for (const field in responseData.errors) {
           error.validation[field] = responseData.errors[field][0]
         }
       }
       error.message = responseData?.message
-      break
-    case FORBIDDEN:
+    },
+    [FORBIDDEN]: () => {
       error.message = 'No tienes permitido hacer eso.'
-      break
-    case UNAUTHORIZED:
+    },
+    [UNAUTHORIZED]: () => {
       error.message = 'Por favor vuelve a iniciar sesión.'
-      break
-    case INTERNAL_SERVER_ERROR:
+    },
+    [INTERNAL_SERVER_ERROR]: () => {
       error.message = 'Algo salió muy mal. Lo siento.'
-      break
-    default:
+    },
+    default: () => {
       error.message = 'Algo salió mal. Por favor, inténtelo de nuevo más tarde.'
-  }
+    }
+  };
+
+  (errorMessages[error.status as keyof typeof errorMessages] || errorMessages.default)()
 
   return error
 }

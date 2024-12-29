@@ -6,13 +6,14 @@ import { Button } from '@/components/ui/button'
 import { useFormHandler } from '@/hooks/useFormHandler'
 
 interface Props {
-  setIsLinkSent: (isSent: boolean) => void
+  setIsLinkSent: React.Dispatch<React.SetStateAction<boolean>>
   resetCounter?: () => void
 }
 
 export default function ForgotPasswordForm ({ setIsLinkSent, resetCounter }: Props): JSX.Element {
   // Form config
   const { form, onSubmit } = useFormHandler({
+    formHeader: { title: 'Recuperar contraseña' },
     schema: forgotPwSchema,
     defaultValues: { email: '' },
     request: async (email: { email: string }) => {

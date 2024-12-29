@@ -6,7 +6,7 @@ import { navigate } from 'wouter/use-browser-location'
 import { CheckCircleIcon, TimerIcon } from 'lucide-react'
 
 export default function ForgotPasswordPage (): JSX.Element {
-  const [isLinkSent, setIsLinkSent] = useState(false)
+  const [isLinkSent, setIsLinkSent] = useState<boolean>(false)
   const [counter, setCounter] = useState(60)
 
   // Counter
@@ -63,13 +63,13 @@ export default function ForgotPasswordPage (): JSX.Element {
                   <><TimerIcon className='ml-3 mr-1' size={16} /> {counter}</>
                 )}
               </div>
-              )
+            )
             : (
               <ForgotPasswordForm
                 resetCounter={resetCounter}
                 setIsLinkSent={setIsLinkSent}
               />
-              )}
+            )}
         </CardContent>
       </Card>
 

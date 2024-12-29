@@ -1,5 +1,6 @@
 node_modules
 src/vite-env.d.ts
-.eslintrc.cjs
+eslint.config.js
 tailwind.config.js
 vite.config.ts
+API_LaravelBreeze

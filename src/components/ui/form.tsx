@@ -1,11 +1,11 @@
 import * as React from 'react'
-import type * as LabelPrimitive from '@radix-ui/react-label'
+import * as LabelPrimitive from '@radix-ui/react-label'
 import { Slot } from '@radix-ui/react-slot'
 import {
   Controller,
-  type ControllerProps,
-  type FieldPath,
-  type FieldValues,
+  ControllerProps,
+  FieldPath,
+  FieldValues,
   FormProvider,
   useFormContext
 } from 'react-hook-form'
@@ -15,10 +15,10 @@ import { Label } from '@/components/ui/label'
 
 const Form = FormProvider
 
-interface FormFieldContextValue<
+type FormFieldContextValue<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>
-> {
+> = {
   name: TName
 }
 
@@ -62,7 +62,7 @@ const useFormField = () => {
   }
 }
 
-interface FormItemContextValue {
+type FormItemContextValue = {
   id: string
 }
 
@@ -71,29 +71,29 @@ const FormItemContext = React.createContext<FormItemContextValue>(
 )
 
 const FormItem = React.forwardRef<
-HTMLDivElement,
-React.HTMLAttributes<HTMLDivElement>
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
 >(({ className, ...props }, ref) => {
   const id = React.useId()
 
   return (
     <FormItemContext.Provider value={{ id }}>
-      <div ref={ref} className={cn('mb-3', className)} {...props} />
+      <div ref={ref} className={cn('space-y-2', className)} {...props} />
     </FormItemContext.Provider>
   )
 })
 FormItem.displayName = 'FormItem'
 
 const FormLabel = React.forwardRef<
-React.ElementRef<typeof LabelPrimitive.Root>,
-React.ComponentPropsWithoutRef<typeof LabelPrimitive.Root>
+  React.ElementRef<typeof LabelPrimitive.Root>,
+  React.ComponentPropsWithoutRef<typeof LabelPrimitive.Root>
 >(({ className, ...props }, ref) => {
   const { error, formItemId } = useFormField()
 
   return (
     <Label
       ref={ref}
-      className={className}
+      className={cn(error && 'text-destructive', className)}
       htmlFor={formItemId}
       {...props}
     />
@@ -102,8 +102,8 @@ React.ComponentPropsWithoutRef<typeof LabelPrimitive.Root>
 FormLabel.displayName = 'FormLabel'
 
 const FormControl = React.forwardRef<
-React.ElementRef<typeof Slot>,
-React.ComponentPropsWithoutRef<typeof Slot>
+  React.ElementRef<typeof Slot>,
+  React.ComponentPropsWithoutRef<typeof Slot>
 >(({ ...props }, ref) => {
   const { error, formItemId, formDescriptionId, formMessageId } = useFormField()
 
@@ -116,7 +116,6 @@ React.ComponentPropsWithoutRef<typeof Slot>
           ? `${formDescriptionId}`
           : `${formDescriptionId} ${formMessageId}`
       }
-      className={cn(props.className, error && 'border-destructive')}
       aria-invalid={!!error}
       {...props}
     />
@@ -125,8 +124,8 @@ React.ComponentPropsWithoutRef<typeof Slot>
 FormControl.displayName = 'FormControl'
 
 const FormDescription = React.forwardRef<
-HTMLParagraphElement,
-React.HTMLAttributes<HTMLParagraphElement>
+  HTMLParagraphElement,
+  React.HTMLAttributes<HTMLParagraphElement>
 >(({ className, ...props }, ref) => {
   const { formDescriptionId } = useFormField()
 
@@ -134,14 +133,16 @@ React.HTMLAttributes<HTMLParagraphElement>
     <p
       ref={ref}
       id={formDescriptionId}
-      className={cn('text-sm text-muted-foreground', className)}
+      className={cn('text-[0.8rem] text-muted-foreground', className)}
       {...props}
     />
   )
 })
 FormDescription.displayName = 'FormDescription'
 
-const FormMessage = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<HTMLParagraphElement>
+const FormMessage = React.forwardRef<
+  HTMLParagraphElement,
+  React.HTMLAttributes<HTMLParagraphElement>
 >(({ className, children, ...props }, ref) => {
   const { error, formMessageId } = useFormField()
   const body = error ? String(error?.message) : children
@@ -154,7 +155,7 @@ const FormMessage = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<
     <p
       ref={ref}
       id={formMessageId}
-      className={cn('text-[0.8rem] font-medium text-destructive my-1', className)}
+      className={cn('text-[0.8rem] font-medium text-destructive', className)}
       {...props}
     >
       {body}

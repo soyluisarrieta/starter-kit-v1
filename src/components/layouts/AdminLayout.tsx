@@ -1,5 +1,5 @@
 import { Icon, icons } from '@/components/icons/Icons'
-import Authenticating from '@/components/pages/auth/AuthLoader'
+import Authenticating from '@/components/pages/Auth/AuthLoader'
 import { Breadcrumb, BreadcrumbEllipsis, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb'
 import { Button } from '@/components/ui/button'
 import { Calendar } from '@/components/ui/calendar'
@@ -37,16 +37,12 @@ export default function AdminLayout ({ widgets: Widgets, children }: Props): JSX
   const breadcrumbItems = buildBreadcrumb(usePathname())
 
   // Checking authentication
-  if (!isSessionVerified && !isAuth) {
-    return <Authenticating />
-  }
+  if (!isSessionVerified && !isAuth) return <Authenticating />
 
   // Redirect if user is not authenticated
-  if (!isAuth) {
-    return (
-      <Redirect to='/ingresar' state={{ from: location }} replace />
-    )
-  }
+  if (!isAuth) return (
+    <Redirect to='/ingresar' state={{ from: location }} replace />
+  )
 
   // Sidebar menu items
   const sidebarItems = [
@@ -114,7 +110,7 @@ export default function AdminLayout ({ widgets: Widgets, children }: Props): JSX
                       <ul><BreadcrumbSeparator /></ul>
                     </BreadcrumbItem>
                   </>
-                  )
+                )
                 : null}
               {breadcrumbItems.slice(-ITEMS_IN_BREADCRUMB + 1).map((item, index) => (
                 <BreadcrumbItem key={index}>
@@ -129,12 +125,12 @@ export default function AdminLayout ({ widgets: Widgets, children }: Props): JSX
                         </BreadcrumbLink>
                         <ul><BreadcrumbSeparator /></ul>
                       </>
-                      )
+                    )
                     : (
                       <BreadcrumbPage className="max-w-20 truncate md:max-w-none">
                         {item.label}
                       </BreadcrumbPage>
-                      )}
+                    )}
                 </BreadcrumbItem>
               ))}
             </BreadcrumbList>
@@ -170,7 +166,7 @@ export default function AdminLayout ({ widgets: Widgets, children }: Props): JSX
 
             <Tabs
               value={darkMode ? 'dark' : 'light'}
-              onValueChange={(theme) => { setDarkMode(theme === 'dark') }}
+              onValueChange={theme => { setDarkMode(theme === 'dark') }}
               className='bg-card shadow-sm border'
               asChild
             >

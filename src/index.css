@@ -1,0 +1,116 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+
+  /* Lato */
+  @font-face {
+    font-family: "Lato";
+    font-weight: 100;
+    font-style: normal;
+    src: url("/fonts/lato/Lato-Light.woff2");
+  }
+
+  @font-face {
+    font-family: "Lato";
+    font-weight: 100;
+    font-style: italic;
+    font-display: swap;
+    src: url("/fonts/lato/Lato-LightItalic.woff2");
+  }
+
+  @font-face {
+    font-family: "Lato";
+    font-weight: 400;
+    font-style: normal;
+    src: url("/fonts/lato/Lato-Regular.woff2");
+  }
+
+  @font-face {
+    font-family: "Lato";
+    font-weight: 400;
+    font-style: italic;
+    font-display: swap;
+    src: url("/fonts/lato/Lato-Italic.woff2");
+  }
+
+  @font-face {
+    font-family: "Lato";
+    font-weight: 900;
+    font-style: normal;
+    src: url("/fonts/lato/Lato-Bold.woff2");
+  }
+
+  @font-face {
+    font-family: "Lato";
+    font-weight: 900;
+    font-style: italic;
+    font-display: swap;
+    src: url("/fonts/lato/Lato-BoldItalic.woff2");
+  }
+
+  :root {
+    --background: 220 33.33% 98.24%;
+    --foreground: 231.43 29.17% 9.41%;
+    --muted: 220 11.11% 94.71%;
+    --muted-foreground: 234.78 12.3% 63.33%;
+    --popover: 0 0% 99%;
+    --popover-foreground: 0 0% 0%;
+    --card: 0 0% 100%;
+    --card-foreground: 225 25% 9.41%;
+    --border: 225 40% 94.12%;
+    --input: 220 11.11% 94.71%;
+    --primary: 13.01 98.81% 67.06%;
+    --primary-foreground: 327 0% 100%;
+    --secondary: 231.18 16.5% 40.39%;
+    --secondary-foreground: 297 0% 100%;
+    --accent: 220 11.11% 93%;
+    --accent-foreground: 231.43 29.17% 9.41%;
+    --destructive: 0 100% 61.88%;
+    --destructive-foreground: 11 87% 91%;
+    --ring: 13.01 98.81% 67.06%;
+    --chart-1: 13.01 98.81% 67.06%;
+    --chart-2: 231.18 21.72% 67.9%;
+    --chart-3: 231.18 18.4% 54.12%;
+    --chart-4: 231.18 25.14% 31.55%;
+    --chart-5: 231.18 30.15% 14.97%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 240 10.53% 14.9%;
+    --foreground: 260 100% 99.41%;
+    --muted: 240 6.4% 25.06%;
+    --muted-foreground: 222 4.31% 54.51%;
+    --popover: 231.43 15.01% 9.36%;
+    --popover-foreground: 240 100% 99.02%;
+    --card: 240 7.27% 21.57%;
+    --card-foreground: 240 100% 99.02%;
+    --border: 240 7.27% 21.57%;
+    --input: 240 8.95% 32.71%;
+    --primary: 13.01 95.79% 63.48%;
+    --primary-foreground: 327 10% 97%;
+    --secondary: 222 6.17% 31.76%;
+    --secondary-foreground: 240 100% 99.02%;
+    --accent: 222 10.27% 19.3%;
+    --accent-foreground: 240 100% 99.02%;
+    --destructive: 0 100% 65.79%;
+    --destructive-foreground: 0 0% 100%;
+    --ring: 12.81 95.7% 63.53%;
+    --chart-1: 12.81 95.7% 63.53%;
+    --chart-2: 230 21.95% 67.84%;
+    --chart-3: 230.45 18.8% 54.12%;
+    --chart-4: 231.22 25.47% 31.57%;
+    --chart-5: 232.17 29.87% 15.1%;
+  }
+
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}

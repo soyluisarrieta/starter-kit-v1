@@ -20,7 +20,7 @@ export default function MasterLayout ({ children }: ComponentProps): JSX.Element
         stacked
         progressClassName='bg-primary-foreground/70 opacity-100'
         toastClassName='bg-primary text-primary-foreground rounded p-4'
-        />
+      />
     </>
   )
 }

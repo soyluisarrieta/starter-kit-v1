@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 
-export interface FormHeader { title: string | null, description?: string | null }
+export interface FormHeader { title: string | null , description?: string | null }
 
 interface FormStore {
   formHeader: FormHeader
@@ -19,7 +19,7 @@ interface FormStore {
   resetStore: () => void
 }
 
-export const useFormStore = create<FormStore>((set) => ({
+export const useFormStore = create<FormStore>(set => ({
   formHeader: { title: null, description: null },
   isResetedFormStore: true,
   isFormModified: false,
@@ -28,16 +28,16 @@ export const useFormStore = create<FormStore>((set) => ({
   timestamps: { updatedAt: null, createdAt: null },
   onResetForm: () => {},
 
-  setIsFormModified: (isFormModified) => {
+  setIsFormModified: isFormModified => {
     set({ isFormModified, isResetedFormStore: false })
   },
-  setOnSubmit: (onSubmit) => {
+  setOnSubmit: onSubmit => {
     set({ onSubmit, isResetedFormStore: false, onSubmitExists: true })
   },
-  setTimestamps: (timestamps) => {
+  setTimestamps: timestamps => {
     set({ timestamps, isResetedFormStore: false })
   },
-  setOnResetForm: (onResetForm) => {
+  setOnResetForm: onResetForm => {
     set({ onResetForm, isResetedFormStore: false })
   },
   resetStore: () => {

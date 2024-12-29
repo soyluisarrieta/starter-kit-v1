@@ -57,7 +57,7 @@ export const Icon = ({ element, variant, ...rest }: IconProps): JSX.Element | nu
   return !IconToRender ? null : <IconToRender {...rest} />
 }
 
-export const SVGCustomIcon = ({ size, color, style, children, ...props }: IconBaseProps): JSX.Element => (
+export const SVGCustomIcon = ({ size, style, children, ...props }: IconBaseProps): JSX.Element => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     xmlSpace="preserve"

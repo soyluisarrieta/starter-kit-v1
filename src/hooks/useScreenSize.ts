@@ -18,7 +18,7 @@ export function useScreenSize (): {
   mdScreen: boolean
   lgScreen: boolean
   xlScreen: boolean
-} {
+  } {
   const [screenSize, setScreenSize] = useState(getCurrentDimension)
 
   useLayoutEffect(() => {

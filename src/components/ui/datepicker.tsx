@@ -85,7 +85,7 @@ export default function DatePicker ({ value, onChange, placeholder }: Props): JS
                 <SelectValue placeholder={'1994'} />
               </SelectTrigger>
               <SelectContent className='bg-background border-input'>
-                {Array.from({ length: 100 }, (_, index) => new Date().getFullYear() - index).map((year) => (
+                {Array.from({ length: 100 }, (_, index) => new Date().getFullYear() - index).map(year => (
                   <SelectItem key={year} value={year.toString()}>{year}</SelectItem>
                 ))}
               </SelectContent>
@@ -100,9 +100,9 @@ export default function DatePicker ({ value, onChange, placeholder }: Props): JS
           classNames={{ caption: 'hidden', cell: 'bg-transparent' }}
           month={pickedDate}
           selected={selected}
-          onSelect={(date) => { setSelected(date); onChange(date) }}
+          onSelect={date => { setSelected(date); onChange(date) }}
           mode="single"
-          disabled={(date) => date > new Date() || date < new Date('1900-01-01')}
+          disabled={date => date > new Date() || date < new Date('1900-01-01')}
           initialFocus
         />
       </PopoverContent>

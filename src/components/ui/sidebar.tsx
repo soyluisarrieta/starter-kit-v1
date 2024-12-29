@@ -14,6 +14,7 @@ import { Link } from 'wouter'
 import { type IconType } from 'react-icons/lib'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { DropdownMenuArrow } from '@radix-ui/react-dropdown-menu'
+import { useEffect } from 'react'
 
 interface MenuItem {
   title: string
@@ -36,13 +37,18 @@ export default function Sidebar ({ menuItems, user, onLogout }: SidebarProps): J
   const { isSidebarOpen, toggleSidebar } = useSidebarStore()
   const { lgScreen } = useScreenSize()
 
+  // Close sidebar when screen is small
+  useEffect(() => {
+    if (!lgScreen && isSidebarOpen) toggleSidebar()
+  }, [lgScreen])
+
   return (
     <>
       {!lgScreen && <BackdropBlur className={cn('fixed inset-0 z-40 transition-all duration-200', !isSidebarOpen && 'pointer-events-none')} onClick={() => { isSidebarOpen && toggleSidebar() }} style={{ opacity: isSidebarOpen ? 1 : 0 }} />}
 
       <aside className={cn('w-10/12 lg:w-72 max-w-72 fixed lg:relative z-40 transition-[width] duration-200 bg-background', !isSidebarOpen && 'w-0 lg:w-[76px]')}>
-        <Button size='icon' className='w-fit h-fit bg-card hover:bg-foreground text-foreground hover:text-background shadow-md dark:shadow-black/70 p-1.5 absolute z-10 top-16 right-0 translate-x-1/2 rounded-full active:scale-90' onClick={toggleSidebar}>
-          <Icon element={icons.CaretDouble} className={cn('transition-transform duration-200', !isSidebarOpen && '-rotate-180')} size={13} />
+        <Button size='icon' className='w-fit h-fit bg-card hover:bg-foreground text-foreground hover:text-background shadow-md dark:shadow-black/70 p-1.5 absolute z-10 top-16 right-0 translate-x-1/2 rounded-full active:scale-90 contrast-75' onClick={toggleSidebar}>
+          <Icon element={icons.CaretDouble} className={cn('transition-transform duration-200', !isSidebarOpen && '-rotate-180')} size={30} />
         </Button>
 
         <ScrollArea className='w-full h-dvh shadow-inner relative bg-blue-900/5 dark:bg-black/15 border-r border-card/50'>
@@ -212,11 +218,11 @@ export default function Sidebar ({ menuItems, user, onLogout }: SidebarProps): J
                   <TooltipTrigger asChild>
                     <Button
                       variant='outline'
-                      className="w-full"
+                      className="w-full gap-0"
                       onClick={onLogout}
                     >
                       <Icon element={icons.Logout} className='min-w-fit' size={20} strokeWidth={1.7} />
-                      <span className={cn('w-auto transition-all duration-200 overflow-hidden', !isSidebarOpen ? 'w-0 opacity-0' : 'ml-1')}>Salir</span>
+                      <span className={cn('w-auto transition-all duration-200 overflow-hidden', !isSidebarOpen ? 'w-0 opacity-0' : 'ml-1.5')}>Salir</span>
                     </Button>
                   </TooltipTrigger>
                   {!isSidebarOpen && (
@@ -235,6 +241,10 @@ export default function Sidebar ({ menuItems, user, onLogout }: SidebarProps): J
             </div>
           </div>
         </ScrollArea>
+        <button
+          className="absolute right-0 inset-y-0 hidden w-2 translate-x-1 transition-all ease-linear sm:flex cursor-w-resize"
+          onClick={toggleSidebar}
+        />
       </aside>
     </>
   )
