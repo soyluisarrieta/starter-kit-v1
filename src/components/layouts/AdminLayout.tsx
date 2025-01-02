@@ -15,9 +15,10 @@ import { buildBreadcrumb } from '@/lib/utils/others'
 import { useThemeStore } from '@/store/ThemeStore'
 import { format } from 'date-fns'
 import { useState } from 'react'
-import { PiChartDonutDuotone, PiHouseDuotone } from 'react-icons/pi'
+import { PiHouseDuotone } from 'react-icons/pi'
 import { Link, Redirect, useLocation } from 'wouter'
 import { usePathname } from 'wouter/use-browser-location'
+import { SIDEBAR_ITEMS } from '@/constants'
 
 interface Props extends ComponentProps {
   widgets: React.ComponentType | undefined
@@ -44,32 +45,11 @@ export default function AdminLayout ({ widgets: Widgets, children }: Props): JSX
     <Redirect to='/ingresar' state={{ from: location }} replace />
   )
 
-  // Sidebar menu items
-  const sidebarItems = [
-    {
-      items: [
-        { Icon: PiHouseDuotone, title: 'Inicio', link: '/' },
-        { Icon: PiChartDonutDuotone, title: 'Otra opción', link: '/otro' },
-        { Icon: PiChartDonutDuotone, title: 'Otra opción', link: '/otro' },
-        { Icon: PiChartDonutDuotone, title: 'Otra opción', link: '/otro' }
-      ]
-    },
-    {
-      title: 'Título',
-      items: [
-        { Icon: PiChartDonutDuotone, title: 'Otra opción', link: '/otro' },
-        { Icon: PiChartDonutDuotone, title: 'Otra opción', link: '/otro' },
-        { Icon: PiChartDonutDuotone, title: 'Otra opción', link: '/otro' },
-        { Icon: PiChartDonutDuotone, title: 'Otra opción', link: '/otro' }
-      ]
-    }
-  ]
-
   // User authenticated
   return (
     <div className='h-dvh overflow-hidden flex'>
       <Sidebar
-        menuItems={sidebarItems}
+        menuItems={SIDEBAR_ITEMS}
         user={profile}
         onLogout={logout}
       />

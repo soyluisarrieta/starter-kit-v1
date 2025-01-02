@@ -37,6 +37,8 @@ export default function Sidebar ({ menuItems, user, onLogout }: SidebarProps): J
   const { isSidebarOpen, toggleSidebar } = useSidebarStore()
   const { lgScreen } = useScreenSize()
 
+  const currentLink = location.pathname
+
   // Close sidebar when screen is small
   useEffect(() => {
     if (!lgScreen && isSidebarOpen) toggleSidebar()
@@ -47,13 +49,13 @@ export default function Sidebar ({ menuItems, user, onLogout }: SidebarProps): J
       {!lgScreen && <BackdropBlur className={cn('fixed inset-0 z-40 transition-all duration-200', !isSidebarOpen && 'pointer-events-none')} onClick={() => { isSidebarOpen && toggleSidebar() }} style={{ opacity: isSidebarOpen ? 1 : 0 }} />}
 
       <aside className={cn('w-10/12 lg:w-72 max-w-72 fixed lg:relative z-40 transition-[width] duration-200 bg-background', !isSidebarOpen && 'w-0 lg:w-[76px]')}>
-        <Button size='icon' className='w-fit h-fit bg-card hover:bg-foreground text-foreground hover:text-background shadow-md dark:shadow-black/70 p-1.5 absolute z-10 top-16 right-0 translate-x-1/2 rounded-full active:scale-90 contrast-75' onClick={toggleSidebar}>
-          <Icon element={icons.CaretDouble} className={cn('transition-transform duration-200', !isSidebarOpen && '-rotate-180')} size={30} />
+        <Button size='icon' className='w-fit h-fit bg-card hover:bg-foreground text-foreground hover:text-background shadow-md dark:shadow-black/70 p-1.5 absolute z-10 top-6 lg:top-14 -right-4 lg:right-0 translate-x-3/4 lg:translate-x-1/2 rounded-full active:scale-90 border' onClick={toggleSidebar}>
+          <Icon element={icons.CaretDouble} className={cn('transition-transform duration-200', !isSidebarOpen && '-rotate-180')} size={84} />
         </Button>
 
-        <ScrollArea className='w-full h-dvh shadow-inner relative bg-blue-900/5 dark:bg-black/15 border-r border-card/50'>
+        <ScrollArea className='w-full h-dvh relative bg-card dark:bg-muted border-r'>
           <div className='h-dvh min-h-fit flex flex-col'>
-            <div className={cn('w-full transition-[width] duration-200 space-y-5 py-4 px-3 flex-1', !isSidebarOpen && 'w-[76px]')}>
+            <div className={cn('w-full transition-[width] duration-200 space-y-5 py-4 px-2 flex-1', !isSidebarOpen && 'w-[76px]')}>
               <Link to='/' asChild>
                 <div className='w-fit h-12 flex items-center cursor-pointer transition-transform active:scale-95 hover:opacity-85'>
                   <div className={cn('h-full flex justify-center items-center flex-shrink-0 ml-0.5')}>
@@ -74,27 +76,28 @@ export default function Sidebar ({ menuItems, user, onLogout }: SidebarProps): J
 
               {menuItems.map((section, index) => (
                 <div key={index}>
-                  {section.title && (<h2 className={cn('mb-2 px-2 sm:text-md font-semibold tracking-tight transition-opacity duration-200 relative', lgScreen && !isSidebarOpen && 'left-0 opacity-0')}>{section.title}</h2>)}
-                  <ul className="space-y-1">
+                  {section.title && (<h2 className={cn('mb-2 px-2 font-bold text-xs uppercase tracking-widest text-muted-foreground/70 transition-opacity duration-200 relative', lgScreen && !isSidebarOpen && 'left-0 opacity-0')}>{section.title}</h2>)}
+                  <ul className="space-y-0.5">
                     {section.items.map((item, idx) => (
                       <li key={idx}>
                         <Tooltip delayDuration={0} disableHoverableContent>
                           <TooltipTrigger asChild>
                             <Link
                               className={
-                                cn('h-10 relative opacity-80 hover:opacity-95 inline-flex items-center justify-center whitespace-nowrap rounded-md hover:bg-primary/10 text-muted-foreground hover:text-primary text-sm font-medium ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 px-4 py-2',
-                                  'w-full', index === 0 && idx === 0 ? 'text-primary opacity-100 before:w-1 before:h-full before:rounded-full before:bg-primary before:absolute before:-left-3' : 'ghost')
+                                cn('h-10 relative hover:opacity-95 inline-flex items-center justify-center whitespace-nowrap rounded-md hover:bg-muted-foreground/10 text-muted-foreground dark:text-muted-foreground hover:text-card-foreground/70 text-sm font-medium ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 px-4 py-2',
+                                  'w-full', currentLink === item.link ? 'bg-gradient-to-b from-primary to-primary/80 shadow-md shadow-black/10 text-primary-foreground dark:text-primary-foreground hover:text-primary-foreground opacity-100' : 'ghost')
                               }
                               to={item.link}
                             >
                               <Icon
-                                className='min-w-fit'
+                                className='min-w-[28px]'
                                 element={item.Icon}
                                 variant='outline'
-                                size={24}
+                                strokeWidth={currentLink === item.link ? 1.5 : 1}
+                                size={20}
                               />
                               <span
-                                className={cn('w-full overflow-hidden flex-1 font-bold', isSidebarOpen ? 'ml-2' : 'opacity-0')}
+                                className={cn('w-full overflow-hidden flex-1 font-medium', isSidebarOpen ? 'ml-1' : 'opacity-0')}
                                 style={{ transition: 'opacity 200ms ease, margin 200ms ease' }}
                               >
                                 {item.title}
@@ -113,15 +116,15 @@ export default function Sidebar ({ menuItems, user, onLogout }: SidebarProps): J
               ))}
             </div>
 
-            <div className="flex-grow-0">
+            <div className="flex-grow-0 bg-muted/30 dark:bg-black/10">
               <Separator orientation='horizontal' />
 
-              <div className="w-full flex items-center gap-1 p-4">
+              <div className="w-full flex items-center gap-1 py-4 px-3">
                 <DropdownMenu open={isSidebarOpen ? false : undefined}>
                   <DropdownMenuTrigger>
-                    <Avatar className={cn('outline outline-2 outline-primary outline-offset-2 ml-0.5', !isSidebarOpen && 'cursor-pointer hover:brightness-125')}>
+                    <Avatar className={cn('outline outline-1 outline-muted-foreground/50 dark:outline-muted-foreground outline-offset-2 ml-0.5', !isSidebarOpen && 'cursor-pointer hover:brightness-125')}>
                       <AvatarImage src={user?.avatar && IMAGES.AVATARS + user.avatar} />
-                      <AvatarFallback className='bg-primary text-primary-foreground'>
+                      <AvatarFallback className='bg-muted-foreground/30 dark:bg-muted-foreground/40 text-card-foreground/40 dark:text-muted-foreground'>
                         {user?.name[0]}{user?.last_name[0]}
                       </AvatarFallback>
                     </Avatar>
@@ -130,17 +133,17 @@ export default function Sidebar ({ menuItems, user, onLogout }: SidebarProps): J
                     <DropdownMenuLabel>Mi cuenta</DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem className='cursor-pointer' asChild>
-                      <Link className='flex' to='/perfil'><Icon size={16} element={icons.User} className='mr-2' />Perfil</Link>
+                      <Link className='flex' to='/perfil'><Icon size={16} element={icons.User} />Perfil</Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem className='cursor-pointer' asChild>
-                      <Link className='flex' to='/ajustes'><Icon size={16} element={icons.Settings} className='mr-2' />Ajustes</Link>
+                      <Link className='flex' to='/ajustes'><Icon size={16} element={icons.Settings} />Ajustes</Link>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem className='cursor-pointer' asChild>
-                      <Link className='flex' to='/actualizaciones'><Icon size={16} element={icons.ChangeLog} className='mr-2' />Actualizaciones</Link>
+                      <Link className='flex' to='/actualizaciones'><Icon size={16} element={icons.ChangeLog} />Actualizaciones</Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem className='cursor-pointer' asChild>
-                      <Link className='flex' to='/historial'><Icon size={16} element={icons.Historical} className='mr-2' />Historial</Link>
+                      <Link className='flex' to='/historial'><Icon size={16} element={icons.Historical} />Historial</Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem className='cursor-pointer' asChild>
                       <a className='flex' href={DOC_URL} target='_blank' rel="noreferrer">
@@ -177,12 +180,12 @@ export default function Sidebar ({ menuItems, user, onLogout }: SidebarProps): J
 
               <Separator orientation='horizontal' />
 
-              <div className={cn('w-full transition-[width] duration-200 overflow-hidden px-4 flex items-center', !isSidebarOpen && 'w-[76px]', (!lgScreen || isSidebarOpen) && 'gap-2')}>
+              <div className={cn('w-full transition-[width] duration-200 overflow-hidden px-3 flex items-center', !isSidebarOpen && 'w-[76px]', (!lgScreen || isSidebarOpen) && 'gap-2')}>
                 <div className={cn('w-full transition-[width] duration-200 min-w-fit', !isSidebarOpen && 'w-0 min-w-0 overflow-hidden')}>
                   <div className='min-w-fit py-3 opacity-90 hover:opacity-100 flex gap-2'>
                     <Tooltip delayDuration={0} disableHoverableContent>
                       <TooltipTrigger>
-                        <Button variant='outline' size='icon' className="active:opacity-50" to='/actualizaciones'>
+                        <Button variant='outline' size='icon' className="dark:bg-muted active:opacity-50" to='/actualizaciones'>
                           <Icon element={icons.ChangeLog} className='min-w-fit' size={20} strokeWidth={1.6} />
                         </Button>
                       </TooltipTrigger>
@@ -192,7 +195,7 @@ export default function Sidebar ({ menuItems, user, onLogout }: SidebarProps): J
                     </Tooltip>
                     <Tooltip delayDuration={0} disableHoverableContent>
                       <TooltipTrigger>
-                        <Button variant='outline' size='icon' className="active:opacity-50" to='/historial'>
+                        <Button variant='outline' size='icon' className="dark:bg-muted active:opacity-50" to='/historial'>
                           <Icon element={icons.Historical} className='min-w-fit' size={20} strokeWidth={1.6} />
                         </Button>
                       </TooltipTrigger>
@@ -203,7 +206,7 @@ export default function Sidebar ({ menuItems, user, onLogout }: SidebarProps): J
                     <Tooltip delayDuration={0} disableHoverableContent>
                       <TooltipTrigger asChild>
                         <a href={DOC_URL} target='_blank' rel="noreferrer">
-                          <Button variant='outline' size='icon' className="active:opacity-50">
+                          <Button variant='outline' size='icon' className="dark:bg-muted active:opacity-50">
                             <Icon element={icons.Help} className='min-w-fit' size={20} strokeWidth={1.6} />
                           </Button>
                         </a>
@@ -218,15 +221,15 @@ export default function Sidebar ({ menuItems, user, onLogout }: SidebarProps): J
                   <TooltipTrigger asChild>
                     <Button
                       variant='outline'
-                      className="w-full gap-0"
+                      className="w-full gap-0 dark:bg-muted"
                       onClick={onLogout}
                     >
-                      <Icon element={icons.Logout} className='min-w-fit' size={20} strokeWidth={1.7} />
+                      <Icon element={icons.Logout} className='min-w-fit text-red-500 dark:text-red-400' size={20} strokeWidth={1.7} />
                       <span className={cn('w-auto transition-all duration-200 overflow-hidden', !isSidebarOpen ? 'w-0 opacity-0' : 'ml-1.5')}>Salir</span>
                     </Button>
                   </TooltipTrigger>
                   {!isSidebarOpen && (
-                    <TooltipContent className='select-none pointer-events-none ' side='right' sideOffset={22}>
+                    <TooltipContent className='select-none pointer-events-none' side='right' sideOffset={22}>
                       Salir
                     </TooltipContent>)}
                 </Tooltip>
