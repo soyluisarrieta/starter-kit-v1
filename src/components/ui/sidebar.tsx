@@ -53,7 +53,7 @@ export default function Sidebar ({ menuItems, user, onLogout }: SidebarProps): J
           <Icon element={icons.CaretDouble} className={cn('transition-transform duration-200', !isSidebarOpen && '-rotate-180')} size={84} />
         </Button>
 
-        <ScrollArea className='w-full h-dvh relative bg-card dark:bg-muted border-r'>
+        <ScrollArea className='w-full h-dvh relative bg-card/90 dark:bg-muted border-r'>
           <div className='h-dvh min-h-fit flex flex-col'>
             <div className={cn('w-full transition-[width] duration-200 space-y-5 py-4 px-2 flex-1', !isSidebarOpen && 'w-[76px]')}>
               <Link to='/' asChild>
@@ -84,7 +84,7 @@ export default function Sidebar ({ menuItems, user, onLogout }: SidebarProps): J
                           <TooltipTrigger asChild>
                             <Link
                               className={
-                                cn('h-10 relative hover:opacity-95 inline-flex items-center justify-center whitespace-nowrap rounded-md hover:bg-muted-foreground/10 text-muted-foreground dark:text-muted-foreground hover:text-card-foreground/70 text-sm font-medium ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 px-4 py-2',
+                                cn('h-10 relative hover:opacity-95 inline-flex items-center justify-center whitespace-nowrap rounded-md hover:bg-accent text-card-foreground/70 dark:text-muted-foreground hover:text-accent-foreground text-sm font-medium ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 px-4 py-2',
                                   'w-full', currentLink === item.link ? 'bg-gradient-to-b from-primary to-primary/80 shadow-md shadow-black/10 text-primary-foreground dark:text-primary-foreground hover:text-primary-foreground opacity-100' : 'ghost')
                               }
                               to={item.link}
