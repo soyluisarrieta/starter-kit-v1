@@ -49,9 +49,14 @@ export default function Sidebar ({ menuItems, user, onLogout }: SidebarProps): J
       {!lgScreen && <BackdropBlur className={cn('fixed inset-0 z-40 transition-all duration-200', !isSidebarOpen && 'pointer-events-none')} onClick={() => { isSidebarOpen && toggleSidebar() }} style={{ opacity: isSidebarOpen ? 1 : 0 }} />}
 
       <aside className={cn('w-10/12 lg:w-72 max-w-72 fixed lg:relative z-40 transition-[width] duration-200 bg-background', !isSidebarOpen && 'w-0 lg:w-[76px]')}>
-        <Button size='icon' className='w-fit h-fit bg-card hover:bg-foreground text-foreground hover:text-background shadow-md dark:shadow-black/70 p-1.5 absolute z-10 top-6 lg:top-14 -right-4 lg:right-0 translate-x-3/4 lg:translate-x-1/2 rounded-full active:scale-90 border' onClick={toggleSidebar}>
-          <Icon element={icons.CaretDouble} className={cn('transition-transform duration-200', !isSidebarOpen && '-rotate-180')} size={84} />
-        </Button>
+        {(isSidebarOpen || lgScreen) && (
+          <Button
+            className='w-fit h-fit bg-card hover:bg-foreground text-foreground hover:text-background shadow-md dark:shadow-black/70 p-1.5 absolute z-10 top-4 lg:top-14 -right-4 lg:right-0 translate-x-3/4 lg:translate-x-1/2 rounded-full active:scale-90 border'
+            size='icon'
+            onClick={toggleSidebar}>
+            <Icon element={icons.CaretDouble} className={cn('transition-transform duration-200', !isSidebarOpen && '-rotate-180')} size={84} />
+          </Button>
+        )}
 
         <ScrollArea className='w-full h-dvh relative bg-card/90 dark:bg-muted border-r'>
           <div className='h-dvh min-h-fit flex flex-col'>

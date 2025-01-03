@@ -2,7 +2,7 @@ import { create } from 'zustand'
 
 export interface FormHeader { title: string | null , description?: string | null }
 
-interface FormStore {
+export interface FormStore {
   formHeader: FormHeader
   isResetedFormStore: boolean
   isFormModified: boolean

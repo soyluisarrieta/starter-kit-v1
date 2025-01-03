@@ -43,7 +43,7 @@ export default function ProfileSettings (): JSX.Element {
   return (
     <>
       <Form {...form}>
-        <div className='grid md:grid-cols-2 gap-4 p-6'>
+        <div className='grid md:grid-cols-2 gap-4 p-4 lg:p-8'>
           <div>
             <h3 className='font-semibold text-lg'>Nombre y Apellido</h3>
             <p className='font-normal leading-snug text-muted-foreground'>Introduzca un nombre y apellido</p>
@@ -76,7 +76,7 @@ export default function ProfileSettings (): JSX.Element {
           </div>
         </div>
         <div className='px-6'><Separator /></div>
-        <div className='grid md:grid-cols-2 gap-4 p-6'>
+        <div className='grid md:grid-cols-2 gap-4 p-4 lg:p-8'>
           <div>
             <h3 className='font-semibold text-lg'>Correo electrónico</h3>
             <p className='font-normal leading-snug text-muted-foreground'>Podrá iniciar sesión con este correo y recibir notificaciones importantes.</p>
@@ -97,7 +97,7 @@ export default function ProfileSettings (): JSX.Element {
           </div>
         </div>
         <div className='px-6'><Separator /></div>
-        <div className='grid md:grid-cols-2 gap-4 p-6'>
+        <div className='grid md:grid-cols-2 gap-4 p-4 lg:p-8'>
           <div>
             <h3 className='font-semibold text-lg'>Fecha de nacimiento</h3>
           </div>
@@ -120,7 +120,7 @@ export default function ProfileSettings (): JSX.Element {
           </div>
         </div>
         <div className='px-6'><Separator /></div>
-        <div className='grid md:grid-cols-2 gap-4 p-6'>
+        <div className='grid md:grid-cols-2 gap-4 p-4 lg:p-8'>
           <div>
             <h3 className='font-semibold text-lg'>Imagen de perfil</h3>
             <p className='font-normal leading-snug text-muted-foreground'>Opcionalmente, puede añadir una imagen de perfil.</p>
@@ -147,7 +147,7 @@ export default function ProfileSettings (): JSX.Element {
           </div>
         </div>
         <div className='px-6'><Separator /></div>
-        <div className='grid md:grid-cols-2 gap-4 p-6'>
+        <div className='grid md:grid-cols-2 gap-4 p-4 lg:p-8'>
           <div>
             <h3 className='font-semibold text-lg'>Género</h3>
             <p className='font-normal leading-snug text-muted-foreground'>Se usa para identificarl{genderLetterSelected} en la aplicación, ej: Bienvenid{genderLetterSelected}</p>
@@ -197,7 +197,7 @@ export default function ProfileSettings (): JSX.Element {
           </div>
         </div>
         <div className='px-6'><Separator /></div>
-        <div className='grid md:grid-cols-2 gap-4 p-6'>
+        <div className='grid md:grid-cols-2 gap-4 p-4 lg:p-8'>
           <h3 className='font-semibold text-lg'>Número de contacto</h3>
           <div className='flex gap-2'>
             <FormField
