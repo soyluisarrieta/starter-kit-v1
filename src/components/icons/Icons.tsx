@@ -6,7 +6,7 @@ import { BsFacebook, BsGithub } from 'react-icons/bs'
 import { AiOutlineHome, AiOutlineUser } from 'react-icons/ai'
 import { PiCalendarBlank, PiCaretDoubleLeftBold, PiCaretLeft, PiMoonStarsDuotone, PiProjectorScreenChart, PiSunDimDuotone } from 'react-icons/pi'
 import { LiaAsteriskSolid } from 'react-icons/lia'
-import { FaUser } from 'react-icons/fa'
+import { FaUndo, FaUser } from 'react-icons/fa'
 import { FiLogIn, FiLogOut, FiMoreVertical, FiSettings } from 'react-icons/fi'
 import { type IconBaseProps, type IconType } from 'react-icons/lib'
 
@@ -15,23 +15,26 @@ export const icons = {
   Home: AiOutlineHome,
   User: AiOutlineUser,
   UserSolid: FaUser,
-  Close: IoCloseOutline,
   Historical: TbHistoryToggle,
-  Notifications: { solid: IoNotifications, outline: IoNotificationsOutline },
   Calendar: PiCalendarBlank,
   Settings: FiSettings,
   Asterisc: LiaAsteriskSolid,
   Help: IoHelpBuoyOutline,
   ChangeLog: TbLicense,
-  Login: FiLogIn,
-  Logout: FiLogOut,
   DotsVertical: FiMoreVertical,
   DotsHorizontal: FiMoreVertical,
+
+  // Actions
+  Reset: FaUndo,
+  Login: FiLogIn,
+  Logout: FiLogOut,
+  Close: IoCloseOutline,
 
   // Toggle
   Eye: { Open: FaRegEyeSlash, Close: FaRegEye },
   ThemeMode: { Dark: PiMoonStarsDuotone, Light: PiSunDimDuotone },
   ArrowTrend: { Up: FaArrowTrendUp, Down: FaArrowTrendDown },
+  Notifications: { solid: IoNotifications, outline: IoNotificationsOutline },
 
   // Brands
   Google: BiLogoGoogle,
