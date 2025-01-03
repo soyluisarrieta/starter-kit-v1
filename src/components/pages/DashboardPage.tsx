@@ -1,3 +1,4 @@
+import Box from '@/components/ui/box'
 import CardTrendWidget from '@/components/widgets/CardTrendWidget'
 import { useAuth } from '@/hooks/useAuth'
 
@@ -31,11 +32,9 @@ export default function DashboardPage (): JSX.Element {
           </div>
         </div>
 
-        <div className='w-full p-5 bg-card rounded-lg overflow-hidden'>
-          <div className='w-full max-w-full animate-in'>
-            <strong className='grow text-2xl font-semibold'>Análisis de pedidos</strong>
-          </div>
-        </div>
+        <Box variant='solid'>
+          <strong className='grow text-2xl font-semibold'>Análisis de pedidos</strong>
+        </Box>
       </div>
     </main>
   )

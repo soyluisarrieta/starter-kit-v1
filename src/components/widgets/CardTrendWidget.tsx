@@ -1,4 +1,5 @@
 import { Icon, icons } from '@/components/icons/Icons'
+import Box from '@/components/ui/box'
 import { cn } from '@/lib/utils'
 
 interface Props {
@@ -14,7 +15,7 @@ export default function CardTrend ({ title, value }: Props): JSX.Element {
   const isPositiveTrend = trendPercentage >= 0
 
   return (
-    <div className='max-h-40 p-5 bg-card rounded-lg grid grid-cols-2 items-end overflow-hidden' style={{ gridTemplateColumns: 'auto 1fr' }}>
+    <Box className='max-h-40 grid grid-cols-2 items-end overflow-hidden' style={{ gridTemplateColumns: 'auto 1fr' }}>
       <div className='w-fit h-full flex flex-col pr-4'>
         <span className='text-md opacity-70 font-light tracking-wide'>{title}</span>
         <strong className='grow text-3xl font-semibold'>{value.after}</strong>
@@ -23,6 +24,6 @@ export default function CardTrend ({ title, value }: Props): JSX.Element {
           <Icon element={icons.ArrowTrend.Up} />
         </span>
       </div>
-    </div>
+    </Box>
   )
 }
