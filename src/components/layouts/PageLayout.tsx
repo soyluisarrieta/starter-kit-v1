@@ -37,8 +37,8 @@ export default function PageLayout (props: PageLayoutProps) {
       {onSubmitExists && (
         <Box
           className={cn(
-            'px-4 lg:px-8 border-0 bg-secondary/30 rounded-none backdrop-blur sticky bottom-0',
-            !isFormModified && 'static bg-secondary/20'
+            'px-4 lg:px-8 border-0 bg-secondary/80 dark:bg-secondary/30 rounded-none backdrop-blur sticky bottom-0',
+            !isFormModified && 'static bg-secondary/60 dark:bg-secondary/20'
           )}
           size='sm'
         >
