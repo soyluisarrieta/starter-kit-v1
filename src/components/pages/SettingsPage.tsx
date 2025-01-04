@@ -34,7 +34,7 @@ export default function SettingsPage ({ children }: ComponentProps): JSX.Element
         <ScrollBar orientation="horizontal" />
       </ScrollArea>
 
-      <main className="w-full h-fit">
+      <main className="w-full min-h-dvh">
         {children}
       </main>
     </PageLayout>

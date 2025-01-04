@@ -51,7 +51,7 @@ export default function Sidebar ({ menuItems, user, onLogout }: SidebarProps): J
       <aside className={cn('w-10/12 lg:w-72 max-w-72 fixed lg:relative z-40 transition-[width] duration-200 bg-background', !isSidebarOpen && 'w-0 lg:w-[76px]')}>
         {(isSidebarOpen || lgScreen) && (
           <Button
-            className='w-fit h-fit bg-card hover:bg-foreground text-foreground hover:text-background shadow-md dark:shadow-black/70 p-1.5 absolute z-10 top-4 lg:top-14 -right-4 lg:right-0 translate-x-3/4 lg:translate-x-1/2 rounded-full active:scale-90 border'
+            className='w-fit h-fit bg-card hover:bg-muted dark:bg-card hover:dark:bg-secondary text-foreground shadow-md dark:shadow-black/70 p-1.5 absolute z-10 top-4 lg:top-14 -right-4 lg:right-0 translate-x-3/4 lg:translate-x-1/2 rounded-full active:scale-90 border'
             size='icon'
             onClick={toggleSidebar}>
             <Icon element={icons.CaretDouble} className={cn('transition-transform duration-200', !isSidebarOpen && '-rotate-180')} size={84} />
