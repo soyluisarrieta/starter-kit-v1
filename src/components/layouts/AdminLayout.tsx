@@ -4,9 +4,8 @@ import { useCheckAuth } from '@/hooks/useCheckAuth'
 import { useScreenSize } from '@/hooks/useScreenSize'
 import { cn } from '@/lib/utils'
 import { SIDEBAR_ITEMS } from '@/constants'
-import { Redirect } from 'wouter'
+import { Redirect, useLocation } from 'wouter'
 import Sidebar from '@/components/ui/sidebar'
-import { Button } from '@/components/ui/button'
 import { Icon, icons } from '@/components/icons/Icons'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { useSidebarStore } from '@/store/SidebarStore'
@@ -16,6 +15,7 @@ interface Props extends ComponentProps {
 }
 
 export default function AdminLayout ({ widgets: Widgets, children }: Props): JSX.Element {
+  const [location] = useLocation()
   const isSessionVerified = useCheckAuth()
   const { toggleSidebar } = useSidebarStore()
   const { isAuth, logout, profile } = useAuth()
