@@ -7,6 +7,7 @@ import { cn } from '@/lib/utils'
 
 interface PageLayoutProps extends FormStore {
   children: ReactNode
+  className?: string
 }
 
 export default function PageLayout (props: PageLayoutProps) {
@@ -17,11 +18,12 @@ export default function PageLayout (props: PageLayoutProps) {
     onSubmitExists,
     onResetForm,
     onSubmit,
+    className,
     children
   } = props
 
   return (
-    <div className='min-h-dvh relative flex flex-col'>
+    <div className='min-h-svh relative flex flex-col flex-1'>
       {/* Header */}
       <header className='px-4 lg:px-8 pt-7 pb-5 lg:pb-4'>
         <h1 className='font-semibold text-xl mb-1'>{title ?? 'Sin título'}</h1>
@@ -29,7 +31,7 @@ export default function PageLayout (props: PageLayoutProps) {
       </header>
 
       {/* Content */}
-      <div className='h-full mb-4 lg:mb-0 flex-1'>
+      <div className={className}>
         {children}
       </div>
 
@@ -65,7 +67,7 @@ export default function PageLayout (props: PageLayoutProps) {
                   disabled={!isFormModified}
                   variant={isFormModified ? 'default' : 'secondary'}
                 >
-                Guardar cambios
+                  Guardar cambios
                 </Button>
               )}
             </div>

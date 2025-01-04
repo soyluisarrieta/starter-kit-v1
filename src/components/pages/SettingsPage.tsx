@@ -15,9 +15,9 @@ export default function SettingsPage ({ children }: ComponentProps): JSX.Element
   ]
 
   return (
-    <PageLayout {...formStore}>
-      <ScrollArea className='h-fit'>
-        <div className={'border-b px-4 lg:px-6 flex items-center'}>
+    <PageLayout className='flex-1' {...formStore}>
+      <ScrollArea>
+        <div className='border-b px-4 lg:px-6 flex items-center mb-2 select-none'>
           {navItems.map(({ title, path }, index) => (
             <Link
               href={path}
@@ -31,10 +31,10 @@ export default function SettingsPage ({ children }: ComponentProps): JSX.Element
             </Link>
           ))}
         </div>
-        <ScrollBar orientation="horizontal" />
+        <ScrollBar className='h-2' orientation="horizontal" />
       </ScrollArea>
 
-      <main className="w-full min-h-dvh">
+      <main className="w-full flex-1 flex flex-col">
         {children}
       </main>
     </PageLayout>
