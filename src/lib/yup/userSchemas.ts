@@ -52,6 +52,8 @@ export const avatar = yup
 export const birthdate = yup
   .date()
   .nullable()
+  .transform((value, originalValue) => originalValue === '' ? null : value)
+  .typeError('La fecha de nacimiento debe ser una fecha válida.')
   .max(new Date(), 'La fecha de nacimiento no puede ser en el futuro.')
 
 export const email = yup

@@ -165,6 +165,7 @@ export default function ProfileSettings (): JSX.Element {
                         setGenderLetterSelected(genderValue === 'male' ? 'o' : genderValue === 'female' ? 'a' : '@')
                       }}
                       defaultValue={field.value}
+                      value={field.value}
                     >
                       <FormItem className="flex items-center space-x-3 mb-0">
                         <FormControl>
