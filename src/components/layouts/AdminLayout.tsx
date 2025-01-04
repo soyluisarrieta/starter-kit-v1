@@ -31,7 +31,7 @@ export default function AdminLayout ({ widgets: Widgets, children }: Props): JSX
 
   // User authenticated
   return (
-    <div className='w-dvw h-dvh grid grid-cols-[auto_1fr]'>
+    <div className='w-dvw h-dvh grid grid-cols-1 lg:grid-cols-[auto_1fr]'>
       <Sidebar
         menuItems={SIDEBAR_ITEMS}
         user={profile}

@@ -8,14 +8,25 @@ interface ThemeStore {
 }
 
 const root = window.document.documentElement
+const darkModeItem = window.localStorage.getItem('dark_mode')
+const theme = darkModeItem ? JSON.parse(darkModeItem) : null
+root.style.colorScheme = theme?.state.darkMode ? 'dark' : theme ? 'light' : 'dark'
 
 export const useThemeStore = create<ThemeStore>()(
   persist((set) => ({
     darkMode: true,
-    toggleDarkMode: () => { set((state) => ({ darkMode: !state.darkMode })) },
+    toggleDarkMode: () => {
+      set((state) => {
+        const isDarkMode = !state.darkMode
+        root.classList[isDarkMode ? 'add' : 'remove']('dark')
+        root.style.colorScheme = isDarkMode ? 'dark' : 'light'
+        return { darkMode: isDarkMode }
+      })
+    },
     setDarkMode: (isDarkMode) => {
       set(() => {
         root.classList[isDarkMode ? 'add' : 'remove']('dark')
+        root.style.colorScheme = isDarkMode ? 'dark' : 'light'
         return { darkMode: isDarkMode }
       })
     }
