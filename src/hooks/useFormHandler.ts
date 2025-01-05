@@ -8,10 +8,9 @@ import { type AnyObjectSchema } from 'yup'
 import { useMutation } from 'react-query'
 import { toast } from 'react-toastify'
 import { useEffect } from 'react'
-import { type FormHeader, useFormStore } from '@/store/FormStore'
+import { useFormStore } from '@/store/FormStore'
 
 interface FormHandlerProps {
-  formHeader: FormHeader
   withCsrf?: boolean
   schema: AnyObjectSchema
   request: (data: any) => Promise<any>
@@ -32,7 +31,6 @@ interface FormHandler {
 }
 
 export function useFormHandler ({
-  formHeader,
   withCsrf = true,
   schema,
   request,
@@ -49,12 +47,8 @@ export function useFormHandler ({
     setIsFormModified,
     setOnSubmit,
     setOnResetForm,
-    setTimestamps,
-    setFormHeader
+    setTimestamps
   } = useFormStore()
-
-  // Form header
-  useEffect(() => { setFormHeader(formHeader) }, [])
 
   // Form config
   const form = useForm({

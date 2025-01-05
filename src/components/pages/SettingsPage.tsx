@@ -1,13 +1,11 @@
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { cn } from '@/lib/utils'
-import { useFormStore } from '@/store/FormStore'
 import { Link } from 'wouter'
 import { usePathname } from 'wouter/use-browser-location'
 import PageLayout from '@/components/layouts/PageLayout'
 
 export default function SettingsPage ({ children }: ComponentProps): JSX.Element {
   const pathname = usePathname()
-  const formStore = useFormStore()
 
   const navItems = [
     { title: 'Generales', path: '/ajustes/generales' },
@@ -15,7 +13,7 @@ export default function SettingsPage ({ children }: ComponentProps): JSX.Element
   ]
 
   return (
-    <PageLayout className='flex-1' {...formStore}>
+    <PageLayout title='Ajustes' className='flex-1'>
       <ScrollArea>
         <div className='border-b px-4 lg:px-6 flex items-center mb-2 select-none'>
           {navItems.map(({ title, path }, index) => (

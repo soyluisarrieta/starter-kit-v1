@@ -1,3 +1,4 @@
+import { Button } from '@/components/ui/button'
 import DatePicker from '@/components/ui/datepicker'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
@@ -7,6 +8,7 @@ import { ACCEPTED_IMAGES } from '@/constants'
 import { useAuth } from '@/hooks/useAuth'
 import { useFormHandler } from '@/hooks/useFormHandler'
 import { profileSchema } from '@/lib/yup/userSchemas'
+import moment from 'moment'
 import { useState } from 'react'
 
 export default function ProfileSettings (): JSX.Element {
@@ -24,10 +26,6 @@ export default function ProfileSettings (): JSX.Element {
   }
 
   const { form } = useFormHandler({
-    formHeader: {
-      title: 'Perfil de Usuario',
-      description: 'Administra tu información personal y preferencias de cuenta.'
-    },
     schema: profileSchema,
     successMessage: 'Perfil actualizado con éxito.',
     defaultValues,
@@ -216,6 +214,30 @@ export default function ProfileSettings (): JSX.Element {
           </div>
         </div>
       </Form>
+
+      {/* Action buttons */}
+      <div className='mx-4 lg:mx-8 mt-4 pt-4 border-t flex justify-end items-center'>
+        <div className='h-10 flex flex-col justify-start gap-1 text-xs'>
+          <span className='text-muted-foreground'>Última actualización:</span>
+          <span className='capitalize font-semibold'>{moment(1736117766).format('MMM Do YYYY, h:mm A')}</span>
+        </div>
+        <div className='flex-grow flex justify-end gap-2 lg:items-center'>
+          <Button
+            className='disabled:opacity-70'
+            disabled={true}
+            variant='outline'
+          >
+          Cancelar
+          </Button>
+          <Button
+            className='disabled:opacity-70'
+            disabled={true}
+            variant={'default'}
+          >
+            Guardar cambios
+          </Button>
+        </div>
+      </div>
     </>
   )
 }
