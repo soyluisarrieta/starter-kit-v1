@@ -1,8 +1,12 @@
 import {
   ColumnDef,
+  ColumnFiltersState,
   flexRender,
   getCoreRowModel,
+  getFilteredRowModel,
   getPaginationRowModel,
+  getSortedRowModel,
+  SortingState,
   useReactTable
 } from '@tanstack/react-table'
 
@@ -19,6 +23,11 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 import { Button } from '@/components/ui/button'
 import { Icon, icons } from '@/components/icons/Icons'
 import { DataTablePagination } from '@/components/ui/datatable-pagination'
+import { ChangeEvent, useState } from 'react'
+import { RxCaretSort } from 'react-icons/rx'
+import { ChevronDownIcon, ChevronUpIcon, SearchIcon } from 'lucide-react'
+import { Input } from '@/components/ui/input'
+import { DataTableColumnHeader } from '@/components/ui/datatable-column-header'
 
 type DataTableColumnProps = {
   align?: 'left' | 'center' | 'right'
@@ -46,11 +55,22 @@ export function DataTable<TData, TValue> ({
   columns,
   data
 }: DataTableProps<TData, TValue>) {
+  const [sorting, setSorting] = useState<SortingState>([])
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+
   const table = useReactTable({
     data,
     columns,
+    getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
-    getCoreRowModel: getCoreRowModel()
+    onSortingChange: setSorting,
+    getSortedRowModel: getSortedRowModel(),
+    onColumnFiltersChange: setColumnFilters,
+    getFilteredRowModel: getFilteredRowModel(),
+    state: {
+      sorting,
+      columnFilters
+    }
   })
 
   return (
@@ -63,12 +83,10 @@ export function DataTable<TData, TValue> ({
                 const { className, align, style } = header.column.columnDef as (ColumnDef<TData, TValue> & DataTableColumnProps)
                 return (
                   <TableHead key={header.id} className={className} style={{ textAlign: align, ...style }}>
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
+                    <DataTableColumnHeader
+                      column={header.column}
+                      title={header.column.columnDef.header?.toString() ?? ''}
+                    />
                   </TableHead>
                 )
               })}

@@ -15,11 +15,15 @@ export default function UsersPage (): JSX.Element {
             {
               header: 'ID',
               accessorKey: 'id',
-              className: 'w-10',
+              className: 'w-16',
               align: 'center',
               cell: ({ row }) => <div className="text-xs font-medium text-muted-foreground whitespace-nowrap">PS{row.getValue('id')}</div>
             },
-            { header: 'Nombre completo', accessorKey: 'full_name' }
+            {
+              header: 'Nombre completo',
+              accessorKey: 'full_name',
+              enableHiding: false
+            }
           ]}
           withActionMenu
         />
