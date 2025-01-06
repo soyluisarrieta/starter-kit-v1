@@ -113,4 +113,8 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  .container {
+    @apply px-4 lg:px-8;
+  }
 }
