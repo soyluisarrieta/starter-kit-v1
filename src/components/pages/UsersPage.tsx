@@ -15,6 +15,7 @@ export default function UsersPage (): JSX.Element {
             { header: 'ID', accessorKey: 'id', className: 'w-10', align: 'center' },
             { header: 'Nombre completo', accessorKey: 'full_name' }
           ]}
+          classNames={{ headers: 'bg-card' }}
         />
       </main>
     </PageLayout>

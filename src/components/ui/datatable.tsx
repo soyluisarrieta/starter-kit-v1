@@ -15,20 +15,27 @@ import {
 } from '@/components/ui/table'
 import { cn } from '@/lib/utils'
 
-interface DataTableColumnProps {
+type DataTableColumnProps = {
   align?: 'left' | 'center' | 'right'
   className?: string
   style?: React.CSSProperties
 }
 
+type DataTableClassNames = {
+  headers?: string
+  rows?: string
+}
+
 export interface DataTableProps<TData, TValue> {
   className?: string
+  classNames?: DataTableClassNames
   columns: (ColumnDef<TData, TValue> & DataTableColumnProps)[]
   data: TData[]
 }
 
 export function DataTable<TData, TValue> ({
   className,
+  classNames,
   columns,
   data
 }: DataTableProps<TData, TValue>) {
@@ -41,7 +48,7 @@ export function DataTable<TData, TValue> ({
   return (
     <div className={cn('rounded-md border', className)}>
       <Table>
-        <TableHeader>
+        <TableHeader className={classNames?.headers}>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
@@ -65,6 +72,7 @@ export function DataTable<TData, TValue> ({
             table.getRowModel().rows.map((row) => (
               <TableRow
                 key={row.id}
+                className={classNames?.rows}
                 data-state={row.getIsSelected() && 'selected'}
               >
                 {row.getVisibleCells().map((cell) => {
@@ -78,7 +86,7 @@ export function DataTable<TData, TValue> ({
             ))
           ) : (
             <TableRow>
-              <TableCell colSpan={columns.length} className="h-24 text-center">
+              <TableCell  colSpan={columns.length} className={cn('h-24 text-center', classNames?.rows)}>
                 No results.
               </TableCell>
             </TableRow>
