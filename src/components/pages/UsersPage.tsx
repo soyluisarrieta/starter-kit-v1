@@ -12,7 +12,13 @@ export default function UsersPage (): JSX.Element {
         <DataTable
           data={MockUsers}
           columns={[
-            { header: 'ID', accessorKey: 'id', className: 'w-10', align: 'center' },
+            {
+              header: 'ID',
+              accessorKey: 'id',
+              className: 'w-10',
+              align: 'center',
+              cell: ({ row }) => <div className="text-xs font-medium text-muted-foreground whitespace-nowrap">PS{row.getValue('id')}</div>
+            },
             { header: 'Nombre completo', accessorKey: 'full_name' }
           ]}
           classNames={{ headers: 'bg-card' }}
