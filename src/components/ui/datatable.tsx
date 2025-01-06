@@ -15,9 +15,15 @@ import {
 } from '@/components/ui/table'
 import { cn } from '@/lib/utils'
 
-interface DataTableProps<TData, TValue> {
+interface DataTableColumnProps {
+  align?: 'left' | 'center' | 'right'
   className?: string
-  columns: (ColumnDef<TData, TValue>)[]
+  style?: React.CSSProperties
+}
+
+export interface DataTableProps<TData, TValue> {
+  className?: string
+  columns: (ColumnDef<TData, TValue> & DataTableColumnProps)[]
   data: TData[]
 }
 
@@ -39,8 +45,9 @@ export function DataTable<TData, TValue> ({
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
+                const { className, align, style } = header.column.columnDef as (ColumnDef<TData, TValue> & DataTableColumnProps)
                 return (
-                  <TableHead key={header.id}>
+                  <TableHead key={header.id} className={className} style={{ textAlign: align, ...style }}>
                     {header.isPlaceholder
                       ? null
                       : flexRender(
@@ -60,11 +67,13 @@ export function DataTable<TData, TValue> ({
                 key={row.id}
                 data-state={row.getIsSelected() && 'selected'}
               >
-                {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </TableCell>
-                ))}
+                {row.getVisibleCells().map((cell) => {
+                  const { align, style } = cell.column.columnDef as (ColumnDef<TData, TValue> & DataTableColumnProps)
+                  return (
+                    <TableCell key={cell.id} style={{ textAlign: align, ...style }}>
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    </TableCell>
+                  )})}
               </TableRow>
             ))
           ) : (

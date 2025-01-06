@@ -1,5 +1,5 @@
 import PageLayout from '@/components/layouts/PageLayout'
-import List from '@/components/pages/CRUD/List'
+import { DataTable } from '@/components/ui/datatable'
 import { MockUsers } from '@/mocks/MockUsers'
 
 export default function UsersPage (): JSX.Element {
@@ -8,14 +8,12 @@ export default function UsersPage (): JSX.Element {
       title="Usuarios"
       description='Lista de usuarios del sistema'
     >
-      <main>
-        <List
-          className='container'
+      <main className='container'>
+        <DataTable
           data={MockUsers}
           columns={[
-            { header: 'ID', accessorKey: 'id' },
-            { header: 'Nombre completo', accessorKey: 'full_name' },
-            { header: 'Correo electrónico', accessorKey: 'email' }
+            { header: 'ID', accessorKey: 'id', className: 'w-10', align: 'center' },
+            { header: 'Nombre completo', accessorKey: 'full_name' }
           ]}
         />
       </main>
