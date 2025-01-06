@@ -1,7 +1,7 @@
 import { IoCloseOutline, IoNotificationsOutline, IoHelpBuoyOutline, IoNotifications } from 'react-icons/io5'
 import { FaRegEyeSlash, FaRegEye, FaXTwitter, FaArrowTrendUp, FaArrowTrendDown } from 'react-icons/fa6'
-import { TbHistoryToggle, TbLicense } from 'react-icons/tb'
-import { BiLogoGoogle } from 'react-icons/bi'
+import { TbHistoryToggle, TbLicense, TbPencil } from 'react-icons/tb'
+import { BiInfoCircle, BiLogoGoogle } from 'react-icons/bi'
 import { BsFacebook, BsGithub } from 'react-icons/bs'
 import { AiOutlineHome, AiOutlineUser } from 'react-icons/ai'
 import { PiCalendarBlank, PiCaretDoubleLeftBold, PiCaretLeft, PiMoonStarsDuotone, PiProjectorScreenChart, PiSunDimDuotone } from 'react-icons/pi'
@@ -9,6 +9,7 @@ import { LiaAsteriskSolid } from 'react-icons/lia'
 import { FaUndo, FaUser } from 'react-icons/fa'
 import { FiLogIn, FiLogOut, FiMoreVertical, FiSettings } from 'react-icons/fi'
 import { type IconBaseProps, type IconType } from 'react-icons/lib'
+import { HiOutlineTrash } from 'react-icons/hi'
 
 export const icons = {
   // Commons
@@ -30,6 +31,9 @@ export const icons = {
   Logout: FiLogOut,
   Close: IoCloseOutline,
   Back: PiCaretLeft,
+  Detail: BiInfoCircle,
+  Edit: TbPencil,
+  Delete: HiOutlineTrash,
 
   // Toggle
   Eye: { Open: FaRegEyeSlash, Close: FaRegEye },
