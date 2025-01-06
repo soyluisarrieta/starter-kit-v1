@@ -17,7 +17,7 @@ export default function CardSettingSection ({ htmlFor, title, description, class
   const generateId = useId()
   const idCardSection = htmlFor ?? generateId
   return (
-    <div className={cn('flex items-center justify-between space-x-10 p-4 lg:p-8', className)}>
+    <div className={cn('container flex items-center justify-between space-x-10 p-4 lg:p-8', className)}>
       <Label htmlFor={idCardSection} className="flex flex-col space-y-1">
         <h3 className="font-semibold text-lg">{title}</h3>
         {description && (

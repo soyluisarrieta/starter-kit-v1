@@ -1,5 +1,7 @@
 export default function HomePage (): JSX.Element {
   return (
-    <div>HomePage</div>
+    <main className="container">
+      HomePage
+    </main>
   )
 }

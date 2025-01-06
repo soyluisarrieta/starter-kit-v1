@@ -16,7 +16,7 @@ export default function PageLayout ({ title, description, withBackButton, classN
   return (
     <div className='min-h-svh relative flex flex-col flex-1'>
       {/* Header */}
-      <header className='px-4 lg:px-8 pt-7 pb-5 lg:pb-4'>
+      <header className='container pt-7 pb-5 lg:pb-4'>
         <div className='flex items-center gap-3'>
           {withBackButton && (
             <BackButton className='p-0 text-muted-foreground mb-4' variant='link' />

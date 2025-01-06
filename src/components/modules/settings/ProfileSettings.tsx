@@ -39,7 +39,7 @@ export default function ProfileSettings (): JSX.Element {
   })
 
   return (
-    <>
+    <div className='container'>
       <Form {...form}>
         <div className='grid md:grid-cols-2 gap-4 p-4 lg:p-8'>
           <div>
@@ -238,6 +238,6 @@ export default function ProfileSettings (): JSX.Element {
           </Button>
         </div>
       </div>
-    </>
+    </div>
   )
 }

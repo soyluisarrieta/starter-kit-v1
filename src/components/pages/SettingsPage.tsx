@@ -3,6 +3,7 @@ import { cn } from '@/lib/utils'
 import { Link } from 'wouter'
 import { usePathname } from 'wouter/use-browser-location'
 import PageLayout from '@/components/layouts/PageLayout'
+import { Separator } from '@/components/ui/separator'
 
 export default function SettingsPage ({ children }: ComponentProps): JSX.Element {
   const pathname = usePathname()
@@ -19,7 +20,7 @@ export default function SettingsPage ({ children }: ComponentProps): JSX.Element
       description='Configura tu cuenta y preferencias'
     >
       <ScrollArea>
-        <div className='border-b px-4 lg:px-6 flex items-center mb-2 select-none'>
+        <div className='container px-4 lg:px-6 flex items-center mb-2 select-none'>
           {navItems.map(({ title, path }, index) => (
             <Link
               href={path}
@@ -35,6 +36,7 @@ export default function SettingsPage ({ children }: ComponentProps): JSX.Element
         </div>
         <ScrollBar className='h-2' orientation="horizontal" />
       </ScrollArea>
+      <Separator className='-mt-2' />
 
       <main className="w-full flex-1 flex flex-col">
         {children}

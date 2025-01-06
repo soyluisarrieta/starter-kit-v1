@@ -1,5 +1,7 @@
 export default function Authenticating (): JSX.Element {
   return (
-    <div>Comprobando autenticación...</div>
+    <main className="container">
+      Comprobando autenticación...
+    </main>
   )
 }

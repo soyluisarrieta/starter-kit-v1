@@ -1,5 +1,7 @@
 export default function ChangeLogPage (): JSX.Element {
   return (
-    <div>ChangeLogPage</div>
+    <main className="container">
+      ChangeLogPage
+    </main>
   )
 }

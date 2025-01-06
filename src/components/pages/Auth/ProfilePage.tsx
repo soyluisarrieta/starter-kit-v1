@@ -6,7 +6,7 @@ export default function ProfilePage (): JSX.Element {
   const { profile } = useAuth()
 
   return (
-    <div className='p-5'>
+    <div className='container'>
       ProfilePage
 
       <div className='w-96 m-5 p-5 border-2 rounded'>
