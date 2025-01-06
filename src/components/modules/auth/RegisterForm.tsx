@@ -22,7 +22,6 @@ export default function RegisterForm (): JSX.Element {
   }
 
   const { form, onSubmit } = useFormHandler({
-    formHeader: { title: 'Registrarse' },
     schema: registerSchema,
     defaultValues,
     successMessage: MESSAGE.WELCOME,

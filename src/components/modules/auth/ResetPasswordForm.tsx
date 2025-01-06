@@ -14,7 +14,6 @@ const ResetPasswordFormContent = ({ token, email }: { token: string, email: stri
   }
 
   const { form, onSubmit } = useFormHandler({
-    formHeader: { title: 'Restablecer contraseña' },
     schema: resetPwSchema,
     defaultValues,
     successMessage: 'Su contraseña se ha restablecido exitosamente.',

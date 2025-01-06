@@ -23,7 +23,6 @@ export default function LoginForm (): JSX.Element {
 
   // Form config
   const { form, onSubmit } = useFormHandler({
-    formHeader: { title: 'Ingresar' },
     schema: loginSchema,
     successMessage: MESSAGE.WELCOME,
     defaultValues,
