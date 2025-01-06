@@ -29,6 +29,7 @@ export const icons = {
   Login: FiLogIn,
   Logout: FiLogOut,
   Close: IoCloseOutline,
+  Back: PiCaretLeft,
 
   // Toggle
   Eye: { Open: FaRegEyeSlash, Close: FaRegEye },

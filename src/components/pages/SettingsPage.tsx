@@ -13,7 +13,11 @@ export default function SettingsPage ({ children }: ComponentProps): JSX.Element
   ]
 
   return (
-    <PageLayout title='Ajustes' className='flex-1'>
+    <PageLayout
+      className='flex-1'
+      title='Ajustes'
+      description='Configura tu cuenta y preferencias'
+    >
       <ScrollArea>
         <div className='border-b px-4 lg:px-6 flex items-center mb-2 select-none'>
           {navItems.map(({ title, path }, index) => (
