@@ -1,13 +1,10 @@
 import Authenticating from '@/components/pages/Auth/AuthLoader'
 import { useAuth } from '@/hooks/useAuth'
 import { useCheckAuth } from '@/hooks/useCheckAuth'
-import { useScreenSize } from '@/hooks/useScreenSize'
-import { cn } from '@/lib/utils'
 import { SIDEBAR_ITEMS } from '@/constants'
 import { Redirect, useLocation } from 'wouter'
 import Sidebar from '@/components/ui/sidebar'
 import { Icon, icons } from '@/components/icons/Icons'
-import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { useSidebarStore } from '@/store/SidebarStore'
 
 interface Props extends ComponentProps {
@@ -19,7 +16,6 @@ export default function AdminLayout ({ widgets: Widgets, children }: Props): JSX
   const isSessionVerified = useCheckAuth()
   const { toggleSidebar } = useSidebarStore()
   const { isAuth, logout, profile } = useAuth()
-  const { xlScreen } = useScreenSize()
 
   // Checking authentication
   if (!isSessionVerified && !isAuth) return <Authenticating />
@@ -31,7 +27,7 @@ export default function AdminLayout ({ widgets: Widgets, children }: Props): JSX
 
   // User authenticated
   return (
-    <div className='w-dvw h-dvh grid grid-cols-1 lg:grid-cols-[auto_1fr]'>
+    <div className='w-dvw h-dvh overflow-x-hidden grid grid-cols-1 lg:grid-cols-[auto_1fr]'>
       <Sidebar
         menuItems={SIDEBAR_ITEMS}
         user={profile}

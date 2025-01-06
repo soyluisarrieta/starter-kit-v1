@@ -2,6 +2,7 @@ import {
   ColumnDef,
   flexRender,
   getCoreRowModel,
+  getPaginationRowModel,
   useReactTable
 } from '@tanstack/react-table'
 
@@ -17,6 +18,7 @@ import { cn } from '@/lib/utils'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { Button } from '@/components/ui/button'
 import { Icon, icons } from '@/components/icons/Icons'
+import { DataTablePagination } from '@/components/ui/datatable-pagination'
 
 type DataTableColumnProps = {
   align?: 'left' | 'center' | 'right'
@@ -47,13 +49,14 @@ export function DataTable<TData, TValue> ({
   const table = useReactTable({
     data,
     columns,
+    getPaginationRowModel: getPaginationRowModel(),
     getCoreRowModel: getCoreRowModel()
   })
 
   return (
     <div className={cn('rounded-md border', className)}>
       <Table>
-        <TableHeader className={classNames?.headers}>
+        <TableHeader className={cn('bg-card', classNames?.headers)}>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
@@ -125,6 +128,8 @@ export function DataTable<TData, TValue> ({
           )}
         </TableBody>
       </Table>
+
+      <DataTablePagination table={table} />
     </div>
   )
 }

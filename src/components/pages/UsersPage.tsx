@@ -21,7 +21,6 @@ export default function UsersPage (): JSX.Element {
             },
             { header: 'Nombre completo', accessorKey: 'full_name' }
           ]}
-          classNames={{ headers: 'bg-card' }}
           withActionMenu
         />
       </main>
