@@ -1,12 +1,12 @@
 import { Route, Switch } from 'wouter'
-import MasterLayout from '@/components/layouts/MasterLayout'
-import AdminLayout from '@/components/layouts/AdminLayout'
-import GuestLayout from '@/components/layouts/GuestLayout'
+import MasterLayout from '@/layouts/MasterLayout'
+import AdminLayout from '@/layouts/AdminLayout'
+import GuestLayout from '@/layouts/GuestLayout'
 import { type RouteConfig, guestRoutes, protectedRoutes } from '@/routing/routes'
 import { Fragment } from 'react/jsx-runtime'
 import React from 'react'
 import Wrapper from '@/components/ui/wrapper'
-import NotFoundPage from '@/components/pages/Errors/NotFoundPage'
+import NotFoundPage from '@/pages/Errors/NotFoundPage'
 
 interface RouteProps extends RouteConfig {
   layout: React.ComponentType<any>

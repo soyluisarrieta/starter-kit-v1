@@ -1,4 +1,4 @@
-import PageLayout from '@/components/layouts/PageLayout'
+import PageLayout from '@/layouts/PageLayout'
 import UserForm from '@/components/modules/users/UserForm'
 import { DataTable } from '@/components/ui/datatable'
 import { MockUsers } from '@/mocks/MockUsers'

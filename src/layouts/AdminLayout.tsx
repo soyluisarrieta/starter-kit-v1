@@ -1,4 +1,4 @@
-import Authenticating from '@/components/pages/Auth/AuthLoader'
+import Authenticating from '@/pages/Auth/AuthLoader'
 import { useAuth } from '@/hooks/useAuth'
 import { useCheckAuth } from '@/hooks/useCheckAuth'
 import { SIDEBAR_ITEMS } from '@/constants'

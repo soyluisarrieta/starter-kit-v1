@@ -2,7 +2,7 @@ import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { cn } from '@/lib/utils'
 import { Link } from 'wouter'
 import { usePathname } from 'wouter/use-browser-location'
-import PageLayout from '@/components/layouts/PageLayout'
+import PageLayout from '@/layouts/PageLayout'
 import { Separator } from '@/components/ui/separator'
 
 export default function SettingsPage ({ children }: ComponentProps): JSX.Element {
