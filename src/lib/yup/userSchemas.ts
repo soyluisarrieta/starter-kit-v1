@@ -112,3 +112,10 @@ export const profileSchema = yup.object({
   phone,
   avatar
 })
+
+export const createUserSchema = yup.object({
+  name,
+  last_name,
+  gender,
+  email
+})
