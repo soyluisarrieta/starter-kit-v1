@@ -20,14 +20,14 @@ import {
   TableRow
 } from '@/components/ui/table'
 import { cn } from '@/lib/utils'
-import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { Button } from '@/components/ui/button'
 import { Icon, icons } from '@/components/icons/Icons'
 import { DataTablePagination } from '@/components/ui/datatable-pagination'
 import { useState } from 'react'
 import { DataTableColumnHeader } from '@/components/ui/datatable-column-header'
 import { Input } from '@/components/ui/input'
-import { BetweenVerticalStartIcon, Columns3Icon, EyeOffIcon, SearchIcon } from 'lucide-react'
+import { EyeOffIcon, InboxIcon, SearchIcon, XIcon } from 'lucide-react'
 
 type DataTableColumnProps = {
   align?: 'left' | 'center' | 'right'
@@ -78,50 +78,69 @@ export function DataTable<TData, TValue> ({
     }
   })
 
+  const isFiltered = table.getState().globalFilter || table.getState().columnFilters.length > 0
+
   return (
     <>
-      <div className="flex items-center py-2 relative">
-        <SearchIcon className='size-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground' />
-        {!disableSearch ? (
-          <Input
-            placeholder="Buscar..."
-            value={(table.getState().globalFilter) ?? ''}
-            onChange={(e) => table.setGlobalFilter(e.target.value)}
-            className="max-w-sm pl-9"
-          />
-        ) : <div />}
+      <div className="flex justify-between items-center py-2 gap-2">
+        {!disableSearch && (
+          <div className='relative flex-1 max-w-sm'>
+            <SearchIcon className='size-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground' />
+            <Input
+              className="w-full pl-9"
+              placeholder="Buscar..."
+              value={(table.getState().globalFilter ?? '')}
+              onChange={(e) => table.setGlobalFilter(e.target.value)}
+            />
+          </div>
+        )}
 
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              className="ml-auto"
-              variant="outline"
-              size='icon'
-            >
-              <EyeOffIcon />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" >
-            <DropdownMenuLabel>Columnas</DropdownMenuLabel>
-            {table
-              .getAllColumns()
-              .filter(
-                (column) => column.getCanHide()
-              )
-              .map((column) => {
-                return (
-                  <DropdownMenuItem
-                    key={column.id}
-                    className={cn('capitalize text-popover-foreground', !column.getIsVisible() && 'line-through opacity-80')}
-                    onClick={() => column.toggleVisibility()}
-                    onSelect={event => event.preventDefault()}
-                  >
-                    {column.id}
-                  </DropdownMenuItem>
+        {isFiltered && (
+          <Button
+            variant="ghost"
+            onClick={() => {
+              table.setGlobalFilter('')
+              table.resetColumnFilters()
+            }}
+            className="h-8 px-2 lg:px-3"
+          >
+              Reiniciar <XIcon className="size-4 ml-2" />
+          </Button>
+        )}
+
+        <div className='flex-1 flex justify-end'>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                className="ml-auto"
+                variant="outline"
+                size='icon'
+              >
+                <EyeOffIcon />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" >
+              <DropdownMenuLabel>Columnas</DropdownMenuLabel>
+              {table
+                .getAllColumns()
+                .filter(
+                  (column) => column.getCanHide()
                 )
-              })}
-          </DropdownMenuContent>
-        </DropdownMenu>
+                .map((column) => {
+                  return (
+                    <DropdownMenuItem
+                      key={column.id}
+                      className={cn('capitalize text-popover-foreground', !column.getIsVisible() && 'line-through opacity-80')}
+                      onClick={() => column.toggleVisibility()}
+                      onSelect={event => event.preventDefault()}
+                    >
+                      {column.id}
+                    </DropdownMenuItem>
+                  )
+                })}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </div>
       <div className={cn('rounded-md border', className)}>
         <Table>
@@ -191,8 +210,10 @@ export function DataTable<TData, TValue> ({
               ))
             ) : (
               <TableRow>
-                <TableCell  colSpan={columns.length} className={cn('h-24 text-center', classNames?.rows)}>
-                Sin resultados.
+                <TableCell colSpan={columns.length} className={cn('py-6', classNames?.rows)}>
+                  <div className='flex flex-col justify-center items-center gap-1 text-muted-foreground'>
+                    <InboxIcon size={50} strokeWidth={1} /> Sin resultados
+                  </div>
                 </TableCell>
               </TableRow>
             )}
