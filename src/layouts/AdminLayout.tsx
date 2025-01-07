@@ -2,17 +2,17 @@ import Authenticating from '@/pages/Auth/AuthLoader'
 import { useAuth } from '@/hooks/useAuth'
 import { useCheckAuth } from '@/hooks/useCheckAuth'
 import { SIDEBAR_ITEMS } from '@/constants'
-import { Redirect, useLocation } from 'wouter'
 import Sidebar from '@/components/ui/sidebar'
 import { Icon, icons } from '@/components/icons/Icons'
 import { useSidebarStore } from '@/store/SidebarStore'
+import { Navigate, Outlet, useLocation } from 'react-router'
 
-interface Props extends ComponentProps {
+interface Props {
   widgets: React.ComponentType | undefined
 }
 
-export default function AdminLayout ({ widgets: Widgets, children }: Props): JSX.Element {
-  const [location] = useLocation()
+export default function AdminLayout ({ widgets: Widgets }: Props): JSX.Element {
+  const location = useLocation()
   const isSessionVerified = useCheckAuth()
   const { toggleSidebar } = useSidebarStore()
   const { isAuth, logout, profile } = useAuth()
@@ -22,7 +22,7 @@ export default function AdminLayout ({ widgets: Widgets, children }: Props): JSX
 
   // Redirect if user is not authenticated
   if (!isAuth) return (
-    <Redirect to='/ingresar' state={{ from: location }} replace />
+    <Navigate to='/ingresar' state={{ from: location.pathname }} replace />
   )
 
   // User authenticated
@@ -46,7 +46,7 @@ export default function AdminLayout ({ widgets: Widgets, children }: Props): JSX
         </header>
 
         {/* Content */}
-        {children}
+        {<Outlet />}
 
         {/* Widgets */}
         {Widgets && (

@@ -3,12 +3,12 @@ import { useYupValidationResolver } from '@/lib/yup/useYupValidationResolver'
 import { csrfService } from '@/services/authService'
 import nProgress from 'nprogress'
 import { type UseFormReturn, type UseFormProps, useForm } from 'react-hook-form'
-import { navigate } from 'wouter/use-browser-location'
 import { type AnyObjectSchema } from 'yup'
 import { useMutation } from 'react-query'
 import { toast } from 'react-toastify'
 import { useEffect } from 'react'
 import { useFormStore } from '@/store/FormStore'
+import { useNavigate } from 'react-router'
 
 interface FormHandlerProps {
   withCsrf?: boolean
@@ -42,6 +42,8 @@ export function useFormHandler ({
   timestamps,
   formConfig
 }: FormHandlerProps): FormHandler {
+  const navigate = useNavigate()
+
   const {
     isFormModified,
     setIsFormModified,

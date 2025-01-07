@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button'
 import { useAuth } from '@/hooks/useAuth'
-import { Link } from 'wouter'
+import { Link } from 'react-router'
 
 export default function ProfilePage (): JSX.Element {
   const { profile } = useAuth()

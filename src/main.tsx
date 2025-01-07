@@ -3,12 +3,12 @@ import { createRoot } from 'react-dom/client'
 import { TooltipProvider } from '@/components/ui/tooltip.tsx'
 import { QueryClientProvider } from 'react-query'
 import { queryClient } from '@/lib/react-query.ts'
-import Router from './routing/Router.tsx'
 import moment from 'moment'
 import 'moment/dist/locale/es'
 
 import './index.css'
 import './lib/nProgress.css'
+import App from '@/App.tsx'
 
 moment.locale('es')
 
@@ -26,7 +26,7 @@ createRoot(document.getElementById('root') as HTMLDivElement).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <Router />
+        <App />
       </TooltipProvider>
     </QueryClientProvider>
   </StrictMode>

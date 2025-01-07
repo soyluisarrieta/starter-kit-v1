@@ -2,10 +2,10 @@ import { Button } from '@/components/ui/button'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { resetPwSchema } from '@/lib/yup/userSchemas'
-import { Link, useParams, useSearch } from 'wouter'
 import { resetPwService } from '@/services/authService'
 import { ErrorBlock } from '@/components/ui/error-block'
 import { useFormHandler } from '@/hooks/useFormHandler'
+import { Link, useParams, useSearchParams } from 'react-router'
 
 const ResetPasswordFormContent = ({ token, email }: { token: string, email: string }): JSX.Element => {
   const defaultValues = {
@@ -73,15 +73,15 @@ const ResetPasswordFormContent = ({ token, email }: { token: string, email: stri
 
 export default function ResetPasswordForm (): JSX.Element {
   const { token } = useParams()
-  const params = new URLSearchParams(useSearch())
-  const email = params.get('email')
+  const [searchParams] = useSearchParams()
+  const email = searchParams.get('email')
 
   if (typeof token !== 'string' || typeof email !== 'string') {
     return (
       <div className="error-container">
         <h2>¡Ups! Algo salió mal</h2>
         <p>No pudimos identificarte con el token y correo electrónico.</p>
-        <Link href='/recuperar-contrasena'>
+        <Link to='/recuperar-contrasena'>
           <Button>Inténtalo de nuevo</Button>
         </Link>
       </div>

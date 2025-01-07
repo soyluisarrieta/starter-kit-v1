@@ -10,11 +10,11 @@ import { useScreenSize } from '@/hooks/useScreenSize'
 import { cn } from '@/lib/utils'
 import { useSidebarStore } from '@/store/SidebarStore'
 import { getYear } from 'date-fns'
-import { Link } from 'wouter'
 import { type IconType } from 'react-icons/lib'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { DropdownMenuArrow } from '@radix-ui/react-dropdown-menu'
 import { useEffect } from 'react'
+import { Link, NavLink } from 'react-router'
 
 interface MenuItem {
   title: string
@@ -61,7 +61,7 @@ export default function Sidebar ({ menuItems, user, onLogout }: SidebarProps): J
         <ScrollArea className='w-full h-dvh relative bg-card/90 dark:bg-muted border-r'>
           <div className='h-dvh min-h-fit flex flex-col'>
             <div className={cn('w-full transition-[width] duration-200 space-y-5 py-4 px-2 flex-1', !isSidebarOpen && 'w-[76px]')}>
-              <Link to='/' asChild>
+              <Link to='/'>
                 <div className='w-fit h-12 flex items-center cursor-pointer transition-transform active:scale-95 hover:opacity-85'>
                   <div className={cn('h-full flex justify-center items-center flex-shrink-0 ml-0.5')}>
                     <svg className='h-full cursor-pointer' fill='none' viewBox='0 0 32 32'>
@@ -82,15 +82,15 @@ export default function Sidebar ({ menuItems, user, onLogout }: SidebarProps): J
               {menuItems.map((section, index) => (
                 <div key={index}>
                   {section.title && (<h2 className={cn('mb-2 px-2 font-bold text-xs uppercase tracking-widest text-muted-foreground/70 transition-opacity duration-200 relative', lgScreen && !isSidebarOpen && 'left-0 opacity-0')}>{section.title}</h2>)}
-                  <ul className="space-y-0.5">
+                  <ul className="space-y-0.5 [&_a.active]:bg-gradient-to-b [&_a.active]:from-primary [&_a.active]:to-primary/80 [&_a.active]:shadow-md [&_a.active]:shadow-black/10 [&_a.active]:text-primary-foreground [&_a.active]:dark:text-primary-foreground [&_a.active]:hover:text-primary-foreground [&_a.active]:opacity-100">
                     {section.items.map((item, idx) => (
                       <li key={idx}>
                         <Tooltip delayDuration={0} disableHoverableContent>
                           <TooltipTrigger asChild>
-                            <Link
+                            <NavLink
                               className={
                                 cn('h-10 relative hover:opacity-95 inline-flex items-center justify-center whitespace-nowrap rounded-md hover:bg-accent text-card-foreground/70 dark:text-muted-foreground hover:text-accent-foreground text-sm font-medium ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 px-4 py-2',
-                                  'w-full', currentLink === item.link ? 'bg-gradient-to-b from-primary to-primary/80 shadow-md shadow-black/10 text-primary-foreground dark:text-primary-foreground hover:text-primary-foreground opacity-100' : 'ghost')
+                                  'w-full')
                               }
                               to={item.link}
                             >
@@ -107,7 +107,7 @@ export default function Sidebar ({ menuItems, user, onLogout }: SidebarProps): J
                               >
                                 {item.title}
                               </span>
-                            </Link>
+                            </NavLink>
                           </TooltipTrigger>
                           {!isSidebarOpen && (
                             <TooltipContent className='select-none pointer-events-none' side='right' sideOffset={16}>

@@ -1,8 +1,11 @@
 import { useAuth } from '@/hooks/useAuth'
-import { Redirect } from 'wouter'
+import { Navigate, Outlet } from 'react-router'
 
-export default function GuestLayout ({ children }: ComponentProps): JSX.Element {
+export default function GuestLayout (): JSX.Element {
   const { isAuth } = useAuth()
-  if (isAuth) return <Redirect to='/' replace /> // Redirect if user is authenticated
-  return <>{children}</> // User is not authenticated
+  // Redirect if user is authenticated
+  if (isAuth) return <Navigate to='/' replace />
+
+  // User is not authenticated
+  return <Outlet />
 }

@@ -1,7 +1,7 @@
 import { Icon, type IconProps, icons } from '@/components/icons/Icons'
 import { Card, CardContent } from '@/components/ui/card'
 import Wrapper from '@/components/ui/wrapper'
-import { Link } from 'wouter'
+import { Link } from 'react-router'
 
 interface Props {
   icon: IconProps['element']
@@ -12,7 +12,7 @@ interface Props {
 
 export default function CardIconWidget ({ icon, title, description, url }: Props): JSX.Element {
   return (
-    <Wrapper component={url ? Link : undefined} to={url ?? '#' + title} asChild>
+    <Wrapper component={url ? Link : undefined} to={url ?? '#' + title}>
       <Card className='cursor-pointer group bg-transparent hover:bg-card hover:brightness-125 border-none rounded-xl'>
         <CardContent className='p-5 flex items-center gap-4'>
           <div className='xl:size-14 size-12 border border-muted rounded-full p-3'>

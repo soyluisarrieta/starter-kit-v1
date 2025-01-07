@@ -2,12 +2,14 @@ import { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import ForgotPasswordForm from '@/components/modules/auth/ForgotPasswordForm'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { navigate } from 'wouter/use-browser-location'
 import { CheckCircleIcon, TimerIcon } from 'lucide-react'
+import { useNavigate } from 'react-router'
 
 export default function ForgotPasswordPage (): JSX.Element {
   const [isLinkSent, setIsLinkSent] = useState<boolean>(false)
   const [counter, setCounter] = useState(60)
+
+  const navigate = useNavigate()
 
   // Counter
   useEffect(() => {

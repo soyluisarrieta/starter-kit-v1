@@ -75,7 +75,7 @@ Este Kit Starter utiliza las siguientes tecnologías con las versiones más actu
 | 4 | [🚨ESLint](https://eslint.org/) | Herramienta de análisis de código estático para identificar patrones problemáticos encontrados en el código JavaScript. |
 | 5 | [🔳Shadcn](https://nextui.dev/) | Colección de componentes de interfaz de usuario accesibles y personalizables. |
 | 6 | [➰TailwindCSS](https://tailwindcss.com/) | Framework CSS de utilidad de última generación para crear rápidamente interfaces de usuario personalizadas. |
-| 7 | [🥢Wouter](https://github.com/molefrog/wouter) | Enrutador minimalista de JavaScript para aplicaciones modernas. |
+| 7 | [🔄React Router](https://github.com/remix-run/react-router) | Biblioteca de enrutamiento para aplicaciones React que permite la navegación dinámica y la gestión de rutas. |
 | 8 | [🌐Axios](https://axios-http.com/) | Cliente HTTP basado en promesas utilizado para realizar peticiones HTTP a servidores, lo que facilita la interacción con API. |
 | 9 | [🐻Zustand](https://zustand-demo.pmnd.rs/) | Pequeña, rápida y escalable librería de gestión de estado que permite administrar el estado de la aplicación de manera sencilla y efectiva. |
 | 10 | [⚙️React_Query](https://tanstack.com/query/latest/docs/react/overview) | Biblioteca de gestión de datos que simplifica la gestión del estado global y las solicitudes a APIs, mejorando la eficiencia y la experiencia del usuario. |
@@ -167,7 +167,6 @@ El código se divide en módulos separados según su funcionalidad, lo que facil
     │   ├── axios.ts
     │   ├── react-query.ts
     │   ├── utils.ts
-    │   ├── wouter-routes.ts
     │   └── ...
     │
     ├── 🌐 services/ # Servicios para solicitudes a la API
