@@ -85,7 +85,7 @@ export function DataTable<TData, TValue> ({
       <div className="flex justify-between items-center py-2 gap-2">
         {!disableSearch && (
           <div className='relative flex-1 max-w-sm'>
-            <SearchIcon className='size-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground' />
+            <SearchIcon className='size-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none' />
             <Input
               className="w-full pl-9"
               placeholder="Buscar..."
@@ -104,7 +104,7 @@ export function DataTable<TData, TValue> ({
             }}
             className="h-8 px-2 lg:px-3"
           >
-              Reiniciar <XIcon className="size-4 ml-2" />
+              Reiniciar <XIcon />
           </Button>
         )}
 
