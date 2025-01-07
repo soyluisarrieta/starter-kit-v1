@@ -17,6 +17,7 @@ import ProfileSettings from '@/components/modules/settings/ProfileSettings'
 import AuthSettings from '@/components/modules/settings/AuthSettings'
 import ChangeLogPage from '@/pages/ChangeLogPage'
 import HistoricalPage from '@/pages/HistoricalPage'
+import UserDetailPage from '@/pages/UserDetailPage'
 
 export default function App () {
   return (
@@ -35,7 +36,11 @@ export default function App () {
           <Route element={<AdminLayout widgets={DashboardWidget} />}>
             <Route path="/" element={<DashboardPage />} />
             <Route path="/perfil" element={<ProfilePage />} />
-            <Route path="/usuarios" element={<UsersPage />} />
+
+            <Route path="/usuarios">
+              <Route index element={<UsersPage />} />
+              <Route path=":id" element={<UserDetailPage />} />
+            </Route>
 
             <Route path="/ajustes" element={<SettingsPage />}>
               <Route index element={<GeneralSettings />} />

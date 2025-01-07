@@ -3,9 +3,11 @@ import UserForm from '@/components/modules/users/UserForm'
 import { DataTable } from '@/components/ui/datatable'
 import { MockUsers } from '@/mocks/MockUsers'
 import ActionMenu from '@/components/ui/action-menu'
-import { CopyIcon, ShareIcon } from 'lucide-react'
+import { useNavigate } from 'react-router'
 
 export default function UsersPage (): JSX.Element {
+  const navigate = useNavigate()
+
   return (
     <PageLayout
       title="Usuarios"
@@ -38,13 +40,8 @@ export default function UsersPage (): JSX.Element {
               className: 'w-0',
               cell: ({ row }) => (
                 <ActionMenu
-                  menuItems={[
-                    { type: 'separator' },
-                    { label: 'Copia enlace', icon: CopyIcon, onClick: () => { console.log('details', row.original) } },
-                    { label: 'Compartir', icon: ShareIcon, onClick: () => { console.log('edit', row.original) } }
-                  ]}
                   defaultActions={{
-                    onDetails: () => { console.log('details', row.original) },
+                    onDetails: () => { navigate(row.original.id) },
                     onEdit: () => { console.log('edit', row.original) },
                     onDelete: () => { console.log('delete', row.original) }
                   }}
