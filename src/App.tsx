@@ -2,7 +2,6 @@ import { BrowserRouter, Routes, Route } from 'react-router'
 import MasterLayout from '@/layouts/MasterLayout'
 import AdminLayout from '@/layouts/AdminLayout'
 import GuestLayout from '@/layouts/GuestLayout'
-import DashboardWidget from '@/components/modules/dashboard/DashboardWidget'
 import DashboardPage from '@/pages/DashboardPage'
 import NotFoundPage from '@/pages/Errors/NotFoundPage'
 import LoginPage from '@/pages/Auth/LoginPage'
@@ -33,7 +32,7 @@ export default function App () {
           </Route>
 
           {/* Rutas protegidas */}
-          <Route element={<AdminLayout widgets={DashboardWidget} />}>
+          <Route element={<AdminLayout />}>
             <Route path="/" element={<DashboardPage />} />
             <Route path="/perfil" element={<ProfilePage />} />
 

@@ -7,11 +7,7 @@ import { Icon, icons } from '@/components/icons/Icons'
 import { useSidebarStore } from '@/store/SidebarStore'
 import { Navigate, Outlet, useLocation } from 'react-router'
 
-interface Props {
-  widgets: React.ComponentType | undefined
-}
-
-export default function AdminLayout ({ widgets: Widgets }: Props): JSX.Element {
+export default function AdminLayout (): JSX.Element {
   const location = useLocation()
   const isSessionVerified = useCheckAuth()
   const { toggleSidebar } = useSidebarStore()
@@ -47,13 +43,6 @@ export default function AdminLayout ({ widgets: Widgets }: Props): JSX.Element {
 
         {/* Content */}
         {<Outlet />}
-
-        {/* Widgets */}
-        {Widgets && (
-          <div className='w-full xl:max-w-md p-4'>
-            <Widgets />
-          </div>
-        )}
       </div>
     </div>
   )
