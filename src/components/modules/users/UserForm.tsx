@@ -9,9 +9,10 @@ import { ACCEPTED_IMAGES } from '@/constants'
 
 interface UserFormProps {
   user?: ProfileAuth
+  callback?: (data?: unknown) => void | Promise<void>
 }
 
-export default function UserForm ({ user }: UserFormProps) {
+export default function UserForm ({ user, callback }: UserFormProps) {
   const defaultValues = {
     name: user?.name ?? '',
     last_name: user?.last_name ?? '',
@@ -26,6 +27,7 @@ export default function UserForm ({ user }: UserFormProps) {
     formConfig: { reValidateMode: 'onSubmit' },
     request: async (formData: ProfileAuth) => {
       console.log(formData)
+      await callback?.()
     }
   })
 

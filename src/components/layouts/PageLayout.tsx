@@ -2,6 +2,7 @@ import BackButton from '@/components/ui/back-button'
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
 import { cn } from '@/lib/utils'
+import { pressKey } from '@/lib/utils/pressKey'
 import { PlusIcon } from 'lucide-react'
 import { ComponentType, ReactNode } from 'react'
 
@@ -17,7 +18,7 @@ interface PageLayoutProps  {
   createForm?: {
     title: string
     description: string
-    component: ComponentType
+    component: ComponentType<{ callback?: () => void }>
     openButton?: {
       label?: string
       disable?: boolean
@@ -33,7 +34,6 @@ export default function PageLayout ({
   children,
   createForm
 }: PageLayoutProps) {
-
   return (
     <div className='min-h-svh relative flex flex-col flex-1'>
       {/* Header */}
@@ -67,7 +67,7 @@ export default function PageLayout ({
                   )}
                 </SheetHeader>
                 <div className='py-2'>
-                  {createForm.component && <createForm.component />}
+                  {createForm.component && <createForm.component callback={() => pressKey('Escape')} />}
                 </div>
               </SheetContent>
             </Sheet>
