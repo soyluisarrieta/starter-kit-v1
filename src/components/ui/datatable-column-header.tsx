@@ -9,24 +9,35 @@ interface DataTableColumnHeaderProps<TData, TValue>
   extends React.HTMLAttributes<HTMLDivElement> {
   column: Column<TData, TValue>
   title: string
+  align?: 'left' | 'center' | 'right'
+  style?: React.CSSProperties
+}
+
+const alignClasses = {
+  left: 'justify-start',
+  center: 'justify-center',
+  right: 'justify-end'
 }
 
 export function DataTableColumnHeader<TData, TValue> ({
   column,
   title,
-  className
+  className,
+  align,
+  style
 }: DataTableColumnHeaderProps<TData, TValue>) {
   if (!column.getCanSort()) {
-    return <div className={cn(className)}>{title}</div>
+    return <div className={className} style={{ textAlign: align, ...style }}>{title}</div>
   }
 
   return (
-    <div className={cn('flex items-center space-x-2', className)}>
+    <div className={'flex items-center space-x-2'}>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button
-            className='bg-transparent hover:bg-transparent p-0 justify-start gap-1'
+            className={cn('bg-transparent hover:bg-transparent p-0', alignClasses[align ?? 'left'], className)}
             variant="ghost"
+            style={{ textAlign: align, ...style }}
           >
             <span>{title}</span>
             {column.getIsSorted() === 'desc' ? (

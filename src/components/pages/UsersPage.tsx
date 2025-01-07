@@ -25,7 +25,7 @@ export default function UsersPage (): JSX.Element {
               enableHiding: false
             }
           ]}
-          withActionMenu
+          enableActionMenu
         />
       </main>
     </PageLayout>

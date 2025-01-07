@@ -40,7 +40,8 @@ type DataTableClassNames = {
 }
 
 export interface DataTableProps<TData, TValue> {
-  withActionMenu?: boolean
+  enableActionMenu?: boolean
+  disableSearch?: boolean
   className?: string
   classNames?: DataTableClassNames
   columns: (ColumnDef<TData, TValue> & DataTableColumnProps)[]
@@ -48,7 +49,8 @@ export interface DataTableProps<TData, TValue> {
 }
 
 export function DataTable<TData, TValue> ({
-  withActionMenu,
+  enableActionMenu,
+  disableSearch,
   className,
   classNames,
   columns,
@@ -74,7 +76,7 @@ export function DataTable<TData, TValue> ({
 
   return (
     <>
-      <div className="flex items-center py-4 relative">
+      {!disableSearch && <div className="flex items-center py-4 relative">
         <SearchIcon className='size-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground' />
         <Input
           placeholder="Buscar..."
@@ -82,7 +84,7 @@ export function DataTable<TData, TValue> ({
           onChange={(e) => table.setGlobalFilter(e.target.value)}
           className="max-w-sm pl-9"
         />
-      </div>
+      </div>}
       <div className={cn('rounded-md border', className)}>
         <Table>
           <TableHeader className={cn('bg-card', classNames?.headers)}>
@@ -93,13 +95,16 @@ export function DataTable<TData, TValue> ({
                   return (
                     <TableHead key={header.id} className={className} style={{ textAlign: align, ...style }}>
                       <DataTableColumnHeader
+                        className={className}
+                        align={align}
+                        style={style}
                         column={header.column}
                         title={header.column.columnDef.header?.toString() ?? ''}
                       />
                     </TableHead>
                   )
                 })}
-                {withActionMenu && <TableHead></TableHead>}
+                {enableActionMenu && <TableHead></TableHead>}
               </TableRow>
             ))}
           </TableHeader>
@@ -119,7 +124,7 @@ export function DataTable<TData, TValue> ({
                       </TableCell>
                     )})}
 
-                  {withActionMenu && (<TableCell className='w-0'>
+                  {enableActionMenu && (<TableCell className='w-0'>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <Button variant="ghost" className="h-8 w-8 p-0">
