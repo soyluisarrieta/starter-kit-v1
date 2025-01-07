@@ -20,9 +20,8 @@ import {
   TableRow
 } from '@/components/ui/table'
 import { cn } from '@/lib/utils'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { Button } from '@/components/ui/button'
-import { Icon, icons } from '@/components/icons/Icons'
 import { DataTablePagination } from '@/components/ui/datatable-pagination'
 import { useState } from 'react'
 import { DataTableColumnHeader } from '@/components/ui/datatable-column-header'
@@ -41,7 +40,6 @@ type DataTableClassNames = {
 }
 
 export interface DataTableProps<TData, TValue> {
-  enableActionMenu?: boolean
   disableSearch?: boolean
   className?: string
   classNames?: DataTableClassNames
@@ -50,7 +48,6 @@ export interface DataTableProps<TData, TValue> {
 }
 
 export function DataTable<TData, TValue> ({
-  enableActionMenu,
   disableSearch,
   className,
   classNames,
@@ -161,7 +158,6 @@ export function DataTable<TData, TValue> ({
                     </TableHead>
                   )
                 })}
-                {enableActionMenu && <TableHead></TableHead>}
               </TableRow>
             ))}
           </TableHeader>
@@ -180,32 +176,6 @@ export function DataTable<TData, TValue> ({
                         {flexRender(cell.column.columnDef.cell, cell.getContext())}
                       </TableCell>
                     )})}
-
-                  {enableActionMenu && (<TableCell className='w-0'>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" className="h-8 w-8 p-0">
-                          <span className="sr-only">Abrir menú</span>
-                          <Icon element={icons.DotsVertical} />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent className='min-w-40' align="end">
-                        <DropdownMenuLabel>Acciones</DropdownMenuLabel>
-                        <DropdownMenuItem><Icon element={icons.Detail} />Detalles</DropdownMenuItem>
-                        <DropdownMenuItem><Icon element={icons.Edit} /> Editar</DropdownMenuItem>
-                        <DropdownMenuSeparator className='bg-border' />
-                        <DropdownMenuItem asChild>
-                          <Button
-                            className='w-full hover:!text-destructive hover:!bg-destructive/10 justify-start relative flex select-none items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&>svg]:size-4 [&>svg]:shrink-0'
-                            variant='ghost'
-                            size='sm'
-                          >
-                            <Icon element={icons.Delete} />Eliminar
-                          </Button>
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </TableCell>)}
                 </TableRow>
               ))
             ) : (
