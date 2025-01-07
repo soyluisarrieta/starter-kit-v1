@@ -7,7 +7,8 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   SortingState,
-  useReactTable
+  useReactTable,
+  VisibilityState
 } from '@tanstack/react-table'
 
 import {
@@ -19,14 +20,14 @@ import {
   TableRow
 } from '@/components/ui/table'
 import { cn } from '@/lib/utils'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
+import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { Button } from '@/components/ui/button'
 import { Icon, icons } from '@/components/icons/Icons'
 import { DataTablePagination } from '@/components/ui/datatable-pagination'
 import { useState } from 'react'
 import { DataTableColumnHeader } from '@/components/ui/datatable-column-header'
 import { Input } from '@/components/ui/input'
-import { SearchIcon } from 'lucide-react'
+import { BetweenVerticalStartIcon, Columns3Icon, EyeOffIcon, SearchIcon } from 'lucide-react'
 
 type DataTableColumnProps = {
   align?: 'left' | 'center' | 'right'
@@ -58,6 +59,7 @@ export function DataTable<TData, TValue> ({
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
 
   const table = useReactTable({
     data,
@@ -68,23 +70,59 @@ export function DataTable<TData, TValue> ({
     getSortedRowModel: getSortedRowModel(),
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
+    onColumnVisibilityChange: setColumnVisibility,
     state: {
       sorting,
-      columnFilters
+      columnFilters,
+      columnVisibility
     }
   })
 
   return (
     <>
-      {!disableSearch && <div className="flex items-center py-4 relative">
+      <div className="flex items-center py-2 relative">
         <SearchIcon className='size-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground' />
-        <Input
-          placeholder="Buscar..."
-          value={(table.getState().globalFilter) ?? ''}
-          onChange={(e) => table.setGlobalFilter(e.target.value)}
-          className="max-w-sm pl-9"
-        />
-      </div>}
+        {!disableSearch ? (
+          <Input
+            placeholder="Buscar..."
+            value={(table.getState().globalFilter) ?? ''}
+            onChange={(e) => table.setGlobalFilter(e.target.value)}
+            className="max-w-sm pl-9"
+          />
+        ) : <div />}
+
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              className="ml-auto"
+              variant="outline"
+              size='icon'
+            >
+              <EyeOffIcon />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" >
+            <DropdownMenuLabel>Columnas</DropdownMenuLabel>
+            {table
+              .getAllColumns()
+              .filter(
+                (column) => column.getCanHide()
+              )
+              .map((column) => {
+                return (
+                  <DropdownMenuItem
+                    key={column.id}
+                    className={cn('capitalize text-popover-foreground', !column.getIsVisible() && 'line-through opacity-80')}
+                    onClick={() => column.toggleVisibility()}
+                    onSelect={event => event.preventDefault()}
+                  >
+                    {column.id}
+                  </DropdownMenuItem>
+                )
+              })}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
       <div className={cn('rounded-md border', className)}>
         <Table>
           <TableHeader className={cn('bg-card', classNames?.headers)}>
