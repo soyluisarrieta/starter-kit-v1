@@ -1,10 +1,9 @@
 import BackButton from '@/components/ui/back-button'
 import { Button } from '@/components/ui/button'
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from '@/components/ui/sheet'
 import { cn } from '@/lib/utils'
-import { pressKey } from '@/lib/utils/pressKey'
 import { PlusIcon } from 'lucide-react'
-import { ComponentType, ReactNode } from 'react'
+import { ComponentType, ReactNode, useState } from 'react'
 
 interface PageLayoutProps  {
   title: string
@@ -34,6 +33,8 @@ export default function PageLayout ({
   children,
   createForm
 }: PageLayoutProps) {
+  const [openCreateForm, setOpenCreateForm] = useState(false)
+
   return (
     <div className='min-h-svh relative flex flex-col flex-1'>
       {/* Header */}
@@ -51,12 +52,13 @@ export default function PageLayout ({
 
         {createForm && !createForm.openButton?.disable && (
           <div className='order-2'>
-            <Sheet>
-              <SheetTrigger asChild>
-                <Button className='text-base text-primary-foreground p-5'>
-                  <PlusIcon /> {createForm.openButton?.label ?? 'Añadir'}
-                </Button>
-              </SheetTrigger>
+            <Button
+              className='text-base text-primary-foreground p-5'
+              onClick={() => setOpenCreateForm(true)}
+            >
+              <PlusIcon /> {createForm.openButton?.label ?? 'Añadir'}
+            </Button>
+            <Sheet open={openCreateForm} onOpenChange={setOpenCreateForm}>
               <SheetContent>
                 <SheetHeader>
                   <SheetTitle>{createForm.title}</SheetTitle>
@@ -67,7 +69,7 @@ export default function PageLayout ({
                   )}
                 </SheetHeader>
                 <div className='py-2'>
-                  {createForm.component && <createForm.component callback={() => pressKey('Escape')} />}
+                  {createForm.component && <createForm.component callback={() => setOpenCreateForm(false)} />}
                 </div>
               </SheetContent>
             </Sheet>
