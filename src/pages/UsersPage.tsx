@@ -6,12 +6,25 @@ import ActionMenu from '@/components/ui/action-menu'
 import { useNavigate } from 'react-router'
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from '@/components/ui/sheet'
 import { useState } from 'react'
+import { AlertDialog, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog'
+import { Button } from '@/components/ui/button'
+import { toast } from 'react-toastify'
 
-type EditFormState = { open: boolean, data?: ProfileAuth }
+type EditFormState = { open: boolean, user?: ProfileAuth }
+type DeleteDialogState = { show: boolean, user?: ProfileAuth }
 
 export default function UsersPage (): JSX.Element {
   const [editForm, setEditForm] = useState<EditFormState>({ open: false })
+  const [deleteDialog, setDeleteDialog] = useState<DeleteDialogState>({ show: false })
   const navigate = useNavigate()
+
+  // Detele user
+  const handleDeleteUser = () => {
+    const user = deleteDialog.user
+    console.log('Delete:',user)
+    setDeleteDialog({ show: false })
+    toast.success('El usuario ha sido eliminado con exito.')
+  }
 
   return (
     <PageLayout
@@ -47,8 +60,8 @@ export default function UsersPage (): JSX.Element {
                 <ActionMenu
                   defaultActions={{
                     onDetails: () => { navigate(row.original.id) },
-                    onEdit: () => { setEditForm({ open: true, data: row.original }) },
-                    onDelete: () => { console.log('delete', row.original) }
+                    onEdit: () => { setEditForm({ open: true, user: row.original }) },
+                    onDelete: () => { setDeleteDialog({ show: true, user: row.original }) }
                   }}
                 />
               )
@@ -56,6 +69,7 @@ export default function UsersPage (): JSX.Element {
           ]}
         />
 
+        {/* Edit form */}
         <Sheet open={editForm.open} onOpenChange={(open) => { setEditForm({ ...editForm, open })} }>
           <SheetContent>
             <SheetHeader>
@@ -65,10 +79,28 @@ export default function UsersPage (): JSX.Element {
               </SheetDescription>
             </SheetHeader>
             <div className='py-2'>
-              <UserForm user={editForm.data} callback={()=> setEditForm({ open: false })} />
+              <UserForm user={editForm.user} callback={()=> setEditForm({ open: false })} />
             </div>
           </SheetContent>
         </Sheet>
+
+        {/* Alert delete */}
+        <AlertDialog open={deleteDialog.show} onOpenChange={(show) => { setDeleteDialog({ ...deleteDialog, show }) }}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>¿Estás absolutamete seguro?</AlertDialogTitle>
+              <AlertDialogDescription>
+                Estás a punto de eliminar este usuario. Esta acción es irreversible.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancelar</AlertDialogCancel>
+              <Button variant="destructive" onClick={handleDeleteUser}>
+                Eliminar
+              </Button>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </main>
     </PageLayout>
   )
