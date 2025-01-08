@@ -19,6 +19,24 @@ export const MESSAGE = {
   ERROR_TRYCATCH: 'Se ha producido un error inesperado. Por favor, inténtelo de nuevo más tarde.'
 }
 
+export const GENDERS = {
+  male: {
+    name: 'Masculino',
+    letter: 'o',
+    color: '#29d'
+  },
+  female: {
+    name: 'Femenino',
+    letter: 'a',
+    color: '#c855dd'
+  },
+  other: {
+    name: 'Otro',
+    letter: '@',
+    color: '#717171'
+  }
+}
+
 // HTTP status codes
 export const UNPROCESSABLE_ENTITY = 422
 export const FORBIDDEN = 403
