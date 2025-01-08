@@ -23,7 +23,7 @@ export default function UserForm ({ user, callback }: UserFormProps) {
   const { form, onSubmit } = useFormHandler({
     schema: createUserSchema,
     defaultValues,
-    successMessage: 'El usuario ha sido creado con exito.',
+    successMessage: `El usuario ha sido ${user ? 'actualizado' : 'creado'} con exito.`,
     formConfig: { reValidateMode: 'onSubmit' },
     request: async (formData: ProfileAuth) => {
       console.log(formData)

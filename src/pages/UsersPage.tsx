@@ -4,8 +4,13 @@ import { DataTable } from '@/components/ui/datatable'
 import { MockUsers } from '@/mocks/MockUsers'
 import ActionMenu from '@/components/ui/action-menu'
 import { useNavigate } from 'react-router'
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from '@/components/ui/sheet'
+import { useState } from 'react'
+
+type EditFormState = { open: boolean, data?: ProfileAuth }
 
 export default function UsersPage (): JSX.Element {
+  const [editForm, setEditForm] = useState<EditFormState>({ open: false })
   const navigate = useNavigate()
 
   return (
@@ -42,7 +47,7 @@ export default function UsersPage (): JSX.Element {
                 <ActionMenu
                   defaultActions={{
                     onDetails: () => { navigate(row.original.id) },
-                    onEdit: () => { console.log('edit', row.original) },
+                    onEdit: () => { setEditForm({ open: true, data: row.original }) },
                     onDelete: () => { console.log('delete', row.original) }
                   }}
                 />
@@ -50,6 +55,20 @@ export default function UsersPage (): JSX.Element {
             }
           ]}
         />
+
+        <Sheet open={editForm.open} onOpenChange={(open) => { setEditForm({ ...editForm, open })} }>
+          <SheetContent>
+            <SheetHeader>
+              <SheetTitle>Editar usuario</SheetTitle>
+              <SheetDescription>
+                Modifica los campos necesarios para actualizar al usuario.
+              </SheetDescription>
+            </SheetHeader>
+            <div className='py-2'>
+              <UserForm user={editForm.data} callback={()=> setEditForm({ open: false })} />
+            </div>
+          </SheetContent>
+        </Sheet>
       </main>
     </PageLayout>
   )
