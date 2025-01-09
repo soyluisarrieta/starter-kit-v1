@@ -3,11 +3,12 @@ import { createUserSchema } from '@/lib/yup/userSchemas'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { useFormHandler } from '@/hooks/useFormHandler'
 import DatePicker from '@/components/ui/datepicker'
 import { ACCEPTED_IMAGES } from '@/constants'
-import { createUserService, updateUserService } from '@/services/userService'
 import { queryClient } from '@/lib/react-query'
+import { useForm } from 'react-hook-form'
+import { useYupValidationResolver } from '@/lib/yup/useYupValidationResolver'
+import { useCreateUser, useUpdateUser } from '@/hooks/useUser'
 
 interface UserFormProps {
   user?: ProfileAuth
@@ -15,30 +16,36 @@ interface UserFormProps {
 }
 
 export default function UserForm ({ user, callback }: UserFormProps) {
+  const { mutateAsync: createUser } = useCreateUser()
+  const { mutateAsync: updateUser } = useUpdateUser()
+
   const defaultValues = {
     name: user?.name ?? '',
     last_name: user?.last_name ?? '',
     gender: user?.gender ?? undefined,
-    email: user?.email ?? ''
+    email: user?.email ?? '',
+    birthdate: user?.birthdate ?? '',
+    avatar: user?.avatar ?? '',
+    phone: user?.phone ?? ''
   }
 
-  const { form, onSubmit } = useFormHandler({
-    schema: createUserSchema,
+  const form = useForm({
+    resolver: useYupValidationResolver(createUserSchema),
     defaultValues,
-    successMessage: `El usuario ha sido ${user ? 'actualizado' : 'creado'} con exito.`,
-    formConfig: { reValidateMode: 'onSubmit' },
-    request: async (formData: ProfileAuth) => {
-      const data: ProfileAuth = user
-        ? await updateUserService({ ...formData, id: user.id })
-        : await createUserService(formData)
-      await callback?.(data)
-      queryClient.invalidateQueries(['users'])
-    }
+    mode: 'onSubmit'
   })
+
+  const onSubmit = async (formData: ProfileAuth) => {
+    const data: ProfileAuth = user
+      ? await updateUser({ ...formData, id: user.id })
+      : await createUser(formData)
+    await callback?.(data)
+    queryClient.invalidateQueries(['users'])
+  }
 
   return (
     <Form {...form}>
-      <form className='space-y-2' onSubmit={onSubmit}>
+      <form className='space-y-2' onSubmit={form.handleSubmit(onSubmit)}>
         <FormField
           control={form.control}
           name="name"
