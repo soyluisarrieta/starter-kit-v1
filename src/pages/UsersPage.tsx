@@ -1,16 +1,13 @@
+import { useState } from 'react'
 import PageLayout from '@/layouts/PageLayout'
 import UserForm from '@/components/modules/users/UserForm'
 import { DataTable } from '@/components/ui/datatable'
 import ActionMenu from '@/components/ui/action-menu'
 import { useNavigate } from 'react-router'
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from '@/components/ui/sheet'
-import { useState } from 'react'
 import { AlertDialog, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
-import { toast } from 'react-toastify'
-import { deleteUserService, getUsersService } from '@/services/userService'
-import { useQuery, useMutation } from '@tanstack/react-query'
-import { queryClient } from '@/lib/react-query'
+import { useDeleteUser, useGetAllUsers } from '@/hooks/useUser'
 
 type EditFormState = { open: boolean, user?: ProfileAuth }
 type DeleteDialogState = { show: boolean, user?: ProfileAuth }
@@ -18,31 +15,15 @@ type DeleteDialogState = { show: boolean, user?: ProfileAuth }
 export default function UsersPage (): JSX.Element {
   const [editForm, setEditForm] = useState<EditFormState>({ open: false })
   const [deleteDialog, setDeleteDialog] = useState<DeleteDialogState>({ show: false })
+
   const navigate = useNavigate()
-
-  // Get all user
-  const { data: users, isLoading } = useQuery({
-    queryKey: ['users'],
-    queryFn: getUsersService
-  })
-
-  // Delete fetching
-  const { mutate: deleteUser } = useMutation({
-    mutationFn: deleteUserService,
-    onSuccess: () => {
-      toast.success('El usuario ha sido eliminado con éxito.')
-      queryClient.invalidateQueries(['users'])
-    },
-    onError: () => toast.error('Error al eliminar el usuario.')
-  })
+  const { data: users, isLoading } = useGetAllUsers()
+  const { mutate: deleteUser } = useDeleteUser()
 
   // Delete user
-  const handleDelete = () => {
-    const user = deleteDialog.user
-    if (user) {
-      deleteUser(user.id)
-      setDeleteDialog({ show: false })
-    }
+  const handleDelete = (userId: ProfileAuth['id']) => {
+    deleteUser(userId)
+    setDeleteDialog({ show: false })
   }
 
   return (
@@ -120,7 +101,7 @@ export default function UsersPage (): JSX.Element {
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogCancel>Cancelar</AlertDialogCancel>
-              <Button variant="destructive" onClick={handleDelete}>
+              <Button variant="destructive" onClick={() => deleteDialog.user && handleDelete(deleteDialog.user.id)}>
                 Eliminar
               </Button>
             </AlertDialogFooter>

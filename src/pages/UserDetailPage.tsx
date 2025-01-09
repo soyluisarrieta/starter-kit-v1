@@ -1,14 +1,11 @@
 import { useParams } from 'react-router'
 import Box from '@/components/ui/box'
 import { GENDERS } from '@/constants'
-import { useQuery } from '@tanstack/react-query'
-import { getUserService } from '@/services/userService'
+import { useGetUserById } from '@/hooks/useUser'
 
 export default function UserDetailPage () {
   const { id } = useParams()
-
-  // Get all user
-  const { data: user, isLoading } = useQuery(['users', id], () => getUserService(id ?? ''))
+  const { data: user, isLoading } = useGetUserById(id ?? '')
 
   return (
     <div className="container mx-auto py-8">
