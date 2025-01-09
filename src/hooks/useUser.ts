@@ -1,6 +1,8 @@
 import { queryClient } from '@/lib/react-query'
+import { handleValidationErrors } from '@/lib/utils/handleValidationErrors'
 import { createUserService, deleteUserService, getUserService, getUsersService, updateUserService } from '@/services/userService'
 import { useMutation, useQuery } from '@tanstack/react-query'
+import { UseFormReturn } from 'react-hook-form'
 import { toast } from 'react-toastify'
 
 // Get all user
@@ -20,7 +22,7 @@ export function useGetUserById (id: ProfileAuth['id']) {
 }
 
 // Create user
-export function useCreateUser () {
+export function useCreateUser ({ form }: { form: UseFormReturn }) {
   return useMutation({
     mutationFn: createUserService,
     onSuccess: (data) => {
@@ -28,12 +30,15 @@ export function useCreateUser () {
       queryClient.invalidateQueries(['users'])
       return data
     },
-    onError: () => toast.error('Error al crear el usuario.')
+    onError: (error) => {
+      console.error(error)
+      handleValidationErrors(error, form.setError)
+    }
   })
 }
 
 // Update user by ID
-export function useUpdateUser () {
+export function useUpdateUser ({ form }: { form: UseFormReturn }) {
   return useMutation({
     mutationFn: updateUserService,
     onSuccess: (data) => {
@@ -41,7 +46,10 @@ export function useUpdateUser () {
       queryClient.invalidateQueries(['users'])
       return data
     },
-    onError: () => toast.error('Error al actualizar el usuario.')
+    onError: (error) => {
+      console.error(error)
+      handleValidationErrors(error, form.setError)
+    }
   })
 }
 
@@ -53,6 +61,9 @@ export function useDeleteUser () {
       toast.success('El usuario ha sido eliminado con éxito.')
       queryClient.invalidateQueries(['users'])
     },
-    onError: () => toast.error('Error al eliminar el usuario.')
+    onError: (error) => {
+      console.error(error)
+      toast.error('No se pudo eliminar al usuario dado a un error inesperado.')
+    }
   })
 }

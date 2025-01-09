@@ -16,9 +16,6 @@ interface UserFormProps {
 }
 
 export default function UserForm ({ user, callback }: UserFormProps) {
-  const { mutateAsync: createUser } = useCreateUser()
-  const { mutateAsync: updateUser } = useUpdateUser()
-
   const defaultValues = {
     name: user?.name ?? '',
     last_name: user?.last_name ?? '',
@@ -35,12 +32,15 @@ export default function UserForm ({ user, callback }: UserFormProps) {
     mode: 'onSubmit'
   })
 
+  const { mutateAsync: createUser } = useCreateUser({ form })
+  const { mutateAsync: updateUser } = useUpdateUser({ form })
+
   const onSubmit = async (formData: ProfileAuth) => {
     const data: ProfileAuth = user
       ? await updateUser({ ...formData, id: user.id })
       : await createUser(formData)
     await callback?.(data)
-    queryClient.invalidateQueries(['users'])
+    queryClient.invalidateQueries(['users', user?.id])
   }
 
   return (
