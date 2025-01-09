@@ -1,19 +1,21 @@
 import { useParams } from 'react-router'
 import Box from '@/components/ui/box'
 import { GENDERS } from '@/constants'
-import { useQuery } from 'react-query'
+import { useQuery } from '@tanstack/react-query'
 import { getUserService } from '@/services/userService'
 
 export default function UserDetailPage () {
   const { id } = useParams()
 
   // Get all user
-  const { data: user } = useQuery('users', () => getUserService(id ?? ''))
+  const { data: user, isLoading } = useQuery(['users', id], () => getUserService(id ?? ''))
 
   return (
     <div className="container mx-auto py-8">
       <h1 className="text-2xl font-bold mb-4">Detalles del Usuario</h1>
-      {user ? (
+      {isLoading ? (
+        <div>Cargando...</div>
+      ) : user ? (
         <Box className='max-w-fit grid grid-cols-2 gap-x-2 odd:[&>p]:text-muted-foreground odd:[&>p]:text-right'>
           <p>ID:</p>
           <p><strong>{id}</strong></p>

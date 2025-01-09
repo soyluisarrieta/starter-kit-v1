@@ -8,8 +8,8 @@ import { useState } from 'react'
 import { AlertDialog, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
 import { toast } from 'react-toastify'
-import { useMutation, useQuery } from 'react-query'
 import { deleteUserService, getUsersService } from '@/services/userService'
+import { useQuery, useMutation } from '@tanstack/react-query'
 
 type EditFormState = { open: boolean, user?: ProfileAuth }
 type DeleteDialogState = { show: boolean, user?: ProfileAuth }
@@ -21,7 +21,7 @@ export default function UsersPage (): JSX.Element {
   const navigate = useNavigate()
 
   // Get all user
-  const { refetch, isLoading } = useQuery('users', getUsersService, {
+  const { refetch, isLoading } = useQuery(['users'], getUsersService, {
     onSuccess: (data) => setUsers(data)
   })
 
@@ -31,7 +31,8 @@ export default function UsersPage (): JSX.Element {
     const updatedUsers = users.map(user => user.id === formData.id ? formData : user)
     setUsers(updatedUsers)
   }
-  const mutation = useMutation(deleteUserService, {
+  const mutation = useMutation({
+    mutationFn: deleteUserService,
     onSuccess: () => {
       toast.success('El usuario ha sido eliminado con éxito.')
       refetch()

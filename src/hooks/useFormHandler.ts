@@ -4,7 +4,7 @@ import { csrfService } from '@/services/authService'
 import nProgress from 'nprogress'
 import { type UseFormReturn, type UseFormProps, useForm } from 'react-hook-form'
 import { type AnyObjectSchema } from 'yup'
-import { useMutation } from 'react-query'
+import { useMutation } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
 import { useEffect } from 'react'
 import { useFormStore } from '@/store/FormStore'
@@ -60,8 +60,8 @@ export function useFormHandler ({
   })
 
   // Use mutation
-  const mutation = useMutation(request, {
-    // success
+  const mutation = useMutation({
+    mutationFn: request,
     onSuccess: () => {
       if (successMessage) {
         toast.success(successMessage)
