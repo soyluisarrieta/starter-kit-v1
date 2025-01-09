@@ -1,11 +1,15 @@
 import { useParams } from 'react-router'
-import { MockUsers } from '@/mocks/MockUsers'
 import Box from '@/components/ui/box'
 import { GENDERS } from '@/constants'
+import { useQuery } from 'react-query'
+import { getUserService } from '@/services/userService'
 
 export default function UserDetailPage () {
   const { id } = useParams()
-  const user = MockUsers.find(user => user.id === id)
+
+  // Get all user
+  const { data: user } = useQuery('users', () => getUserService(id ?? ''))
+
   return (
     <div className="container mx-auto py-8">
       <h1 className="text-2xl font-bold mb-4">Detalles del Usuario</h1>

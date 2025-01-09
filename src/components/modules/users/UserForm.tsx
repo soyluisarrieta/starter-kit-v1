@@ -6,10 +6,11 @@ import { Input } from '@/components/ui/input'
 import { useFormHandler } from '@/hooks/useFormHandler'
 import DatePicker from '@/components/ui/datepicker'
 import { ACCEPTED_IMAGES } from '@/constants'
+import { createUserService, updateUserService } from '@/services/userService'
 
 interface UserFormProps {
   user?: ProfileAuth
-  callback?: (data?: unknown) => void | Promise<void>
+  callback?: (formData: ProfileAuth) => void
 }
 
 export default function UserForm ({ user, callback }: UserFormProps) {
@@ -26,8 +27,10 @@ export default function UserForm ({ user, callback }: UserFormProps) {
     successMessage: `El usuario ha sido ${user ? 'actualizado' : 'creado'} con exito.`,
     formConfig: { reValidateMode: 'onSubmit' },
     request: async (formData: ProfileAuth) => {
-      console.log(formData)
-      await callback?.()
+      const data: ProfileAuth = user
+        ? await updateUserService({ ...formData, id: user.id })
+        : await createUserService(formData)
+      await callback?.(data)
     }
   })
 
@@ -173,7 +176,7 @@ export default function UserForm ({ user, callback }: UserFormProps) {
         )}
 
         <div>
-          <Button className='w-full mt-4' type='submit' size='lg'>Añadir</Button>
+          <Button className='w-full mt-4' type='submit' size='lg'>{user ? 'Actualizar' : 'Añadir'}</Button>
         </div>
       </form>
     </Form>

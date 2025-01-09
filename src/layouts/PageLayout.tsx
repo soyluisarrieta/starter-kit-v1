@@ -17,7 +17,8 @@ interface PageLayoutProps  {
   createForm?: {
     title: string
     description: string
-    component: ComponentType<{ callback?: () => void }>
+    component: ComponentType<{ callback?: (formData: any) => void }>
+    onSubmit: (formData: any) => void
     openButton?: {
       label?: string
       disable?: boolean
@@ -69,7 +70,7 @@ export default function PageLayout ({
                   )}
                 </SheetHeader>
                 <div className='py-2'>
-                  {createForm.component && <createForm.component callback={() => setOpenCreateForm(false)} />}
+                  {createForm.component && <createForm.component callback={(formData) => { setOpenCreateForm(false); createForm.onSubmit(formData) }} />}
                 </div>
               </SheetContent>
             </Sheet>
