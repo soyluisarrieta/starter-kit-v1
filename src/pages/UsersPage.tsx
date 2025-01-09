@@ -10,43 +10,37 @@ import { Button } from '@/components/ui/button'
 import { toast } from 'react-toastify'
 import { deleteUserService, getUsersService } from '@/services/userService'
 import { useQuery, useMutation } from '@tanstack/react-query'
+import { queryClient } from '@/lib/react-query'
 
 type EditFormState = { open: boolean, user?: ProfileAuth }
 type DeleteDialogState = { show: boolean, user?: ProfileAuth }
 
 export default function UsersPage (): JSX.Element {
-  const [users, setUsers] = useState<ProfileAuth[]>([])
   const [editForm, setEditForm] = useState<EditFormState>({ open: false })
   const [deleteDialog, setDeleteDialog] = useState<DeleteDialogState>({ show: false })
   const navigate = useNavigate()
 
   // Get all user
-  const { refetch, isLoading } = useQuery(['users'], getUsersService, {
-    onSuccess: (data) => setUsers(data)
+  const { data: users, isLoading } = useQuery({
+    queryKey: ['users'],
+    queryFn: getUsersService
   })
 
-  // Update user
-  const handleUpdate = (formData: ProfileAuth) => {
-    setEditForm({ open: false })
-    const updatedUsers = users.map(user => user.id === formData.id ? formData : user)
-    setUsers(updatedUsers)
-  }
-  const mutation = useMutation({
+  // Delete fetching
+  const { mutate: deleteUser } = useMutation({
     mutationFn: deleteUserService,
     onSuccess: () => {
       toast.success('El usuario ha sido eliminado con éxito.')
-      refetch()
+      queryClient.invalidateQueries(['users'])
     },
-    onError: () => {
-      toast.error('Error al eliminar el usuario.')
-    }
+    onError: () => toast.error('Error al eliminar el usuario.')
   })
 
   // Delete user
   const handleDelete = () => {
     const user = deleteDialog.user
     if (user) {
-      mutation.mutate(user.id)
+      deleteUser(user.id)
       setDeleteDialog({ show: false })
     }
   }
@@ -59,11 +53,7 @@ export default function UsersPage (): JSX.Element {
         title: 'Crear usuario',
         description: 'Complete el formulario para crear un nuevo usuario.',
         openButton: { label: 'Crear usuario' },
-        component: UserForm,
-        onSubmit: (formData) => {
-          const newUsers = [formData, ...users]
-          setUsers(newUsers)
-        }
+        component: UserForm
       }}
     >
       <main className='container'>
@@ -114,7 +104,7 @@ export default function UsersPage (): JSX.Element {
               </SheetDescription>
             </SheetHeader>
             <div className='py-2'>
-              <UserForm user={editForm.user} callback={handleUpdate} />
+              <UserForm user={editForm.user} callback={() => setEditForm({ open: false })} />
             </div>
           </SheetContent>
         </Sheet>

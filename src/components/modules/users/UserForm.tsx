@@ -7,6 +7,7 @@ import { useFormHandler } from '@/hooks/useFormHandler'
 import DatePicker from '@/components/ui/datepicker'
 import { ACCEPTED_IMAGES } from '@/constants'
 import { createUserService, updateUserService } from '@/services/userService'
+import { queryClient } from '@/lib/react-query'
 
 interface UserFormProps {
   user?: ProfileAuth
@@ -31,6 +32,7 @@ export default function UserForm ({ user, callback }: UserFormProps) {
         ? await updateUserService({ ...formData, id: user.id })
         : await createUserService(formData)
       await callback?.(data)
+      queryClient.invalidateQueries(['users'])
     }
   })
 
