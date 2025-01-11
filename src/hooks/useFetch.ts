@@ -1,6 +1,10 @@
+import { queryClient } from '@/lib/react-query'
+import { handleValidationErrors } from '@/lib/utils/handleValidationErrors'
 import { useAuthStore } from '@/store/AuthStore'
-import { MutationOptions, QueryOptions, useMutation, useQuery } from '@tanstack/react-query'
+import { MutationOptions, QueryKey, QueryOptions, useMutation, useQuery } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
+import { UseFormReturn } from 'react-hook-form'
+import { toast } from 'react-toastify'
 
 interface ErrorResponse {
   message: string
@@ -21,6 +25,8 @@ const useErrorHandler = () => {
     case 401:
       setProfile(null)
       break
+    case 422:
+      break
     default:
       console.error(`Error ${status}:`, errorMessage)
     }
@@ -37,8 +43,7 @@ interface ApiQueryOptions<TData, TError = ApiError>
 // Query
 export function useFetchQuery<TData> (config: ApiQueryOptions<TData>) {
   const handleError = useErrorHandler()
-
-  return useQuery({
+  const query =  useQuery({
     ...config,
     onError: (error) => {
       config.onError?.(error)
@@ -51,26 +56,37 @@ export function useFetchQuery<TData> (config: ApiQueryOptions<TData>) {
       return failureCount < 3
     }
   })
+  return query
 }
 
 interface ApiMutationOptions<TData, TVariables, TError = ApiError>
-  extends Omit<MutationOptions<TData, TError, TVariables>, 'onError'> {
-  onError?: (error: ApiError) => void
-}
+  extends Omit<MutationOptions<TData, TError, TVariables>, 'onError' | 'onSuccess'> {
+    queryKey: QueryKey
+    messages: { success: string, error: string }
+    onError?: (error: ApiError) => void
+    onSuccess?: (data: TData) => TData
+  }
 
 // Mutation
 export function useFetchMutation<TData, TVariables> (
-  config: ApiMutationOptions<TData, TVariables>
+  config: ApiMutationOptions<TData, TVariables>,
+  form?: UseFormReturn
 ) {
   const handleError = useErrorHandler()
-
-  return useMutation({
+  const mutation = useMutation({
     ...config,
+    onSuccess: (data) => {
+      config.onSuccess?.(data)
+      const successMssg = config.messages?.success
+      successMssg && toast.success(successMssg)
+      queryClient.invalidateQueries(config.queryKey)
+      return data
+    },
     onError: (error) => {
-      if (error) {
-        config.onError?.(error)
-        handleError(error)
-      }
+      config.onError?.(error)
+      form && handleValidationErrors(error, form.setError)
+      handleError(error)
     }
   })
+  return mutation
 }
