@@ -1,5 +1,4 @@
 import { create } from 'zustand'
-import { createJSONStorage, persist } from 'zustand/middleware'
 
 interface AuthStore {
   isAuth: boolean
@@ -8,14 +7,12 @@ interface AuthStore {
   logout: () => void
 }
 
-export const useAuthStore = create<AuthStore>()(
-  persist((set) => ({
-    profile: null,
-    isAuth: false,
-    setProfile: (profile) => { set(() => ({ profile, isAuth: true })) },
-    logout: () => { set(() => ({ profile: null, isAuth: false })) }
-  }), { name: 'profile', storage: createJSONStorage(()=> sessionStorage) })
-)
+export const useAuthStore = create<AuthStore>()((set) => ({
+  profile: null,
+  isAuth: false,
+  setProfile: (profile) => { set(() => ({ profile, isAuth: true })) },
+  logout: () => { set(() => ({ profile: null, isAuth: false })) }
+}))
 
 interface SessionStore {
   sessionVerified: boolean
