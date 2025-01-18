@@ -30,8 +30,7 @@ export const phone = yup
   .string()
   .nullable().transform((val, ori) => val === '' ? null : ori)
   .matches(/^[0-9]+$/, 'Número de teléfono no válido')
-  .min(10, 'El número de teléfono debe contener al menos 10 dígitos')
-  .max(15, 'El número de teléfono no puede exceder de 15 dígitos.')
+  .length(10, 'El número de teléfono debe contener 10 caracteres')
 
 export const adultBirthdate = yup
   .date()
