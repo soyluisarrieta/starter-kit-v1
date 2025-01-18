@@ -36,7 +36,7 @@ export default function PageLayout ({
   const [openCreateForm, setOpenCreateForm] = useState(false)
 
   return (
-    <div className='min-h-svh relative flex flex-col flex-1'>
+    <div className='relative flex flex-col flex-1'>
       {/* Header */}
       <header className='container pt-7 pb-5 lg:pb-4 grid grid-cols-[1fr_auto] items-center'>
         {withBackButton && (

@@ -5,7 +5,6 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input'
 import DatePicker from '@/components/ui/datepicker'
 import { ACCEPTED_IMAGES } from '@/constants'
-import { queryClient } from '@/lib/react-query'
 import { useForm } from 'react-hook-form'
 import { useYupValidationResolver } from '@/lib/yup/useYupValidationResolver'
 import { useCreateUser, useUpdateUser } from '@/hooks/useUser'
@@ -40,7 +39,6 @@ export default function UserForm ({ user, callback }: UserFormProps) {
       ? await updateUser({ ...formData, id: user.id })
       : await createUser(formData)
     await callback?.(data)
-    queryClient.invalidateQueries(['users', user?.id])
   }
 
   return (

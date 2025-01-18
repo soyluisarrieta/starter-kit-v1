@@ -30,7 +30,7 @@ class UserRequest extends FormRequest
       'password' => 'nullable|string|min:8|max:35|confirmed',
       'birthdate' => 'nullable|date|max:' . now()->toDateString(),
       'address' => 'nullable|string|min:3|max:100',
-      'phone' => 'nullable|string|regex:/^[0-9]+$/|min:10|max:15',
+      'phone' => 'nullable|string|regex:/^[0-9]+$/|size:10',
       'avatar' => 'nullable|image|max:2048', // 2MB
     ];
   }
