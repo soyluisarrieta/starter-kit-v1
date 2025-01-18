@@ -1,3 +1,4 @@
+import { INTERNAL_SERVER_ERROR, UNAUTHORIZED, UNPROCESSABLE_ENTITY } from '@/constants'
 import { queryClient } from '@/lib/react-query'
 import { handleValidationErrors } from '@/lib/utils/handleValidationErrors'
 import { useAuthStore } from '@/store/AuthStore'
@@ -22,13 +23,19 @@ const useErrorHandler = () => {
     const errorMessage = error.message
 
     switch (status) {
-    case 401:
+    case UNAUTHORIZED:
       setProfile(null)
+      toast.error('Su sesión ha expirado. Por favor, vuelva a iniciar sesión.')
       break
-    case 422:
+    case UNPROCESSABLE_ENTITY:
+      toast.error('Los datos válidos. Por favor, revise el formulario y vuelva a intentarlo.')
+      break
+    case INTERNAL_SERVER_ERROR:
+      toast.error('Lo sentimos, ha ocurrido un error en el servidor. Por favor, comuníquese con el equipo de soporte técnico.')
       break
     default:
       console.error(`Error ${status}:`, errorMessage)
+      toast.error('Ha ocurrido un error inesperado. Por favor, comuníquese con el equipo de soporte técnico.')
     }
 
     // throw error
