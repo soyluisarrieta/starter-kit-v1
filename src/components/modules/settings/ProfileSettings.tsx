@@ -33,6 +33,8 @@ export default function ProfileSettings (): JSX.Element {
     mode: 'onSubmit'
   })
 
+  const isModified = form.formState.isDirty && form.formState.isValid
+
   const { mutateAsync: updateUser } = useUpdateUser({ form })
 
   const onSubmit = async (formData: ProfileAuth) => {
@@ -195,21 +197,25 @@ export default function ProfileSettings (): JSX.Element {
         </div>
 
         {/* Action buttons */}
-        <div className='mt-4 pt-4 border-t flex justify-end items-center'>
-          <div className='h-10 flex flex-col justify-start gap-1 text-xs'>
-            <span className='text-muted-foreground'>Última actualización:</span>
-            <span className='capitalize font-semibold'>{moment(profile?.updated_at).format('MMM Do YYYY, h:mm A')}</span>
+        <div className='mt-4 py-4 border-t flex justify-end items-center'>
+          <div className='h-10 flex flex-col justify-start gap-1'>
+            <span className='text-muted-foreground text-xs -mb-1'>Última actualización:</span>
+            <span className='capitalize font-semibold text-sm'>{moment(profile?.updated_at).format('MMM Do YYYY, h:mm A')}</span>
           </div>
           <div className='flex-grow flex justify-end gap-2 lg:items-center'>
+            {isModified && (
+              <Button
+                variant='outline'
+                type='button'
+                onClick={() => form.reset()}
+              >
+                  Cancelar
+              </Button>
+            )}
             <Button
-              className='disabled:opacity-70'
-              variant='outline'
-            >
-              Cancelar
-            </Button>
-            <Button
-              className='disabled:opacity-70'
-              variant={'default'}
+              variant={isModified ? 'default' : 'outline'}
+              type='submit'
+              disabled={!isModified}
             >
               Guardar cambios
             </Button>
