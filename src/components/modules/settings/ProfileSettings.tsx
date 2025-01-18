@@ -6,41 +6,42 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Separator } from '@/components/ui/separator'
 import { ACCEPTED_IMAGES } from '@/constants'
 import { useAuth } from '@/hooks/useAuth'
-import { useFormHandler } from '@/hooks/useFormHandler'
+import { useUpdateUser } from '@/hooks/useUser'
 import { profileSchema } from '@/lib/yup/userSchemas'
+import { useYupValidationResolver } from '@/lib/yup/useYupValidationResolver'
 import moment from 'moment'
 import { useState } from 'react'
+import { useForm } from 'react-hook-form'
 
 export default function ProfileSettings (): JSX.Element {
   const { profile } = useAuth()
   const [genderLetterSelected, setGenderLetterSelected] = useState(profile?.gender_letter)
 
   const defaultValues = {
-    name: profile?.name,
-    last_name: profile?.last_name,
-    email: profile?.email,
-    gender: profile?.gender,
+    name: profile?.name ?? '',
+    last_name: profile?.last_name ?? '',
+    email: profile?.email ?? '',
+    gender: profile?.gender ?? undefined,
     birthdate: profile?.birthdate ?? '',
     phone: profile?.phone ?? '',
-    avatar: profile?.avatar
+    avatar: profile?.avatar ?? ''
   }
 
-  const { form } = useFormHandler({
-    schema: profileSchema,
-    successMessage: 'Perfil actualizado con éxito.',
+  const form = useForm({
+    resolver: useYupValidationResolver(profileSchema),
     defaultValues,
-    timestamps: {
-      updatedAt: profile?.updated_at,
-      createdAt: profile?.created_at
-    },
-    request: async (userData) => {
-      console.log(userData)
-    }
+    mode: 'onSubmit'
   })
 
+  const { mutateAsync: updateUser } = useUpdateUser({ form })
+
+  const onSubmit = async (formData: ProfileAuth) => {
+    await updateUser({ ...formData, id: profile?.id ?? '' })
+  }
+
   return (
-    <div className='container'>
-      <Form {...form}>
+    <Form {...form}>
+      <form className='container' onSubmit={form.handleSubmit(onSubmit)}>
         <div className='grid md:grid-cols-2 gap-4 py-4 lg:py-8'>
           <div>
             <h3 className='font-semibold text-lg'>Nombre y Apellido</h3>
@@ -66,27 +67,6 @@ export default function ProfileSettings (): JSX.Element {
                 <FormItem className='w-full'>
                   <FormControl>
                     <Input placeholder={profile?.last_name} {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-        </div>
-        <div className='px-6'><Separator /></div>
-        <div className='grid md:grid-cols-2 gap-4 py-4 lg:py-8'>
-          <div>
-            <h3 className='font-semibold text-lg'>Correo electrónico</h3>
-            <p className='font-normal leading-snug text-muted-foreground'>Podrá iniciar sesión con este correo y recibir notificaciones importantes.</p>
-          </div>
-          <div className='flex gap-2'>
-            <FormField
-              control={form.control}
-              name='email'
-              render={({ field }) => (
-                <FormItem className='w-full'>
-                  <FormControl>
-                    <Input placeholder={profile?.email} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -213,31 +193,29 @@ export default function ProfileSettings (): JSX.Element {
             />
           </div>
         </div>
-      </Form>
 
-      {/* Action buttons */}
-      <div className='mt-4 pt-4 border-t flex justify-end items-center'>
-        <div className='h-10 flex flex-col justify-start gap-1 text-xs'>
-          <span className='text-muted-foreground'>Última actualización:</span>
-          <span className='capitalize font-semibold'>{moment(1736117766).format('MMM Do YYYY, h:mm A')}</span>
+        {/* Action buttons */}
+        <div className='mt-4 pt-4 border-t flex justify-end items-center'>
+          <div className='h-10 flex flex-col justify-start gap-1 text-xs'>
+            <span className='text-muted-foreground'>Última actualización:</span>
+            <span className='capitalize font-semibold'>{moment(profile?.updated_at).format('MMM Do YYYY, h:mm A')}</span>
+          </div>
+          <div className='flex-grow flex justify-end gap-2 lg:items-center'>
+            <Button
+              className='disabled:opacity-70'
+              variant='outline'
+            >
+              Cancelar
+            </Button>
+            <Button
+              className='disabled:opacity-70'
+              variant={'default'}
+            >
+              Guardar cambios
+            </Button>
+          </div>
         </div>
-        <div className='flex-grow flex justify-end gap-2 lg:items-center'>
-          <Button
-            className='disabled:opacity-70'
-            disabled={true}
-            variant='outline'
-          >
-          Cancelar
-          </Button>
-          <Button
-            className='disabled:opacity-70'
-            disabled={true}
-            variant={'default'}
-          >
-            Guardar cambios
-          </Button>
-        </div>
-      </div>
-    </div>
+      </form>
+    </Form>
   )
 }

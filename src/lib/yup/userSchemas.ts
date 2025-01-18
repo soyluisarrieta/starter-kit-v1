@@ -105,12 +105,9 @@ export const resetPwSchema = yup.object({
 export const profileSchema = yup.object({
   name,
   last_name,
-  email,
   gender,
   birthdate,
-  address,
-  phone,
-  avatar
+  phone
 })
 
 export const createUserSchema = yup.object({
