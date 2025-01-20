@@ -28,7 +28,7 @@ class UserRequest extends FormRequest
       'gender' => 'required|string|in:male,female,other',
       'email' => ['required', 'string', 'email', 'max:100', Rule::unique('users')->ignore($this->user?->id)],
       'password' => 'nullable|string|min:8|max:35|confirmed',
-      'birthdate' => 'nullable|date|max:' . now()->toDateString(),
+      'birthdate' => 'nullable|date|before_or_equal:' . now()->toDateString(),
       'address' => 'nullable|string|min:3|max:100',
       'phone' => 'nullable|string|regex:/^[0-9]+$/|size:10',
       'avatar' => 'nullable|image|max:2048', // 2MB
