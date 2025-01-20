@@ -33,7 +33,7 @@ export default function ProfileSettings (): JSX.Element {
     mode: 'onSubmit'
   })
 
-  const isModified = form.formState.isDirty || form.formState.isValid
+  const isModified = form.formState.isDirty || !form.formState.isValid
 
   const { mutateAsync: updateUser } = useUpdateUser({ form })
 
