@@ -44,7 +44,7 @@ export default function DatePicker ({ value, onChange, placeholder }: Props): JS
           <CalendarDaysIcon className='mr-1 h-4 w-4 -translate-x-1' />
           <span className='first-letter:capitalize'>
             {value
-              ? moment(value as moment.MomentInput).format('MMMM D - YYYY')
+              ? moment(value as moment.MomentInput).utc().format('MMMM DD - YYYY')
               : placeholder ?? 'Seleccione una fecha'}
           </span>
         </Button>
