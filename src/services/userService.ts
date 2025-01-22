@@ -16,7 +16,8 @@ export const createUserService = async (user: ProfileAuth): Promise<ProfileAuth>
 }
 
 export const updateUserService = async (user: ProfileAuth): Promise<ProfileAuth> => {
-  const { data } = await axios.put(`/api/users/${user.id}`, { ...user })
+  const { data } = await axios.put(`/api/users/${user.id}`, user,
+    { headers: { 'Content-Type': 'multipart/form-data' } })
   return data
 }
 
