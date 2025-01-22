@@ -31,7 +31,7 @@ class UserRequest extends FormRequest
       'birthdate' => 'nullable|date|before_or_equal:' . now()->toDateString(),
       'address' => 'nullable|string|min:3|max:100',
       'phone' => 'nullable|string|regex:/^[0-9]+$/|size:10',
-      'avatar' => 'nullable|image|max:2048', // 2MB
+      'avatar' => 'nullable|image|mimes:jpeg,png,jpg|max:2048', // 2MB
     ];
   }
 }

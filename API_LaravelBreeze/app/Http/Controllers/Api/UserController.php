@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
+use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserRequest;
 use App\Http\Resources\UserResource;
+use Illuminate\Support\Str;
 use App\Models\User;
 
 class UserController extends Controller
@@ -41,9 +43,23 @@ class UserController extends Controller
    */
   public function update(UserRequest $request, User $user)
   {
-    $user->update($request->validated());
+    $validatedData = $request->validated();
+
+    // Handle the avatar update
+    if ($request->hasFile('avatar')) {
+      if (!empty($user->avatar) && Storage::disk('public')->exists('avatars/' . $user->avatar)) {
+        Storage::disk('public')->delete('avatars/' . $user->avatar);
+      }
+
+      $file = $request->file('avatar');
+      $file->store('avatars', 'public');
+      $validatedData['avatar'] = $file->hashName();
+    }
+
+    $user->update($validatedData);
     return new UserResource($user);
   }
+
 
   /**
    * Remove the specified resource from storage.
