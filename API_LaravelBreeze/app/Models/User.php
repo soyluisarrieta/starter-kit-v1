@@ -8,11 +8,12 @@ use App\Notifications\ResetPasswordNotification;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Spatie\Permission\Traits\HasRoles;
 use App\Traits\UsesUuid;
 
 class User extends Authenticatable
 {
-    use UsesUuid, HasFactory, Notifiable;
+    use UsesUuid, HasFactory, Notifiable, HasRoles;
 
     /**
      * The attributes that are mass assignable.
