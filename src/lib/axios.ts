@@ -56,7 +56,27 @@ const parseAxiosError = (err: AxiosError): ErrorProps => {
   return error
 }
 
-// Interceptors
+// Request interceptor
+axios.interceptors.request.use((config) => {
+  const isMultiPart = config.headers['Content-Type'] === 'multipart/form-data'
+  if (isMultiPart && (config.method === 'patch' || config.method === 'put')) {
+    const method = config.method.toUpperCase()
+    config.method = 'post'
+
+    if (config.data instanceof FormData) {
+      config.data.append('_method', method)
+    } else {
+      config.data = { ...config.data, _method: method }
+    }
+  }
+  console.log({ config })
+
+  return config
+}, (error) => {
+  return Promise.reject(error)
+})
+
+// Response interceptor
 axios.interceptors.response.use(null, async (err: AxiosError) => {
   const errors = parseAxiosError(err)
   return await Promise.reject(errors)
