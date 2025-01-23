@@ -1,4 +1,4 @@
-export default function Authenticating (): JSX.Element {
+export default function Authenticating () {
   return (
     <main className="container">
       Comprobando autenticación...

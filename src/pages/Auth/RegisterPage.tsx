@@ -1,4 +1,4 @@
-import RegisterForm from '@/components/modules/auth/RegisterForm'
+import RegisterForm from '@/components/features/auth/RegisterForm'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { InfoIcon } from 'lucide-react'

@@ -1,4 +1,4 @@
-import LoginForm from '@/components/modules/auth/LoginForm'
+import LoginForm from '@/components/features/auth/LoginForm'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { InfoIcon } from 'lucide-react'

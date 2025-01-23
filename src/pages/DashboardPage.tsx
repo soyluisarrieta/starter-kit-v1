@@ -1,4 +1,4 @@
-import DashboardWidget from '@/components/modules/dashboard/DashboardWidget'
+import DashboardWidget from '@/components/features/dashboard/DashboardWidget'
 import Box from '@/components/ui/box'
 import CardTrendWidget from '@/components/widgets/CardTrendWidget'
 import { useAuth } from '@/hooks/useAuth'

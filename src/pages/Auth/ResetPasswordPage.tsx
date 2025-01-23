@@ -1,4 +1,4 @@
-import ResetPasswordForm from '@/components/modules/auth/ResetPasswordForm'
+import ResetPasswordForm from '@/components/features/auth/ResetPasswordForm'
 
 export default function ResetPasswordPage (): JSX.Element {
   return (

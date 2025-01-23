@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { Icon, icons } from '@/components/icons/Icons'
-import CardSettingSection from '@/components/modules/settings/CardSettingSection'
+import CardSettingSection from '@/components/features/settings/CardSettingSection'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { useFormStore } from '@/store/FormStore'
 import { useThemeStore } from '@/store/ThemeStore'

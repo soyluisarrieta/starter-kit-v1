@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import PageLayout from '@/layouts/PageLayout'
-import UserForm from '@/components/modules/users/UserForm'
+import UserForm from '@/components/features/users/UserForm'
 import { DataTable } from '@/components/ui/datatable'
 import ActionMenu from '@/components/ui/action-menu'
 import { useNavigate } from 'react-router'
