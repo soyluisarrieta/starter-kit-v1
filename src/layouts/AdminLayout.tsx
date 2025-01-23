@@ -30,7 +30,7 @@ export default function AdminLayout (): JSX.Element {
         onLogout={logout}
       />
 
-      <div className='overflow-x-hidden'>
+      <div className='overflow-x-hidden' style={{ scrollbarGutter: 'stable' }}>
         {/* Top bar */}
         <header className='w-full p-3 border-b lg:hidden flex justify-between items-center'>
           <button
