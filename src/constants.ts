@@ -3,7 +3,7 @@ import { HiOutlineCog8Tooth, HiOutlineUsers, HiOutlineHome } from 'react-icons/h
 const API = import.meta.env.VITE_BACKEND_URL_LOCAL
 
 export const IMAGES = {
-  AVATARS: API + '/avatar'
+  AVATARS: API + '/storage/avatars'
 }
 
 export const DOC_URL = 'https://paylusestudio.com/'

@@ -1,11 +1,11 @@
 import { Button } from '@/components/ui/button'
 import DatePicker from '@/components/ui/datepicker'
-import ImageUpload from '@/components/ui/image-upload'
+import ImageUpload from '@/components/ui/file-upload'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Separator } from '@/components/ui/separator'
-import { ACCEPTED_IMAGES } from '@/constants'
+import { ACCEPTED_IMAGES, IMAGES } from '@/constants'
 import { useAuth } from '@/hooks/useAuth'
 import { useUpdateUser } from '@/hooks/useUser'
 import { profileSchema } from '@/lib/yup/userSchemas'
@@ -116,6 +116,7 @@ export default function ProfileSettings (): JSX.Element {
                     <ImageUpload
                       {...fieldProps}
                       accept={ACCEPTED_IMAGES}
+                      image={profile?.avatar ? `${IMAGES.AVATARS}/${profile.avatar}` : ''}
                       onChange={onChange}
                     />
                   </FormControl>

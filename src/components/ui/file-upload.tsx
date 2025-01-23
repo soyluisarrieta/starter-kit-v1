@@ -1,11 +1,12 @@
 import { cn } from '@/lib/utils'
-import React, { forwardRef, useState } from 'react'
+import React, { forwardRef, useEffect, useState } from 'react'
 
 interface ImageUploadProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'> {
+  image?: string;
   onChange: (file: File) => void;
 }
 
-const ImageUpload = forwardRef<HTMLInputElement, ImageUploadProps>(({ onChange, accept, ...fieldProps }, ref) => {
+const ImageUpload = forwardRef<HTMLInputElement, ImageUploadProps>(({ onChange, image, accept, ...fieldProps }, ref) => {
   const [isDragging, setIsDragging] = useState(false)
   const [previewUrl, setPreviewUrl] = useState<string | null>(null)
 
@@ -49,6 +50,10 @@ const ImageUpload = forwardRef<HTMLInputElement, ImageUploadProps>(({ onChange, 
       }
     }
   }
+
+  useEffect(()=>{
+    image && setPreviewUrl(image)
+  },[image])
 
   return (
     <div
@@ -94,7 +99,7 @@ const ImageUpload = forwardRef<HTMLInputElement, ImageUploadProps>(({ onChange, 
             >
               <path
                 d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
-                strokeWidth={2}
+                strokeWidth={1}
                 strokeLinecap="round"
                 strokeLinejoin="round"
               />
@@ -103,7 +108,7 @@ const ImageUpload = forwardRef<HTMLInputElement, ImageUploadProps>(({ onChange, 
         </div>
 
         {/* Vista previa de la imagen */}
-        {previewUrl && (
+        {(previewUrl) && (
           <div className="absolute top-0 left-0 p-1 pointer-events-none">
             <img
               src={previewUrl}
