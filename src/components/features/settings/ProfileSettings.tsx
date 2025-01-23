@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button'
 import DatePicker from '@/components/ui/datepicker'
-import ImageUpload from '@/components/ui/file-upload'
+import ImageUpload from '@/components/ui/image-upload'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
@@ -25,7 +25,7 @@ export default function ProfileSettings (): JSX.Element {
     gender: profile?.gender ?? undefined,
     birthdate: profile?.birthdate ?? '',
     phone: profile?.phone ?? '',
-    avatar: profile?.avatar ?? ''
+    avatar: null
   }
 
   const form = useForm({
