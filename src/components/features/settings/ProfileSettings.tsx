@@ -5,7 +5,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Separator } from '@/components/ui/separator'
-import { ACCEPTED_IMAGES, IMAGES } from '@/constants'
+import { ACCEPTED_IMAGES } from '@/constants'
 import { useAuth } from '@/hooks/useAuth'
 import { useUpdateUser } from '@/hooks/useUser'
 import { profileSchema } from '@/lib/yup/userSchemas'
@@ -13,6 +13,7 @@ import { useYupValidationResolver } from '@/lib/yup/useYupValidationResolver'
 import moment from 'moment'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { ASSETS } from '@/constants/assets'
 
 export default function ProfileSettings (): JSX.Element {
   const { profile } = useAuth()
@@ -116,7 +117,7 @@ export default function ProfileSettings (): JSX.Element {
                     <ImageUpload
                       {...fieldProps}
                       accept={ACCEPTED_IMAGES}
-                      image={profile?.avatar ? `${IMAGES.AVATARS}/${profile.avatar}` : ''}
+                      image={profile?.avatar ? `${ASSETS.IMAGES.AVATARS}/${profile.avatar}` : ''}
                       onChange={onChange}
                     />
                   </FormControl>

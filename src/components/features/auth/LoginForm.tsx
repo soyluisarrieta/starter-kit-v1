@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button'
 import { useAuth } from '@/hooks/useAuth'
 import { loginSchema } from '@/lib/yup/userSchemas'
 import { loginService } from '@/services/authService'
-import { MESSAGE } from '@/constants'
+import { MESSAGES } from '@/constants'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { useFormHandler } from '@/hooks/useFormHandler'
@@ -24,7 +24,7 @@ export default function LoginForm (): JSX.Element {
   // Form config
   const { form, onSubmit } = useFormHandler({
     schema: loginSchema,
-    successMessage: MESSAGE.WELCOME,
+    successMessage: MESSAGES.WELCOME,
     defaultValues,
     redirectTo: from,
     formConfig: { reValidateMode: 'onSubmit' },

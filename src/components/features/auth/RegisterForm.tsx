@@ -6,7 +6,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { registerService } from '@/services/authService'
-import { MESSAGE } from '@/constants'
+import { MESSAGES } from '@/constants'
 import { useFormHandler } from '@/hooks/useFormHandler'
 
 export default function RegisterForm (): JSX.Element {
@@ -24,7 +24,7 @@ export default function RegisterForm (): JSX.Element {
   const { form, onSubmit } = useFormHandler({
     schema: registerSchema,
     defaultValues,
-    successMessage: MESSAGE.WELCOME,
+    successMessage: MESSAGES.WELCOME,
     formConfig: { reValidateMode: 'onSubmit' },
     request: async (data: RegisterForm) => {
       await registerService(data)

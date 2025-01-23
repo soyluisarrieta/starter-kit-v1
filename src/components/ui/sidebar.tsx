@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
-import { COPYRIGHT, DOC_URL, IMAGES } from '@/constants'
+import { COPYRIGHT, DOC_URL, ASSETS } from '@/constants'
 import { useScreenSize } from '@/hooks/useScreenSize'
 import { cn } from '@/lib/utils'
 import { useSidebarStore } from '@/store/SidebarStore'
@@ -128,7 +128,7 @@ export default function Sidebar ({ menuItems, user, onLogout }: SidebarProps): J
                 <DropdownMenu open={isSidebarOpen ? false : undefined}>
                   <DropdownMenuTrigger>
                     <Avatar className={cn('outline outline-1 outline-muted-foreground/50 dark:outline-muted-foreground outline-offset-2 ml-0.5', !isSidebarOpen && 'cursor-pointer hover:brightness-125')}>
-                      <AvatarImage src={user?.avatar && IMAGES.AVATARS + user.avatar} />
+                      <AvatarImage src={user?.avatar && `${ASSETS.IMAGES.AVATARS}/${user.avatar}`} />
                       <AvatarFallback className='bg-muted-foreground/30 dark:bg-muted-foreground/40 text-card-foreground/40 dark:text-muted-foreground'>
                         {user?.name[0]}{user?.last_name[0]}
                       </AvatarFallback>
