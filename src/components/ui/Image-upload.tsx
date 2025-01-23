@@ -1,11 +1,11 @@
 import { cn } from '@/lib/utils'
-import { InputHTMLAttributes, useState } from 'react'
+import React, { forwardRef, useState } from 'react'
 
-interface ImageUploadProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange'> {
+interface ImageUploadProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'> {
   onChange: (file: File) => void;
 }
 
-export default function ImageUpload ({ onChange, accept, ...fieldProps }: ImageUploadProps) {
+const ImageUpload = forwardRef<HTMLInputElement, ImageUploadProps>(({ onChange, accept, ...fieldProps }, ref) => {
   const [isDragging, setIsDragging] = useState(false)
   const [previewUrl, setPreviewUrl] = useState<string | null>(null)
 
@@ -71,6 +71,7 @@ export default function ImageUpload ({ onChange, accept, ...fieldProps }: ImageU
         {/* Input oculto */}
         <input
           {...fieldProps}
+          ref={ref}
           id="file-upload"
           name="file-upload"
           className="sr-only"
@@ -107,7 +108,7 @@ export default function ImageUpload ({ onChange, accept, ...fieldProps }: ImageU
             <img
               src={previewUrl}
               alt="Vista previa"
-              className="w-full aspect-square rounded object-cover"
+              className="w-full aspect-square rounded object-cover bg-white"
             />
           </div>
         )}
@@ -115,4 +116,6 @@ export default function ImageUpload ({ onChange, accept, ...fieldProps }: ImageU
 
     </div>
   )
-}
+})
+
+export default ImageUpload
