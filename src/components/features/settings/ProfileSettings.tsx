@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/button'
 import DatePicker from '@/components/ui/datepicker'
+import ImageUpload from '@/components/ui/image-upload'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
@@ -112,12 +113,10 @@ export default function ProfileSettings (): JSX.Element {
               render={({ field: { value, onChange, ...fieldProps } }) => (
                 <FormItem>
                   <FormControl>
-                    <Input
+                    <ImageUpload
                       {...fieldProps}
-                      placeholder="Avatar"
-                      type="file"
                       accept={ACCEPTED_IMAGES}
-                      onChange={(event) => { onChange(event.target.files?.[0]) }}
+                      onChange={onChange}
                     />
                   </FormControl>
                   <FormMessage />
