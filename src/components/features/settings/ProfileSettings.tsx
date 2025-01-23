@@ -76,7 +76,7 @@ export default function ProfileSettings (): JSX.Element {
             />
           </div>
         </div>
-        <div className='px-6'><Separator /></div>
+        <Separator />
         <div className='grid md:grid-cols-2 gap-4 py-4 lg:py-8'>
           <div>
             <h3 className='font-semibold text-lg'>Fecha de nacimiento</h3>
@@ -99,7 +99,7 @@ export default function ProfileSettings (): JSX.Element {
             />
           </div>
         </div>
-        <div className='px-6'><Separator /></div>
+        <Separator />
         <div className='grid md:grid-cols-2 gap-4 py-4 lg:py-8'>
           <div>
             <h3 className='font-semibold text-lg'>Imagen de perfil</h3>
@@ -126,7 +126,7 @@ export default function ProfileSettings (): JSX.Element {
             />
           </div>
         </div>
-        <div className='px-6'><Separator /></div>
+        <Separator />
         <div className='grid md:grid-cols-2 gap-4 py-4 lg:py-8'>
           <div>
             <h3 className='font-semibold text-lg'>Género</h3>
@@ -177,7 +177,7 @@ export default function ProfileSettings (): JSX.Element {
             />
           </div>
         </div>
-        <div className='px-6'><Separator /></div>
+        <Separator />
         <div className='grid md:grid-cols-2 gap-4 py-4 lg:py-8'>
           <h3 className='font-semibold text-lg'>Número de contacto</h3>
           <div className='flex gap-2'>
