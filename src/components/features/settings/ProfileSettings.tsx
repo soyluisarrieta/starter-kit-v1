@@ -14,9 +14,11 @@ import moment from 'moment'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { ASSETS } from '@/constants/assets'
+import { useAuthStore } from '@/store/AuthStore'
 
 export default function ProfileSettings (): JSX.Element {
   const { profile } = useAuth()
+  const { setProfile } = useAuthStore()
   const [genderLetterSelected, setGenderLetterSelected] = useState(profile?.gender_letter)
 
   const defaultValues = {
@@ -40,7 +42,8 @@ export default function ProfileSettings (): JSX.Element {
   const { mutateAsync: updateUser } = useUpdateUser({ form })
 
   const onSubmit = async (formData: ProfileAuth) => {
-    await updateUser({ ...formData, id: profile?.id ?? '' })
+    const updatedProfile = await updateUser({ ...formData, id: profile?.id ?? '' })
+    setProfile(updatedProfile)
   }
 
   return (
