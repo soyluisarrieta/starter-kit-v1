@@ -58,7 +58,7 @@ const ImageUpload = forwardRef<HTMLInputElement, ImageUploadProps>(({ onChange, 
   return (
     <div
       className={cn(
-        'flex flex-col items-center justify-center w-full',
+        'flex flex-col justify-start w-full',
         isDragging ? 'border-primary bg-primary/10' : ''
       )}
       onDragEnter={handleDragEnter}

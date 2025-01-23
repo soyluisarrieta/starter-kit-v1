@@ -5,7 +5,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Separator } from '@/components/ui/separator'
-import { ACCEPTED_IMAGES } from '@/constants'
+import { ACCEPTED_IMAGES, GENDERS } from '@/constants'
 import { useAuth } from '@/hooks/useAuth'
 import { useUpdateUser } from '@/hooks/useUser'
 import { profileSchema } from '@/lib/yup/userSchemas'
@@ -19,7 +19,7 @@ import { useAuthStore } from '@/store/AuthStore'
 export default function ProfileSettings (): JSX.Element {
   const { profile } = useAuth()
   const { setProfile } = useAuthStore()
-  const [genderLetterSelected, setGenderLetterSelected] = useState(profile?.gender_letter)
+  const [genderLetterSelected, setGenderLetterSelected] = useState(profile?.gender_letter ?? GENDERS.other.letter)
 
   const defaultValues = {
     name: profile?.name ?? '',
@@ -44,6 +44,7 @@ export default function ProfileSettings (): JSX.Element {
   const onSubmit = async (formData: ProfileAuth) => {
     const updatedProfile = await updateUser({ ...formData, id: profile?.id ?? '' })
     setProfile(updatedProfile)
+    form.reset(formData)
   }
 
   return (
