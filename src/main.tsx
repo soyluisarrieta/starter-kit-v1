@@ -1,4 +1,4 @@
-import { StrictMode } from 'react'
+import { StrictMode, Suspense } from 'react'
 import { createRoot } from 'react-dom/client'
 import { TooltipProvider } from '@/components/ui/tooltip.tsx'
 import { QueryClientProvider } from '@tanstack/react-query'
@@ -24,10 +24,12 @@ if (theme && theme.state.darkMode !== undefined) {
 
 createRoot(document.getElementById('root') as HTMLDivElement).render(
   <StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <App />
-      </TooltipProvider>
-    </QueryClientProvider>
+    <Suspense fallback={<div>Loading...</div>}>
+      <QueryClientProvider client={queryClient}>
+        <TooltipProvider>
+          <App />
+        </TooltipProvider>
+      </QueryClientProvider>
+    </Suspense>
   </StrictMode>
 )

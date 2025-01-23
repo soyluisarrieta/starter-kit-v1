@@ -1,22 +1,24 @@
 import { BrowserRouter, Routes, Route } from 'react-router'
 import MasterLayout from '@/layouts/MasterLayout'
-import AdminLayout from '@/layouts/AdminLayout'
-import GuestLayout from '@/layouts/GuestLayout'
-import DashboardPage from '@/pages/DashboardPage'
-import NotFoundPage from '@/pages/Errors/NotFoundPage'
-import LoginPage from '@/pages/Auth/LoginPage'
-import RegisterPage from '@/pages/Auth/RegisterPage'
-import ForgotPasswordPage from '@/pages/Auth/ForgotPasswordPage'
-import ResetPasswordPage from '@/pages/Auth/ResetPasswordPage'
-import ProfilePage from '@/pages/Auth/ProfilePage'
-import UsersPage from '@/pages/UsersPage'
-import SettingsPage from '@/pages/SettingsPage'
-import GeneralSettings from '@/components/modules/settings/GeneralSettings'
-import ProfileSettings from '@/components/modules/settings/ProfileSettings'
-import AuthSettings from '@/components/modules/settings/AuthSettings'
-import ChangeLogPage from '@/pages/ChangeLogPage'
-import HistoricalPage from '@/pages/HistoricalPage'
-import UserDetailPage from '@/pages/UserDetailPage'
+import { lazy } from 'react'
+
+const GuestLayout = lazy(() => import('@/layouts/GuestLayout'))
+const LoginPage = lazy(() => import('@/pages/Auth/LoginPage'))
+const RegisterPage = lazy(() => import('@/pages/Auth/RegisterPage'))
+const ForgotPasswordPage = lazy(() => import('@/pages/Auth/ForgotPasswordPage'))
+const ResetPasswordPage = lazy(() => import('@/pages/Auth/ResetPasswordPage'))
+const AdminLayout = lazy(() => import('@/layouts/AdminLayout'))
+const ProfilePage = lazy(() => import('@/pages/Auth/ProfilePage'))
+const UsersPage = lazy(() => import('@/pages/UsersPage'))
+const SettingsPage = lazy(() => import('@/pages/SettingsPage'))
+const GeneralSettings = lazy(() => import('@/components/modules/settings/GeneralSettings'))
+const ProfileSettings = lazy(() => import('@/components/modules/settings/ProfileSettings'))
+const AuthSettings = lazy(() => import('@/components/modules/settings/AuthSettings'))
+const ChangeLogPage = lazy(() => import('@/pages/ChangeLogPage'))
+const HistoricalPage = lazy(() => import('@/pages/HistoricalPage'))
+const NotFoundPage = lazy(() => import('@/pages/Errors/NotFoundPage'))
+const UserDetailPage = lazy(() => import('@/pages/UserDetailPage'))
+const DashboardPage = lazy(() => import('@/pages/DashboardPage'))
 
 export default function App () {
   return (
