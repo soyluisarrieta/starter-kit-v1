@@ -29,6 +29,8 @@ interface User {
 interface ProfileAuth extends User {
   id: string
   email: string
+  roles: string[]
+  permissions: string[]
   last_activity?: string
   created_at: string
   updated_at: string

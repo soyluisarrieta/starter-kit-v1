@@ -20,6 +20,8 @@ export const profileService = async (): Promise<ProfileAuth> => {
     address: user.address,
     avatar: user.avatar,
     email: user.email,
+    roles: user.roles,
+    permissions: user.permissions,
     last_activity: user.last_activity,
     created_at: user.created_at,
     updated_at: user.updated_at,
