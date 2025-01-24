@@ -2,10 +2,21 @@ import { useParams } from 'react-router'
 import Box from '@/components/ui/box'
 import { GENDERS } from '@/constants'
 import { useGetUserById } from '@/hooks/useUser'
+import usePermissions from '@/hooks/usePermissions'
 
 export default function UserDetailPage () {
   const { id } = useParams()
   const { data: user, isLoading } = useGetUserById(id ?? '')
+  const { hasPermission } = usePermissions()
+
+  if (!hasPermission('view:user')) {
+    return (
+      <div className="container mx-auto py-8">
+        <h1 className="text-2xl font-bold mb-4">Acceso Denegado</h1>
+        <p>Lo sentimos, no tienes permiso para acceder a esta sección.</p>
+      </div>
+    )
+  }
 
   return (
     <div className="container mx-auto py-8">
