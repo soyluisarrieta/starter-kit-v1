@@ -1,5 +1,5 @@
 import { MAX_FILE_SIZE } from '@/constants'
-import { isValidFileType } from '@/lib/utils/others'
+import { isValidFileType } from '@/helpers/others'
 import yup from '@/lib/yup'
 
 // Validations

@@ -1,6 +1,6 @@
 import { INTERNAL_SERVER_ERROR, UNAUTHORIZED, UNPROCESSABLE_ENTITY } from '@/constants'
 import { queryClient } from '@/lib/react-query'
-import { handleValidationErrors } from '@/lib/utils/handleValidationErrors'
+import { handleValidationErrors } from '@/helpers/handleValidationErrors'
 import { useAuthStore } from '@/store/AuthStore'
 import { MutationOptions, QueryKey, QueryOptions, useMutation, useQuery } from '@tanstack/react-query'
 import { AxiosError } from 'axios'

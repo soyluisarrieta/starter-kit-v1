@@ -1,4 +1,4 @@
-import { handleValidationErrors } from '@/lib/utils/handleValidationErrors'
+import { handleValidationErrors } from '@/helpers/handleValidationErrors'
 import { useYupValidationResolver } from '@/lib/yup/useYupValidationResolver'
 import { csrfService } from '@/services/authService'
 import nProgress from 'nprogress'

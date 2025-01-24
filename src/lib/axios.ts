@@ -69,8 +69,6 @@ axios.interceptors.request.use((config) => {
       config.data = { ...config.data, _method: method }
     }
   }
-  console.log({ config })
-
   return config
 }, (error) => {
   return Promise.reject(error)
