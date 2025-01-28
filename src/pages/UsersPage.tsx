@@ -30,12 +30,6 @@ export default function UsersPage (): JSX.Element {
     <PageLayout
       title="Usuarios"
       description='Lista de usuarios del sistema'
-      createForm={{
-        title: 'Crear usuario',
-        description: 'Complete el formulario para crear un nuevo usuario.',
-        openButton: { label: 'Crear usuario' },
-        component: UserForm
-      }}
     >
       <main className='container'>
         {isLoading ? (
@@ -45,6 +39,7 @@ export default function UsersPage (): JSX.Element {
         ) : (
           <DataTable
             data={users || []}
+            onAdd={() => { alert('Añadir nuevo')}}
             columns={[
               {
                 header: 'ID',

@@ -26,7 +26,7 @@ createRoot(document.getElementById('root') as HTMLDivElement).render(
   <StrictMode>
     <Suspense fallback={<div>Loading...</div>}>
       <QueryClientProvider client={queryClient}>
-        <TooltipProvider>
+        <TooltipProvider delayDuration={100}>
           <App />
         </TooltipProvider>
       </QueryClientProvider>

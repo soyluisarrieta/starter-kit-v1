@@ -2,7 +2,7 @@ import BackButton from '@/components/ui/back-button'
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from '@/components/ui/sheet'
 import { cn } from '@/lib/utils'
-import { PlusIcon } from 'lucide-react'
+import { ChartColumnBigIcon } from 'lucide-react'
 import { ComponentType, ReactNode, useState } from 'react'
 
 interface PageLayoutProps  {
@@ -50,14 +50,15 @@ export default function PageLayout ({
           {description && <p className='text-muted-foreground'>{description}</p>}
         </div>
 
-        {createForm && !createForm.openButton?.disable && (
-          <div className='order-2'>
-            <Button
-              className='text-base text-primary-foreground p-5'
-              onClick={() => setOpenCreateForm(true)}
-            >
-              <PlusIcon /> {createForm.openButton?.label ?? 'Añadir'}
-            </Button>
+        <div className='order-2'>
+          <Button
+            className='text-base p-5'
+            variant='secondary'
+            onClick={() => setOpenCreateForm(true)}
+          >
+            <ChartColumnBigIcon/> Métricas
+          </Button>
+          {createForm && !createForm.openButton?.disable && (
             <Sheet open={openCreateForm} onOpenChange={setOpenCreateForm}>
               <SheetContent>
                 <SheetHeader>
@@ -73,8 +74,8 @@ export default function PageLayout ({
                 </div>
               </SheetContent>
             </Sheet>
-          </div>
-        )}
+          )}
+        </div>
       </header>
 
       {/* Content */}
