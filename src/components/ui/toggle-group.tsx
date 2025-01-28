@@ -45,6 +45,7 @@ const ToggleGroupItem = React.forwardRef<
           variant: context.variant || variant,
           size: context.size || size
         }),
+        'focus-visible:outline-none focus-within:outline-none',
         className
       )}
       {...props}
