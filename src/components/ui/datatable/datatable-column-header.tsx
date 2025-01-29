@@ -13,7 +13,7 @@ interface DataTableColumnHeaderProps<TData, TValue>
   style?: React.CSSProperties
 }
 
-const alignClasses = {
+const ALIGN_CLASSES = {
   left: 'justify-start',
   center: 'justify-center',
   right: 'justify-end'
@@ -35,7 +35,7 @@ export function DataTableColumnHeader<TData, TValue> ({
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button
-            className={cn('bg-transparent hover:bg-transparent p-0', alignClasses[align ?? 'left'], className)}
+            className={cn('bg-transparent hover:bg-transparent p-0', ALIGN_CLASSES[align ?? 'left'], className)}
             variant="ghost"
             style={{ textAlign: align, ...style }}
           >
