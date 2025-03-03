@@ -1,193 +1,533 @@
-# Nombre del Proyecto 🎉
+# TODO LIST
 
-Aquí presentamos una breve descripción de tu fascinante proyecto. ¿Qué resuelve? ¿Qué hace único a este proyecto?
+## Configuraciones iniciales de la api
 
-## 🚀 Índice
+- [x] Configurar variables de entorno
+- [x] Configuración de la base de datos
+- [x] Configurar traducciones de laravel
 
-- [Nombre del Proyecto 🎉](#nombre-del-proyecto-)
-  - [🚀 Índice](#-índice)
-  - [🎬 Comenzando](#-comenzando)
-    - [💻 Requisitos previos](#-requisitos-previos)
-    - [⚙️ Instalación](#️-instalación)
-  - [📚 Tecnologías](#-tecnologías)
-  - [🌟 Características](#-características)
-  - [🏗️ Arquitectura de la Aplicación](#️-arquitectura-de-la-aplicación)
-    - [📁 Estructura del directorio](#-estructura-del-directorio)
-  - [Autores](#autores)
+## Autenticación
 
-## 🎬 Comenzando
+- [x] Registrarse
+- [x] Inicio de sesión
+- [x] Email de recuperación de Contraseña
+- [x] Reestablecer Contraseña
+- [x] Obtener Perfil de usuario
+- [x] Actualizar Perfil de usuario
+- [x] Roles y permisos de usuario
 
-### 💻 Requisitos previos
+## Integraciones
 
-Antes de comenzar a trabajar con este proyecto, asegúrate de tener Node.js y npm para gestionar las dependencias y ejecutar scripts. Asegúrate de tenerlos instalados en tu sistema. Puedes descargar NodeJS desde [nodejs.org](https://nodejs.org/), npm viene con NodeJS.
+- [x] Google SSO
+- [x] Resend
+- [ ] Modelo de lenguaje (Sin tests)
 
-Para verificar que NodeJS y npm están instalados, puedes ejecutar los siguientes comandos en tu terminal:
+- [ ] SDK Meta publicaciones (Facebook / Instagram)
+  - [ ] Happy Tests
+  - [ ] Implementations
+  - [ ] Routes
+  - [ ] Migrations
+  - [ ] Models
+  - [ ] Factories
+  - [ ] Resources
+  - [ ] Requests
+  - [ ] Controller
+  - [ ] Validation Tests
 
-```bash
-node -v
-npm -v
-```
+- [ ] Alegra POS
+  - [ ] Happy Tests
+  - [ ] Implementations
+  - [ ] Routes
+  - [ ] Migrations
+  - [ ] Models
+  - [ ] Factories
+  - [ ] Resources
+  - [ ] Requests
+  - [ ] Controller
+  - [ ] Validation Tests
 
-Asegurate de tener las versiones de [node](https://nodejs.org/) y [npm](https://docs.npmjs.com/try-the-latest-stable-version-of-npm) actualizadas.
+- [ ] Siigo POS
+  - [ ] Happy Tests
+  - [ ] Implementations
+  - [ ] Routes
+  - [ ] Migrations
+  - [ ] Models
+  - [ ] Factories
+  - [ ] Resources
+  - [ ] Requests
+  - [ ] Controller
+  - [ ] Validation Tests
 
-### ⚙️ Instalación
+- [ ] Listar integraciones del usuario
+  - [ ] Happy Tests
+  - [ ] Implementations
+  - [ ] Routes
+  - [ ] Migrations
+  - [ ] Models
+  - [ ] Factories
+  - [ ] Resources
+  - [ ] Requests
+  - [ ] Controller
+  - [ ] Validation Tests
 
-A continuación se explica paso a paso cómo configurar un entorno de desarrollo:
+- [ ] Añadir integración
+  - [ ] Happy Tests
+  - [ ] Implementations
+  - [ ] Routes
+  - [ ] Migrations
+  - [ ] Models
+  - [ ] Factories
+  - [ ] Resources
+  - [ ] Requests
+  - [ ] Controller
+  - [ ] Validation Tests
 
-1. Clona este repositorio
-2. Accede al repositorio:
+- [ ] Desconectar integración
+  - [ ] Happy Tests
+  - [ ] Implementations
+  - [ ] Routes
+  - [ ] Migrations
+  - [ ] Models
+  - [ ] Factories
+  - [ ] Resources
+  - [ ] Requests
+  - [ ] Controller
+  - [ ] Validation Tests
 
-    ```bash
-    cd nameApp
-    ```
+## Sistema de registro
 
-3. Genera el archivo .env ejecuntado el siguiete comando:
+- [ ] Movimiento del usuario
+  - [ ] Happy Tests
+  - [ ] Implementations
+  - [ ] Routes
+  - [ ] Migrations
+  - [ ] Models
+  - [ ] Factories
+  - [ ] Resources
+  - [ ] Requests
+  - [ ] Controller
+  - [ ] Validation Tests
 
-    ```bash
-    cp .env.example .env
-    ```
+- [ ] Errores del sistema (vía email)
+  - [ ] Happy Tests
+  - [ ] Implementations
+  - [ ] Routes
+  - [ ] Migrations
+  - [ ] Models
+  - [ ] Factories
+  - [ ] Resources
+  - [ ] Requests
+  - [ ] Controller
+  - [ ] Validation Tests
 
-4. Instala las dependencias ejecuntando el siguiente comando:
+## Negocios
 
-    ```bash
-    npm install
-    ```
+- [ ] Crear negocio
+  - [ ] Happy Tests
+  - [ ] Implementations
+  - [ ] Routes
+  - [ ] Migrations
+  - [ ] Models
+  - [ ] Factories
+  - [ ] Resources
+  - [ ] Requests
+  - [ ] Controller
+  - [ ] Validation Tests
 
-5. Ejecutar la aplicación:
+- [ ] Listar negocios
+  - [ ] Happy Tests
+  - [ ] Implementations
+  - [ ] Routes
+  - [ ] Migrations
+  - [ ] Models
+  - [ ] Factories
+  - [ ] Resources
+  - [ ] Requests
+  - [ ] Controller
+  - [ ] Validation Tests
 
-    ```bash
-    npm run dev
-    ```
+- [ ] Ver negocio
+  - [ ] Happy Tests
+  - [ ] Implementations
+  - [ ] Routes
+  - [ ] Migrations
+  - [ ] Models
+  - [ ] Factories
+  - [ ] Resources
+  - [ ] Requests
+  - [ ] Controller
+  - [ ] Validation Tests
 
-    Esto iniciará la aplicación en un servidor local y deberías poder acceder a ella en tu navegador en <http://localhost:5173/>.
+- [ ] Actualizar negocio
+  - [ ] Happy Tests
+  - [ ] Implementations
+  - [ ] Routes
+  - [ ] Migrations
+  - [ ] Models
+  - [ ] Factories
+  - [ ] Resources
+  - [ ] Requests
+  - [ ] Controller
+  - [ ] Validation Tests
 
-¡Ahora estás listo para comenzar a trabajar en el proyecto utilizando npm como gestor de paquetes!
+- [ ] Eliminar negocio
+  - [ ] Happy Tests
+  - [ ] Implementations
+  - [ ] Routes
+  - [ ] Migrations
+  - [ ] Models
+  - [ ] Factories
+  - [ ] Resources
+  - [ ] Requests
+  - [ ] Controller
+  - [ ] Validation Tests
 
-## 📚 Tecnologías
+- [ ] Actualizar logo del negocio
+  - [ ] Happy Tests
+  - [ ] Implementations
+  - [ ] Routes
+  - [ ] Migrations
+  - [ ] Models
+  - [ ] Factories
+  - [ ] Resources
+  - [ ] Requests
+  - [ ] Controller
+  - [ ] Validation Tests
 
-Este Kit Starter utiliza las siguientes tecnologías con las versiones más actualizadas:
+- [ ] Eliminar logo del negocio
+  - [ ] Happy Tests
+  - [ ] Implementations
+  - [ ] Routes
+  - [ ] Migrations
+  - [ ] Models
+  - [ ] Factories
+  - [ ] Resources
+  - [ ] Requests
+  - [ ] Controller
+  - [ ] Validation Tests
 
-|  | Nombre | Descripción |
-| --- | --- | --- |
-| 1 | [⚛️React](https://reactjs.org/) | Biblioteca de JavaScript para construir interfaces de usuario. |
-| 2 | [🟦Typescript](https://www.typescriptlang.org/) | Lenguaje de programación estático y de tipado fuerte basado en JavaScript. |
-| 3 | [🚀Vite](https://vitejs.dev/) | Herramienta de desarrollo rápida y flexible para aplicaciones web. |
-| 4 | [🚨ESLint](https://eslint.org/) | Herramienta de análisis de código estático para identificar patrones problemáticos encontrados en el código JavaScript. |
-| 5 | [🔳Shadcn](https://nextui.dev/) | Colección de componentes de interfaz de usuario accesibles y personalizables. |
-| 6 | [➰TailwindCSS](https://tailwindcss.com/) | Framework CSS de utilidad de última generación para crear rápidamente interfaces de usuario personalizadas. |
-| 7 | [🔄React Router](https://github.com/remix-run/react-router) | Biblioteca de enrutamiento para aplicaciones React que permite la navegación dinámica y la gestión de rutas. |
-| 8 | [🌐Axios](https://axios-http.com/) | Cliente HTTP basado en promesas utilizado para realizar peticiones HTTP a servidores, lo que facilita la interacción con API. |
-| 9 | [🐻Zustand](https://zustand-demo.pmnd.rs/) | Pequeña, rápida y escalable librería de gestión de estado que permite administrar el estado de la aplicación de manera sencilla y efectiva. |
-| 10 | [⚙️React_Query](https://tanstack.com/query/latest/docs/react/overview) | Biblioteca de gestión de datos que simplifica la gestión del estado global y las solicitudes a APIs, mejorando la eficiencia y la experiencia del usuario. |
-| 11 | [📋React Hook Form](https://react-hook-form.com/) | Biblioteca de formularios eficiente y flexible para la gestión de formularios en React. |
-| 12 | [🔍Yup](https://github.com/jquense/yup) | Biblioteca de validación utilizada comúnmente con Formik para definir esquemas de validación de datos en formularios. |
-| 13 | [⭐Lucide_Icons](https://lucide.dev/icons/) | Colección de iconos ligeros y minimalistas para aplicaciones web. |
-| 14 | [⏳nProgress](https://ricostacruz.com/nprogress/) | Biblioteca para loader o barra de progreso delgadas como YouTube. |
-| 15 | [🔔Sonner](https://sonner.emilkowal.ski/) | Biblioteca para generar toast de notificaciones. |
-| 16 | [📆MomentJS](https://momentjs.com/) | Analizar, validar, manipular, formatear y mostrar fechas y horas en javascript. |
+## Productos
 
-## 🌟 Características
+- [ ] Crear un producto
+  - [ ] Happy Tests
+  - [ ] Implementations
+  - [ ] Routes
+  - [ ] Migrations
+  - [ ] Models
+  - [ ] Factories
+  - [ ] Resources
+  - [ ] Requests
+  - [ ] Controller
+  - [ ] Validation Tests
 
-- ### Sistema de login
+- [ ] Listar productos
+  - [ ] Happy Tests
+  - [ ] Implementations
+  - [ ] Routes
+  - [ ] Migrations
+  - [ ] Models
+  - [ ] Factories
+  - [ ] Resources
+  - [ ] Requests
+  - [ ] Controller
+  - [ ] Validation Tests
 
-  - [x] Formularios de inicio de sesión y registro.
-  - [x] Cerrar sesión.
-  - [ ] Cambiar contraseña.
-  - [x] Recuperación contraseña.
-  - [ ] Recordar usuario.
-  - [ ] Integración con Gmail.
+- [ ] Ver producto
+  - [ ] Happy Tests
+  - [ ] Implementations
+  - [ ] Routes
+  - [ ] Migrations
+  - [ ] Models
+  - [ ] Factories
+  - [ ] Resources
+  - [ ] Requests
+  - [ ] Controller
+  - [ ] Validation Tests
 
-- ### Panel de control
+- [ ] Actualizar un producto
+  - [ ] Happy Tests
+  - [ ] Implementations
+  - [ ] Routes
+  - [ ] Migrations
+  - [ ] Models
+  - [ ] Factories
+  - [ ] Resources
+  - [ ] Requests
+  - [ ] Controller
+  - [ ] Validation Tests
 
-  - [ ] Navegación intuitiva y menús desplegables.
-  - [ ] Página de bienvenida.
-  - [ ] Permisos administrativos.
-  - [ ] Gestión de perfil de usuario.
+- [ ] Eliminar producto
+  - [ ] Happy Tests
+  - [ ] Implementations
+  - [ ] Routes
+  - [ ] Migrations
+  - [ ] Models
+  - [ ] Factories
+  - [ ] Resources
+  - [ ] Requests
+  - [ ] Controller
+  - [ ] Validation Tests
 
-- ### Gestion de contenido (usuarios)
+- [ ] Deshabilitar producto
+  - [ ] Happy Tests
+  - [ ] Implementations
+  - [ ] Routes
+  - [ ] Migrations
+  - [ ] Models
+  - [ ] Factories
+  - [ ] Resources
+  - [ ] Requests
+  - [ ] Controller
+  - [ ] Validation Tests
 
-  - [ ] Mostrar todos
-  - [ ] Mostrar detalles por id
-  - [ ] Crear nuevo
-  - [ ] Editar uno
-  - [ ] Eliminar uno
-  
-## 🏗️ Arquitectura de la Aplicación
+- [ ] Importación de productos desde un .csv
+  - [ ] Happy Tests
+  - [ ] Implementations
+  - [ ] Routes
+  - [ ] Migrations
+  - [ ] Models
+  - [ ] Factories
+  - [ ] Resources
+  - [ ] Requests
+  - [ ] Controller
+  - [ ] Validation Tests
 
-Nuestra aplicación sigue una arquitectura modular basada en componentes utilizando React.
+- [ ] Importación de productos desde un .xlsx
+  - [ ] Happy Tests
+  - [ ] Implementations
+  - [ ] Routes
+  - [ ] Migrations
+  - [ ] Models
+  - [ ] Factories
+  - [ ] Resources
+  - [ ] Requests
+  - [ ] Controller
+  - [ ] Validation Tests
 
-El código se divide en módulos separados según su funcionalidad, lo que facilita el mantenimiento y la escalabilidad del código. Cada módulo tiene su propio conjunto de componentes, servicios y estado.
+- [ ] Importar productos desde Alegra
+  - [ ] Happy Tests
+  - [ ] Implementations
+  - [ ] Routes
+  - [ ] Migrations
+  - [ ] Models
+  - [ ] Factories
+  - [ ] Resources
+  - [ ] Requests
+  - [ ] Controller
+  - [ ] Validation Tests
 
-### 📁 Estructura del directorio
+- [ ] Refrescar productos desde Alegra
+  - [ ] Happy Tests
+  - [ ] Implementations
+  - [ ] Routes
+  - [ ] Migrations
+  - [ ] Models
+  - [ ] Factories
+  - [ ] Resources
+  - [ ] Requests
+  - [ ] Controller
+  - [ ] Validation Tests
 
-```bash
-    📂 src/
-    ├── 🧩 components/
-    │   ├── 📁 icons/ # Componentes iconos en SVG personalizados
-    │   │   ├── LogoEmpresa.tsx
-    │   │   └── IconoEmpresa.tsx
-    │   │
-    │   ├── 📁 layout/ # Componentes de layout generales
-    │   │   ├── AdminLayout.tsx
-    │   │   ├── GuestLayout.tsx
-    │   │   └── MasterLayout.tsx
-    │   │
-    │   ├── 📁 modules/ # Componentes de layout generales
-    │   │   ├── 📁 auth/
-    │   │   ├── 📁
-    │   │   └── ...
-    │   │
-    │   ├── 📁 pages/ # Componentes de página
-    │   │   ├── Authenticating.tsx
-    │   │   ├── DashboardPage.tsx
-    │   │   ├── HomePage.tsx
-    │   │   ├── UserPage.tsx
-    │   │   ├── 📁 Auth/
-    │   │   │   ├── AuthLoader.tsx
-    │   │   │   ├── LoginPage.tsx
-    │   │   │   └── ...
-    │   │   │
-    │   │   └── 📁 Errors/ # Componentes de error
-    │   │       └── NotFound.tsx
-    │   │
-    │   └── 📁 ui/ # Componentes de interfaz de usuario reutilizables
-    │       ├── button.tsx
-    │       ├── card.tsx
-    │       ├── drawer.tsx
-    │       ├── select.tsx
-    │       └── ...
-    │
-    ├── 🧲 hooks/ # Hooks personalizados
-    │   ├── useAuth.ts
-    │   ├── useCheckAuth.ts
-    │   ├── useMediaQuery.ts
-    │   └── ...
-    │
-    ├── 📚 lib/ # Configuraciones de librerías y utilidades
-    │   ├── axios.ts
-    │   ├── react-query.ts
-    │   ├── utils.ts
-    │   └── ...
-    │
-    ├── 🌐 services/ # Servicios para solicitudes a la API
-    │   ├── authServices.ts
-    │   ├── userServices.ts
-    │   ├── diaryServices.ts
-    │   └── ...
-    │
-    ├── 🏪 store/ # Configuración del estado global
-    │   ├── AuthStore.ts
-    │   ├── ThemeModeStore.ts
-    │   ├── PreferencesStore.ts
-    │   └── ...
-    │
-    ├── 🌐 App.tsx # Contiene la lógica principal de enrutamiento y autenticación
-    ├── 📜 constants.ts # Todas las constantes utilizadas en la aplicación
-    ├── 🎨 global.css # Estilos globales y punto de entrada para Tailwind CSS
-    ├── 🚀 main.tsx # Punto de entrada principal con todos los providers
-    └── 📚 types.d.ts # Definiciones de tipos globales
-```
+- [ ] Importar productos desde Siigo
+  - [ ] Happy Tests
+  - [ ] Implementations
+  - [ ] Routes
+  - [ ] Migrations
+  - [ ] Models
+  - [ ] Factories
+  - [ ] Resources
+  - [ ] Requests
+  - [ ] Controller
+  - [ ] Validation Tests
 
-## Autores
+- [ ] Refrescar productos desde Siigo
+  - [ ] Happy Tests
+  - [ ] Implementations
+  - [ ] Routes
+  - [ ] Migrations
+  - [ ] Models
+  - [ ] Factories
+  - [ ] Resources
+  - [ ] Requests
+  - [ ] Controller
+  - [ ] Validation Tests
 
-- **Luis Arrieta A.** - *Desarrollador web* ([@SoyLuisArrieta](https://github.com/soyluisarrieta))
+## Publicaciones
+
+- [ ] Crear una publicación
+  - [ ] Happy Tests
+  - [ ] Implementations
+  - [ ] Routes
+  - [ ] Migrations
+  - [ ] Models
+  - [ ] Factories
+  - [ ] Resources
+  - [ ] Requests
+  - [ ] Controller
+  - [ ] Validation Tests
+
+- [ ] Listar publicaciones
+  - [ ] Happy Tests
+  - [ ] Implementations
+  - [ ] Routes
+  - [ ] Migrations
+  - [ ] Models
+  - [ ] Factories
+  - [ ] Resources
+  - [ ] Requests
+  - [ ] Controller
+  - [ ] Validation Tests
+
+- [ ] Ver publicación
+  - [ ] Happy Tests
+  - [ ] Implementations
+  - [ ] Routes
+  - [ ] Migrations
+  - [ ] Models
+  - [ ] Factories
+  - [ ] Resources
+  - [ ] Requests
+  - [ ] Controller
+  - [ ] Validation Tests
+
+- [ ] Actualizar una publicación
+  - [ ] Happy Tests
+  - [ ] Implementations
+  - [ ] Routes
+  - [ ] Migrations
+  - [ ] Models
+  - [ ] Factories
+  - [ ] Resources
+  - [ ] Requests
+  - [ ] Controller
+  - [ ] Validation Tests
+
+- [ ] Eliminar publicación
+  - [ ] Happy Tests
+  - [ ] Implementations
+  - [ ] Routes
+  - [ ] Migrations
+  - [ ] Models
+  - [ ] Factories
+  - [ ] Resources
+  - [ ] Requests
+  - [ ] Controller
+  - [ ] Validation Tests
+
+- [ ] Publicar ahora
+  - [ ] Happy Tests
+  - [ ] Implementations
+  - [ ] Routes
+  - [ ] Migrations
+  - [ ] Models
+  - [ ] Factories
+  - [ ] Resources
+  - [ ] Requests
+  - [ ] Controller
+  - [ ] Validation Tests
+
+- [ ] Reprogramar una publicación
+  - [ ] Happy Tests
+  - [ ] Implementations
+  - [ ] Routes
+  - [ ] Migrations
+  - [ ] Models
+  - [ ] Factories
+  - [ ] Resources
+  - [ ] Requests
+  - [ ] Controller
+  - [ ] Validation Tests
+
+- [ ] Cancelar publicación
+  - [ ] Happy Tests
+  - [ ] Implementations
+  - [ ] Routes
+  - [ ] Migrations
+  - [ ] Models
+  - [ ] Factories
+  - [ ] Resources
+  - [ ] Requests
+  - [ ] Controller
+  - [ ] Validation Tests
+
+- [ ] Generar de contenido
+  - [ ] Happy Tests
+  - [ ] Implementations
+  - [ ] Routes
+  - [ ] Migrations
+  - [ ] Models
+  - [ ] Factories
+  - [ ] Resources
+  - [ ] Requests
+  - [ ] Controller
+  - [ ] Validation Tests
+
+- [ ] Generar publicación a partir de un producto
+  - [ ] Happy Tests
+  - [ ] Implementations
+  - [ ] Routes
+  - [ ] Migrations
+  - [ ] Models
+  - [ ] Factories
+  - [ ] Resources
+  - [ ] Requests
+  - [ ] Controller
+  - [ ] Validation Tests
+
+- [ ] Refinar publicación
+  - [ ] Happy Tests
+  - [ ] Implementations
+  - [ ] Routes
+  - [ ] Migrations
+  - [ ] Models
+  - [ ] Factories
+  - [ ] Resources
+  - [ ] Requests
+  - [ ] Controller
+  - [ ] Validation Tests
+
+- [ ] Obtener última publicación de un producto
+  - [ ] Happy Tests
+  - [ ] Implementations
+  - [ ] Routes
+  - [ ] Migrations
+  - [ ] Models
+  - [ ] Factories
+  - [ ] Resources
+  - [ ] Requests
+  - [ ] Controller
+  - [ ] Validation Tests
+
+- [ ] Listar todas las publicaciones de un producto
+  - [ ] Happy Tests
+  - [ ] Implementations
+  - [ ] Routes
+  - [ ] Migrations
+  - [ ] Models
+  - [ ] Factories
+  - [ ] Resources
+  - [ ] Requests
+  - [ ] Controller
+  - [ ] Validation Tests
+
+## Métricas
+
+- [ ] Obtener para el dashboard
+  - [ ] Happy Tests
+  - [ ] Implementations
+  - [ ] Routes
+  - [ ] Migrations
+  - [ ] Models
+  - [ ] Factories
+  - [ ] Resources
+  - [ ] Requests
+  - [ ] Controller
+  - [ ] Validation Tests
+
+## Siguientes pasos
+
+- [ ] Cambiar Contraseña de la cuenta
+- [ ] Personalizar correo de recuperación de contraseña
+- [ ] Verificación de correo electrónico registrada
+- [ ] Cambiar correo electrónico de la cuenta con verificación
+- [ ] Personalizar correo de verificación para cambio de correo
