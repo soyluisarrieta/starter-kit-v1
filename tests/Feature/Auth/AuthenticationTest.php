@@ -12,18 +12,19 @@ class AuthenticationTest extends TestCase
 
     public function test_login_screen_can_be_rendered()
     {
-        $response = $this->get('/login');
+        $response = $this->get('/ingresar');
 
         $response->assertStatus(200);
     }
 
     public function test_users_can_authenticate_using_the_login_screen()
     {
-        $user = User::factory()->create(['password' => bcrypt('password')]);
+        $this->withoutExceptionHandling();
+        $user = User::factory()->create(['password' => bcrypt('Pa$$w0rd')]);
 
         $response = $this->post('/login', [
             'email' => $user->email,
-            'password' => 'password',
+            'password' => 'Pa$$w0rd',
         ]);
 
         $this->assertAuthenticated();

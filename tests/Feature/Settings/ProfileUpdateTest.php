@@ -16,7 +16,7 @@ class ProfileUpdateTest extends TestCase
 
         $response = $this
             ->actingAs($user)
-            ->get('/settings/profile');
+            ->get('/ajustes/perfil');
 
         $response->assertOk();
     }
@@ -35,7 +35,7 @@ class ProfileUpdateTest extends TestCase
 
         $response
             ->assertSessionHasNoErrors()
-            ->assertRedirect('/settings/profile');
+            ->assertRedirect('/ajustes/perfil');
 
         $user->refresh();
 
@@ -59,7 +59,7 @@ class ProfileUpdateTest extends TestCase
 
         $response
             ->assertSessionHasNoErrors()
-            ->assertRedirect('/settings/profile');
+            ->assertRedirect('/ajustes/perfil');
 
         $this->assertNotNull($user->refresh()->email_verified_at);
     }
