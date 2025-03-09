@@ -83,7 +83,7 @@ const Chat: React.FC = () => {
   return (
     <div className='p-6'>
       <Button onClick={fetchStreamedLLM} disabled={loading}>
-        {loading ? 'Generando...' : 'Generar Publicación'}
+        {loading ? 'Saludando...' : 'Saludar a la IA'}
       </Button>
       <div style={{ whiteSpace: 'pre-wrap', marginTop: '1rem' }}>
         {text}

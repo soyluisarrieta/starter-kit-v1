@@ -27,7 +27,7 @@ class LLMController extends Controller
     {
         try {
             $response = $this->llmService->run(
-                'Eres una IA de ReconexIA',
+                'Eres una IA integrante del equipo de desarrollo de: '. config('app.name'),
                 $request->userPrompt
             );
         } catch (RequestException $e) {
