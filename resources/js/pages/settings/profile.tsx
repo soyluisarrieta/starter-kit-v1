@@ -16,8 +16,8 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 
 const breadcrumbs: BreadcrumbItem[] = [
   {
-    title: 'Profile settings',
-    href: '/settings/profile'
+    title: 'Ajustes de perfil',
+    href: '/ajustes/perfil'
   }
 ]
 
@@ -64,7 +64,7 @@ export default function Profile ({ mustVerifyEmail, status }: { mustVerifyEmail:
                 onChange={(e) => setData('name', e.target.value)}
                 required
                 autoComplete="name"
-                placeholder="Full name"
+                placeholder={data.name}
               />
 
               <InputError
@@ -94,10 +94,10 @@ export default function Profile ({ mustVerifyEmail, status }: { mustVerifyEmail:
             <div className="grid gap-2">
               <Label htmlFor="gender">Género</Label>
               <p className='text-xs text-muted-foreground mb-1'>
-                              ¿Cómo prefieres ser tratad
+                ¿Cómo prefieres ser tratad
                 {data.gender === 'male' ? 'o' : data.gender === 'female' ? 'a' : '@'}
                 {' '}
-                              en la aplicación?
+                en la aplicación?
               </p>
 
               <RadioGroup
@@ -116,7 +116,7 @@ export default function Profile ({ mustVerifyEmail, status }: { mustVerifyEmail:
                     htmlFor="male-gender"
                     className='text-sm text-muted-foreground'
                   >
-                                  Masculino
+                    Masculino
                   </Label>
                 </div>
                 <div className="flex items-center space-x-2">
@@ -128,7 +128,7 @@ export default function Profile ({ mustVerifyEmail, status }: { mustVerifyEmail:
                     htmlFor="female-gender"
                     className='text-sm text-muted-foreground'
                   >
-                                  Femenino
+                    Femenino
                   </Label>
                 </div>
                 <div className="flex items-center space-x-2">
@@ -140,7 +140,7 @@ export default function Profile ({ mustVerifyEmail, status }: { mustVerifyEmail:
                     htmlFor="other-gender"
                     className='text-sm text-muted-foreground'
                   >
-                                  Prefiero no decirlo
+                    Prefiero no decirlo
                   </Label>
                 </div>
               </RadioGroup>
@@ -177,7 +177,7 @@ export default function Profile ({ mustVerifyEmail, status }: { mustVerifyEmail:
                   htmlFor="has_whatsapp"
                   className='text-xs text-muted-foreground'
                 >
-                                ¿Tienes WhatsApp?
+                  ¿Tienes WhatsApp?
                 </Label>
               </div>
             </div>
@@ -189,6 +189,7 @@ export default function Profile ({ mustVerifyEmail, status }: { mustVerifyEmail:
                 type="address"
                 className="mt-1 block w-full"
                 value={data.address ?? ''}
+                placeholder={data.address ?? ''}
                 onChange={(e) => setData('address', e.target.value)}
               />
 
@@ -214,20 +215,20 @@ export default function Profile ({ mustVerifyEmail, status }: { mustVerifyEmail:
             {!mustVerifyEmail && auth.user.email_verified_at === null && (
               <div>
                 <p className="-mt-4 text-sm text-muted-foreground">
-                                  Su dirección de correo electrónico no está verificada.{' '}
+                  Su dirección de correo electrónico no está verificada.{' '}
                   <Link
                     href={route('verification.send')}
                     method="post"
                     as="button"
                     className="hover:decoration-current! text-foreground underline decoration-neutral-300 underline-offset-4 transition-colors duration-300 ease-out dark:decoration-neutral-500"
                   >
-                                        Haga clic aquí para reenviar el correo electrónico de verificación.
+                    Haga clic aquí para reenviar el correo electrónico de verificación.
                   </Link>
                 </p>
 
                 {status === 'verification-link-sent' && (
                   <div className="mt-2 text-sm font-medium text-green-600">
-                                        Se ha enviado un nuevo enlace de verificación a su dirección de correo electrónico.
+                    Se ha enviado un nuevo enlace de verificación a su dirección de correo electrónico.
                   </div>
                 )}
               </div>

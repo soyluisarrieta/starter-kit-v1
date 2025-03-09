@@ -59,7 +59,7 @@ export default function Register () {
 
       <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
         <span className="relative z-10 bg-background px-2 text-muted-foreground">
-                O regístrate con
+          O regístrate con
         </span>
       </div>
 
@@ -148,14 +148,14 @@ export default function Register () {
 
           <Button type="submit" className="mt-2 w-full" tabIndex={6} disabled={processing}>
             {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
-                        Crear cuenta
+            Crear cuenta
           </Button>
         </div>
 
         <div className="text-muted-foreground text-center text-sm">
-                    ¿Ya tienes una cuenta?{' '}
+          ¿Ya tienes una cuenta?{' '}
           <TextLink href={route('login')} tabIndex={6}>
-                        Inicia sesión
+            Inicia sesión
           </TextLink>
         </div>
       </form>

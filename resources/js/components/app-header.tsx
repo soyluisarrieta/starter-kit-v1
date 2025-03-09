@@ -17,20 +17,15 @@ import AppLogoIcon from './app-logo-icon'
 
 const mainNavItems: NavItem[] = [
   {
-    title: 'Dashboard',
-    url: '/dashboard',
+    title: 'Inicio',
+    url: '/inicio',
     icon: LayoutGrid
   }
 ]
 
 const rightNavItems: NavItem[] = [
   {
-    title: 'Repository',
-    url: 'https://github.com/laravel/react-starter-kit',
-    icon: Folder
-  },
-  {
-    title: 'Documentation',
+    title: 'Documentación',
     url: 'https://laravel.com/docs/starter-kits',
     icon: BookOpen
   }
@@ -59,7 +54,7 @@ export function AppHeader ({ breadcrumbs = [] }: AppHeaderProps) {
                 </Button>
               </SheetTrigger>
               <SheetContent side="left" className="bg-sidebar flex h-full w-64 flex-col items-stretch justify-between">
-                <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
+                <SheetTitle className="sr-only">Menú de navegación</SheetTitle>
                 <SheetHeader className="flex justify-start text-left">
                   <AppLogoIcon className="h-6 w-6 fill-current text-black dark:text-white" />
                 </SheetHeader>
@@ -94,7 +89,7 @@ export function AppHeader ({ breadcrumbs = [] }: AppHeaderProps) {
             </Sheet>
           </div>
 
-          <Link href="/dashboard" prefetch className="flex items-center space-x-2">
+          <Link href="/inicio" prefetch className="flex items-center space-x-2">
             <AppLogo />
           </Link>
 

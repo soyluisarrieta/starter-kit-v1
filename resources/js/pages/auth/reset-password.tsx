@@ -89,7 +89,7 @@ export default function ResetPassword ({ token, email }: ResetPasswordProps) {
 
           <Button type="submit" className="mt-4 w-full" disabled={processing}>
             {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
-                        Reestablecer
+            Reestablecer
           </Button>
         </div>
       </form>

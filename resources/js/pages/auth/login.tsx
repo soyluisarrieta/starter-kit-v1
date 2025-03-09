@@ -91,7 +91,7 @@ export default function Login ({ status, canResetPassword }: LoginProps) {
               <Label htmlFor="password">Contraseña</Label>
               {canResetPassword && (
                 <TextLink href={route('password.request')} className="ml-auto text-xs" tabIndex={5}>
-                                    ¿Olvidaste tu contraseña?
+                ¿Olvidaste tu contraseña?
                 </TextLink>
               )}
             </div>
@@ -119,12 +119,10 @@ export default function Login ({ status, canResetPassword }: LoginProps) {
           </Button>
         </div>
 
-        <a href='/auth/google'>Iniciar sesión con Google</a>
-
         <div className="text-muted-foreground text-center text-sm">
-                    ¿No tienes una cuenta?{' '}
+          ¿No tienes una cuenta?{' '}
           <TextLink href={route('register')} tabIndex={5}>
-                        Regístrate
+          Regístrate
           </TextLink>
         </div>
       </form>

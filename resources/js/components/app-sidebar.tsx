@@ -9,20 +9,15 @@ import AppLogo from './app-logo'
 
 const mainNavItems: NavItem[] = [
   {
-    title: 'Dashboard',
-    url: '/dashboard',
+    title: 'Inicio',
+    url: '/inicio',
     icon: LayoutGrid
   }
 ]
 
 const footerNavItems: NavItem[] = [
   {
-    title: 'Repository',
-    url: 'https://github.com/laravel/react-starter-kit',
-    icon: Folder
-  },
-  {
-    title: 'Documentation',
+    title: 'Documentación',
     url: 'https://laravel.com/docs/starter-kits',
     icon: BookOpen
   }
@@ -35,7 +30,7 @@ export function AppSidebar () {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
-              <Link href="/dashboard" prefetch>
+              <Link href="/inicio" prefetch>
                 <AppLogo />
               </Link>
             </SidebarMenuButton>

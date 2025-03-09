@@ -9,19 +9,19 @@ import SettingsLayout from '@/layouts/settings/layout'
 
 const breadcrumbs: BreadcrumbItem[] = [
   {
-    title: 'Appearance settings',
-    href: '/settings/appearance'
+    title: 'Ajustes de apariencia',
+    href: '/ajustes/apariencia'
   }
 ]
 
 export default function Appearance () {
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
-      <Head title="Appearance settings" />
+      <Head title="Ajustes de apariencia" />
 
       <SettingsLayout>
         <div className="space-y-6">
-          <HeadingSmall title="Appearance settings" description="Update your account's appearance settings" />
+          <HeadingSmall title="Ajustes de apariencia" description="Actualice la configuración de apariencia de su cuenta" />
           <AppearanceTabs />
         </div>
       </SettingsLayout>
