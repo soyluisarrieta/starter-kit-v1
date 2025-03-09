@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 0.0.3 (2025-03-09)
+
+
+### Bug Fixes
+
+* rename route for login, register and dashboard tests ([ee3283d](https://github.com/soyluisarrieta/starter-kit-v1/commit/ee3283d0da1c028f17b835df447f01c74e6a10fb))
+
 ### 0.0.2 (2025-03-03)
 
 ### 0.0.1 (2025-03-03)
