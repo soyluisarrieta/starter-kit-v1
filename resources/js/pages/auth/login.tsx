@@ -30,7 +30,7 @@ export default function Login ({ status, canResetPassword }: LoginProps) {
 
   const submit: FormEventHandler = (e) => {
     e.preventDefault()
-    post(route('login'), {
+    post('/login', {
       onFinish: () => reset('password')
     })
   }
@@ -64,7 +64,7 @@ export default function Login ({ status, canResetPassword }: LoginProps) {
 
       <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
         <span className="relative z-10 bg-background px-2 text-muted-foreground">
-                O ingresa con
+          O ingresa con
         </span>
       </div>
 
@@ -110,19 +110,19 @@ export default function Login ({ status, canResetPassword }: LoginProps) {
 
           <div className="flex items-center space-x-3">
             <Checkbox id="remember" name="remember" tabIndex={3} />
-            <Label htmlFor="remember">Recuerdame</Label>
+            <Label htmlFor="remember">Recuérdame</Label>
           </div>
 
           <Button type="submit" className="mt-4 w-full" tabIndex={4} disabled={processing}>
             {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
-                        Ingresar
+            Ingresar
           </Button>
         </div>
 
         <div className="text-muted-foreground text-center text-sm">
           ¿No tienes una cuenta?{' '}
           <TextLink href={route('register')} tabIndex={5}>
-          Regístrate
+            Regístrate
           </TextLink>
         </div>
       </form>
