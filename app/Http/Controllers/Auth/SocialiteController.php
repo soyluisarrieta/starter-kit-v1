@@ -44,18 +44,32 @@ class SocialiteController extends Controller
         $name = $user_sso->user['given_name'];
         $lastname = $user_sso->user['family_name'];
 
-        // Check if the user already exists
-        $user = User::firstOrCreate(
-            ['sso_id' => $user_sso->id, 'sso_provider' => $provider],
-            [
-                'name' => $name,
-                'lastname' => $lastname,
-                'email' => $user_sso->email,
-                'password' => Hash::make(Str::random(12)),
-                'avatar' => $user_sso->avatar,
-                'email_verified_at' => now(),
-            ]
-        );
+        // Check if the user already exists by SSO ID and provider
+        $user = User::where('sso_id', $user_sso->id)
+            ->where('sso_provider', $provider)
+            ->first();
+
+        if (!$user) {
+            $user = User::where('email', $user_sso->email)->first();
+
+            if ($user) {
+                $user->sso_id = $user_sso->id;
+                $user->sso_provider = $provider;
+                $user->avatar = $user_sso->avatar;
+                $user->save();
+            } else {
+                $user = User::create([
+                    'sso_id' => $user_sso->id,
+                    'sso_provider' => $provider,
+                    'name' => $name,
+                    'lastname' => $lastname,
+                    'email' => $user_sso->email,
+                    'password' => Hash::make(Str::random(12)),
+                    'avatar' => $user_sso->avatar,
+                    'email_verified_at' => now(),
+                ]);
+            }
+        }
 
         Auth::login($user, true);
 
