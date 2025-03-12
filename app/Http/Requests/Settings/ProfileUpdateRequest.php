@@ -22,7 +22,7 @@ class ProfileUpdateRequest extends FormRequest
             'gender' => 'nullable|in:male,female,other',
             'birthdate' => 'nullable|date|before_or_equal:today',
             'address' => 'nullable|string|max:255',
-            'phone' => 'nullable|string|regex:/^[0-9]{10}$/',
+            'phone' => 'nullable|string',
             'has_whatsapp' => 'boolean',
             'avatar' => 'nullable|image|mimes:jpeg,png,jpg,webp|2048',
             'email' => [

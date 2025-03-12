@@ -17,7 +17,7 @@ return new class extends Migration {
             $table->enum('gender', ['male', 'female', 'other'])->nullable();
             $table->date('birthdate')->nullable();
             $table->string('address', length: 100)->nullable();
-            $table->string('phone', length: 10)->nullable();
+            $table->string('phone', length: 50)->nullable();
             $table->boolean('has_whatsapp')->default(false);
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
