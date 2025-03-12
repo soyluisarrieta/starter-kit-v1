@@ -11,6 +11,7 @@ import {
 import { cn } from '@/lib/utils'
 import { CalendarIcon } from 'lucide-react'
 import { PropsSingle } from 'react-day-picker'
+import { useState } from 'react'
 
 type DatePickerProps = Omit<CalendarProps, 'selected'> & Omit<PropsSingle, 'onSelect' | 'selected'> & {
   value?: string
@@ -19,19 +20,22 @@ type DatePickerProps = Omit<CalendarProps, 'selected'> & Omit<PropsSingle, 'onSe
 }
 
 export default function DatePicker ({ mode = 'single', value, onChange, placeholder, ...props }: DatePickerProps) {
+  const [isOpen, setIsOpen] = useState(false)
+  const [date, setDate] = useState<Date | null>(null)
+
   return (
-    <Popover>
+    <Popover open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger asChild>
         <Button
           variant={'outline'}
           className={cn(
-            'w-[240px] justify-start text-left font-normal cursor-pointer',
+            'w-full justify-start text-left font-normal cursor-pointer',
             !value && 'text-muted-foreground'
           )}
         >
-          <CalendarIcon className="mr-1 h-4 w-4" />
+          <CalendarIcon className="h-4 w-4 opacity-50" />
           {value
-            ? <span className='capitalize'>{format(parseISO(value), 'MMMM dd, yyyy', { locale: es })}</span>
+            ? <span className='capitalize'>{format(value, 'MMMM dd, yyyy', { locale: es })}</span>
             : <span>{placeholder ?? 'Selecciona una fecha'}</span>}
         </Button>
       </PopoverTrigger>
@@ -41,6 +45,8 @@ export default function DatePicker ({ mode = 'single', value, onChange, placehol
           selected={value ? parseISO(value) : undefined}
           onSelect={(date) => onChange(date ? format(date, 'yyyy-MM-dd') : undefined)}
           locale={es}
+          onDayClick={() => setIsOpen(false)}
+          captionLayout="dropdown"
           {...props}
         />
       </PopoverContent>
