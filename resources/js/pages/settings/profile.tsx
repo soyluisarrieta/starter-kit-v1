@@ -1,8 +1,7 @@
-import { format } from 'date-fns'
 import { User, type BreadcrumbItem, type SharedData } from '@/types'
 import { Transition } from '@headlessui/react'
 import { Head, Link, useForm, usePage } from '@inertiajs/react'
-import { FormEventHandler } from 'react'
+import { FormEventHandler, useState } from 'react'
 
 import DeleteUser from '@/components/delete-user'
 import HeadingSmall from '@/components/heading-small'
@@ -15,6 +14,8 @@ import SettingsLayout from '@/layouts/settings/layout'
 import { Checkbox } from '@/components/ui/checkbox'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import DatePicker from '@/components/ui/datepicker'
+import { PhoneInput } from '@/components/ui/phone-input'
+import { Country } from 'react-phone-number-input'
 
 const breadcrumbs: BreadcrumbItem[] = [
   {
@@ -24,6 +25,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 ]
 
 export default function Profile ({ mustVerifyEmail, status }: { mustVerifyEmail: boolean; status?: string }) {
+  const [country, setCountry] = useState<Country>()
   const { auth } = usePage<SharedData>().props
 
   const { data, setData, patch, errors, processing, recentlySuccessful } = useForm({
@@ -168,12 +170,13 @@ export default function Profile ({ mustVerifyEmail, status }: { mustVerifyEmail:
 
             <div className="grid gap-2">
               <Label htmlFor="phone">Número de contacto</Label>
-              <Input
-                id="phone"
-                className="mt-1 block w-full"
-                value={data.phone ?? ''}
-                onChange={(e) => setData('phone', e.target.value)}
-                placeholder={data.phone ?? ''}
+              <PhoneInput
+                id='phone'
+                className="mt-1 w-full"
+                defaultCountry={country ?? 'CO'}
+                value={data.phone ?? undefined}
+                onChange={value => setData('phone', value)}
+                onCountryChange={setCountry}
               />
 
               <InputError
