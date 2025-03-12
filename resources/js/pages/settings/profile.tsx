@@ -1,3 +1,4 @@
+import { format } from 'date-fns'
 import { User, type BreadcrumbItem, type SharedData } from '@/types'
 import { Transition } from '@headlessui/react'
 import { Head, Link, useForm, usePage } from '@inertiajs/react'
@@ -13,6 +14,7 @@ import AppLayout from '@/layouts/app-layout'
 import SettingsLayout from '@/layouts/settings/layout'
 import { Checkbox } from '@/components/ui/checkbox'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
+import DatePicker from '@/components/ui/datepicker'
 
 const breadcrumbs: BreadcrumbItem[] = [
   {
@@ -89,6 +91,19 @@ export default function Profile ({ mustVerifyEmail, status }: { mustVerifyEmail:
                 className="mt-2"
                 message={errors.lastname}
               />
+            </div>
+
+            <div className="grid gap-2">
+              <Label htmlFor="birthdate">Fecha de nacimiento</Label>
+
+              <DatePicker
+                id='birthdate'
+                mode='single'
+                value={data?.birthdate ?? undefined}
+                onChange={(value) => value && setData('birthdate', value)}
+              />
+
+              <InputError className="mt-2" message={errors.birthdate} />
             </div>
 
             <div className="grid gap-2">

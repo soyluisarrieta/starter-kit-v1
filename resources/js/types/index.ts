@@ -34,7 +34,7 @@ export interface User {
     lastname: string;
     gender: 'male' | 'female' | 'other';
     gender_letter: 'o' | 'a' | '@';
-    birthdate: Date | null;
+    birthdate: string | null;
     address: string | null;
     phone: string | null;
     has_whatsapp: boolean;
