@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 0.0.6 (2025-03-12)
+
+
+### Features
+
+* add birthdate field to profile settings ([7edb34e](https://github.com/soyluisarrieta/starter-kit-v1/commit/7edb34ebc5252238f55be9422238445957c3b0cc))
+
 ### 0.0.5 (2025-03-11)
 
 
