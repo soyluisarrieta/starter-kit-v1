@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 0.0.7 (2025-03-13)
+
+
+### Bug Fixes
+
+* persist form data in multi step form ([665841f](https://github.com/soyluisarrieta/starter-kit-v1/commit/665841f1d9626c7fa68228a518313b5faeae541b))
+
 ### 0.0.6 (2025-03-13)
 
 
