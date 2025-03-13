@@ -149,7 +149,7 @@ export const MultiStepForm = ({
             <ChevronLeftIcon className="mr-2" /> Volver
           </Button>
           <span className="text-sm">
-            Paso {step + 1} de {steps.length}
+            Paso {step + 1} de {steps.length + 1}
           </span>
         </div>
 
@@ -181,8 +181,8 @@ export const MultiStepForm = ({
         <div className="text-center py-2">
           <CheckCircleIcon className="inline-block mb-4 h-16 w-16 text-foreground" strokeWidth={1.3} />
           <h2 className="text-2xl font-semibold">¡Completado!</h2>
-          <p className="text-muted-foreground mb-10">Si estás listo, pulsa el botón para continuar.</p>
-          <Button className="w-full" onClick={() => onSubmit(selections)}>
+          <p className="text-muted-foreground mb-10">Si todo está listo, confirmalo pulsando el botón.</p>
+          <Button onClick={() => onSubmit(selections)}>
             Finalizar
           </Button>
         </div>
