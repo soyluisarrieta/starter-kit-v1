@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { CheckCircleIcon, ChevronLeftIcon, LucideIcon } from 'lucide-react'
 import { create } from 'zustand'
+import { useEffect } from 'react'
 
 import { cn } from '@/lib/utils'
 import { Card } from '@/components/ui/card'
@@ -79,6 +80,19 @@ const StepForm = ({ steps }: { steps: FormStep[] }) => {
   const { step, selections, setSelection } = useFormStore()
   const currentStep = steps[step]
   const stepId = currentStep.id
+
+  useEffect(() => {
+    if (currentStep.items && !(currentStep.items instanceof Array) && selections[stepId]) {
+      const stepSelections = selections[stepId] as unknown as Record<string, string>
+
+      Object.keys(stepSelections).forEach((key) => {
+        const field = document.querySelector(`#${stepId} form [name="${key}"]`) as HTMLInputElement
+        if (field) {
+          field.value = stepSelections[key]
+        }
+      })
+    }
+  }, [stepId, currentStep.items, selections])
 
   const handleOnSubmit = (e: React.FormEvent) => {
     e.preventDefault()
