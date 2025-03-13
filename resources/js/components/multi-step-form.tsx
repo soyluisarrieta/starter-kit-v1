@@ -6,12 +6,13 @@ import { cn } from '@/lib/utils'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
+import { JSX } from 'react'
 
 interface FormState {
   step: number
   selections: Record<string, string>
   setStep: (step: number) => void
-  setSelection: (step: number, value: string | number) => void
+  setSelection: (step: number, value: any) => void
   reset: () => void
 }
 
@@ -26,15 +27,25 @@ const useFormStore = create<FormState>((set) => ({
   reset: () => set({ step: 0, selections: {} })
 }))
 
+type FormItems = {
+  id: string | number
+  title: string
+  icon?: LucideIcon
+  image?: string
+}
+
+type FormCustom = {
+  custom: JSX.Element
+  button?: {
+    label?: string
+    onClick?: () => void
+  }
+}
+
 type FormStep = {
   title: string
   description?: string
-  items: {
-    id: string | number
-    title: string
-    icon?: LucideIcon
-    image?: string
-  }[]
+  items?: FormItems[] | FormCustom
 }
 
 const OptionCard = ({
@@ -62,23 +73,54 @@ const OptionCard = ({
     <h3 className="font-semibold">{title}</h3>
   </Card>
 )
-
 const StepForm = ({ steps }: { steps: FormStep[] }) => {
   const { step, selections, setSelection } = useFormStore()
+  const stepId = `step-${step + 1}`
   const currentStep = steps[step]
 
+  const handleOnSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+
+    if (currentStep.items && !(currentStep.items instanceof Array)) {
+      const { button } = currentStep.items as FormCustom
+      const form = document.querySelector(`#${stepId} form`) as HTMLFormElement
+
+      if (form && form.checkValidity()) {
+        const formData = new FormData(form)
+        const formValues = Object.fromEntries(formData)
+        setSelection(step, formValues)
+        button?.onClick?.()
+      } else {
+        form?.reportValidity()
+      }
+    }
+  }
+
+  if (currentStep.items instanceof Array) {
+    return (
+      <div id={stepId} className="flex flex-wrap justify-center gap-2">
+        {currentStep.items.map((item) => (
+          <OptionCard
+            key={item.id}
+            title={item.title}
+            icon={item.icon}
+            image={item.image}
+            selected={selections[step] === item.id}
+            onClick={() => setSelection(step, item.id)}
+          />
+        ))}
+      </div>
+    )
+  }
+
   return (
-    <div className="flex flex-wrap justify-center gap-2">
-      {currentStep?.items.map((item) => (
-        <OptionCard
-          key={item.id}
-          title={item.title}
-          icon={item.icon}
-          image={item.image}
-          selected={selections[step] === item.id}
-          onClick={() => setSelection(step, item.id)}
-        />
-      ))}
+    <div className='flex flex-wrap justify-center gap-2'>
+      <div id={stepId}>
+        {currentStep.items?.custom}
+      </div>
+      <Button onClick={handleOnSubmit}>
+        {currentStep.items?.button?.label || 'Siguiente'}
+      </Button>
     </div>
   )
 }
@@ -110,28 +152,30 @@ export const MultiStepForm = ({
         </div>
 
         <Progress className='h-2' value={progress} />
-
-        <AnimatePresence mode="wait" initial={false}>
-          <motion.div
-            key={step}
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -20 }}
-            transition={{ duration: 0.15 }}
-            className='my-7'
-          >
-            <h1 className="text-2xl font-semibold text-center">
-              {steps[step]?.title}
-            </h1>
-            {steps[step]?.description && (
-              <p className="text-muted-foreground text-center">{steps[step].description}</p>
-            )}
-          </motion.div>
-          <StepForm steps={steps} />
-        </AnimatePresence>
       </div>
 
-      {step === steps.length && (
+      {step !== steps.length ? (
+        <AnimatePresence mode="wait" initial={false}>
+          <div>
+            <motion.div
+              key={step}
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              transition={{ duration: 0.15 }}
+              className='my-7'
+            >
+              <h1 className="text-2xl font-semibold text-center">
+                {steps[step]?.title}
+              </h1>
+              {steps[step]?.description && (
+                <p className="text-muted-foreground text-center">{steps[step].description}</p>
+              )}
+            </motion.div>
+            <StepForm steps={steps} />
+          </div>
+        </AnimatePresence>
+      ) : (
         <div className="text-center py-2">
           <CheckCircleIcon className="inline-block mb-4 h-16 w-16 text-foreground" strokeWidth={1.3} />
           <h2 className="text-2xl font-semibold">¡Completado!</h2>
