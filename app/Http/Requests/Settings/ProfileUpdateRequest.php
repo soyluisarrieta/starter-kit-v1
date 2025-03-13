@@ -24,7 +24,7 @@ class ProfileUpdateRequest extends FormRequest
             'address' => 'nullable|string|max:255',
             'phone' => 'nullable|string',
             'has_whatsapp' => 'boolean',
-            'avatar' => 'nullable|image|mimes:jpeg,png,jpg,webp|2048',
+            'avatar' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
             'email' => [
                 'required',
                 'string',
