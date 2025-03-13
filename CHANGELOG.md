@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 0.0.6 (2025-03-13)
+
+
+### Features
+
+* upload and show avatar image updated ([a4d5c7c](https://github.com/soyluisarrieta/starter-kit-v1/commit/a4d5c7cbd19b9db4269a14d046a6e52a397a60d9))
+
 ### 0.0.5 (2025-03-11)
 
 
