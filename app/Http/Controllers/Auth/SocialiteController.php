@@ -6,10 +6,12 @@ use App\Http\Controllers\Controller;
 use App\Mail\LoginAlertMail;
 use App\Models\User;
 use Exception;
+use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Laravel\Socialite\Facades\Socialite;
 
@@ -55,20 +57,39 @@ class SocialiteController extends Controller
             if ($user) {
                 $user->sso_id = $user_sso->id;
                 $user->sso_provider = $provider;
-                $user->avatar = $user_sso->avatar;
-                $user->save();
             } else {
-                $user = User::create([
+                $user = new User([
                     'sso_id' => $user_sso->id,
                     'sso_provider' => $provider,
                     'name' => $name,
                     'lastname' => $lastname,
                     'email' => $user_sso->email,
                     'password' => Hash::make(Str::random(12)),
-                    'avatar' => $user_sso->avatar,
                     'email_verified_at' => now(),
                 ]);
             }
+
+            // Download and save the avatar image
+            if ($user_sso->avatar) {
+                try {
+                    $client = new Client();
+                    $response = $client->request('GET', $user_sso->avatar);
+                    $imageContent = $response->getBody()->getContents();
+                    $avatarName = Str::uuid() . '.jpg';
+
+                    Storage::disk('public')->put("avatars/{$avatarName}", $imageContent);
+
+                    $user->avatar = $avatarName;
+
+                    if ($user->isDirty('avatar') && $user->getOriginal('avatar')) {
+                        Storage::disk('public')->delete("avatars/{$user->getOriginal('avatar')}");
+                    }
+                } catch (Exception $e) {
+                    Log::error('Avatar download error: ' . $e->getMessage());
+                }
+            }
+
+            $user->save();
         }
 
         Auth::login($user, true);
