@@ -41,7 +41,7 @@ class ProfileController extends Controller
 
         // update avatar
         if ($user->isDirty('avatar')) {
-            $oldAvatar = Auth::user()->avatar;
+            $oldAvatar = $user->getOriginal('avatar');
 
             if ($user->avatar !== null) {
                 $avatarName = Str::uuid() . '.' . $user->avatar->getClientOriginalExtension();
