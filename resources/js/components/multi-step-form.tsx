@@ -12,7 +12,7 @@ interface FormState {
   step: number
   selections: Record<string, string>
   setStep: (step: number) => void
-  setSelection: (step: number, value: any) => void
+  setSelection: (stepId: string, value: any) => void
   reset: () => void
 }
 
@@ -20,8 +20,8 @@ const useFormStore = create<FormState>((set) => ({
   step: 0,
   selections: {},
   setStep: (step) => set({ step }),
-  setSelection: (step, value) => set((state) => ({
-    selections: { ...state.selections, [step]: value },
+  setSelection: (stepId, value) => set((state) => ({
+    selections: { ...state.selections, [stepId]: value },
     step: state.step + 1
   })),
   reset: () => set({ step: 0, selections: {} })
@@ -43,6 +43,7 @@ type FormCustom = {
 }
 
 type FormStep = {
+  id: string
   title: string
   description?: string
   items?: FormItems[] | FormCustom
@@ -73,10 +74,11 @@ const OptionCard = ({
     <h3 className="font-semibold">{title}</h3>
   </Card>
 )
+
 const StepForm = ({ steps }: { steps: FormStep[] }) => {
   const { step, selections, setSelection } = useFormStore()
-  const stepId = `step-${step + 1}`
   const currentStep = steps[step]
+  const stepId = currentStep.id
 
   const handleOnSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -88,7 +90,7 @@ const StepForm = ({ steps }: { steps: FormStep[] }) => {
       if (form && form.checkValidity()) {
         const formData = new FormData(form)
         const formValues = Object.fromEntries(formData)
-        setSelection(step, formValues)
+        setSelection(stepId, formValues)
         button?.onClick?.()
       } else {
         form?.reportValidity()
@@ -105,8 +107,8 @@ const StepForm = ({ steps }: { steps: FormStep[] }) => {
             title={item.title}
             icon={item.icon}
             image={item.image}
-            selected={selections[step] === item.id}
-            onClick={() => setSelection(step, item.id)}
+            selected={selections[stepId] === item.id}
+            onClick={() => setSelection(stepId, item.id)}
           />
         ))}
       </div>
