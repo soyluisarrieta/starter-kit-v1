@@ -1,7 +1,7 @@
 import { User, type BreadcrumbItem, type SharedData } from '@/types'
 import { Transition } from '@headlessui/react'
 import { Head, Link, useForm, usePage } from '@inertiajs/react'
-import { FormEventHandler, useState } from 'react'
+import { FormEventHandler, useRef, useState } from 'react'
 
 import DeleteUser from '@/components/delete-user'
 import HeadingSmall from '@/components/heading-small'
@@ -16,6 +16,9 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import DatePicker from '@/components/ui/datepicker'
 import { PhoneInput } from '@/components/ui/phone-input'
 import { Country } from 'react-phone-number-input'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { useInitials } from '@/hooks/use-initials'
+import { UploadIcon } from 'lucide-react'
 
 const breadcrumbs: BreadcrumbItem[] = [
   {
@@ -25,8 +28,13 @@ const breadcrumbs: BreadcrumbItem[] = [
 ]
 
 export default function Profile ({ mustVerifyEmail, status }: { mustVerifyEmail: boolean; status?: string }) {
+  const [profilePicture, setProfilePicture] = useState<string | null>(null)
   const [country, setCountry] = useState<Country>()
+
+  const inputRef = useRef<HTMLInputElement | null>(null)
   const { auth } = usePage<SharedData>().props
+
+  const getInitials = useInitials()
 
   const { data, setData, patch, errors, processing, recentlySuccessful } = useForm({
     name: auth.user.name,
@@ -47,6 +55,12 @@ export default function Profile ({ mustVerifyEmail, status }: { mustVerifyEmail:
     })
   }
 
+  const handleAvatarClick = () => {
+    if (inputRef.current) {
+      inputRef.current.click()
+    }
+  }
+
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
       <Head title="Configuración del perfil" />
@@ -54,6 +68,44 @@ export default function Profile ({ mustVerifyEmail, status }: { mustVerifyEmail:
       <SettingsLayout>
         <div className="space-y-6">
           <HeadingSmall title="Información del perfil" description="Actualice su información personal de la cuenta" />
+
+          <div className='flex items-center gap-3'>
+            <div className="relative">
+              <Avatar className="size-24 overflow-hidden rounded-full cursor-crosshair" onClick={handleAvatarClick}>
+                <AvatarImage
+                  className='bg-foreground'
+                  src={profilePicture ?? auth.user.avatar ?? undefined}
+                  alt={auth.user.name}
+                />
+                <AvatarFallback className="rounded-lg bg-neutral-200 text-black dark:bg-neutral-700 dark:text-white">
+                  {getInitials(`${auth.user.name} ${auth.user.lastname}`)}
+                </AvatarFallback>
+              </Avatar>
+              <input
+                type="file"
+                accept="image/png, image/jpeg, image/webp"
+                ref={inputRef}
+                onChange={(e) => {
+                  const file = e.target.files?.[0]
+                  if (file) {
+                    const imageUrl = URL.createObjectURL(file)
+                    setProfilePicture(imageUrl)
+                  }
+                }}
+                style={{ display: 'none' }}
+              />
+            </div>
+
+            <div className="flex flex-col [&>button]:self-start gap-1 pt-2">
+              <Button variant='outline' onClick={handleAvatarClick}>
+                <UploadIcon />
+                Actualizar foto
+              </Button>
+              <Button className='hover:bg-destructive' variant='ghost' size='sm'>
+                  Eliminar
+              </Button>
+            </div>
+          </div>
 
           <form
             onSubmit={submit}
