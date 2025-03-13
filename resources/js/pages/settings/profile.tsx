@@ -1,7 +1,7 @@
 import { User, type BreadcrumbItem, type SharedData } from '@/types'
 import { Transition } from '@headlessui/react'
 import { Head, Link, router, useForm, usePage } from '@inertiajs/react'
-import { FormEventHandler, useRef, useState } from 'react'
+import { FormEventHandler, useEffect, useRef, useState } from 'react'
 
 import DeleteUser from '@/components/delete-user'
 import HeadingSmall from '@/components/heading-small'
@@ -54,6 +54,24 @@ export default function Profile ({ mustVerifyEmail, status }: { mustVerifyEmail:
     })
   }
 
+  // Update and preview avatar
+  const updateAvatar = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    router.post(route('profile.update'), {
+      _method: 'patch',
+      ...auth.user,
+      avatar: file
+    }, {
+      preserveScroll: true,
+      forceFormData: true,
+      onSuccess: () => {
+        const imageUrl = URL.createObjectURL(file)
+        setProfilePicture(imageUrl)
+      }
+    })
+  }
+
   // Remove avatar
   const removeAvatar = () => {
     router.patch(route('profile.update'), {
@@ -70,17 +88,9 @@ export default function Profile ({ mustVerifyEmail, status }: { mustVerifyEmail:
   // Upload avatar
   const getInitials = useInitials()
   const inputRef = useRef<HTMLInputElement | null>(null)
-  const handleAvatarClick = () => {
+  const uploadAvatar = () => {
     if (inputRef.current) {
       inputRef.current.click()
-    }
-  }
-
-  const handleAvatarPreview = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (file) {
-      const imageUrl = URL.createObjectURL(file)
-      setProfilePicture(imageUrl)
     }
   }
 
@@ -94,10 +104,10 @@ export default function Profile ({ mustVerifyEmail, status }: { mustVerifyEmail:
 
           <div className='flex items-center gap-3'>
             <div className="relative">
-              <Avatar className="size-20 overflow-hidden rounded-full cursor-crosshair" onClick={handleAvatarClick}>
+              <Avatar className="size-20 overflow-hidden rounded-full cursor-crosshair" onClick={uploadAvatar}>
                 <AvatarImage
                   className='object-cover'
-                  src={profilePicture ?? data.avatar ?? undefined}
+                  src={profilePicture ?? (data.avatar && `/storage/avatars/${data.avatar}`) ?? undefined}
                   alt={data.name}
                 />
                 <AvatarFallback className="rounded-lg bg-neutral-200 text-black dark:bg-neutral-700 dark:text-white">
@@ -109,19 +119,19 @@ export default function Profile ({ mustVerifyEmail, status }: { mustVerifyEmail:
                 type="file"
                 accept="image/png, image/jpeg, image/webp"
                 ref={inputRef}
-                onChange={handleAvatarPreview}
+                onChange={updateAvatar}
               />
             </div>
 
             <div className="flex flex-col [&>button]:self-start gap-1 pt-2">
-              <Button variant='outline' onClick={handleAvatarClick}>
+              <Button variant='outline' onClick={uploadAvatar}>
                 <UploadIcon />
                 Actualizar foto
               </Button>
 
               <Dialog>
                 <DialogTrigger asChild>
-                  <Button className='hover:bg-destructive' variant='ghost' size='sm'>
+                  <Button className='hover:bg-destructive' variant='ghost' size='sm' disabled={!data.avatar}>
                     Eliminar
                   </Button>
                 </DialogTrigger>
@@ -139,7 +149,7 @@ export default function Profile ({ mustVerifyEmail, status }: { mustVerifyEmail:
                     </DialogClose>
                     <DialogClose asChild>
                       <Button variant="destructive" onClick={removeAvatar}>
-                      Eliminar foto
+                        Eliminar foto
                       </Button>
                     </DialogClose>
                   </DialogFooter>
