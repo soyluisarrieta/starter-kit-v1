@@ -46,7 +46,8 @@ export default [
       'space-infix-ops': 'error',                                               // Requiere espacios alrededor de operadores
       'key-spacing': ['error', { 'beforeColon': false, 'afterColon': true }],   // Formato de espacios en propiedades de objetos
       'indent': ['error', 2],                                                   // Indentación de 2 espacios
-      'no-trailing-spaces': 'error'                                            // No permite espacios al final de las líneas
+      'no-trailing-spaces': 'error',                                            // No permite espacios al final de las líneas
+      'react/jsx-indent': ['error', 2]                                          // Indentación de JSX de 2 espacios
     },
     settings: {
       react: {
