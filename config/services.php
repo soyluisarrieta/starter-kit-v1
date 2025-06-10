@@ -35,18 +35,4 @@ return [
         ],
     ],
 
-    'google' => [
-        'client_id' => env('GOOGLE_CLIENT_ID'),
-        'client_secret' => env('GOOGLE_CLIENT_SECRET'),
-        'redirect' => env('GOOGLE_CALLBACK_REDIRECT'),
-    ],
-
-    'llm' => [
-        'api_url' => env('LLM_API_URL'),
-        'endpoint' => env('LLM_API_ENDPOINT'),
-        'api_key' => env('LLM_API_KEY'),
-        'model' => env('LLM_MODEL'),
-        'max_tokens' => env('LLM_MAX_TOKENS'),
-    ],
-
 ];

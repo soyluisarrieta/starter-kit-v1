@@ -21,7 +21,7 @@ class PasswordConfirmationTest extends TestCase
 
     public function test_password_can_be_confirmed()
     {
-        $user = User::factory()->create(['password' => bcrypt('password')]);
+        $user = User::factory()->create();
 
         $response = $this->actingAs($user)->post('/confirm-password', [
             'password' => 'password',

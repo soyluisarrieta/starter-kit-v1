@@ -17,14 +17,8 @@ class ProfileUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|regex:/^[a-zA-Z\s]+$/|min:3|max:25',
-            'lastname' => 'required|string|regex:/^[a-zA-Z\s]+$/|min:3|max:25',
-            'gender' => 'nullable|in:male,female,other',
-            'birthdate' => 'nullable|date|before_or_equal:today',
-            'address' => 'nullable|string|max:255',
-            'phone' => 'nullable|string',
-            'has_whatsapp' => 'boolean',
-            'avatar' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'name' => ['required', 'string', 'max:255'],
+
             'email' => [
                 'required',
                 'string',

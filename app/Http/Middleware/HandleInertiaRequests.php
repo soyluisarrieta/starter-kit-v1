@@ -2,10 +2,10 @@
 
 namespace App\Http\Middleware;
 
-use App\Http\Resources\UserResource;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
+use Tighten\Ziggy\Ziggy;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -39,15 +39,18 @@ class HandleInertiaRequests extends Middleware
     {
         [$message, $author] = str(Inspiring::quotes()->random())->explode('-');
 
-        $user = $request->user();
-
         return [
             ...parent::share($request),
             'name' => config('app.name'),
             'quote' => ['message' => trim($message), 'author' => trim($author)],
             'auth' => [
-                'user' => $user ? UserResource::make($request->user()) : null,
+                'user' => $request->user(),
             ],
+            'ziggy' => fn (): array => [
+                ...(new Ziggy)->toArray(),
+                'location' => $request->url(),
+            ],
+            'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
         ];
     }
 }

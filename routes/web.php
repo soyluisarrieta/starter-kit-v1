@@ -1,7 +1,5 @@
 <?php
 
-use App\Http\Controllers\Auth\SocialiteController;
-use App\Http\Controllers\Integrations\LLMController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -10,20 +8,10 @@ Route::get('/', function () {
 })->name('home');
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('inicio', function () {
+    Route::get('dashboard', function () {
         return Inertia::render('dashboard');
     })->name('dashboard');
 });
 
-// Socialite
-Route::controller(SocialiteController::class)->group(function () {
-    Route::get('auth/{provider}', 'redirectToProvider');
-    Route::get('auth/{provider}/callback', 'handleProviderCallback');
-});
-
-
-// LLM
-Route::post('/llm/chat', [LLMController::class, 'chat']);
-
-require __DIR__ . '/settings.php';
-require __DIR__ . '/auth.php';
+require __DIR__.'/settings.php';
+require __DIR__.'/auth.php';

@@ -4,7 +4,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     /**
      * Run the migrations.
      */
@@ -12,20 +13,10 @@ return new class extends Migration {
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('name', length: 25);
-            $table->string('lastname', length: 25);
-            $table->enum('gender', ['male', 'female', 'other'])->nullable();
-            $table->date('birthdate')->nullable();
-            $table->string('address', length: 100)->nullable();
-            $table->string('phone', length: 50)->nullable();
-            $table->boolean('has_whatsapp')->default(false);
+            $table->string('name');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->string('avatar')->nullable();
-            $table->enum('status', ['active', 'inactive', 'deleted'])->default('active');
-            $table->string('sso_id')->nullable();
-            $table->string('sso_provider')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
