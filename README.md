@@ -20,3 +20,21 @@
    ```bash
    composer dev
    ```
+
+## ✨ Caracteristicas
+
+### Autenticación
+
+- [ ] Registrarse
+- [ ] Inicio de sesión
+- [ ] Email de recuperación de Contraseña
+- [ ] Reestablecer Contraseña
+- [ ] Obtener Perfil de usuario
+- [ ] Actualizar Perfil de usuario
+- [ ] Roles y permisos de usuario
+
+## Integraciones
+
+- [ ] Google SSO
+- [ ] Resend
+- [ ] Modelo de lenguaje
