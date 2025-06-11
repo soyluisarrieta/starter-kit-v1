@@ -32,7 +32,7 @@
 - [x] Obtener perfil de usuario
 - [x] Actualizar perfil de usuario
 - [x] Actualizar contraseña
-- [ ] Roles y permisos de usuario
+- [x] Roles y permisos de usuario
 - [x] Cambio de Light/Dark mode
 
 ## Integraciones
