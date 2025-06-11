@@ -24,26 +24,26 @@ export default function AppearanceToggleDropdown ({ className = '', ...props }: 
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" size="icon" className="h-9 w-9 rounded-md">
             {getCurrentIcon()}
-            <span className="sr-only">Toggle theme</span>
+            <span className="sr-only">Cambiar tema</span>
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuItem onClick={() => updateAppearance('light')}>
             <span className="flex items-center gap-2">
               <Sun className="h-5 w-5" />
-              Light
+              Claro
             </span>
           </DropdownMenuItem>
           <DropdownMenuItem onClick={() => updateAppearance('dark')}>
             <span className="flex items-center gap-2">
               <Moon className="h-5 w-5" />
-              Dark
+              Oscuro
             </span>
           </DropdownMenuItem>
           <DropdownMenuItem onClick={() => updateAppearance('system')}>
             <span className="flex items-center gap-2">
               <Monitor className="h-5 w-5" />
-              System
+              Sistema
             </span>
           </DropdownMenuItem>
         </DropdownMenuContent>

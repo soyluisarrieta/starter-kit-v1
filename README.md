@@ -25,12 +25,12 @@
 
 ### Autenticación
 
-- [ ] Registrarse
-- [ ] Inicio de sesión
+- [x] Registrarse
+- [x] Inicio de sesión
 - [ ] Email de recuperación de Contraseña
 - [ ] Reestablecer Contraseña
-- [ ] Obtener Perfil de usuario
-- [ ] Actualizar Perfil de usuario
+- [x] Obtener Perfil de usuario
+- [x] Actualizar Perfil de usuario
 - [ ] Roles y permisos de usuario
 
 ## Integraciones

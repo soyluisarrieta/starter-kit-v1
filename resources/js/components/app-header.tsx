@@ -11,26 +11,21 @@ import { useInitials } from '@/hooks/use-initials'
 import { cn } from '@/lib/utils'
 import { type BreadcrumbItem, type NavItem, type SharedData } from '@/types'
 import { Link, usePage } from '@inertiajs/react'
-import { BookOpen, Folder, LayoutGrid, Menu, Search } from 'lucide-react'
+import { BookOpen, LayoutGrid, Menu, Search } from 'lucide-react'
 import AppLogo from './app-logo'
 import AppLogoIcon from './app-logo-icon'
 
 const mainNavItems: NavItem[] = [
   {
-    title: 'Dashboard',
-    href: '/dashboard',
+    title: 'Inicio',
+    href: '/inicio',
     icon: LayoutGrid
   }
 ]
 
 const rightNavItems: NavItem[] = [
   {
-    title: 'Repository',
-    href: 'https://github.com/laravel/react-starter-kit',
-    icon: Folder
-  },
-  {
-    title: 'Documentation',
+    title: 'Documentación',
     href: 'https://laravel.com/docs/starter-kits#react',
     icon: BookOpen
   }
@@ -39,7 +34,7 @@ const rightNavItems: NavItem[] = [
 const activeItemStyles = 'text-neutral-900 dark:bg-neutral-800 dark:text-neutral-100'
 
 interface AppHeaderProps {
-    breadcrumbs?: BreadcrumbItem[];
+  breadcrumbs?: BreadcrumbItem[];
 }
 
 export function AppHeader ({ breadcrumbs = [] }: AppHeaderProps) {
@@ -59,7 +54,7 @@ export function AppHeader ({ breadcrumbs = [] }: AppHeaderProps) {
                 </Button>
               </SheetTrigger>
               <SheetContent side="left" className="flex h-full w-64 flex-col items-stretch justify-between bg-sidebar">
-                <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
+                <SheetTitle className="sr-only">Menú de Navegación</SheetTitle>
                 <SheetHeader className="flex justify-start text-left">
                   <AppLogoIcon className="h-6 w-6 fill-current text-black dark:text-white" />
                 </SheetHeader>
@@ -94,7 +89,7 @@ export function AppHeader ({ breadcrumbs = [] }: AppHeaderProps) {
             </Sheet>
           </div>
 
-          <Link href="/dashboard" prefetch className="flex items-center space-x-2">
+          <Link href="/inicio" prefetch className="flex items-center space-x-2">
             <AppLogo />
           </Link>
 
