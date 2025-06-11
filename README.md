@@ -26,15 +26,17 @@
 ### Autenticación
 
 - [x] Registrarse
-- [x] Inicio de sesión
-- [ ] Email de recuperación de Contraseña
-- [ ] Reestablecer Contraseña
-- [x] Obtener Perfil de usuario
-- [x] Actualizar Perfil de usuario
+- [x] Iniciar y cerrar de sesión
+- [x] Email de recuperación de contraseña
+- [x] Reestablecer contraseña
+- [x] Obtener perfil de usuario
+- [x] Actualizar perfil de usuario
+- [x] Actualizar contraseña
 - [ ] Roles y permisos de usuario
+- [x] Cambio de Light/Dark mode
 
 ## Integraciones
 
 - [ ] Google SSO
-- [ ] Resend
+- [x] Resend
 - [ ] Modelo de lenguaje
