@@ -2,6 +2,7 @@ import { type BreadcrumbItem, type SharedData } from '@/types'
 import { Transition } from '@headlessui/react'
 import { Head, Link, useForm, usePage } from '@inertiajs/react'
 import { FormEventHandler } from 'react'
+import { InputMask } from '@react-input/mask'
 
 import DeleteUser from '@/components/delete-user'
 import HeadingSmall from '@/components/heading-small'
@@ -11,6 +12,8 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import AppLayout from '@/layouts/app-layout'
 import SettingsLayout from '@/layouts/settings/layout'
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
+import { DatePicker } from '@/components/ui/date-picker'
 
 const breadcrumbs: BreadcrumbItem[] = [
   {
@@ -20,16 +23,44 @@ const breadcrumbs: BreadcrumbItem[] = [
 ]
 
 type ProfileForm = {
-    name: string;
-    email: string;
+  name: string;
+  lastname: string;
+  email: string;
+  gender: 'male' | 'female' | 'other';
+  birthdate?: string;
+  phone?: string;
+  address?: string;
 };
 
+const genders = [
+  {
+    id: 'male',
+    name: 'Bienvenido',
+    description: 'Masculino'
+  },
+  {
+    id: 'female',
+    name: 'Bienvenida',
+    description: 'Femenina'
+  },
+  {
+    id: 'other',
+    name: 'Bienvenid@',
+    description: 'Otro'
+  }
+] as const
+
 export default function Profile ({ mustVerifyEmail, status }: { mustVerifyEmail: boolean; status?: string }) {
-  const { auth } = usePage<SharedData>().props
+  const { auth: { user } } = usePage<SharedData>().props
 
   const { data, setData, patch, errors, processing, recentlySuccessful } = useForm<Required<ProfileForm>>({
-    name: auth.user.name,
-    email: auth.user.email
+    name: user.name,
+    lastname: user.lastname,
+    email: user.email,
+    gender: user.gender || 'other',
+    birthdate: user.birthdate || '',
+    phone: user.phone || '',
+    address: user.address || ''
   })
 
   const submit: FormEventHandler = (e) => {
@@ -49,20 +80,38 @@ export default function Profile ({ mustVerifyEmail, status }: { mustVerifyEmail:
           <HeadingSmall title="Información del perfil" description="Actualiza tu nombre y dirección de correo electrónico" />
 
           <form onSubmit={submit} className="space-y-6">
-            <div className="grid gap-2">
-              <Label htmlFor="name">Nombre</Label>
+            <div className='grid grid-cols-2 gap-2'>
+              <div className="grid gap-2">
+                <Label htmlFor="name">Nombre</Label>
 
-              <Input
-                id="name"
-                className="mt-1 block w-full"
-                value={data.name}
-                onChange={(e) => setData('name', e.target.value)}
-                required
-                autoComplete="name"
-                placeholder="Nombre y Apellido"
-              />
+                <Input
+                  id="name"
+                  className="mt-1 block w-full"
+                  value={data.name}
+                  onChange={(e) => setData('name', e.target.value)}
+                  required
+                  autoComplete="name"
+                  placeholder={data.name || 'Nombre'}
+                />
 
-              <InputError className="mt-2" message={errors.name} />
+                <InputError className="mt-2" message={errors.name} />
+              </div>
+
+              <div className="grid gap-2">
+                <Label htmlFor="lastname">Apellido</Label>
+
+                <Input
+                  id="lastname"
+                  className="mt-1 block w-full"
+                  value={data.lastname}
+                  onChange={(e) => setData('lastname', e.target.value)}
+                  required
+                  autoComplete="lastname"
+                  placeholder={data.lastname || 'Apellido'}
+                />
+
+                <InputError className="mt-2" message={errors.name} />
+              </div>
             </div>
 
             <div className="grid gap-2">
@@ -76,13 +125,13 @@ export default function Profile ({ mustVerifyEmail, status }: { mustVerifyEmail:
                 onChange={(e) => setData('email', e.target.value)}
                 required
                 autoComplete="username"
-                placeholder="email@ejemplo.com"
+                placeholder={data.email || 'email@ejemplo.com'}
               />
 
               <InputError className="mt-2" message={errors.email} />
             </div>
 
-            {mustVerifyEmail && auth.user.email_verified_at === null && (
+            {mustVerifyEmail && user.email_verified_at === null && (
               <div>
                 <p className="-mt-4 text-sm text-muted-foreground">
                   Tu dirección de correo electrónico no está verificada.{' '}
@@ -103,6 +152,86 @@ export default function Profile ({ mustVerifyEmail, status }: { mustVerifyEmail:
                 )}
               </div>
             )}
+
+            <fieldset className="flex flex-col gap-3">
+              <legend className="text-sm font-medium">Género</legend>
+              <p className="text-muted-foreground text-sm">
+                Selecciona tu género para personalizar tu experiencia
+              </p>
+              <RadioGroup
+                className="grid grid-cols-3 gap-3"
+                value={data.gender}
+                onValueChange={(value: ProfileForm['gender']) => setData('gender', value)}
+              >
+                {genders.map((gender) => (
+                  <Label
+                    className="has-[[data-state=checked]]:border-ring has-[[data-state=checked]]:bg-primary/5 flex items-start gap-3 rounded-lg border p-3"
+                    key={gender.id}
+                  >
+                    <RadioGroupItem
+                      value={gender.id}
+                      id={gender.name}
+                      className="data-[state=checked]:border-primary"
+                    />
+                    <div className="grid gap-1 font-normal">
+                      <div className="font-medium">{gender.name}</div>
+                      <div className="text-muted-foreground pr-2 text-xs leading-snug text-balance">
+                        {gender.description}
+                      </div>
+                    </div>
+                  </Label>
+                ))}
+              </RadioGroup>
+            </fieldset>
+
+            <div className="grid gap-2">
+              <Label htmlFor="birthdate">Fecha de nacimiento</Label>
+
+              <DatePicker
+                className="mt-1 w-full"
+                mode='single'
+                defaultValue={data.birthdate ? new Date(`${data.birthdate}T05:00:00.000Z`) : undefined}
+                value={data.birthdate ? new Date(data.birthdate) : undefined}
+                onValueChange={(date) => setData('birthdate', date ? date.toISOString().split('T')[0] : '')}
+                placeholder="Selecciona una fecha"
+              />
+
+              <InputError className="mt-2" message={errors.name} />
+            </div>
+
+            <div className="grid gap-2">
+              <Label htmlFor="phone">Número de teléfono</Label>
+
+              <InputMask
+                id="phone"
+                className="mt-1 block w-full"
+                mask="___ ___ ____"
+                replacement={{ _: /\d/ }}
+                component={Input}
+                type='tel'
+                value={data.phone}
+                onChange={(e) => setData('phone', e.target.value)}
+                autoComplete="phone"
+                placeholder={data.phone || '321 456 7890'}
+              />
+
+              <InputError className="mt-2" message={errors.name} />
+            </div>
+
+            <div className="grid gap-2">
+              <Label htmlFor="address">Dirección</Label>
+
+              <Input
+                id="address"
+                className="mt-1 block w-full"
+                value={data.address}
+                onChange={(e) => setData('address', e.target.value)}
+                autoComplete="address"
+                placeholder={data.address || 'Dirección'}
+              />
+
+              <InputError className="mt-2" message={errors.name} />
+            </div>
 
             <div className="flex items-center gap-4">
               <Button disabled={processing}>Guardar</Button>
