@@ -11,6 +11,7 @@ import AuthLayout from '@/layouts/auth-layout'
 
 type RegisterForm = {
     name: string;
+    lastname: string;
     email: string;
     password: string;
     password_confirmation: string;
@@ -19,6 +20,7 @@ type RegisterForm = {
 export default function Register () {
   const { data, setData, post, processing, errors, reset } = useForm<Required<RegisterForm>>({
     name: '',
+    lastname: '',
     email: '',
     password: '',
     password_confirmation: ''
@@ -36,21 +38,40 @@ export default function Register () {
       <Head title="Registrarse" />
       <form className="flex flex-col gap-6" onSubmit={submit}>
         <div className="grid gap-6">
-          <div className="grid gap-2">
-            <Label htmlFor="name">Nombre</Label>
-            <Input
-              id="name"
-              type="text"
-              required
-              autoFocus
-              tabIndex={1}
-              autoComplete="name"
-              value={data.name}
-              onChange={(e) => setData('name', e.target.value)}
-              disabled={processing}
-              placeholder="Nombre y Apellido"
-            />
-            <InputError message={errors.name} className="mt-2" />
+          <div className='grid grid-cols-2 gap-2'>
+            <div className="grid gap-2">
+              <Label htmlFor="name">Nombre</Label>
+              <Input
+                id="name"
+                type="text"
+                required
+                autoFocus
+                tabIndex={1}
+                autoComplete="name"
+                value={data.name}
+                onChange={(e) => setData('name', e.target.value)}
+                disabled={processing}
+                placeholder="Nombre"
+              />
+              <InputError message={errors.name} className="mt-2" />
+            </div>
+
+            <div className="grid gap-2">
+              <Label htmlFor="lastname">Apellido</Label>
+              <Input
+                id="lastname"
+                type="text"
+                required
+                autoFocus
+                tabIndex={1}
+                autoComplete="lastname"
+                value={data.lastname}
+                onChange={(e) => setData('lastname', e.target.value)}
+                disabled={processing}
+                placeholder="Apellido"
+              />
+              <InputError message={errors.name} className="mt-2" />
+            </div>
           </div>
 
           <div className="grid gap-2">
