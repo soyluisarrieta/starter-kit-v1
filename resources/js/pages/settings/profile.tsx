@@ -16,7 +16,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { DatePicker } from '@/components/ui/date-picker'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { useInitials } from '@/hooks/use-initials'
-import { UploadIcon } from 'lucide-react'
+import { MailIcon, MapPinnedIcon, PhoneIcon, UploadIcon } from 'lucide-react'
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -222,16 +222,19 @@ export default function Profile ({ mustVerifyEmail, status }: { mustVerifyEmail:
             <div className="grid gap-2">
               <Label htmlFor="email">Correo electrónico</Label>
 
-              <Input
-                id="email"
-                type="email"
-                className="mt-1 block w-full"
-                value={data.email}
-                onChange={(e) => setData('email', e.target.value)}
-                required
-                autoComplete="username"
-                placeholder={data.email || 'email@ejemplo.com'}
-              />
+              <div className='relative flex items-center'>
+                <Input
+                  id="email"
+                  type="email"
+                  className="pl-9 mt-1 block w-full"
+                  value={data.email}
+                  onChange={(e) => setData('email', e.target.value)}
+                  required
+                  autoComplete="username"
+                  placeholder={data.email || 'email@ejemplo.com'}
+                />
+                <MailIcon className='absolute left-3 mt-1 size-4 text-muted-foreground pointer-events-none' />
+              </div>
 
               <InputError className="mt-2" message={errors.email} />
             </div>
@@ -289,51 +292,59 @@ export default function Profile ({ mustVerifyEmail, status }: { mustVerifyEmail:
               </RadioGroup>
             </fieldset>
 
-            <div className="grid gap-2">
-              <Label htmlFor="birthdate">Fecha de nacimiento</Label>
+            <div className="grid grid-cols-2 gap-2">
+              <div className="grid gap-2">
+                <Label htmlFor="birthdate">Fecha de nacimiento</Label>
 
-              <DatePicker
-                className="mt-1 w-full"
-                mode='single'
-                defaultValue={data.birthdate ? new Date(`${data.birthdate}T05:00:00.000Z`) : undefined}
-                value={data.birthdate ? new Date(data.birthdate) : undefined}
-                onValueChange={(date) => setData('birthdate', date ? date.toISOString().split('T')[0] : '')}
-                placeholder="Selecciona una fecha"
-              />
+                <DatePicker
+                  className="mt-1 w-full"
+                  mode='single'
+                  defaultValue={data.birthdate ? new Date(`${data.birthdate}T05:00:00.000Z`) : undefined}
+                  value={data.birthdate ? new Date(data.birthdate) : undefined}
+                  onValueChange={(date) => setData('birthdate', date ? date.toISOString().split('T')[0] : '')}
+                  placeholder="Selecciona una fecha"
+                />
 
-              <InputError className="mt-2" message={errors.name} />
-            </div>
+                <InputError className="mt-2" message={errors.name} />
+              </div>
 
-            <div className="grid gap-2">
-              <Label htmlFor="phone">Número de teléfono</Label>
+              <div className="grid gap-2">
+                <Label htmlFor="phone">Número de teléfono</Label>
 
-              <InputMask
-                id="phone"
-                className="mt-1 block w-full"
-                mask="___ ___ ____"
-                replacement={{ _: /\d/ }}
-                component={Input}
-                type='tel'
-                value={data.phone}
-                onChange={(e) => setData('phone', e.target.value)}
-                autoComplete="phone"
-                placeholder={data.phone || '321 456 7890'}
-              />
+                <div className='relative flex items-center'>
+                  <InputMask
+                    id="phone"
+                    className="pl-9 mt-1 block w-full"
+                    mask="___ ___ ____"
+                    replacement={{ _: /\d/ }}
+                    component={Input}
+                    type='tel'
+                    value={data.phone}
+                    onChange={(e) => setData('phone', e.target.value)}
+                    autoComplete="phone"
+                    placeholder={data.phone || '321 456 7890'}
+                  />
+                  <PhoneIcon className='absolute left-3 mt-1 size-4 text-muted-foreground pointer-events-none' />
+                </div>
 
-              <InputError className="mt-2" message={errors.name} />
+                <InputError className="mt-2" message={errors.name} />
+              </div>
             </div>
 
             <div className="grid gap-2">
               <Label htmlFor="address">Dirección</Label>
 
-              <Input
-                id="address"
-                className="mt-1 block w-full"
-                value={data.address}
-                onChange={(e) => setData('address', e.target.value)}
-                autoComplete="address"
-                placeholder={data.address || 'Dirección'}
-              />
+              <div className='relative flex items-center'>
+                <Input
+                  id="address"
+                  className="pl-8 mt-1 block w-full"
+                  value={data.address}
+                  onChange={(e) => setData('address', e.target.value)}
+                  autoComplete="address"
+                  placeholder={data.address || 'Dirección'}
+                />
+                <MapPinnedIcon className='absolute left-3 mt-1 size-4 text-muted-foreground pointer-events-none' />
+              </div>
 
               <InputError className="mt-2" message={errors.name} />
             </div>

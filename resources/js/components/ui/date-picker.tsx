@@ -123,8 +123,8 @@ function DatePickerTrigger ({
       asChild
     >
       <PopoverTrigger>
+        <CalendarIcon className="h-4 w-4 text-muted-foreground" />
         <span className={cn("flex-1", !isRangeMode && "first-letter:uppercase")}>{formatDisplayText()}</span>
-        <CalendarIcon className="ml-2 h-4 w-4 text-muted-foreground" />
       </PopoverTrigger>
     </Button>
   )
