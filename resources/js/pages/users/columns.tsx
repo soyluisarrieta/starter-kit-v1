@@ -30,6 +30,10 @@ export const userColumns = defineColumns<User>([
     )
   },
   {
+    accessorKey: 'lastname',
+    header: 'Apellido'
+  },
+  {
     accessorKey: 'email',
     header: 'Correo electrónico',
     width: '100%'

@@ -13,12 +13,35 @@ const breadcrumbs: BreadcrumbItem[] = [
   }
 ]
 
+const userTabs = {
+  defaultTab: 'all',
+  tabs: [
+    {
+      value: 'all',
+      label: 'Todo',
+      columnVisibility: { lastname: false }
+    },
+    {
+      value: 'admins',
+      label: 'Administradores',
+      columnVisibility: { lastname: false },
+      filter: (user: User) => user.roles.includes('admin')
+    },
+    {
+      value: 'users',
+      label: 'Usuarios',
+      columnVisibility: { lastname: false },
+      filter: (user: User) => user.roles.includes('user')
+    }
+  ]
+}
+
 export default function Users ({ users }: { users: User[] }) {
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
       <Head title="Usuarios" />
 
-      <div className="overflow-x-auto p-4">
+      <div className="max-w-6xl w-full mx-auto overflow-x-auto p-4">
         {can('create:user') && (
           <Link
             href={route('usuarios.crear')}
@@ -31,6 +54,7 @@ export default function Users ({ users }: { users: User[] }) {
           columns={userColumns}
           data={users}
           filterableColumns={userFiletarables}
+          tabs={userTabs}
         />
       </div>
     </AppLayout>
