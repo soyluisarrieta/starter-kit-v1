@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Modules;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Modules\UserRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -37,19 +38,11 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(UserRequest $request)
     {
-        $request->validate([
-            "name" => "required|string|max:100",
-            "email" => "required|email|unique:users",
-        ]);
-
-        User::create([
-            "name" => $request->name,
-            "email" => $request->email,
-            "password" => bcrypt("qweqwe123"),
-        ]);
-
+        $data = $request->validated();
+        $data['password'] = bcrypt("qweqwe123");
+        User::create($data);
         return to_route("usuarios.index");
     }
     /**
