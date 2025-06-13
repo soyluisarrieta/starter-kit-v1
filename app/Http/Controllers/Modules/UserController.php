@@ -20,6 +20,7 @@ class UserController extends Controller
                 fn($user) => [
                     'id' => $user->id,
                     'name' => $user->name,
+                    'lastname' => $user->lastname,
                     'email' => $user->email,
                     'roles' => $user->roles->pluck('name')->toArray()
                 ]
