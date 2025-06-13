@@ -49,7 +49,7 @@ export default function Users ({ users }: { users: User[] }) {
                 <td className="px-6 py-2 font-medium text-neutral-900 dark:text-white">{id}</td>
                 <td className="px-6 py-2 text-neutral-600 dark:text-neutral-300">{name}</td>
                 <td className="px-6 py-2 text-neutral-600 dark:text-neutral-300">{email}</td>
-                <td className="px-6 py-2 text-neutral-600 dark:text-neutral-300">{roles.join(', ')}</td>
+                <td className="px-6 py-2 text-neutral-600 dark:text-neutral-300">{roles.length ? roles.join(', ') : '?'}</td>
                 <td className="px-6 py-2">
                   <Link
                     className="cursor-pointer mr-1 px-3 py-2 text-xs font-medium text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"

@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import AppLayout from '@/layouts/app-layout'
+import FormUser from '@/pages/users/form'
 import { User, type BreadcrumbItem } from '@/types'
 import { Head, Link, useForm } from '@inertiajs/react'
 
@@ -13,15 +14,16 @@ const breadcrumbs: BreadcrumbItem[] = [
   }
 ]
 
-export default function EditUsers ({ user }: { user: User }) {
-  const { data, setData, errors, processing, put } = useForm({
+export default function EditUser ({ user }: { user: User }) {
+  const form = useForm({
     name: user.name || '',
+    lastname: user.lastname || '',
     email: user.email || ''
   })
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    put(route('usuarios.actualizar', user.id))
+    form.put(route('usuarios.actualizar', user.id))
   }
 
   return (
@@ -41,38 +43,7 @@ export default function EditUsers ({ user }: { user: User }) {
             className="space-y-6 mt-4 max-w-md mx-auto"
             onSubmit={onSubmit}
           >
-            <div className="grid gap-2">
-              <Label htmlFor="name">Nombre completo</Label>
-              <Input
-                id="name"
-                type="text"
-                autoFocus
-                tabIndex={1}
-                autoComplete="name"
-                value={data.name}
-                onChange={(e) => setData('name', e.target.value)}
-                disabled={processing}
-                placeholder="Nombre y Apellido"
-              />
-              <InputError message={errors.name} className="mt-2" />
-            </div>
-
-            <div className="grid gap-2">
-              <Label htmlFor="email">Correo electrónico</Label>
-              <Input
-                id="email"
-                type="text"
-                autoFocus
-                tabIndex={1}
-                autoComplete="email"
-                value={data.email}
-                onChange={(e) => setData('email', e.target.value)}
-                disabled={processing}
-                placeholder="email@ejemplo.com"
-              />
-              <InputError message={errors.email} className="mt-2" />
-            </div>
-
+            <FormUser {...form} />
             <Button type="submit">
               Actualizar
             </Button>
