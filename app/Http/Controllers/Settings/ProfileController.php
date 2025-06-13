@@ -44,7 +44,7 @@ class ProfileController extends Controller
             $oldAvatar = $profile->getOriginal('avatar');
 
             if ($profile->avatar !== null) {
-                $avatarName = Str::uuid() . '.' . $profile->avatar->getClientOriginalExtension();
+                $avatarName = Str::uuid() . '.' . $request->avatar->getClientOriginalExtension();
                 $request->avatar->storeAs('avatars', $avatarName, 'public');
                 $profile->avatar = $avatarName;
             }
