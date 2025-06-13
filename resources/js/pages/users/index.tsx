@@ -2,8 +2,9 @@ import { DataTable } from '@/components/data-table/data-table'
 import AppLayout from '@/layouts/app-layout'
 import can from '@/lib/can'
 import { userColumns } from '@/pages/users/columns'
+import { userFiletarables } from '@/pages/users/filters'
 import { User, type BreadcrumbItem } from '@/types'
-import { Head, Link, router } from '@inertiajs/react'
+import { Head, Link } from '@inertiajs/react'
 
 const breadcrumbs: BreadcrumbItem[] = [
   {
@@ -29,6 +30,7 @@ export default function Users ({ users }: { users: User[] }) {
         <DataTable
           columns={userColumns}
           data={users}
+          filterableColumns={userFiletarables}
         />
       </div>
     </AppLayout>
