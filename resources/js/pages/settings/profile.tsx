@@ -1,7 +1,7 @@
 import { type BreadcrumbItem, type SharedData } from '@/types'
 import { Transition } from '@headlessui/react'
-import { Head, Link, useForm, usePage } from '@inertiajs/react'
-import { FormEventHandler } from 'react'
+import { Head, Link, router, useForm, usePage } from '@inertiajs/react'
+import { FormEventHandler, useEffect, useRef, useState } from 'react'
 import { InputMask } from '@react-input/mask'
 
 import DeleteUser from '@/components/delete-user'
@@ -14,6 +14,10 @@ import AppLayout from '@/layouts/app-layout'
 import SettingsLayout from '@/layouts/settings/layout'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { DatePicker } from '@/components/ui/date-picker'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { useInitials } from '@/hooks/use-initials'
+import { UploadIcon } from 'lucide-react'
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 
 const breadcrumbs: BreadcrumbItem[] = [
   {
@@ -26,6 +30,7 @@ type ProfileForm = {
   name: string;
   lastname: string;
   email: string;
+  avatar?: string;
   gender: 'male' | 'female' | 'other';
   birthdate?: string;
   phone?: string;
@@ -51,17 +56,23 @@ const genders = [
 ] as const
 
 export default function Profile ({ mustVerifyEmail, status }: { mustVerifyEmail: boolean; status?: string }) {
+  const [avatarButtonState, setAvatarButtonState] = useState(false)
   const { auth: { user } } = usePage<SharedData>().props
 
   const { data, setData, patch, errors, processing, recentlySuccessful } = useForm<Required<ProfileForm>>({
     name: user.name,
     lastname: user.lastname,
     email: user.email,
+    avatar: user.avatar || '',
     gender: user.gender || 'other',
     birthdate: user.birthdate || '',
     phone: user.phone || '',
     address: user.address || ''
   })
+
+  useEffect(() => {
+    setAvatarButtonState(user.avatar ? true : false)
+  },[user.avatar])
 
   const submit: FormEventHandler = (e) => {
     e.preventDefault()
@@ -71,6 +82,39 @@ export default function Profile ({ mustVerifyEmail, status }: { mustVerifyEmail:
     })
   }
 
+  // Update and preview avatar
+  const updateAvatar = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    router.post(route('profile.update'), {
+      _method: 'patch',
+      ...user,
+      avatar: file
+    }, {
+      preserveScroll: true,
+      forceFormData: true
+    })
+  }
+
+  // Remove avatar
+  const removeAvatar = () => {
+    router.patch(route('profile.update'), {
+      ...user,
+      avatar: null
+    }, {
+      preserveScroll: true
+    })
+  }
+
+  // Upload avatar
+  const getInitials = useInitials()
+  const inputRef = useRef<HTMLInputElement | null>(null)
+  const uploadAvatar = () => {
+    if (inputRef.current) {
+      inputRef.current.click()
+    }
+  }
+
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
       <Head title="Configuración del perfil" />
@@ -78,6 +122,67 @@ export default function Profile ({ mustVerifyEmail, status }: { mustVerifyEmail:
       <SettingsLayout>
         <div className="space-y-6">
           <HeadingSmall title="Información del perfil" description="Actualiza tu nombre y dirección de correo electrónico" />
+
+          <div className='flex items-center gap-3'>
+            <div className="relative">
+              <Avatar className="size-20 overflow-hidden rounded-full cursor-crosshair" onClick={uploadAvatar}>
+                <AvatarImage
+                  className='object-cover'
+                  src={user.avatar ? `/storage/avatars/${user.avatar}` : undefined}
+                  alt={data.name}
+                />
+                <AvatarFallback className="rounded-lg bg-neutral-200 text-black dark:bg-neutral-700 dark:text-white">
+                  {getInitials(`${data.name} ${data.lastname}`)}
+                </AvatarFallback>
+              </Avatar>
+              <input
+                className='hidden'
+                type="file"
+                accept="image/png, image/jpeg, image/webp"
+                ref={inputRef}
+                onChange={updateAvatar}
+              />
+            </div>
+
+            <div className="flex flex-col [&>button]:self-start gap-1 pt-2">
+              <Button variant='outline' onClick={uploadAvatar}>
+                <UploadIcon />
+                Actualizar foto
+              </Button>
+
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button
+                    className='hover:bg-destructive'
+                    variant='ghost'
+                    size='sm'
+                    disabled={!avatarButtonState}
+                  >
+                    Eliminar
+                  </Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogTitle>¿Estás seguro de que deseas eliminar tu foto?</DialogTitle>
+                  <DialogDescription>
+                    Una vez que se elimine su foto no podrá ser recuperada, y se eliminarán de forma permanente.
+                  </DialogDescription>
+
+                  <DialogFooter className="gap-2">
+                    <DialogClose asChild>
+                      <Button variant="secondary">
+                        Cancelar
+                      </Button>
+                    </DialogClose>
+                    <DialogClose asChild>
+                      <Button variant="destructive" onClick={removeAvatar}>
+                        Eliminar foto
+                      </Button>
+                    </DialogClose>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
+            </div>
+          </div>
 
           <form onSubmit={submit} className="space-y-6">
             <div className='grid grid-cols-2 gap-2'>
