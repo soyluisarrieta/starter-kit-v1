@@ -237,11 +237,11 @@ function DataTableColumnFilter<TData> ({
           asChild
         >
           <DropdownMenuTrigger>
-            <div className='flex items-center gap-1.5'>
-              <span className='font-normal opacity-70'>{filter.label}:</span>
-              {selectedValues.size >= 0 && (
+            <div className='flex items-center gap-1.5 overflow-hidden'>
+              <span className='font-normal opacity-70 overflow-hidden'>{filter.label}:</span>
+              {selectedValues.size > 0 && (
                 <Badge
-                  className={cn('flex items-center gap-1 px-2 py-0.5 h-5 text-xs', selectedValues.size > 1 && 'aspect-square')}
+                  className={cn('flex items-center gap-1 px-1 py-0.5 h-5 text-xs overflow-hidden border-muted-foreground/30', selectedValues.size > 1 && 'aspect-square')}
                   variant='outline'
                 >
                   {selectedValues.size === 1 && selectedOptionLabel ? (
