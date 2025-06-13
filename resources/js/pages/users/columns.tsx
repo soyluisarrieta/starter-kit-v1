@@ -1,4 +1,5 @@
 import { defineColumns } from '@/components/data-table/data-table-utils'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
@@ -13,21 +14,19 @@ export const userColumns = defineColumns<User>([
   },
   {
     accessorKey: 'name',
-    header: 'Nombre',
+    header: 'Nombre y apellido',
     cell: ({ row: { original } }) => (
-      <Link href={route('usuarios.mostrar', { id: original.id })}>
-        {original.name}
-      </Link>
-    )
-  },
-  {
-    accessorKey: 'lastname',
-    header: 'Apellido',
-    minWidth: 150,
-    cell: ({ row: { original } }) => (
-      <Link href={route('usuarios.mostrar', { id: original.id })}>
-        {original.lastname}
-      </Link>
+      <div className='flex items-center gap-2'>
+        <Avatar className="h-8 w-8 overflow-hidden rounded-full">
+          <AvatarImage src={original.avatar ? `/storage/avatars/${original.avatar}` : undefined} alt={original.name} />
+          <AvatarFallback className="rounded-lg bg-neutral-200 text-black dark:bg-neutral-700 dark:text-white">
+            {original.name.substring(0, 1).toUpperCase()}
+          </AvatarFallback>
+        </Avatar>
+        <Link href={route('usuarios.mostrar', { id: original.id })}>
+          {original.name} {original.lastname}
+        </Link>
+      </div>
     )
   },
   {

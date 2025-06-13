@@ -19,6 +19,7 @@ class UserController extends Controller
             "users" => User::with('roles')->get()->map(
                 fn($user) => [
                     'id' => $user->id,
+                    'avatar' => $user->avatar,
                     'name' => $user->name,
                     'lastname' => $user->lastname,
                     'email' => $user->email,
