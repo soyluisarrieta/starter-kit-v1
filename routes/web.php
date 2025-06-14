@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Integrations\LLMController;
 use App\Http\Controllers\Modules\UserController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -13,7 +14,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return Inertia::render('dashboard');
     })->name('dashboard');
 
+    // CRUDS
     Route::resource_es('usuarios', UserController::class);
+
+    // LLM
+    Route::post('/llm/chat', [LLMController::class, 'chat']);
 });
 
 require __DIR__ . '/settings.php';

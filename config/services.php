@@ -41,4 +41,11 @@ return [
         ],
     ],
 
+    'llm' => [
+        'api_url' => env('LLM_API_URL'),
+        'endpoint' => env('LLM_API_ENDPOINT'),
+        'api_key' => env('LLM_API_KEY'),
+        'model' => env('LLM_MODEL'),
+        'max_tokens' => env('LLM_MAX_TOKENS'),
+    ],
 ];

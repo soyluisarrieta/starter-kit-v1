@@ -37,6 +37,6 @@
 
 ## Integraciones
 
-- [ ] Google SSO
+- [x] Google SSO
 - [x] Resend
-- [ ] Modelo de lenguaje
+- [x] Modelo de lenguaje
