@@ -23,6 +23,8 @@ return new class extends Migration {
             $table->string('password');
             $table->string('avatar')->nullable();
             $table->enum('status', ['active', 'inactive', 'deleted'])->default('active');
+            $table->string('sso_id')->nullable();
+            $table->string('sso_provider')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
