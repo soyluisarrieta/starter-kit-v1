@@ -176,7 +176,7 @@ export function DataTable<TData> ({
         />
       </DataTableToolbar>
 
-      <div className="relative">
+      <div className="relative border rounded-lg">
         <ScrollArea type='always'>
           <Table className={!widthExists ? 'w-auto' : 'w-full'}>
             <DataTableHeader
@@ -228,9 +228,9 @@ function DataTableHeader<TData> ({
   minWidthExists: boolean;
 }) {
   return (
-    <TableHeader className='border-0 outline-0 [&_tr]:border-0'>
+    <TableHeader>
       {table.getHeaderGroups().map((headerGroup) => (
-        <TableRow key={headerGroup.id} className='[&>th]:first:rounded-l-lg [&>th]:last:rounded-r-lg'>
+        <TableRow key={headerGroup.id} className='[&>th]:first:rounded-tl-lg [&>th]:last:rounded-tr-lg'>
           {headerGroup.headers.map((header) => {
             const column = header.column.columnDef as CustomColumnDef<TData>
             const columnStyle: React.CSSProperties = {
@@ -240,7 +240,7 @@ function DataTableHeader<TData> ({
             return (
               <TableHead
                 key={header.id}
-                className='px-0 bg-muted hover:muted dark:bg-border'
+                className='px-0 dark:bg-border bg-muted/70 py-1.5'
                 style={columnStyle}
               >
                 <DataTableColumnHeader header={header} />
