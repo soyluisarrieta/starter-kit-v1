@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import AuthLayout from '@/layouts/auth-layout'
+import GoogleButton from '@/components/google-button'
 
 type RegisterForm = {
     name: string;
@@ -36,6 +37,9 @@ export default function Register () {
   return (
     <AuthLayout title="Crear una cuenta" description="Ingresa tus detalles a continuación para registrarte">
       <Head title="Registrarse" />
+
+      <GoogleButton />
+
       <form className="flex flex-col gap-6" onSubmit={submit}>
         <div className="grid gap-6">
           <div className='grid grid-cols-2 gap-2'>

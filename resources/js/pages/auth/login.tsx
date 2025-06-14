@@ -9,6 +9,7 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import AuthLayout from '@/layouts/auth-layout'
+import GoogleButton from '@/components/google-button'
 
 type LoginForm = {
     email: string;
@@ -38,6 +39,8 @@ export default function Login ({ status, canResetPassword }: LoginProps) {
   return (
     <AuthLayout title="Iniciar sesión" description="Ingresa con tu cuenta con tus credenciales">
       <Head title="Iniciar sesión" />
+
+      <GoogleButton />
 
       <form className="flex flex-col gap-6" onSubmit={submit}>
         <div className="grid gap-6">
