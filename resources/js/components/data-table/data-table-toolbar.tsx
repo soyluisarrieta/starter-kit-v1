@@ -158,8 +158,7 @@ function DataTableColumnFilter<TData> ({
   column,
   filter,
   isOpen,
-  onOpenChange,
-  onRemoveFilter
+  onOpenChange
 }: {
   column: Column<TData>
   filter: FilterColumnExt<TData>;
@@ -198,20 +197,6 @@ function DataTableColumnFilter<TData> ({
           onValueChange={updateFilterValue}
           placeholder={filter.label}
         />
-        <Button
-          className='size-4 p-0 hover:dark:bg-transparent text-muted-foreground mx-1.5'
-          variant='ghost'
-          size='icon'
-          onClick={(e) => {
-            e.stopPropagation()
-            updateFilterValue(undefined)
-            if (onRemoveFilter) {
-              onRemoveFilter(filter.id)
-            }
-          }}
-        >
-          <XIcon />
-        </Button>
       </div>
     )
   }
@@ -229,46 +214,40 @@ function DataTableColumnFilter<TData> ({
 
   return (
     <DropdownMenu open={isOpen} onOpenChange={onOpenChange}>
-      <div className='bg-accent/30 border rounded-lg flex items-center h-8'>
+      <div className='border border-dashed rounded-lg flex items-center'>
         <Button
-          className='bg-accent/90 dark:hover:bg-accent/70 flex items-center gap-1.5 pr-3'
+          className='flex items-center gap-1.5 pr-2'
           variant='ghost'
           size='sm'
           asChild
         >
           <DropdownMenuTrigger>
             <div className='flex items-center gap-1.5 overflow-hidden'>
-              <span className='font-normal opacity-70 overflow-hidden'>{filter.label}:</span>
+              <span className='font-normal opacity-70 overflow-hidden'>
+                {filter.label}
+              </span>
               {selectedValues.size > 0 && (
-                <Badge
-                  className={cn('flex items-center gap-1 px-1 py-0.5 h-5 text-xs overflow-hidden border-muted-foreground/30', selectedValues.size > 1 && 'aspect-square')}
-                  variant='outline'
-                >
-                  {selectedValues.size === 1 && selectedOptionLabel ? (
-                    <span className='max-w-24 truncate'>{selectedOptionLabel}</span>
-                  ) : (
-                    <span>
-                      {selectedValues.size < 10 ? selectedValues.size : '+9'}
-                    </span>
-                  )}
-                </Badge>
+                <>
+                  <span className='h-4 w-px border-l mx-0.5' />
+                  <Badge
+                    className={cn(
+                      'h-5 flex items-center gap-1 px-1 py-0.5 rounded-sm text-xs overflow-hidden',
+                      selectedValues.size > 1 && 'aspect-square'
+                    )}
+                    variant='secondary'
+                  >
+                    {selectedValues.size === 1 && selectedOptionLabel ? (
+                      <span className='max-w-20 truncate'>{selectedOptionLabel}</span>
+                    ) : (
+                      <span>
+                        {selectedValues.size < 10 ? selectedValues.size : '+9'}
+                      </span>
+                    )}
+                  </Badge>
+                </>
               )}
             </div>
           </DropdownMenuTrigger>
-        </Button>
-        <Button
-          className='size-4 p-0 hover:dark:bg-transparent text-muted-foreground mx-1.5'
-          variant='ghost'
-          size='icon'
-          onClick={(e) => {
-            e.stopPropagation()
-            updateFilterValue(undefined)
-            if (onRemoveFilter) {
-              onRemoveFilter(filter.id)
-            }
-          }}
-        >
-          <XIcon />
         </Button>
       </div>
       <DropdownMenuContent className='min-w-44 p-0'>
@@ -326,34 +305,22 @@ function DataTableColumnFilter<TData> ({
                 </CommandGroup>
               </ScrollArea>
 
-              <CommandSeparator className='mb-2' />
-              <div className='flex justify-between items-center gap-x-2'>
-                <Button
-                  className='grow font-normal flex items-center gap-1.5'
-                  variant="ghost"
-                  size='sm'
-                  onClick={() => updateFilterValue(undefined)}
-                  disabled={selectedValues.size === 0}
-                >
-                  <RotateCwIcon className='size-3.5 text-muted-foreground' />
-                  {TC.TOOLBAR.RESET}
-                </Button>
-                <span className='h-4 border-r' />
-                <Button
-                  className='grow font-normal flex items-center gap-1.5'
-                  variant="ghost"
-                  size='sm'
-                  onClick={() => {
-                    updateFilterValue(undefined)
-                    if (onRemoveFilter) {
-                      onRemoveFilter(filter.id)
-                    }
-                  }}
-                >
-                  <TrashIcon className='size-3.5 text-muted-foreground' />
-                  {TC.TOOLBAR.DELETE}
-                </Button>
-              </div>
+              {selectedValues.size > 0 && (
+                <>
+                  <CommandSeparator className='mb-2' />
+                  <div className='flex justify-between items-center gap-x-2'>
+                    <Button
+                      className='grow font-normal flex items-center gap-1.5'
+                      variant="ghost"
+                      size='sm'
+                      onClick={() => updateFilterValue(undefined)}
+                    >
+                      <RotateCwIcon className='size-3.5 text-muted-foreground' />
+                      {TC.TOOLBAR.RESET}
+                    </Button>
+                  </div>
+                </>
+              )}
             </CommandList>
           </Command>
         </DropdownMenuGroup>
@@ -369,102 +336,52 @@ function DataTableLeftToolbar<TData> ({
   table: Table<TData>;
   columnFilters?: FilterColumnExt<TData>[];
 }) {
-  const [openFilterMenu, setOpenFilterMenu] = useState(false)
-  const [openFilterDropdown, setOpenFilterDropdown] = useState<FilterColumnExt<TData>['id']>()
-  const [activeFilters, setActiveFilters] = useState<FilterColumnExt<TData>[]>([])
-
-  const handleFilterChange = (
-    filterId: FilterColumnExt<TData>['id'],
-    open: boolean
-  ) => {
-    if (open) {
-      setOpenFilterDropdown(filterId)
-    } else if (openFilterDropdown === filterId) {
-      setOpenFilterDropdown(undefined)
-    }
-  }
+  const [activeFilters, setActiveFilters] = useState<FilterColumnExt<TData>[]>(columnFilters || [])
 
   return (
     <div className='w-full flex items-center gap-1 flex-wrap pt-0.5'>
       <DataTableSearchInput table={table} />
-      {activeFilters.length > 0 && activeFilters.map(filter => {
-        const column = table.getColumn(filter.columnKey)
-        if (!column) return null
-        return (
-          <DataTableColumnFilter
-            key={filter.id}
-            column={column}
-            filter={filter}
-            isOpen={openFilterDropdown === filter.id}
-            onOpenChange={(open) => {
-              handleFilterChange(filter.id, open)
-            }}
-            onRemoveFilter={(filterId) => {
-              const updatedFilters = activeFilters.filter(f => f.id !== filterId)
-              setActiveFilters(updatedFilters)
-            }}
-          />
-        )}
-      )}
-
-      <DropdownMenu open={openFilterMenu} onOpenChange={setOpenFilterMenu}>
-        <Button
-          className='whitespace-nowrap border border-dashed flex items-center gap-1.5 h-8 text-sm'
-          variant='ghost'
-          asChild
-        >
-          <DropdownMenuTrigger>
-            <ListFilterIcon className='size-4' />
-            <span className='font-medium'>{TC.TOOLBAR.ADD_FILTER}</span>
-          </DropdownMenuTrigger>
-        </Button>
-        <DropdownMenuContent>
-          <DropdownMenuGroup>
-            <DropdownMenuLabel className='text-xs text-muted-foreground font-normal'>
-              {TC.TOOLBAR.SELECT_COLUMN}
-            </DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            {columnFilters?.map(filter => {
-              const column = table.getColumn(filter.columnKey)
-              if (!column) return null
-              return (
-                <Button
-                  key={filter.id}
-                  className='w-full flex justify-between items-center capitalize p-2 text-sm'
-                  variant='ghost'
-                  onClick={() => {
-                    const isFilterActive = activeFilters.some(activeFilter => activeFilter.id === filter.id)
-                    if (!isFilterActive) {
-                      setActiveFilters([...activeFilters, filter])
-                    }
-                    setOpenFilterMenu(false)
-                    handleFilterChange(filter.id, true)
-                  }}
-                >
-                  {filter.label}
-                </Button>
-              )
-            })}
-            {table.getState().columnFilters.length > 0 && (
-              <>
-                <DropdownMenuSeparator />
-                <Button
-                  className="w-full font-normal flex items-center gap-1.5"
-                  variant="ghost"
-                  size='sm'
-                  onClick={() => table.resetColumnFilters()}
-                  asChild
-                >
-                  <DropdownMenuItem>
-                    <RotateCwIcon className="size-4" />
-                    {TC.TOOLBAR.CLEAR_FILTERS}
-                  </DropdownMenuItem>
-                </Button>
-              </>
+      {activeFilters.length > 0 && (
+        <div className='ml-1 flex items-center gap-1 flex-wrap'>
+          {activeFilters.map(filter => {
+            const column = table.getColumn(filter.columnKey)
+            if (!column) return null
+            return (
+              <DataTableColumnFilter
+                key={filter.id}
+                column={column}
+                filter={filter}
+                onRemoveFilter={(filterId) => {
+                  setActiveFilters(prev => prev.filter(f => f.id !== filterId))
+                }}
+              />
             )}
-          </DropdownMenuGroup>
-        </DropdownMenuContent>
-      </DropdownMenu>
+          )}
+          {activeFilters.some(filter => {
+            const column = table.getColumn(filter.columnKey)
+            if (!column) return false
+            const columnFilters = column.getFilterValue() as Record<FilterColumnExt<TData>['id'], any>
+            return columnFilters && Object.keys(columnFilters).length > 0
+          }) && (
+            <Button
+              variant="link"
+              size="sm"
+              className="flex items-center gap-1.5"
+              onClick={() => {
+                activeFilters.forEach(filter => {
+                  const column = table.getColumn(filter.columnKey)
+                  if (column) {
+                    column.setFilterValue(undefined)
+                  }
+                })
+              }}
+            >
+              <XIcon className="size-3.5 text-muted-foreground" />
+              <span>{TC.TOOLBAR.CLEAR_FILTERS}</span>
+            </Button>
+          )}
+        </div>
+      )}
     </div>
   )
 }
@@ -497,7 +414,7 @@ function DataTableRightToolbar<TData> ({
   }
 
   return (
-    <div className='w-full flex sm:justify-end gap-1 border-t sm:border-none pt-2 sm:pt-0'>
+    <div className='flex sm:justify-end gap-1 border-t sm:border-none pt-2 sm:pt-0'>
       <DropdownMenu>
         <Button
           className='hidden sm:flex'
