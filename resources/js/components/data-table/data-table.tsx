@@ -156,7 +156,11 @@ export function DataTable<TData> ({
           value={activeTab}
           onValueChange={setActiveTab}
         >
-          <TabsList className='w-full pb-0 rounded-none bg-transparent justify-start border-b [&>button]:grow-0 [&>button]:px-3 [&>button]:border-0 [&>button]:rounded-none [&>button]:dark:data-[state=active]:bg-transparent [&>button]:dark:data-[state=active]:border-b-2 [&>button]:dark:data-[state=active]:border-primary [&>button]:dark:data-[state=active]:text-primary [&>button]:hover:text-primary/90'>
+          <TabsList className='
+            w-full pb-0 rounded-none bg-transparent justify-start  border-b
+            [&>button]:grow-0 [&>button]:px-3 [&>button]:border-0 [&>button]:rounded-none [&>button]:hover:text-primary/90
+            [&>button]:data-[state=active]:border-b-2 [&>button]:data-[state=active]:border-primary [&>button]:data-[state=active]:shadow-none [&>button]:dark:data-[state=active]:bg-transparent [&>button]:dark:data-[state=active]:border-b-2 [&>button]:dark:data-[state=active]:border-primary [&>button]:dark:data-[state=active]:text-primary
+          '>
             {tabsConfig.tabs.map((tab) => (
               <TabsTrigger key={tab.value} value={tab.value}>{tab.label}</TabsTrigger>
             ))}
