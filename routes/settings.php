@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\Settings\PasswordController;
 use App\Http\Controllers\Settings\ProfileController;
-use App\Http\Controllers\Settings\TwoFactorAuthenticationController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -25,7 +24,4 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('ajustes/apariencia', function () {
         return Inertia::render('settings/appearance');
     })->name('appearance.edit');
-
-    Route::get('ajustes/doble-factor-de-autenticacion', [TwoFactorAuthenticationController::class, 'show'])
-        ->name('two-factor.show');
 });

@@ -3,16 +3,15 @@
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
-use Laravel\Fortify\Http\Controllers\RegisteredUserController;
-use Laravel\Fortify\Http\Controllers\PasswordResetLinkController;
-use Laravel\Fortify\Http\Controllers\NewPasswordController;
-use Laravel\Fortify\Http\Controllers\EmailVerificationPromptController;
 use Laravel\Fortify\Http\Controllers\ConfirmablePasswordController;
-use Laravel\Fortify\Http\Controllers\TwoFactorAuthenticatedSessionController;
+use Laravel\Fortify\Http\Controllers\EmailVerificationPromptController;
+use Laravel\Fortify\Http\Controllers\NewPasswordController;
+use Laravel\Fortify\Http\Controllers\PasswordResetLinkController;
+use Laravel\Fortify\Http\Controllers\RegisteredUserController;
 
 Route::group(['middleware' => config('fortify.middleware', ['web'])], function () {
 
-    Route::middleware(['guest:' . config('fortify.guard')])->group(function () {
+    Route::middleware(['guest:'.config('fortify.guard')])->group(function () {
         Route::get('/ingresar', [AuthenticatedSessionController::class, 'create'])
             ->name('login');
 
@@ -28,14 +27,9 @@ Route::group(['middleware' => config('fortify.middleware', ['web'])], function (
             Route::get('/restablecer-contrasena/{token}', [NewPasswordController::class, 'create'])
                 ->name('password.reset');
         }
-
-        if (Features::enabled(Features::twoFactorAuthentication())) {
-            Route::get('/verificacion-dos-pasos', [TwoFactorAuthenticatedSessionController::class, 'create'])
-                ->name('two-factor.login');
-        }
     });
 
-    Route::middleware([config('fortify.auth_middleware', 'auth') . ':' . config('fortify.guard')])->group(function () {
+    Route::middleware([config('fortify.auth_middleware', 'auth').':'.config('fortify.guard')])->group(function () {
         if (Features::enabled(Features::emailVerification())) {
             Route::get('/verificar-correo', EmailVerificationPromptController::class)
                 ->name('verification.notice');
