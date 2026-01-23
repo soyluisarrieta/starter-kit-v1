@@ -14,3 +14,8 @@ export type Auth = {
     roles: string[];
     permissions: string[];
 };
+
+export type PermissionDef = {
+    key: string;
+    value: string;
+};
