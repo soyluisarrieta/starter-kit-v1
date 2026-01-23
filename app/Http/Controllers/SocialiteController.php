@@ -62,7 +62,7 @@ class SocialiteController extends Controller
             ->where('sso_provider', $provider)
             ->first();
 
-        if (!$user) {
+        if (! $user) {
             $user = User::query()->where('email', $email)->first();
 
             if ($user) {
@@ -107,6 +107,7 @@ class SocialiteController extends Controller
 
         // auto-login user
         Auth::login($user, true);
+
         return redirect()->route('dashboard');
     }
 }
