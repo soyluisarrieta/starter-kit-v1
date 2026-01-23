@@ -1,5 +1,6 @@
 import { Form, Head } from '@inertiajs/react';
 import InputError from '@/components/input-error';
+import GoogleButton from '@/components/sso/google-button';
 import TextLink from '@/components/text-link';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -16,6 +17,15 @@ export default function Register() {
             description="Ingresa tus datos para crear tu cuenta"
         >
             <Head title="Registro" />
+
+            <GoogleButton />
+
+            <div className="flex w-full items-center gap-2">
+                <div className="h-px w-full bg-muted" />
+                <span className="text-xs text-muted-foreground">O</span>
+                <div className="h-px w-full bg-muted" />
+            </div>
+
             <Form
                 {...store.form()}
                 resetOnSuccess={['password', 'password_confirmation']}
@@ -32,7 +42,7 @@ export default function Register() {
                                     type="text"
                                     required
                                     autoFocus
-                                    tabIndex={1}
+                                    tabIndex={2}
                                     autoComplete="name"
                                     name="name"
                                     placeholder="Nombre completo"
@@ -51,7 +61,7 @@ export default function Register() {
                                     id="email"
                                     type="email"
                                     required
-                                    tabIndex={2}
+                                    tabIndex={3}
                                     autoComplete="email"
                                     name="email"
                                     placeholder="correo@ejemplo.com"
@@ -65,7 +75,7 @@ export default function Register() {
                                     id="password"
                                     type="password"
                                     required
-                                    tabIndex={3}
+                                    tabIndex={4}
                                     autoComplete="new-password"
                                     name="password"
                                     placeholder="••••••••••"
@@ -81,7 +91,7 @@ export default function Register() {
                                     id="password_confirmation"
                                     type="password"
                                     required
-                                    tabIndex={4}
+                                    tabIndex={5}
                                     autoComplete="new-password"
                                     name="password_confirmation"
                                     placeholder="••••••••••"
@@ -94,7 +104,7 @@ export default function Register() {
                             <Button
                                 type="submit"
                                 className="mt-2 w-full"
-                                tabIndex={5}
+                                tabIndex={6}
                                 data-test="register-user-button"
                             >
                                 {processing && <Spinner />}
@@ -104,7 +114,7 @@ export default function Register() {
 
                         <div className="text-center text-sm text-muted-foreground">
                             ¿Ya tienes cuenta?{' '}
-                            <TextLink href={login()} tabIndex={6}>
+                            <TextLink href={login()} tabIndex={7}>
                                 Inicia sesión
                             </TextLink>
                         </div>

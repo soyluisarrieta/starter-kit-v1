@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\SocialiteController;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
@@ -9,6 +10,7 @@ use Laravel\Fortify\Http\Controllers\NewPasswordController;
 use Laravel\Fortify\Http\Controllers\PasswordResetLinkController;
 use Laravel\Fortify\Http\Controllers\RegisteredUserController;
 
+// Fortify
 Route::group(['middleware' => config('fortify.middleware', ['web'])], function () {
 
     Route::middleware(['guest:'.config('fortify.guard')])->group(function () {
@@ -38,4 +40,10 @@ Route::group(['middleware' => config('fortify.middleware', ['web'])], function (
         Route::get('/confirmar-contrasena', [ConfirmablePasswordController::class, 'show'])
             ->name('password.confirm');
     });
+});
+
+// Socialite
+Route::controller(SocialiteController::class)->group(function () {
+    Route::get('auth/{provider}', 'redirectToProvider')->name('auth.sso.redirect');
+    Route::get('auth/{provider}/callback', 'handleProviderCallback')->name('auth.sso.callback');
 });

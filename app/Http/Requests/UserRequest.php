@@ -52,7 +52,7 @@ class UserRequest extends FormRequest
             'address' => 'dirección',
             'phone' => 'teléfono',
             'avatar' => 'avatar',
-            'email' => 'correo electrónico'
+            'email' => 'correo electrónico',
         ];
     }
 }
