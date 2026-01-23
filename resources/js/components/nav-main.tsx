@@ -11,12 +11,15 @@ import type { NavItem } from '@/types';
 
 export function NavMain({ items = [] }: { items: NavItem[] }) {
     const { isCurrentUrl } = useCurrentUrl();
+    const visibleItems = items.filter(
+        ({ hasPermission = true }) => hasPermission,
+    );
 
     return (
         <SidebarGroup className="px-2 py-0">
             <SidebarGroupLabel>Plataforma</SidebarGroupLabel>
             <SidebarMenu>
-                {items.map((item) => (
+                {visibleItems.map((item) => (
                     <SidebarMenuItem key={item.title}>
                         <SidebarMenuButton
                             asChild

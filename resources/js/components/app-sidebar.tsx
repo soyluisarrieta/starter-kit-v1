@@ -12,22 +12,11 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
+import { USER_PERMISSIONS } from '@/constants/permissions';
+import { useCan } from '@/hooks/use-can';
 import { dashboard, users } from '@/routes';
 import type { NavItem } from '@/types';
 import AppLogo from './app-logo';
-
-const mainNavItems: NavItem[] = [
-    {
-        title: 'Inicio',
-        href: dashboard(),
-        icon: HomeIcon,
-    },
-    {
-        title: 'Usuarios',
-        href: users(),
-        icon: UserIcon,
-    },
-];
 
 const footerNavItems: NavItem[] = [
     {
@@ -43,6 +32,21 @@ const footerNavItems: NavItem[] = [
 ];
 
 export function AppSidebar() {
+    const { canListUser } = useCan([USER_PERMISSIONS.LIST]);
+
+    const mainNavItems: NavItem[] = [
+        {
+            title: 'Inicio',
+            href: dashboard(),
+            icon: HomeIcon,
+        },
+        {
+            title: 'Usuarios',
+            href: users(),
+            icon: UserIcon,
+            hasPermission: canListUser,
+        },
+    ];
     return (
         <Sidebar collapsible="icon" variant="inset">
             <SidebarHeader>
