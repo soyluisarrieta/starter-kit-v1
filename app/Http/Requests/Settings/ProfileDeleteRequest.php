@@ -21,4 +21,11 @@ class ProfileDeleteRequest extends FormRequest
             'password' => $this->currentPasswordRules(),
         ];
     }
+
+    public function attributes(): array
+    {
+        return [
+            'password' => 'contraseña',
+        ];
+    }
 }

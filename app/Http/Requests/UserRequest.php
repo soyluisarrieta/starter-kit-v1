@@ -28,7 +28,6 @@ class UserRequest extends FormRequest
 
         return [
             'name' => 'required|string|regex:/^[a-zA-Z\s]+$/|min:3|max:25',
-            'lastname' => 'required|string|regex:/^[a-zA-Z\s]+$/|min:3|max:25',
             'gender' => 'nullable|in:male,female,other',
             'birthdate' => 'nullable|date|before_or_equal:today',
             'address' => 'nullable|string|max:100',
@@ -37,7 +36,6 @@ class UserRequest extends FormRequest
             'email' => [
                 'required',
                 'string',
-                'lowercase',
                 'email',
                 'max:100',
                 Rule::unique(User::class)->ignore($user->id),
@@ -54,9 +52,7 @@ class UserRequest extends FormRequest
             'address' => 'dirección',
             'phone' => 'teléfono',
             'avatar' => 'avatar',
-            'email' => 'correo electrónico',
-            'password' => 'contraseña',
-            'password_confirmation' => 'confirmación de contraseña',
+            'email' => 'correo electrónico'
         ];
     }
 }
