@@ -1,9 +1,9 @@
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, usePage } from '@inertiajs/react';
 import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/app-layout';
 import { users } from '@/routes';
 import { create } from '@/routes/users';
-import type { BreadcrumbItem } from '@/types';
+import type { BreadcrumbItem, User } from '@/types';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -13,6 +13,10 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 export default function Users() {
+    const { users } = usePage<{
+        users: User[];
+    }>().props;
+
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Usuarios" />
@@ -29,6 +33,7 @@ export default function Users() {
                         <Link href={create()}>Crear usuario</Link>
                     </Button>
                 </div>
+                <pre>{JSON.stringify(users, null, 2)}</pre>
             </div>
         </AppLayout>
     );
