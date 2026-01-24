@@ -10,22 +10,22 @@ enum Roles: string
     public function label(): string
     {
         return match ($this) {
-            static::SUPER_ADMIN => 'Super Administrador',
-            static::ADMIN => 'Administrador',
+            self::SUPER_ADMIN => 'Super Administrador',
+            self::ADMIN => 'Administrador',
         };
     }
 
     public function permissions(): array
     {
         return match ($this) {
-            static::SUPER_ADMIN => [
+            self::SUPER_ADMIN => [
                 Permissions::LIST_USER->value,
                 Permissions::VIEW_USER->value,
                 Permissions::CREATE_USER->value,
                 Permissions::UPDATE_USER->value,
                 Permissions::DELETE_USER->value,
             ],
-            static::ADMIN => [
+            self::ADMIN => [
                 Permissions::LIST_USER->value,
                 Permissions::VIEW_USER->value,
             ],

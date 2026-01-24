@@ -13,11 +13,11 @@ enum Permissions: string
     public function label(): string
     {
         return match ($this) {
-            static::LIST_USER => 'Listar Usuarios',
-            static::VIEW_USER => 'Ver Usuario',
-            static::CREATE_USER => 'Crear Usuario',
-            static::UPDATE_USER => 'Actualizar Usuario',
-            static::DELETE_USER => 'Eliminar Usuario',
+            self::LIST_USER => 'Listar Usuarios',
+            self::VIEW_USER => 'Ver Usuario',
+            self::CREATE_USER => 'Crear Usuario',
+            self::UPDATE_USER => 'Actualizar Usuario',
+            self::DELETE_USER => 'Eliminar Usuario',
         };
     }
 }
