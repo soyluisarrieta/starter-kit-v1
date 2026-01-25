@@ -15,7 +15,9 @@ class UserController extends Controller
                 'avatar' => $user->avatar,
                 'name' => $user->name,
                 'email' => $user->email,
-                'roles' => $user->roles,
+                'roles' => $user->roles->pluck('name')->toArray(),
+                'created_at' => $user->created_at,
+                'updated_at' => $user->updated_at,
             ]);
 
         return Inertia::render('users/index', compact('users'));

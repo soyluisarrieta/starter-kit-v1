@@ -1,21 +1,19 @@
-export type User = {
+export interface UserAuth {
     id: number;
     name: string;
     email: string;
-    avatar?: string;
-    email_verified_at: string | null;
+    avatar: string | null;
     created_at: string;
     updated_at: string;
-    [key: string]: unknown;
-};
+}
 
-export type Auth = {
-    user: User;
+export interface Auth {
+    user: UserAuth;
     roles: string[];
     permissions: string[];
-};
+}
 
-export type PermissionDef = {
+export interface PermissionDef {
     key: string;
     value: string;
-};
+}
