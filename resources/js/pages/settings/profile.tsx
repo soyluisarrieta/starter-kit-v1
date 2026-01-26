@@ -1,15 +1,28 @@
 import { Transition } from '@headlessui/react';
-import { Form, Head, Link, usePage } from '@inertiajs/react';
+import { Form, Head, Link, router, usePage } from '@inertiajs/react';
+import { UploadIcon } from 'lucide-react';
+import { useRef } from 'react';
 import ProfileController from '@/actions/App/Http/Controllers/Settings/ProfileController';
 import DeleteUser from '@/components/delete-user';
 import Heading from '@/components/heading';
 import InputError from '@/components/input-error';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
+import {
+    Dialog,
+    DialogClose,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogTitle,
+    DialogTrigger,
+} from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { useInitials } from '@/hooks/use-initials';
 import AppLayout from '@/layouts/app-layout';
 import SettingsLayout from '@/layouts/settings/layout';
-import { edit } from '@/routes/profile';
+import { edit, update } from '@/routes/profile';
 import { send } from '@/routes/verification';
 import type { BreadcrumbItem, SharedData } from '@/types';
 
@@ -28,6 +41,47 @@ export default function Profile({
     status?: string;
 }) {
     const { auth } = usePage<SharedData>().props;
+    const getInitials = useInitials();
+
+    const inputRef = useRef<HTMLInputElement | null>(null);
+    const uploadAvatar = () => {
+        if (inputRef.current) {
+            inputRef.current.click();
+        }
+    };
+
+    // Update and preview avatar
+    const updateAvatar = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+        router.post(
+            update().url,
+            {
+                _method: 'patch',
+                ...auth.user,
+                avatar: file,
+            },
+            {
+                preserveScroll: true,
+                forceFormData: true,
+            },
+        );
+    };
+
+    // Remove avatar
+    const removeAvatar = () => {
+        router.patch(
+            update().url,
+            {
+                _method: 'patch',
+                ...auth.user,
+                avatar: null,
+            },
+            {
+                preserveScroll: true,
+            },
+        );
+    };
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -42,6 +96,81 @@ export default function Profile({
                         title="Información de perfil"
                         description="Actualiza tu nombre y correo electrónico"
                     />
+
+                    <div className="relative flex items-center gap-3">
+                        <Avatar
+                            className="size-20 cursor-crosshair overflow-hidden rounded-full"
+                            onClick={uploadAvatar}
+                        >
+                            <AvatarImage
+                                className="object-cover"
+                                src={
+                                    auth.user.avatar
+                                        ? `/storage/avatars/${auth.user.avatar}`
+                                        : undefined
+                                }
+                                alt={auth.user.name}
+                            />
+                            <AvatarFallback className="rounded-lg bg-neutral-200 text-black dark:bg-neutral-700 dark:text-white">
+                                {getInitials(auth.user.name)}
+                            </AvatarFallback>
+                        </Avatar>
+
+                        <input
+                            className="hidden"
+                            type="file"
+                            accept="image/png, image/jpeg, image/webp"
+                            ref={inputRef}
+                            onChange={updateAvatar}
+                        />
+
+                        <div className="flex flex-col gap-1 pt-2 [&>button]:self-start">
+                            <Button variant="outline" onClick={uploadAvatar}>
+                                <UploadIcon />
+                                Actualizar foto
+                            </Button>
+
+                            <Dialog>
+                                <DialogTrigger asChild>
+                                    <Button
+                                        className="hover:bg-destructive!"
+                                        variant="ghost"
+                                        size="sm"
+                                        disabled={!auth.user.avatar}
+                                    >
+                                        Eliminar
+                                    </Button>
+                                </DialogTrigger>
+                                <DialogContent>
+                                    <DialogTitle>
+                                        ¿Estás seguro de que deseas eliminar tu
+                                        foto?
+                                    </DialogTitle>
+                                    <DialogDescription>
+                                        Una vez que se elimine su foto no podrá
+                                        ser recuperada, y se eliminarán de forma
+                                        permanente.
+                                    </DialogDescription>
+
+                                    <DialogFooter className="gap-2">
+                                        <DialogClose asChild>
+                                            <Button variant="secondary">
+                                                Cancelar
+                                            </Button>
+                                        </DialogClose>
+                                        <DialogClose asChild>
+                                            <Button
+                                                variant="destructive"
+                                                onClick={removeAvatar}
+                                            >
+                                                Eliminar foto
+                                            </Button>
+                                        </DialogClose>
+                                    </DialogFooter>
+                                </DialogContent>
+                            </Dialog>
+                        </div>
+                    </div>
 
                     <Form
                         {...ProfileController.update.form()}
