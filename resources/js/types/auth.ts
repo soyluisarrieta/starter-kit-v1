@@ -1,11 +1,6 @@
-export interface UserAuth {
-    id: number;
-    name: string;
-    email: string;
-    avatar: string | null;
-    created_at: string;
-    updated_at: string;
-}
+import type { User } from '@/types/user';
+
+export type UserAuth = Omit<User, 'roles'>;
 
 export interface Auth {
     user: UserAuth;
