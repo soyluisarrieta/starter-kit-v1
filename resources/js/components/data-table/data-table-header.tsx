@@ -1,5 +1,6 @@
 import type { Column } from '@tanstack/react-table';
 import { ArrowDown, ArrowUp, ArrowUpDown, EyeOff } from 'lucide-react';
+import type { ReactNode } from 'react';
 import { Button } from '@/components/ui/button';
 import {
     DropdownMenu,
@@ -13,19 +14,19 @@ import { useDataTableStore } from '@/stores/data-table-store';
 
 interface DataTableColumnHeaderProps<TData, TValue> {
     column: Column<TData, TValue>;
-    title: string;
+    children: ReactNode;
     className?: string;
 }
 
 export function DataTableColumnHeader<TData, TValue>({
     column,
-    title,
     className,
+    children,
 }: DataTableColumnHeaderProps<TData, TValue>) {
     const sorting = useDataTableStore((state) => state.sorting);
 
     if (!column.getCanSort()) {
-        return <div className={cn(className)}>{title}</div>;
+        return <div className={cn(className)}>{children}</div>;
     }
 
     const sorted = sorting.find((s) => s.id === column.id)?.desc;
@@ -39,7 +40,9 @@ export function DataTableColumnHeader<TData, TValue>({
                         size="sm"
                         className="-ml-3 data-[state=open]:bg-accent"
                     >
-                        <span>{title}</span>
+                        <span className="text-xs tracking-wide text-muted-foreground">
+                            {children}
+                        </span>
                         {sorted === true ? (
                             <ArrowDown className="ml-2 size-4" />
                         ) : sorted === false ? (

@@ -31,6 +31,7 @@ import { DataTableBulkActions } from './data-table-bulk-actions';
 import { DataTableColumnToggle } from './data-table-column-toggle';
 import { DataTableEmpty } from './data-table-empty';
 import { DataTableFilters } from './data-table-filters';
+import { DataTableColumnHeader } from './data-table-header';
 import { DataTablePagination } from './data-table-pagination';
 import { DataTableRowActions } from './data-table-row-actions';
 import { DataTableSearch } from './data-table-search';
@@ -93,6 +94,7 @@ export function DataTable<TData extends object>({
     const selectionColumn: ColumnDef<TData, unknown> = useMemo(
         () => ({
             id: 'select',
+            label: 'Seleccionar todo',
             header: ({ table }) => (
                 <Checkbox
                     checked={
@@ -122,6 +124,7 @@ export function DataTable<TData extends object>({
     const actionsColumn: ColumnDef<TData, unknown> = useMemo(
         () => ({
             id: 'actions',
+            label: 'Acciones',
             header: () => <span className="sr-only">Acciones</span>,
             cell: ({ row }) => (
                 <DataTableRowActions row={row.original} actions={rowActions} />
@@ -215,7 +218,6 @@ export function DataTable<TData extends object>({
                 </div>
             </div>
 
-            {/* Active filters section - shows between toolbar and table */}
             <DataTableActiveFilters filterConfigs={filterConfigs} />
 
             <div className="rounded-md border">
@@ -236,13 +238,20 @@ export function DataTable<TData extends object>({
                                                     : undefined,
                                         }}
                                     >
-                                        {header.isPlaceholder
-                                            ? null
-                                            : flexRender(
-                                                  header.column.columnDef
-                                                      .header,
-                                                  header.getContext(),
-                                              )}
+                                        {header.isPlaceholder ? null : (
+                                            <DataTableColumnHeader
+                                                column={header.column}
+                                            >
+                                                {header.column.columnDef.header
+                                                    ? flexRender(
+                                                          header.column
+                                                              .columnDef.header,
+                                                          header.getContext(),
+                                                      )
+                                                    : (header.column.columnDef
+                                                          .label ?? header.id)}
+                                            </DataTableColumnHeader>
+                                        )}
                                     </TableHead>
                                 ))}
                             </TableRow>

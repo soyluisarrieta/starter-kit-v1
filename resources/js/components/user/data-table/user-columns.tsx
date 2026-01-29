@@ -5,7 +5,6 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import type { User } from '@/types';
 import type { ResponsiveColumnConfig } from '@/types/data-table';
-import { DataTableColumnHeader } from '../../data-table/data-table-header';
 
 export const userResponsiveColumns: ResponsiveColumnConfig[] = [
     { columnId: 'created_at', minWidth: 768 },
@@ -15,10 +14,8 @@ export const userResponsiveColumns: ResponsiveColumnConfig[] = [
 export const userColumns: ColumnDef<User>[] = [
     {
         id: 'name',
+        header: 'Nombre',
         accessorFn: (row) => row.name,
-        header: ({ column }) => (
-            <DataTableColumnHeader column={column} title="Nombre" />
-        ),
         cell: ({ row }) => {
             const user = row.original;
             return (
@@ -36,18 +33,14 @@ export const userColumns: ColumnDef<User>[] = [
     },
     {
         accessorKey: 'email',
-        header: ({ column }) => (
-            <DataTableColumnHeader column={column} title="Correo electrónico" />
-        ),
+        header: 'Correo electrónico',
         cell: ({ row }) => (
             <div className="text-muted-foreground">{row.getValue('email')}</div>
         ),
     },
     {
         accessorKey: 'roles',
-        header: ({ column }) => (
-            <DataTableColumnHeader column={column} title="Roles" />
-        ),
+        header: 'Roles',
         filterFn: (row, _columnId, filterValue: string[]) => {
             const roles = row.getValue<string[]>('roles');
             return filterValue.some((value) => roles.includes(value));
@@ -67,9 +60,7 @@ export const userColumns: ColumnDef<User>[] = [
     },
     {
         accessorKey: 'created_at',
-        header: ({ column }) => (
-            <DataTableColumnHeader column={column} title="Fecha registro" />
-        ),
+        header: 'Fecha de registro',
         cell: ({ row }) => {
             const date = row.getValue<string>('created_at');
             return format(new Date(date), 'dd MMM yyyy', {
@@ -79,9 +70,7 @@ export const userColumns: ColumnDef<User>[] = [
     },
     {
         accessorKey: 'updated_at',
-        header: ({ column }) => (
-            <DataTableColumnHeader column={column} title="Último acceso" />
-        ),
+        header: 'Último acceso',
         cell: ({ row }) => {
             const date = row.getValue<string>('updated_at');
             return format(new Date(date), 'dd MMM yyyy', {

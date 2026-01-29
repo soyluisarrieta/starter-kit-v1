@@ -54,9 +54,16 @@ export function DataTableColumnToggle<TData>({
                 <DropdownMenuLabel>Mostrar columnas</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 {columns.map((column) => {
-                    const header = column.columnDef.header;
                     const displayName =
-                        typeof header === 'string' ? header : column.id;
+                        typeof column.columnDef.header === 'string'
+                            ? column.columnDef.header
+                            : column.columnDef.label;
+
+                    if (typeof displayName !== 'string') {
+                        console.error(
+                            `Column "${column.id}" header is not a string. Please add a "label" property to the column definition.`,
+                        );
+                    }
 
                     return (
                         <DropdownMenuCheckboxItem
