@@ -1,25 +1,21 @@
 <?php
 
-use App\Http\Controllers\Integrations\LLMController;
-use App\Http\Controllers\Modules\UserController;
+use App\Enums\Permissions;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-Route::get('/', function () {
-    return Inertia::render('welcome');
-})->name('home');
-
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('inicio', function () {
-        return Inertia::render('dashboard');
-    })->name('dashboard');
+    Route::get('/', fn () => Inertia::render('dashboard'))->name('dashboard');
 
-    // CRUDS
-    Route::resource_es('usuarios', UserController::class);
+    Route::get('/usuarios', [UserController::class, 'index'])
+        ->middleware('can:'.Permissions::LIST_USER->value)
+        ->name('users');
 
-    // LLM
-    Route::post('/llm/chat', [LLMController::class, 'chat']);
+    Route::get('/usuarios/crear', fn () => Inertia::render('users/create'))
+        ->middleware('can:'.Permissions::CREATE_USER->value)
+        ->name('users.create');
 });
 
-require __DIR__ . '/settings.php';
-require __DIR__ . '/auth.php';
+require __DIR__.'/auth.php';
+require __DIR__.'/settings.php';

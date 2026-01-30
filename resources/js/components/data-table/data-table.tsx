@@ -1,304 +1,299 @@
-import * as React from 'react'
 import {
-  type Table as TableType,
-  type VisibilityState,
-  type ColumnFiltersState,
-  type SortingState,
-  flexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  useReactTable
-} from '@tanstack/react-table'
+    flexRender,
+    getCoreRowModel,
+    getFilteredRowModel,
+    getPaginationRowModel,
+    getSortedRowModel,
+    useReactTable,
+    type ColumnDef,
+} from '@tanstack/react-table';
+import { useEffect, useMemo } from 'react';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow
-} from '@/components/ui/table'
-import { DataTableLeftToolbar, DataTableRightToolbar, DataTableToolbar } from '@/components/data-table/data-table-toolbar'
-import DataTableFooter from '@/components/data-table/data-table-footer'
-import { DataTableColumnHeader } from '@/components/data-table/data-table-column-header'
-import { DataTableColumnSelection, DataTableSelectionActions } from '@/components/data-table/data-table-column-selection'
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from '@/components/ui/table';
+import { useResponsiveColumns } from '@/hooks/use-responsive-columns';
+import { filterData } from '@/lib/data-table/data-table-filters';
+import { useDataTableStore } from '@/stores/data-table-store';
 import type {
-  CustomColumnDef,
-  DataTableActions,
-  DataTableTabsConfig,
-  FilterColumnExtended as FilterColumnExt,
-  FilterFunction
-} from '@/components/data-table/data-table-types'
-import { Skeleton } from '@/components/ui/skeleton'
-import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { createFilterFn, getFilterFn } from '@/components/data-table/data-table-utils'
-import { FILTERS } from '@/components/data-table/filters'
+    ColumnFilterConfig,
+    DataTableRowAction,
+    DataTableBulkAction,
+    ResponsiveColumnConfig,
+} from '@/types/data-table';
+import { DataTableActiveFilters } from './data-table-active-filters';
+import { DataTableBulkActions } from './data-table-bulk-actions';
+import { DataTableColumnToggle } from './data-table-column-toggle';
+import { DataTableEmpty } from './data-table-empty';
+import { DataTableFilters } from './data-table-filters';
+import { DataTableColumnHeader } from './data-table-header';
+import { DataTablePagination } from './data-table-pagination';
+import { DataTableRowActions } from './data-table-row-actions';
+import { DataTableSearch } from './data-table-search';
 
-export function DataTable<TData> ({
-  columns,
-  data,
-  mock,
-  disableRowSelection = false,
-  actions = {},
-  filterableColumns,
-  disableCopyJSON = false,
-  isLoading = false,
-  tabs: tabsConfig
-}: {
-  columns: CustomColumnDef<TData>[];
-  data: TData[] | undefined;
-  mock?: TData[];
-  disableRowSelection?: boolean;
-  actions?: DataTableActions<TData>;
-  filterableColumns?: FilterColumnExt<TData>[];
-  disableCopyJSON?: boolean;
-  isLoading?: boolean;
-  tabs?: DataTableTabsConfig<TData>;
-}) {
-  const [sorting, setSorting] = React.useState<SortingState>([])
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
-  const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
-  const [rowSelection, setRowSelection] = React.useState({})
-  const [activeTab, setActiveTab] = React.useState<string>(tabsConfig?.defaultTab || tabsConfig?.tabs?.[0]?.value || 'all')
+interface DataTableProps<TData extends object> {
+    data: TData[];
+    columns: ColumnDef<TData, unknown>[];
+    searchableColumns?: Array<keyof TData>;
+    filterConfigs?: ColumnFilterConfig[];
+    responsiveColumns?: ResponsiveColumnConfig[];
+    rowActions?: DataTableRowAction<TData>[];
+    bulkActions?: DataTableBulkAction<TData>[];
+    onDelete?: (rows: TData[]) => void;
+    enableRowSelection?: boolean;
+    enableExport?: boolean;
+    enableColumnToggle?: boolean;
+    pageSizeOptions?: number[];
+    exportFilename?: string;
+    searchPlaceholder?: string;
+}
 
-  React.useEffect(() => {
-    if (tabsConfig) {
-      const activeTabConfig = tabsConfig.tabs.find(tab => tab.value === activeTab)
-      if (activeTabConfig?.columnVisibility) {
-        setColumnVisibility(activeTabConfig.columnVisibility)
-      } else {
-        setColumnVisibility({})
-      }
-    }
-  }, [activeTab, tabsConfig])
+export function DataTable<TData extends object>({
+    data,
+    columns,
+    searchableColumns = [],
+    filterConfigs = [],
+    responsiveColumns = [],
+    rowActions = [],
+    bulkActions = [],
+    onDelete,
+    enableRowSelection = true,
+    enableExport = true,
+    enableColumnToggle = true,
+    pageSizeOptions = [10, 20, 30, 50, 100],
+    exportFilename = 'datos',
+    searchPlaceholder = 'Buscar...',
+}: DataTableProps<TData>) {
+    const sorting = useDataTableStore((state) => state.sorting);
+    const setSorting = useDataTableStore((state) => state.setSorting);
+    const columnVisibility = useDataTableStore(
+        (state) => state.columnVisibility,
+    );
+    const setColumnVisibility = useDataTableStore(
+        (state) => state.setColumnVisibility,
+    );
+    const rowSelection = useDataTableStore((state) => state.rowSelection);
+    const setRowSelection = useDataTableStore((state) => state.setRowSelection);
+    const { globalSearch, columnFilters } = useDataTableStore(
+        (state) => state.filters,
+    );
+    const { pageIndex, pageSize } = useDataTableStore(
+        (state) => state.pagination,
+    );
 
-  const extendedColumn = React.useMemo(() => {
-    return columns.map(column => {
-      column.filterFn = (row, columnId, filterValue) => {
-        if (!filterValue) return true
+    const filteredData = useMemo(
+        () => filterData(data, globalSearch, columnFilters, searchableColumns),
+        [data, globalSearch, columnFilters, searchableColumns],
+    );
 
-        return Object
-          .entries(filterValue)
-          .every(([filterId, value]) => {
-            const filterConfig = filterableColumns?.find(f => f.id === filterId)
-            if (!filterConfig) return true
-
-            const filterFunction: FilterFunction<TData> = filterConfig.filterFn
-              ? createFilterFn(filterConfig.filterFn)
-              : getFilterFn(filterConfig.type)
-
-            return filterFunction(row, columnId, value)
-          })
-      }
-
-      const accessorFn = (originalRow: TData) =>
-        originalRow[column.accessorKey as keyof TData]?.toString()
-      return {
-        accessorFn: column.accessorKey ? accessorFn : undefined,
-        ...column
-      }
-    })
-  }, [columns, filterableColumns])
-
-  const memorizedColumns = React.useMemo(() => {
-    if (!disableRowSelection) {
-      return [
-        DataTableColumnSelection<TData>(),
-        ...extendedColumn
-      ]
-    }
-    return extendedColumn
-  }, [extendedColumn, disableRowSelection])
-
-  const filteredData = React.useMemo(() => {
-    if (!tabsConfig || !data) return data
-
-    const activeTabConfig = tabsConfig.tabs.find(tab => tab.value === activeTab)
-    if (!activeTabConfig || !activeTabConfig.filter) return data
-
-    return data.filter(activeTabConfig.filter)
-  }, [data, tabsConfig, activeTab])
-
-  const table = useReactTable({
-    data: filteredData ?? mock ?? [],
-    columns: memorizedColumns,
-    defaultColumn: { filterFn: getFilterFn(FILTERS.PARTIAL_MATCH) },
-    globalFilterFn: getFilterFn(FILTERS.GLOBAL_SEARCH),
-    onSortingChange: setSorting,
-    onColumnFiltersChange: setColumnFilters,
-    onColumnVisibilityChange: setColumnVisibility,
-    onRowSelectionChange: setRowSelection,
-    getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    state: {
-      sorting,
-      columnFilters,
-      columnVisibility,
-      rowSelection
-    }
-  })
-
-  const widthExists = columns.some((column) => column.width)
-  const minWidthExists = columns.some((column) => column.minWidth)
-
-  const selectedRows = table.getFilteredSelectedRowModel().rows.length
-
-  return (
-    <>
-      {tabsConfig && (
-        <Tabs
-          defaultValue={tabsConfig.defaultTab || tabsConfig.tabs[0].value}
-          className={tabsConfig.className}
-          value={activeTab}
-          onValueChange={setActiveTab}
-        >
-          <TabsList className='
-            w-full pb-0 rounded-none bg-transparent justify-start  border-b
-            [&>button]:grow-0 [&>button]:px-3 [&>button]:border-0 [&>button]:rounded-none [&>button]:hover:text-primary/90
-            [&>button]:data-[state=active]:border-b-2 [&>button]:data-[state=active]:border-primary [&>button]:data-[state=active]:shadow-none [&>button]:dark:data-[state=active]:bg-transparent [&>button]:dark:data-[state=active]:border-b-2 [&>button]:dark:data-[state=active]:border-primary [&>button]:dark:data-[state=active]:text-primary
-          '>
-            {tabsConfig.tabs.map((tab) => (
-              <TabsTrigger key={tab.value} value={tab.value}>{tab.label}</TabsTrigger>
-            ))}
-          </TabsList>
-        </Tabs>
-      )}
-
-      <DataTableToolbar>
-        <DataTableLeftToolbar
-          table={table}
-          columnFilters={filterableColumns}
-        />
-        <DataTableRightToolbar
-          table={table}
-          onExport={actions?.onExport}
-          disableCopyJSON={disableCopyJSON}
-        />
-      </DataTableToolbar>
-
-      <div className="relative border rounded-lg">
-        <ScrollArea type='always'>
-          <Table className={!widthExists ? 'w-auto' : 'w-full'}>
-            <DataTableHeader
-              table={table}
-              widthExists={widthExists}
-              minWidthExists={minWidthExists}
-            />
-            <TableBody>
-              {table.getRowModel().rows?.length ? (
-                <DataTableRow
-                  table={table}
-                  widthExists={widthExists}
-                  minWidthExists={minWidthExists}
-                  isLoading={isLoading}
+    const selectionColumn: ColumnDef<TData, unknown> = useMemo(
+        () => ({
+            id: 'select',
+            label: 'Seleccionar todo',
+            header: ({ table }) => (
+                <Checkbox
+                    checked={
+                        table.getIsAllPageRowsSelected() ||
+                        (table.getIsSomePageRowsSelected() && 'indeterminate')
+                    }
+                    onCheckedChange={(value) =>
+                        table.toggleAllPageRowsSelected(!!value)
+                    }
+                    aria-label="Seleccionar todo"
                 />
-              ) : (
-                <TableRow>
-                  <TableCell colSpan={columns.length + 1} className="h-24 text-center">
-                    No results.
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
+            ),
+            cell: ({ row }) => (
+                <Checkbox
+                    checked={row.getIsSelected()}
+                    onCheckedChange={(value) => row.toggleSelected(!!value)}
+                    aria-label="Seleccionar fila"
+                />
+            ),
+            enableSorting: false,
+            enableHiding: false,
+            size: 40,
+        }),
+        [],
+    );
 
-          <ScrollBar orientation="horizontal" />
+    const actionsColumn: ColumnDef<TData, unknown> = useMemo(
+        () => ({
+            id: 'actions',
+            label: 'Acciones',
+            header: () => <span className="sr-only">Acciones</span>,
+            cell: ({ row }) => (
+                <DataTableRowActions row={row.original} actions={rowActions} />
+            ),
+            enableSorting: false,
+            enableHiding: false,
+            size: 50,
+        }),
+        [rowActions],
+    );
 
-          <DataTableSelectionActions
-            table={table}
-            selectedRows={selectedRows}
-            actions={actions}
-          />
-        </ScrollArea>
+    const tableColumns = useMemo(() => {
+        const cols: ColumnDef<TData, unknown>[] = [];
 
-        <DataTableFooter table={table} />
+        if (enableRowSelection) {
+            cols.push(selectionColumn);
+        }
 
-      </div>
-    </>
-  )
-}
+        cols.push(...columns);
 
-function DataTableHeader<TData> ({
-  table,
-  widthExists,
-  minWidthExists
-}: {
-  table: TableType<TData>;
-  widthExists: boolean;
-  minWidthExists: boolean;
-}) {
-  return (
-    <TableHeader>
-      {table.getHeaderGroups().map((headerGroup) => (
-        <TableRow key={headerGroup.id} className='[&>th]:first:rounded-tl-lg [&>th]:last:rounded-tr-lg'>
-          {headerGroup.headers.map((header) => {
-            const column = header.column.columnDef as CustomColumnDef<TData>
-            const columnStyle: React.CSSProperties = {
-              width: widthExists ? (column.width === 'auto' ? '0%' : column.width) : '100%',
-              minWidth: minWidthExists ? column.minWidth : undefined
-            }
-            return (
-              <TableHead
-                key={header.id}
-                className='px-0 dark:bg-border bg-muted/70 py-1.5'
-                style={columnStyle}
-              >
-                <DataTableColumnHeader header={header} />
-              </TableHead>
-            )
-          })}
-        </TableRow>
-      ))}
-    </TableHeader>
-  )
-}
+        if (rowActions.length > 0) {
+            cols.push(actionsColumn);
+        }
 
-function DataTableRow<TData> ({
-  table,
-  widthExists,
-  minWidthExists,
-  isLoading
-}: {
-  table: TableType<TData>;
-  widthExists: boolean;
-  minWidthExists: boolean;
-  isLoading: boolean;
-}) {
-  const totalColumns = table.getAllColumns().length
-  return (
-    table.getRowModel().rows.map((row) => (
-      <TableRow
-        key={row.id}
-        className='hover:bg-muted/20 data-[state=selected]:bg-muted/40 data-[state=selected]:hover:bg-muted/40'
-        data-state={row.getIsSelected() && 'selected'}
-      >
-        {row.getVisibleCells().map((cell, i) => {
-          const column = cell.column.columnDef as CustomColumnDef<TData>
-          const columnStyle: React.CSSProperties = {
-            width: widthExists ? (column.width === 'auto' ? 0 : column.width) : '100%',
-            minWidth: minWidthExists ? column.minWidth : undefined,
-            textAlign: column.align
-          }
-          const content = flexRender(cell.column.columnDef.cell, cell.getContext())
-          return (
-            <TableCell
-              key={cell.id}
-              className='p-3'
-              style={columnStyle}
-            >
-              {isLoading && i !== 0 && i !== totalColumns - 1 ? (
-                <Skeleton className="w-fit h-3 align-middle my-2.5 rounded-xl inline-flex">
-                  <span className='h-0 opacity-0 pointer-events-none select-none'>{content}</span>
-                </Skeleton>
-              ) : content}
-            </TableCell>
-          )
-        })}
-      </TableRow>
-    ))
-  )
+        return cols;
+    }, [
+        columns,
+        enableRowSelection,
+        rowActions.length,
+        selectionColumn,
+        actionsColumn,
+    ]);
+
+    const table = useReactTable({
+        data: filteredData,
+        columns: tableColumns,
+        state: {
+            sorting,
+            columnVisibility,
+            rowSelection,
+            pagination: { pageIndex, pageSize },
+        },
+        onSortingChange: setSorting,
+        onColumnVisibilityChange: setColumnVisibility,
+        onRowSelectionChange: setRowSelection,
+        getCoreRowModel: getCoreRowModel(),
+        getSortedRowModel: getSortedRowModel(),
+        getPaginationRowModel: getPaginationRowModel(),
+        getFilteredRowModel: getFilteredRowModel(),
+        manualFiltering: true,
+        enableRowSelection,
+    });
+
+    useResponsiveColumns({
+        configs: responsiveColumns,
+        onVisibilityChange: setColumnVisibility,
+        currentVisibility: columnVisibility,
+    });
+
+    useEffect(() => {
+        table.setPageIndex(pageIndex);
+    }, [table, pageIndex]);
+
+    useEffect(() => {
+        table.setPageSize(pageSize);
+    }, [table, pageSize]);
+
+    const hasData = data.length > 0;
+    const hasFilteredData = filteredData.length > 0;
+
+    return (
+        <div className="space-y-4">
+            <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                <DataTableSearch placeholder={searchPlaceholder} />
+
+                <div className="flex flex-1 items-center justify-between gap-2">
+                    <DataTableFilters configs={filterConfigs} />
+                    <div className="flex items-center gap-2">
+                        <DataTableBulkActions
+                            table={table}
+                            data={filteredData}
+                            customActions={bulkActions}
+                            onDelete={onDelete}
+                            enableExport={enableExport}
+                            exportFilename={exportFilename}
+                        />
+                        {enableColumnToggle && (
+                            <DataTableColumnToggle table={table} />
+                        )}
+                    </div>
+                </div>
+            </div>
+
+            <DataTableActiveFilters filterConfigs={filterConfigs} />
+
+            <div className="rounded-md border">
+                <Table>
+                    <TableHeader>
+                        {table.getHeaderGroups().map((headerGroup) => (
+                            <TableRow
+                                key={headerGroup.id}
+                                className="bg-muted/50"
+                            >
+                                {headerGroup.headers.map((header) => (
+                                    <TableHead
+                                        key={header.id}
+                                        style={{
+                                            width:
+                                                header.getSize() !== 150
+                                                    ? header.getSize()
+                                                    : undefined,
+                                        }}
+                                    >
+                                        {header.isPlaceholder ? null : (
+                                            <DataTableColumnHeader
+                                                column={header.column}
+                                            >
+                                                {header.column.columnDef.header
+                                                    ? flexRender(
+                                                          header.column
+                                                              .columnDef.header,
+                                                          header.getContext(),
+                                                      )
+                                                    : (header.column.columnDef
+                                                          .label ?? header.id)}
+                                            </DataTableColumnHeader>
+                                        )}
+                                    </TableHead>
+                                ))}
+                            </TableRow>
+                        ))}
+                    </TableHeader>
+                    <TableBody>
+                        {hasFilteredData ? (
+                            table.getRowModel().rows.map((row) => (
+                                <TableRow
+                                    key={row.id}
+                                    data-state={
+                                        row.getIsSelected() && 'selected'
+                                    }
+                                >
+                                    {row.getVisibleCells().map((cell) => (
+                                        <TableCell key={cell.id}>
+                                            {flexRender(
+                                                cell.column.columnDef.cell,
+                                                cell.getContext(),
+                                            )}
+                                        </TableCell>
+                                    ))}
+                                </TableRow>
+                            ))
+                        ) : (
+                            <TableRow>
+                                <TableCell
+                                    colSpan={tableColumns.length}
+                                    className="h-24 text-center"
+                                >
+                                    <DataTableEmpty hasData={hasData} />
+                                </TableCell>
+                            </TableRow>
+                        )}
+                    </TableBody>
+                </Table>
+            </div>
+
+            <DataTablePagination
+                table={table}
+                pageSizeOptions={pageSizeOptions}
+            />
+        </div>
+    );
 }

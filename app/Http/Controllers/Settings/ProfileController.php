@@ -3,7 +3,8 @@
 namespace App\Http\Controllers\Settings;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Modules\UserRequest;
+use App\Http\Requests\Settings\ProfileDeleteRequest;
+use App\Http\Requests\UserRequest;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -44,8 +45,8 @@ class ProfileController extends Controller
             $oldAvatar = $profile->getOriginal('avatar');
 
             if ($profile->avatar !== null) {
-                $avatarName = Str::uuid() . '.' . $request->avatar->getClientOriginalExtension();
-                $request->avatar->storeAs('avatars', $avatarName, 'public');
+                $avatarName = Str::uuid().'.'.$profile->avatar->getClientOriginalExtension();
+                $profile->avatar->storeAs('avatars', $avatarName, 'public');
                 $profile->avatar = $avatarName;
             }
 
@@ -53,7 +54,6 @@ class ProfileController extends Controller
                 Storage::disk('public')->delete("avatars/{$oldAvatar}");
             }
         }
-
         $profile->save();
 
         return to_route('profile.edit');
@@ -62,12 +62,8 @@ class ProfileController extends Controller
     /**
      * Delete the user's account.
      */
-    public function destroy(Request $request): RedirectResponse
+    public function destroy(ProfileDeleteRequest $request): RedirectResponse
     {
-        $request->validate([
-            'password' => ['required', 'current_password'],
-        ]);
-
         $user = $request->user();
 
         Auth::logout();

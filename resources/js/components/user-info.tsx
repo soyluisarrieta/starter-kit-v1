@@ -1,22 +1,34 @@
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { useInitials } from '@/hooks/use-initials'
-import { type User } from '@/types'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { PATHS } from '@/constants/paths';
+import { useInitials } from '@/hooks/use-initials';
+import type { UserAuth } from '@/types';
 
-export function UserInfo ({ user, showEmail = false }: { user: User; showEmail?: boolean }) {
-  const getInitials = useInitials()
+export function UserInfo({
+    user,
+    showEmail = false,
+}: {
+    user: UserAuth;
+    showEmail?: boolean;
+}) {
+    const getInitials = useInitials();
+    const avatarUrl = user.avatar ? `${PATHS.avatars}/${user.avatar}` : '';
 
-  return (
-    <>
-      <Avatar className="h-8 w-8 overflow-hidden rounded-full">
-        <AvatarImage src={user.avatar ? `/storage/avatars/${user.avatar}` : undefined} alt={user.name} />
-        <AvatarFallback className="rounded-lg bg-neutral-200 text-black dark:bg-neutral-700 dark:text-white">
-          {getInitials(user.name)}
-        </AvatarFallback>
-      </Avatar>
-      <div className="grid flex-1 text-left text-sm leading-tight">
-        <span className="truncate font-medium">{user.name}</span>
-        {showEmail && <span className="truncate text-xs text-muted-foreground">{user.email}</span>}
-      </div>
-    </>
-  )
+    return (
+        <>
+            <Avatar className="h-8 w-8 overflow-hidden rounded-full">
+                <AvatarImage src={avatarUrl} alt={user.name} />
+                <AvatarFallback className="rounded-lg bg-neutral-200 text-black dark:bg-neutral-700 dark:text-white">
+                    {getInitials(user.name)}
+                </AvatarFallback>
+            </Avatar>
+            <div className="grid flex-1 text-left text-sm leading-tight">
+                <span className="truncate font-medium">{user.name}</span>
+                {showEmail && (
+                    <span className="truncate text-xs text-muted-foreground">
+                        {user.email}
+                    </span>
+                )}
+            </div>
+        </>
+    );
 }

@@ -2,9 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Enums\Permissions;
 use App\Enums\Roles;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
 
@@ -15,15 +13,10 @@ class RoleSeeder extends Seeder
      */
     public function run(): void
     {
-        Role::create(['name' => Roles::ADMIN->value])
-            ->givePermissionTo([
-                Permissions::LIST_USER->value,
-                Permissions::VIEW_USER->value,
-                Permissions::CREATE_USER->value,
-                Permissions::UPDATE_USER->value,
-                Permissions::DELETE_USER->value,
-            ]);
+        Role::create(['name' => Roles::SUPER_ADMIN->value])
+            ->givePermissionTo(Roles::SUPER_ADMIN->permissions());
 
-        Role::create(['name' => Roles::USER->value]);
+        Role::create(['name' => Roles::ADMIN->value])
+            ->givePermissionTo(Roles::ADMIN->permissions());
     }
 }

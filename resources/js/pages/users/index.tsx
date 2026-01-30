@@ -1,62 +1,79 @@
-import { DataTable } from '@/components/data-table/data-table'
-import AppLayout from '@/layouts/app-layout'
-import can from '@/lib/can'
-import { userColumns } from '@/pages/users/columns'
-import { userFiletarables } from '@/pages/users/filters'
-import { User, type BreadcrumbItem } from '@/types'
-import { Head, Link } from '@inertiajs/react'
+import { Head, Link, usePage } from '@inertiajs/react';
+import { PlusIcon } from 'lucide-react';
+import { useCallback } from 'react';
+import { DataTable } from '@/components/data-table';
+import { Button } from '@/components/ui/button';
+import {
+    userColumns,
+    userResponsiveColumns,
+} from '@/components/user/data-table/user-columns';
+import {
+    userBulkActions,
+    userFilterConfigs,
+    userRowActions,
+} from '@/components/user/data-table/user-configs';
+import AppLayout from '@/layouts/app-layout';
+import { users } from '@/routes';
+import { create } from '@/routes/users';
+import type { BreadcrumbItem, User } from '@/types';
 
 const breadcrumbs: BreadcrumbItem[] = [
-  {
-    title: 'Usuarios',
-    href: '/usuarios'
-  }
-]
-
-const userTabs = {
-  defaultTab: 'all',
-  tabs: [
     {
-      value: 'all',
-      label: 'Todo',
-      columnVisibility: { lastname: false }
+        title: 'Usuarios',
+        href: users().url,
     },
-    {
-      value: 'admins',
-      label: 'Administradores',
-      columnVisibility: { lastname: false },
-      filter: (user: User) => user.roles.includes('admin')
-    },
-    {
-      value: 'users',
-      label: 'Usuarios',
-      columnVisibility: { lastname: false },
-      filter: (user: User) => user.roles.includes('user')
-    }
-  ]
-}
+];
 
-export default function Users ({ users }: { users: User[] }) {
-  return (
-    <AppLayout breadcrumbs={breadcrumbs}>
-      <Head title="Usuarios" />
+export default function Users() {
+    const { users } = usePage<{ users: User[] }>().props;
 
-      <div className="max-w-6xl w-full mx-auto overflow-x-auto p-4">
-        {can('create:user') && (
-          <Link
-            href={route('usuarios.crear')}
-            className="mb-4 inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-          >
-            Crear
-          </Link>
-        )}
-        <DataTable
-          columns={userColumns}
-          data={users}
-          filterableColumns={userFiletarables}
-          tabs={userTabs}
-        />
-      </div>
-    </AppLayout>
-  )
+    const handleDelete = useCallback((rows: User[]) => {
+        console.log(
+            '[Eliminar] Usuarios seleccionados:',
+            rows.map((r) => r.id),
+        );
+    }, []);
+    return (
+        <AppLayout breadcrumbs={breadcrumbs}>
+            <Head title="Usuarios" />
+
+            <main className="px-4 py-10">
+                <div className="mb-8 flex items-center justify-between">
+                    <div className="flex-1">
+                        <h1 className="text-3xl font-bold tracking-tight">
+                            Gestión de Usuarios
+                        </h1>
+                        <p className="mt-2 text-muted-foreground">
+                            Administra los usuarios del sistema con búsqueda,
+                            filtros y exportación.
+                        </p>
+                    </div>
+                    <Button
+                        className="fixed right-1 bottom-1 size-12 rounded-full p-4 lg:static lg:h-9 lg:w-auto lg:rounded-md"
+                        asChild
+                    >
+                        <Link href={create()}>
+                            <PlusIcon className="size-5 lg:size-4" />
+                            <span className="hidden lg:inline">
+                                Nuevo usuario
+                            </span>
+                        </Link>
+                    </Button>
+                </div>
+
+                <DataTable
+                    data={users}
+                    columns={userColumns}
+                    searchableColumns={['name', 'email', 'roles']}
+                    filterConfigs={userFilterConfigs}
+                    responsiveColumns={userResponsiveColumns}
+                    rowActions={userRowActions}
+                    bulkActions={userBulkActions}
+                    onDelete={handleDelete}
+                    exportFilename="usuarios"
+                    searchPlaceholder="Buscar usuarios..."
+                />
+            </main>
+        </AppLayout>
+    );
 }

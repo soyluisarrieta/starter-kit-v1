@@ -1,18 +1,35 @@
-import { SidebarProvider } from '@/components/ui/sidebar'
-import { SharedData } from '@/types'
-import { usePage } from '@inertiajs/react'
+import { usePage } from '@inertiajs/react';
+import type { ReactNode } from 'react';
+import { Toaster } from 'sonner';
+import { SidebarProvider } from '@/components/ui/sidebar';
+import { useFlashMessages } from '@/hooks/use-flash-message';
+import type { SharedData } from '@/types';
 
-interface AppShellProps {
-    children: React.ReactNode;
+type Props = {
+    children: ReactNode;
     variant?: 'header' | 'sidebar';
-}
+};
 
-export function AppShell ({ children, variant = 'header' }: AppShellProps) {
-  const isOpen = usePage<SharedData>().props.sidebarOpen
+const SonnerToaster = () => <Toaster position="top-right" richColors />;
 
-  if (variant === 'header') {
-    return <div className="flex min-h-screen w-full flex-col">{children}</div>
-  }
+export function AppShell({ children, variant = 'header' }: Props) {
+    const isOpen = usePage<SharedData>().props.sidebarOpen;
 
-  return <SidebarProvider defaultOpen={isOpen}>{children}</SidebarProvider>
+    useFlashMessages();
+
+    if (variant === 'header') {
+        return (
+            <div className="flex min-h-screen w-full flex-col">
+                {children}
+                <SonnerToaster />
+            </div>
+        );
+    }
+
+    return (
+        <SidebarProvider defaultOpen={isOpen}>
+            {children}
+            <SonnerToaster />
+        </SidebarProvider>
+    );
 }

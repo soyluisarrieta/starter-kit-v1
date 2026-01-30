@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Enums\Roles;
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class UserSeeder extends Seeder
@@ -14,18 +13,16 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        User::create([
-            'name' => 'Luis',
-            'lastname' => 'Arrieta',
+        User::firstOrCreate([
+            'name' => 'Luis Arrieta',
             'email' => 'luisarrieta796@gmail.com',
             'password' => bcrypt('qweqwe123'),
-        ])->assignRole(Roles::ADMIN->value);
+        ])->assignRole(Roles::SUPER_ADMIN->value);
 
-        User::create([
-            'name' => 'Jessica',
-            'lastname' => 'Pistala',
+        User::firstOrCreate([
+            'name' => 'Paola Pistala',
             'email' => 'jpaola1017@gmail.com',
             'password' => bcrypt('qweqwe123'),
-        ])->assignRole(Roles::USER->value);
+        ])->assignRole(Roles::ADMIN->value);
     }
 }

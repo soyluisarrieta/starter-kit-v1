@@ -1,144 +1,126 @@
-import { Head, useForm } from '@inertiajs/react'
-import { LoaderCircle } from 'lucide-react'
-import { FormEventHandler } from 'react'
+import { Form, Head } from '@inertiajs/react';
+import InputError from '@/components/input-error';
+import GoogleButton from '@/components/sso/google-button';
+import TextLink from '@/components/text-link';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Spinner } from '@/components/ui/spinner';
+import AuthLayout from '@/layouts/auth-layout';
+import { login } from '@/routes';
+import { store } from '@/routes/register';
 
-import InputError from '@/components/input-error'
-import TextLink from '@/components/text-link'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import AuthLayout from '@/layouts/auth-layout'
-import GoogleButton from '@/components/google-button'
+export default function Register() {
+    return (
+        <AuthLayout
+            title="Crea una cuenta"
+            description="Ingresa tus datos para crear tu cuenta"
+        >
+            <Head title="Registro" />
 
-type RegisterForm = {
-    name: string;
-    lastname: string;
-    email: string;
-    password: string;
-    password_confirmation: string;
-};
+            <GoogleButton />
 
-export default function Register () {
-  const { data, setData, post, processing, errors, reset } = useForm<Required<RegisterForm>>({
-    name: '',
-    lastname: '',
-    email: '',
-    password: '',
-    password_confirmation: ''
-  })
-
-  const submit: FormEventHandler = (e) => {
-    e.preventDefault()
-    post('/register', {
-      onFinish: () => reset('password', 'password_confirmation')
-    })
-  }
-
-  return (
-    <AuthLayout title="Crear una cuenta" description="Ingresa tus detalles a continuación para registrarte">
-      <Head title="Registrarse" />
-
-      <GoogleButton />
-
-      <form className="flex flex-col gap-6" onSubmit={submit}>
-        <div className="grid gap-6">
-          <div className='grid grid-cols-2 gap-2'>
-            <div className="grid gap-2">
-              <Label htmlFor="name">Nombre</Label>
-              <Input
-                id="name"
-                type="text"
-                required
-                autoFocus
-                tabIndex={1}
-                autoComplete="name"
-                value={data.name}
-                onChange={(e) => setData('name', e.target.value)}
-                disabled={processing}
-                placeholder="Nombre"
-              />
-              <InputError message={errors.name} className="mt-2" />
+            <div className="flex w-full items-center gap-2">
+                <div className="h-px w-full bg-muted" />
+                <span className="text-xs text-muted-foreground">O</span>
+                <div className="h-px w-full bg-muted" />
             </div>
 
-            <div className="grid gap-2">
-              <Label htmlFor="lastname">Apellido</Label>
-              <Input
-                id="lastname"
-                type="text"
-                required
-                autoFocus
-                tabIndex={1}
-                autoComplete="lastname"
-                value={data.lastname}
-                onChange={(e) => setData('lastname', e.target.value)}
-                disabled={processing}
-                placeholder="Apellido"
-              />
-              <InputError message={errors.name} className="mt-2" />
-            </div>
-          </div>
+            <Form
+                {...store.form()}
+                resetOnSuccess={['password', 'password_confirmation']}
+                disableWhileProcessing
+                className="flex flex-col gap-6"
+            >
+                {({ processing, errors }) => (
+                    <>
+                        <div className="grid gap-6">
+                            <div className="grid gap-2">
+                                <Label htmlFor="name">Nombre</Label>
+                                <Input
+                                    id="name"
+                                    type="text"
+                                    required
+                                    autoFocus
+                                    tabIndex={2}
+                                    autoComplete="name"
+                                    name="name"
+                                    placeholder="Nombre completo"
+                                />
+                                <InputError
+                                    message={errors.name}
+                                    className="mt-2"
+                                />
+                            </div>
 
-          <div className="grid gap-2">
-            <Label htmlFor="email">Correo electrónico</Label>
-            <Input
-              id="email"
-              type="email"
-              required
-              tabIndex={2}
-              autoComplete="email"
-              value={data.email}
-              onChange={(e) => setData('email', e.target.value)}
-              disabled={processing}
-              placeholder="email@ejemplo.com"
-            />
-            <InputError message={errors.email} />
-          </div>
+                            <div className="grid gap-2">
+                                <Label htmlFor="email">
+                                    Correo electrónico
+                                </Label>
+                                <Input
+                                    id="email"
+                                    type="email"
+                                    required
+                                    tabIndex={3}
+                                    autoComplete="email"
+                                    name="email"
+                                    placeholder="correo@ejemplo.com"
+                                />
+                                <InputError message={errors.email} />
+                            </div>
 
-          <div className="grid gap-2">
-            <Label htmlFor="password">Contraseña</Label>
-            <Input
-              id="password"
-              type="password"
-              required
-              tabIndex={3}
-              autoComplete="new-password"
-              value={data.password}
-              onChange={(e) => setData('password', e.target.value)}
-              disabled={processing}
-              placeholder="•••••••••••••"
-            />
-            <InputError message={errors.password} />
-          </div>
+                            <div className="grid gap-2">
+                                <Label htmlFor="password">Contraseña</Label>
+                                <Input
+                                    id="password"
+                                    type="password"
+                                    required
+                                    tabIndex={4}
+                                    autoComplete="new-password"
+                                    name="password"
+                                    placeholder="••••••••••"
+                                />
+                                <InputError message={errors.password} />
+                            </div>
 
-          <div className="grid gap-2">
-            <Label htmlFor="password_confirmation">Confirmar contraseña</Label>
-            <Input
-              id="password_confirmation"
-              type="password"
-              required
-              tabIndex={4}
-              autoComplete="new-password"
-              value={data.password_confirmation}
-              onChange={(e) => setData('password_confirmation', e.target.value)}
-              disabled={processing}
-              placeholder="•••••••••••••"
-            />
-            <InputError message={errors.password_confirmation} />
-          </div>
+                            <div className="grid gap-2">
+                                <Label htmlFor="password_confirmation">
+                                    Confirmar contraseña
+                                </Label>
+                                <Input
+                                    id="password_confirmation"
+                                    type="password"
+                                    required
+                                    tabIndex={5}
+                                    autoComplete="new-password"
+                                    name="password_confirmation"
+                                    placeholder="••••••••••"
+                                />
+                                <InputError
+                                    message={errors.password_confirmation}
+                                />
+                            </div>
 
-          <Button type="submit" className="mt-2 w-full" tabIndex={5} disabled={processing}>
-            {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
-            Crear cuenta
-          </Button>
-        </div>
+                            <Button
+                                type="submit"
+                                className="mt-2 w-full"
+                                tabIndex={6}
+                                data-test="register-user-button"
+                            >
+                                {processing && <Spinner />}
+                                Crear cuenta
+                            </Button>
+                        </div>
 
-        <div className="text-center text-sm text-muted-foreground">
-          ¿Ya tienes una cuenta?{' '}
-          <TextLink href={route('login')} tabIndex={6}>
-            Iniciar sesión
-          </TextLink>
-        </div>
-      </form>
-    </AuthLayout>
-  )
+                        <div className="text-center text-sm text-muted-foreground">
+                            ¿Ya tienes cuenta?{' '}
+                            <TextLink href={login()} tabIndex={7}>
+                                Inicia sesión
+                            </TextLink>
+                        </div>
+                    </>
+                )}
+            </Form>
+        </AuthLayout>
+    );
 }

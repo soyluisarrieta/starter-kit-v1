@@ -1,63 +1,49 @@
 <?php
 
-use App\Http\Controllers\Auth\AuthenticatedSessionController;
-use App\Http\Controllers\Auth\ConfirmablePasswordController;
-use App\Http\Controllers\Auth\EmailVerificationNotificationController;
-use App\Http\Controllers\Auth\EmailVerificationPromptController;
-use App\Http\Controllers\Auth\NewPasswordController;
-use App\Http\Controllers\Auth\PasswordResetLinkController;
-use App\Http\Controllers\Auth\RegisteredUserController;
-use App\Http\Controllers\Auth\SocialiteController;
-use App\Http\Controllers\Auth\VerifyEmailController;
+use App\Http\Controllers\SocialiteController;
 use Illuminate\Support\Facades\Route;
+use Laravel\Fortify\Features;
+use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
+use Laravel\Fortify\Http\Controllers\ConfirmablePasswordController;
+use Laravel\Fortify\Http\Controllers\EmailVerificationPromptController;
+use Laravel\Fortify\Http\Controllers\NewPasswordController;
+use Laravel\Fortify\Http\Controllers\PasswordResetLinkController;
+use Laravel\Fortify\Http\Controllers\RegisteredUserController;
 
-Route::middleware('guest')->group(function () {
-    Route::get('registrarse', [RegisteredUserController::class, 'create'])
-        ->name('register');
+// Fortify
+Route::group(['middleware' => config('fortify.middleware', ['web'])], function () {
 
-    Route::post('register', [RegisteredUserController::class, 'store']);
+    Route::middleware(['guest:'.config('fortify.guard')])->group(function () {
+        Route::get('/ingresar', [AuthenticatedSessionController::class, 'create'])
+            ->name('login');
 
-    Route::get('ingresar', [AuthenticatedSessionController::class, 'create'])
-        ->name('login');
+        if (Features::enabled(Features::registration())) {
+            Route::get('/registro', [RegisteredUserController::class, 'create'])
+                ->name('register');
+        }
 
-    Route::post('login', [AuthenticatedSessionController::class, 'store']);
+        if (Features::enabled(Features::resetPasswords())) {
+            Route::get('/recuperar-contrasena', [PasswordResetLinkController::class, 'create'])
+                ->name('password.request');
 
-    Route::get('olvide-mi-clave', [PasswordResetLinkController::class, 'create'])
-        ->name('password.request');
+            Route::get('/restablecer-contrasena/{token}', [NewPasswordController::class, 'create'])
+                ->name('password.reset');
+        }
+    });
 
-    Route::post('forgot-password', [PasswordResetLinkController::class, 'store'])
-        ->name('password.email');
+    Route::middleware([config('fortify.auth_middleware', 'auth').':'.config('fortify.guard')])->group(function () {
+        if (Features::enabled(Features::emailVerification())) {
+            Route::get('/verificar-correo', EmailVerificationPromptController::class)
+                ->name('verification.notice');
+        }
 
-    Route::get('restablecer-clave/{token}', [NewPasswordController::class, 'create'])
-        ->name('password.reset');
-
-    Route::post('reset-password', [NewPasswordController::class, 'store'])
-        ->name('password.store');
-});
-
-Route::middleware('auth')->group(function () {
-    Route::get('verificar-email', EmailVerificationPromptController::class)
-        ->name('verification.notice');
-
-    Route::get('verificar-email/{id}/{hash}', VerifyEmailController::class)
-        ->middleware(['signed', 'throttle:6,1'])
-        ->name('verification.verify');
-
-    Route::post('email/verification-notification', [EmailVerificationNotificationController::class, 'store'])
-        ->middleware('throttle:6,1')
-        ->name('verification.send');
-
-    Route::get('confirmar-contraseña', [ConfirmablePasswordController::class, 'show'])
-        ->name('password.confirm');
-
-    Route::post('confirm-password', [ConfirmablePasswordController::class, 'store']);
-
-    Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
-        ->name('logout');
+        Route::get('/confirmar-contrasena', [ConfirmablePasswordController::class, 'show'])
+            ->name('password.confirm');
+    });
 });
 
 // Socialite
 Route::controller(SocialiteController::class)->group(function () {
-    Route::get('auth/{provider}', 'redirectToProvider');
-    Route::get('auth/{provider}/callback', 'handleProviderCallback');
+    Route::get('auth/{provider}', 'redirectToProvider')->name('auth.sso.redirect');
+    Route::get('auth/{provider}/callback', 'handleProviderCallback')->name('auth.sso.callback');
 });
