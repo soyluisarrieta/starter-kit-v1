@@ -3,6 +3,7 @@ import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
+import { PATHS } from '@/constants/paths';
 import type { User } from '@/types';
 import type { ResponsiveColumnConfig } from '@/types/data-table';
 
@@ -18,10 +19,14 @@ export const userColumns: ColumnDef<User>[] = [
         accessorFn: (row) => row.name,
         cell: ({ row }) => {
             const user = row.original;
+            const avatarUrl = user.avatar
+                ? `${PATHS.avatars}/${user.avatar}`
+                : '';
+
             return (
-                <div className="flex items-center gap-3">
-                    <Avatar className="h-8 w-8 overflow-hidden rounded-full">
-                        <AvatarImage src={user.avatar ?? ''} alt={user.name} />
+                <div className="flex items-center gap-2">
+                    <Avatar className="size-8 overflow-hidden rounded-full">
+                        <AvatarImage src={avatarUrl} alt={user.name} />
                         <AvatarFallback className="rounded-lg bg-neutral-200 text-black dark:bg-neutral-700 dark:text-white">
                             {user.name[0]}
                         </AvatarFallback>

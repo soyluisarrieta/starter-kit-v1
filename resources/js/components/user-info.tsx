@@ -1,4 +1,5 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { PATHS } from '@/constants/paths';
 import { useInitials } from '@/hooks/use-initials';
 import type { UserAuth } from '@/types';
 
@@ -10,7 +11,7 @@ export function UserInfo({
     showEmail?: boolean;
 }) {
     const getInitials = useInitials();
-    const avatarUrl = user.avatar ? `/storage/avatars/${user.avatar}` : '';
+    const avatarUrl = user.avatar ? `${PATHS.avatars}/${user.avatar}` : '';
 
     return (
         <>
