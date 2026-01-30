@@ -20,6 +20,8 @@ class UserController extends Controller
                 'updated_at' => $user->updated_at,
             ]);
 
+        Inertia::flash('success', 'Usuarios cargados correctamente');
+
         return Inertia::render('users/index', compact('users'));
     }
 }
