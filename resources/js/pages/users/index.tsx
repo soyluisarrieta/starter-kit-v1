@@ -1,7 +1,6 @@
 import { Head, Link, usePage } from '@inertiajs/react';
-import type { ColumnDef } from '@tanstack/react-table';
 import { PlusIcon } from 'lucide-react';
-import { useCallback, useMemo } from 'react';
+import { useCallback } from 'react';
 import { DataTable } from '@/components/data-table';
 import { Button } from '@/components/ui/button';
 import {
@@ -17,12 +16,6 @@ import AppLayout from '@/layouts/app-layout';
 import { users } from '@/routes';
 import { create } from '@/routes/users';
 import type { BreadcrumbItem, User } from '@/types';
-import type {
-    ColumnFilterConfig,
-    DataTableBulkAction,
-    DataTableRowAction,
-    ResponsiveColumnConfig,
-} from '@/types/data-table';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -33,23 +26,6 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 export default function Users() {
     const { users } = usePage<{ users: User[] }>().props;
-    const columns: ColumnDef<User, unknown>[] = useMemo(() => userColumns, []);
-    const filterConfigs: ColumnFilterConfig[] = useMemo(
-        () => userFilterConfigs,
-        [],
-    );
-    const responsiveColumns: ResponsiveColumnConfig[] = useMemo(
-        () => userResponsiveColumns,
-        [],
-    );
-    const rowActions: DataTableRowAction<User>[] = useMemo(
-        () => userRowActions,
-        [],
-    );
-    const bulkActions: DataTableBulkAction<User>[] = useMemo(
-        () => userBulkActions,
-        [],
-    );
 
     const handleDelete = useCallback((rows: User[]) => {
         console.log(
@@ -87,17 +63,13 @@ export default function Users() {
 
                 <DataTable
                     data={users}
-                    columns={columns}
+                    columns={userColumns}
                     searchableColumns={['name', 'email', 'roles']}
-                    filterConfigs={filterConfigs}
-                    responsiveColumns={responsiveColumns}
-                    rowActions={rowActions}
-                    bulkActions={bulkActions}
+                    filterConfigs={userFilterConfigs}
+                    responsiveColumns={userResponsiveColumns}
+                    rowActions={userRowActions}
+                    bulkActions={userBulkActions}
                     onDelete={handleDelete}
-                    enableRowSelection
-                    enableExport
-                    enableColumnToggle
-                    pageSizeOptions={[5, 10, 20, 50]}
                     exportFilename="usuarios"
                     searchPlaceholder="Buscar usuarios..."
                 />
