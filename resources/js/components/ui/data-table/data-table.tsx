@@ -158,6 +158,7 @@ export function DataTable<TData extends object>({
         actionsColumn,
     ]);
 
+    // eslint-disable-next-line react-hooks/incompatible-library
     const table = useReactTable({
         data: filteredData,
         columns: tableColumns,

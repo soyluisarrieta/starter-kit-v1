@@ -1,12 +1,12 @@
 import { Form, Head } from '@inertiajs/react';
-import InputError from '@/components/input-error';
-import GoogleButton from '@/components/sso/google-button';
-import TextLink from '@/components/text-link';
+import GoogleButton from '@/components/features/auth/google-button';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
+import InputError from '@/components/ui/input-error';
 import { Label } from '@/components/ui/label';
 import { Spinner } from '@/components/ui/spinner';
+import TextLink from '@/components/ui/text-link';
 import AuthLayout from '@/layouts/auth-layout';
 import { register } from '@/routes';
 import { store } from '@/routes/login';

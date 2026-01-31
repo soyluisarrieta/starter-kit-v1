@@ -1,17 +1,17 @@
 import { Head, Link, usePage } from '@inertiajs/react';
 import { PlusIcon } from 'lucide-react';
 import { useCallback } from 'react';
-import { DataTable } from '@/components/data-table';
-import { Button } from '@/components/ui/button';
 import {
     userColumns,
     userResponsiveColumns,
-} from '@/components/user/data-table/user-columns';
+} from '@/components/features/user/data-table/user-columns';
 import {
     userBulkActions,
     userFilterConfigs,
     userRowActions,
-} from '@/components/user/data-table/user-configs';
+} from '@/components/features/user/data-table/user-configs';
+import { Button } from '@/components/ui/button';
+import { DataTable } from '@/components/ui/data-table';
 import AppLayout from '@/layouts/app-layout';
 import { users } from '@/routes';
 import { create } from '@/routes/users';

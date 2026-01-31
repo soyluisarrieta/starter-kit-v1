@@ -3,9 +3,8 @@ import { Form, Head, Link, router, usePage } from '@inertiajs/react';
 import { UploadIcon } from 'lucide-react';
 import { useRef } from 'react';
 import ProfileController from '@/actions/App/Http/Controllers/Settings/ProfileController';
-import DeleteUser from '@/components/delete-user';
-import Heading from '@/components/heading';
-import InputError from '@/components/input-error';
+import DeleteUser from '@/components/features/account/delete-user';
+import Heading from '@/components/layout/heading';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import {
@@ -18,6 +17,7 @@ import {
     DialogTrigger,
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
+import InputError from '@/components/ui/input-error';
 import { Label } from '@/components/ui/label';
 import { useInitials } from '@/hooks/use-initials';
 import AppLayout from '@/layouts/app-layout';

@@ -1,8 +1,9 @@
 import { Link } from '@inertiajs/react';
 import { BookOpen, Folder, HomeIcon, UserIcon } from 'lucide-react';
-import { NavFooter } from '@/components/nav-footer';
-import { NavMain } from '@/components/nav-main';
-import { NavUser } from '@/components/nav-user';
+import AppLogo from '@/components/layout/app-logo';
+import { NavFooter } from '@/components/layout/nav-footer';
+import { NavMain } from '@/components/layout/nav-main';
+import { NavUser } from '@/components/layout/nav-user';
 import {
     Sidebar,
     SidebarContent,
@@ -16,7 +17,6 @@ import { USER_PERMISSIONS } from '@/constants/permissions';
 import { useCan } from '@/hooks/use-can';
 import { dashboard, users } from '@/routes';
 import type { NavItem } from '@/types';
-import AppLogo from './app-logo';
 
 const footerNavItems: NavItem[] = [
     {

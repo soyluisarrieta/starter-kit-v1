@@ -1,6 +1,9 @@
 import { Link, usePage } from '@inertiajs/react';
 import { BookOpen, Folder, LayoutGrid, Menu, Search } from 'lucide-react';
-import { Breadcrumbs } from '@/components/breadcrumbs';
+import AppLogo from '@/components/layout/app-logo';
+import AppLogoIcon from '@/components/layout/app-logo-icon';
+import { Breadcrumbs } from '@/components/layout/breadcrumbs';
+import { UserMenuContent } from '@/components/layout/user-menu-content';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import {
@@ -27,14 +30,12 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { UserMenuContent } from '@/components/user-menu-content';
+import { PATHS } from '@/constants/paths';
 import { useCurrentUrl } from '@/hooks/use-current-url';
 import { useInitials } from '@/hooks/use-initials';
 import { cn, toUrl } from '@/lib/utils';
 import { dashboard } from '@/routes';
 import type { BreadcrumbItem, NavItem, SharedData } from '@/types';
-import AppLogo from './app-logo';
-import AppLogoIcon from './app-logo-icon';
 
 type Props = {
     breadcrumbs?: BreadcrumbItem[];
@@ -69,6 +70,9 @@ export function AppHeader({ breadcrumbs = [] }: Props) {
     const { auth } = page.props;
     const getInitials = useInitials();
     const { isCurrentUrl, whenCurrentUrl } = useCurrentUrl();
+    const avatarUrl = auth.user.avatar
+        ? `${PATHS.avatars}/${auth.user.avatar}`
+        : '';
     return (
         <>
             <div className="border-b border-sidebar-border/80">
@@ -80,7 +84,7 @@ export function AppHeader({ breadcrumbs = [] }: Props) {
                                 <Button
                                     variant="ghost"
                                     size="icon"
-                                    className="mr-2 h-[34px] w-[34px]"
+                                    className="mr-2 size-8.5"
                                 >
                                     <Menu className="h-5 w-5" />
                                 </Button>
@@ -223,7 +227,7 @@ export function AppHeader({ breadcrumbs = [] }: Props) {
                                 >
                                     <Avatar className="size-8 overflow-hidden rounded-full">
                                         <AvatarImage
-                                            src={auth.user.avatar}
+                                            src={avatarUrl}
                                             alt={auth.user.name}
                                         />
                                         <AvatarFallback className="rounded-lg bg-neutral-200 text-black dark:bg-neutral-700 dark:text-white">
