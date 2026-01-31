@@ -64,7 +64,7 @@ export default function Users() {
                 <DataTable
                     data={users}
                     columns={userColumns}
-                    searchableColumns={['name', 'email', 'roles']}
+                    searchableColumns={['name', 'last_name', 'email', 'roles']}
                     filterConfigs={userFilterConfigs}
                     responsiveColumns={userResponsiveColumns}
                     rowActions={userRowActions}

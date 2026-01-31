@@ -8,6 +8,8 @@ import type { User } from '@/types';
 import type { ResponsiveColumnConfig } from '@/types/data-table';
 
 export const userResponsiveColumns: ResponsiveColumnConfig[] = [
+    { columnId: 'last_name', minWidth: 1024 },
+    { columnId: 'email', minWidth: 1024 },
     { columnId: 'created_at', minWidth: 768 },
     { columnId: 'updated_at', minWidth: 1024 },
 ];
@@ -27,15 +29,34 @@ export const userColumns: ColumnDef<User>[] = [
             return (
                 <div className="flex items-center gap-2">
                     <Avatar className="size-8 overflow-hidden rounded-full">
-                        <AvatarImage src={avatarUrl} alt={fullName} />
+                        <AvatarImage src={avatarUrl} alt={user.name} />
                         <AvatarFallback className="rounded-lg bg-neutral-200 text-black dark:bg-neutral-700 dark:text-white">
                             {user.name[0]}
                         </AvatarFallback>
                     </Avatar>
-                    <span className="font-medium">{fullName}</span>
+                    <div className="flex flex-col">
+                        <div>
+                            <span className="hidden font-medium lg:inline">
+                                {user.name}
+                            </span>
+                            <span className="font-medium lg:hidden">
+                                {fullName}
+                            </span>
+                        </div>
+                        <span className="text-xs font-light text-muted-foreground lg:hidden">
+                            {user.email}
+                        </span>
+                    </div>
                 </div>
             );
         },
+    },
+    {
+        accessorKey: 'last_name',
+        header: 'Apellido',
+        cell: ({ row }) => (
+            <div className="font-medium">{row.getValue('last_name')}</div>
+        ),
     },
     {
         accessorKey: 'email',
