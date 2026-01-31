@@ -19,6 +19,7 @@ export const userColumns: ColumnDef<User>[] = [
         accessorFn: (row) => row.name,
         cell: ({ row }) => {
             const user = row.original;
+            const fullName = `${user.name} ${user.last_name}`;
             const avatarUrl = user.avatar
                 ? `${PATHS.avatars}/${user.avatar}`
                 : '';
@@ -26,12 +27,12 @@ export const userColumns: ColumnDef<User>[] = [
             return (
                 <div className="flex items-center gap-2">
                     <Avatar className="size-8 overflow-hidden rounded-full">
-                        <AvatarImage src={avatarUrl} alt={user.name} />
+                        <AvatarImage src={avatarUrl} alt={fullName} />
                         <AvatarFallback className="rounded-lg bg-neutral-200 text-black dark:bg-neutral-700 dark:text-white">
                             {user.name[0]}
                         </AvatarFallback>
                     </Avatar>
-                    <span className="font-medium">{user.name}</span>
+                    <span className="font-medium">{fullName}</span>
                 </div>
             );
         },
@@ -66,6 +67,7 @@ export const userColumns: ColumnDef<User>[] = [
     {
         accessorKey: 'created_at',
         header: 'Fecha de registro',
+        size: 0,
         cell: ({ row }) => {
             const date = row.getValue<string>('created_at');
             return format(new Date(date), 'dd MMM yyyy', {
@@ -76,6 +78,7 @@ export const userColumns: ColumnDef<User>[] = [
     {
         accessorKey: 'updated_at',
         header: 'Último acceso',
+        size: 0,
         cell: ({ row }) => {
             const date = row.getValue<string>('updated_at');
             return format(new Date(date), 'dd MMM yyyy', {

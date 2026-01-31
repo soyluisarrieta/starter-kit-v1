@@ -181,23 +181,44 @@ export default function Profile({
                     >
                         {({ processing, recentlySuccessful, errors }) => (
                             <>
-                                <div className="grid gap-2">
-                                    <Label htmlFor="name">Nombre</Label>
+                                <div className="grid grid-cols-2 gap-2">
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="name">Nombre</Label>
 
-                                    <Input
-                                        id="name"
-                                        className="mt-1 block w-full"
-                                        defaultValue={auth.user.name}
-                                        name="name"
-                                        required
-                                        autoComplete="name"
-                                        placeholder="Nombre completo"
-                                    />
+                                        <Input
+                                            id="name"
+                                            className="mt-1 block w-full"
+                                            defaultValue={auth.user.name}
+                                            name="name"
+                                            required
+                                            autoComplete="name"
+                                            placeholder="Nombre"
+                                        />
 
-                                    <InputError
-                                        className="mt-2"
-                                        message={errors.name}
-                                    />
+                                        <InputError
+                                            className="mt-2"
+                                            message={errors.name}
+                                        />
+                                    </div>
+
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="name">Apellido</Label>
+
+                                        <Input
+                                            id="last_name"
+                                            className="mt-1 block w-full"
+                                            defaultValue={auth.user.last_name}
+                                            name="last_name"
+                                            required
+                                            autoComplete="last_name"
+                                            placeholder="Apellido"
+                                        />
+
+                                        <InputError
+                                            className="mt-2"
+                                            message={errors.name}
+                                        />
+                                    </div>
                                 </div>
 
                                 <div className="grid gap-2">

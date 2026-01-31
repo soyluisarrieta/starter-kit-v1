@@ -14,6 +14,7 @@ class UserController extends Controller
                 'id' => $user->id,
                 'avatar' => $user->avatar,
                 'name' => $user->name,
+                'last_name' => $user->last_name,
                 'email' => $user->email,
                 'roles' => $user->roles->pluck('name')->toArray(),
                 'created_at' => $user->created_at,

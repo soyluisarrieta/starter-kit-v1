@@ -50,12 +50,12 @@ class SocialiteController extends Controller
         }
 
         $name =
-            $ssoUser->getName()
-            ?? $ssoUser->name
-            ?? ($ssoUser->user['name'] ?? null)
+            ($ssoUser->user['given_name'] ?? null)
             ?? explode('@', $email)[0]
             ?? 'Usuario';
 
+        $lastName = $ssoUser->user['family_name'] ?? $name;
+        
         // find or create user
         $user = User::query()
             ->where('sso_id', $ssoUser->getId())
@@ -75,6 +75,7 @@ class SocialiteController extends Controller
                     'sso_id' => $ssoUser->getId(),
                     'sso_provider' => $provider,
                     'name' => $name,
+                    'last_name' => $lastName,
                     'email' => $email,
                     'password' => Hash::make(Str::random(24)),
                     'email_verified_at' => now(),

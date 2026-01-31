@@ -28,6 +28,7 @@ class UserRequest extends FormRequest
 
         return [
             'name' => 'required|string|regex:/^[a-zA-Z\s]+$/|min:3|max:25',
+            'last_name' => 'required|string|regex:/^[a-zA-Z\s]+$/|min:3|max:25',
             'avatar' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
             'email' => [
                 'required',
