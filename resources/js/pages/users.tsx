@@ -10,6 +10,8 @@ import {
     ShieldIcon,
     Link2Icon,
     CheckIcon,
+    EyeIcon,
+    CopyIcon,
 } from 'lucide-react';
 import { useCallback, useState } from 'react';
 import {
@@ -19,13 +21,19 @@ import {
 import {
     userBulkActions,
     userFilterConfigs,
-    userRowActions,
 } from '@/components/features/user/data-table/user-configs';
-import UserDialogForm from '@/components/features/user/user-dialog-form';
+import UserForm from '@/components/features/user/user-form';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { DataTable } from '@/components/ui/data-table';
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+} from '@/components/ui/dialog';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -47,6 +55,7 @@ import AppLayout from '@/layouts/app-layout';
 import { cn } from '@/lib/utils';
 import { users } from '@/routes';
 import type { BreadcrumbItem, User } from '@/types';
+import type { DataTableRowAction } from '@/types/data-table';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -57,8 +66,8 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 export default function Users() {
     const [selectedUser, setSelectedUser] = useState<User | null>(null);
-    const { toggle: toggleView, isOpen: isOpenView } =
-        useDialog('user-sheet-view');
+    const userDialogForm = useDialog('user-dialog-form');
+    const userSheetView = useDialog('user-sheet-view');
     const { users } = usePage<{ users: User[] }>().props;
 
     const handleDelete = useCallback((rows: User[]) => {
@@ -70,8 +79,31 @@ export default function Users() {
 
     const handleView = (row: User) => {
         setSelectedUser(row);
-        toggleView(true);
+        userSheetView.toggle(true);
     };
+
+    const userRowActions: DataTableRowAction<User>[] = [
+        {
+            label: 'Ver detalles',
+            icon: <EyeIcon className="mr-2 size-4" />,
+            onClick: handleView,
+        },
+        {
+            label: 'Editar',
+            icon: <EditIcon className="mr-2 size-4" />,
+            onClick: (row) => {
+                userDialogForm.toggle(true);
+                setSelectedUser(row);
+            },
+        },
+        {
+            label: 'Copiar email',
+            icon: <CopyIcon className="mr-2 size-4" />,
+            onClick: (row) => {
+                navigator.clipboard.writeText(row.email);
+            },
+        },
+    ];
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -89,14 +121,16 @@ export default function Users() {
                         </p>
                     </div>
 
-                    <UserDialogForm>
-                        <Button className="fixed right-4 bottom-4 size-12 rounded-full p-4 lg:static lg:h-9 lg:w-auto lg:rounded-md">
-                            <PlusIcon className="size-5 lg:size-4" />
-                            <span className="hidden lg:inline">
-                                Crear usuario
-                            </span>
-                        </Button>
-                    </UserDialogForm>
+                    <Button
+                        className="fixed right-4 bottom-4 size-12 rounded-full p-4 lg:static lg:h-9 lg:w-auto lg:rounded-md"
+                        onClick={() => {
+                            setSelectedUser(null);
+                            userDialogForm.toggle(true);
+                        }}
+                    >
+                        <PlusIcon className="size-5 lg:size-4" />
+                        <span className="hidden lg:inline">Crear usuario</span>
+                    </Button>
                 </div>
 
                 <DataTable
@@ -114,7 +148,10 @@ export default function Users() {
             </main>
 
             {/* View user */}
-            <Sheet onOpenChange={toggleView} open={isOpenView}>
+            <Sheet
+                onOpenChange={userSheetView.toggle}
+                open={userSheetView.isOpen}
+            >
                 <SheetContent aria-describedby={undefined}>
                     <SheetHeader className="relative">
                         <div
@@ -253,6 +290,26 @@ export default function Users() {
                     </div>
                 </SheetContent>
             </Sheet>
+
+            {/* Create or edit user */}
+            <Dialog
+                onOpenChange={userDialogForm.toggle}
+                open={userDialogForm.isOpen}
+            >
+                <DialogContent>
+                    <DialogHeader className="mb-2">
+                        <DialogTitle>
+                            {selectedUser ? 'Editar' : 'Crear'} usuario
+                        </DialogTitle>
+                        <DialogDescription>
+                            {selectedUser
+                                ? 'Actualiza la información del usuario.'
+                                : 'Completa la información para crear el usuario.'}
+                        </DialogDescription>
+                    </DialogHeader>
+                    <UserForm user={selectedUser} />
+                </DialogContent>
+            </Dialog>
         </AppLayout>
     );
 }
