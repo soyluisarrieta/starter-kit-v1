@@ -42,6 +42,7 @@ import {
     SheetTitle,
 } from '@/components/ui/sheet';
 import { PATHS } from '@/constants/paths';
+import { useDialog } from '@/hooks/use-dialog';
 import AppLayout from '@/layouts/app-layout';
 import { cn } from '@/lib/utils';
 import { users } from '@/routes';
@@ -55,8 +56,9 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 export default function Users() {
-    const [openView, setOpenView] = useState(false);
-    const [userView, setUserView] = useState<User | null>(null);
+    const [selectedUser, setSelectedUser] = useState<User | null>(null);
+    const { toggle: toggleView, isOpen: isOpenView } =
+        useDialog('user-sheet-view');
     const { users } = usePage<{ users: User[] }>().props;
 
     const handleDelete = useCallback((rows: User[]) => {
@@ -67,8 +69,8 @@ export default function Users() {
     }, []);
 
     const handleView = (row: User) => {
-        setUserView(row);
-        setOpenView(true);
+        setSelectedUser(row);
+        toggleView(true);
     };
 
     return (
@@ -111,19 +113,20 @@ export default function Users() {
                 />
             </main>
 
-            <Sheet onOpenChange={setOpenView} open={openView}>
+            {/* View user */}
+            <Sheet onOpenChange={toggleView} open={isOpenView}>
                 <SheetContent aria-describedby={undefined}>
                     <SheetHeader className="relative">
                         <div
                             className={cn(
                                 'absolute inset-0 -z-10 overflow-hidden rounded-b-xl',
-                                !userView?.avatar && 'bg-muted',
+                                !selectedUser?.avatar && 'bg-muted',
                             )}
                         >
                             <div
                                 className="absolute inset-0 bg-cover bg-center blur-2xl saturate-200"
                                 style={{
-                                    backgroundImage: `url(${PATHS.avatars}/${userView?.avatar})`,
+                                    backgroundImage: `url(${PATHS.avatars}/${selectedUser?.avatar})`,
                                 }}
                             />
                         </div>
@@ -132,14 +135,16 @@ export default function Users() {
                         </SheetTitle>
                         <Avatar className="mt-4 -mb-10 size-24 rounded-full outline-4 -outline-offset-1 outline-background">
                             <AvatarImage
-                                src={`${PATHS.avatars}/${userView?.avatar}`}
-                                alt={userView?.name}
+                                src={`${PATHS.avatars}/${selectedUser?.avatar}`}
+                                alt={selectedUser?.name}
                             />
-                            <AvatarFallback>{userView?.name[0]}</AvatarFallback>
+                            <AvatarFallback>
+                                {selectedUser?.name[0]}
+                            </AvatarFallback>
                         </Avatar>
-                        {userView && (
+                        {selectedUser && (
                             <div className="absolute right-4 bottom-3">
-                                {userView.roles.map((role) => (
+                                {selectedUser.roles.map((role) => (
                                     <Badge key={role}>{role}</Badge>
                                 ))}
                             </div>
@@ -151,13 +156,14 @@ export default function Users() {
                             <div className="flex justify-between gap-3">
                                 <h3 className="text-2xl font-medium">
                                     <span>
-                                        {userView?.name} {userView?.last_name}
+                                        {selectedUser?.name}{' '}
+                                        {selectedUser?.last_name}
                                     </span>
                                     <small className="ml-1 text-lg text-muted-foreground">
-                                        #{userView?.id}
+                                        #{selectedUser?.id}
                                     </small>
                                 </h3>
-                                {userView?.id && (
+                                {selectedUser?.id && (
                                     <div className="space-x-1">
                                         <Button
                                             size="icon-sm"
@@ -210,7 +216,7 @@ export default function Users() {
                                 )}
                             </div>
                             <p className="text-sm text-muted-foreground">
-                                {userView?.email}
+                                {selectedUser?.email}
                             </p>
                         </div>
 
@@ -227,8 +233,8 @@ export default function Users() {
                                         Correo electrónico
                                     </span>
                                 </div>
-                                <span>{userView?.email}</span>
-                                {userView?.email_verified_at && (
+                                <span>{selectedUser?.email}</span>
+                                {selectedUser?.email_verified_at && (
                                     <span title="Correo verificado">
                                         <BadgeCheckIcon className="mb-px ml-1 inline size-4 fill-blue-400 text-background" />
                                     </span>
@@ -239,9 +245,9 @@ export default function Users() {
 
                     <div className="border-t px-4 py-2 text-xs text-muted-foreground/50">
                         Última actualización:{' '}
-                        {userView?.updated_at &&
+                        {selectedUser?.updated_at &&
                             format(
-                                new Date(userView.updated_at),
+                                new Date(selectedUser.updated_at),
                                 'dd/MM/yyyy - HH:mm a',
                             )}
                     </div>
