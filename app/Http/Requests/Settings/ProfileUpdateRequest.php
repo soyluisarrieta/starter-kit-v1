@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Settings;
 
 use App\Concerns\UserValidationRules;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class UserRequest extends FormRequest
+class ProfileUpdateRequest extends FormRequest
 {
     use UserValidationRules;
 
@@ -17,8 +17,7 @@ class UserRequest extends FormRequest
      */
     public function rules(): array
     {
-        $user = $this->route('user');
-        return $this->userRules($user?->id);
+        return $this->userRules($this->user()->id);
     }
 
     public function attributes(): array

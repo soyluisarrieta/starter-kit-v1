@@ -181,7 +181,7 @@ export default function Profile({
                     >
                         {({ processing, recentlySuccessful, errors }) => (
                             <>
-                                <div className="grid grid-cols-2 gap-2">
+                                <div className="grid grid-cols-2 items-start gap-2">
                                     <div className="grid gap-2">
                                         <Label htmlFor="name">Nombre</Label>
 
@@ -195,10 +195,7 @@ export default function Profile({
                                             placeholder="Nombre"
                                         />
 
-                                        <InputError
-                                            className="mt-2"
-                                            message={errors.name}
-                                        />
+                                        <InputError message={errors.name} />
                                     </div>
 
                                     <div className="grid gap-2">
@@ -215,8 +212,7 @@ export default function Profile({
                                         />
 
                                         <InputError
-                                            className="mt-2"
-                                            message={errors.name}
+                                            message={errors.last_name}
                                         />
                                     </div>
                                 </div>
@@ -237,10 +233,7 @@ export default function Profile({
                                         placeholder="Correo electrónico"
                                     />
 
-                                    <InputError
-                                        className="mt-2"
-                                        message={errors.email}
-                                    />
+                                    <InputError message={errors.email} />
                                 </div>
 
                                 {mustVerifyEmail &&
