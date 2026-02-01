@@ -39,6 +39,7 @@ export default function UserForm({ user }: UserFormProps) {
                         id="name"
                         name="name"
                         type="text"
+                        autoFocus={!user}
                         tabIndex={1}
                         value={data.name}
                         onChange={(e) => setData('name', e.target.value)}
