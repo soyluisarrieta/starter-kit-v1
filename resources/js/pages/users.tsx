@@ -21,6 +21,7 @@ import {
     userFilterConfigs,
     userRowActions,
 } from '@/components/features/user/data-table/user-configs';
+import UserDialogForm from '@/components/features/user/user-dialog-form';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -85,10 +86,15 @@ export default function Users() {
                             filtros y exportación.
                         </p>
                     </div>
-                    <Button className="fixed right-4 bottom-4 size-12 rounded-full p-4 lg:static lg:h-9 lg:w-auto lg:rounded-md">
-                        <PlusIcon className="size-5 lg:size-4" />
-                        <span className="hidden lg:inline">Nuevo usuario</span>
-                    </Button>
+
+                    <UserDialogForm>
+                        <Button className="fixed right-4 bottom-4 size-12 rounded-full p-4 lg:static lg:h-9 lg:w-auto lg:rounded-md">
+                            <PlusIcon className="size-5 lg:size-4" />
+                            <span className="hidden lg:inline">
+                                Crear usuario
+                            </span>
+                        </Button>
+                    </UserDialogForm>
                 </div>
 
                 <DataTable

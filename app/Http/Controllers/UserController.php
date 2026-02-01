@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UserRequest;
 use App\Models\User;
 use Inertia\Inertia;
 
@@ -22,5 +23,13 @@ class UserController extends Controller
             ]);
 
         return Inertia::render('users', compact('users'));
+    }
+    
+    public function store(UserRequest $request)
+    {
+        $user = $request->validated();
+        $user['password'] = bcrypt("qweqwe123");
+        User::create($user);
+        return to_route("users");
     }
 }

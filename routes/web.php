@@ -11,6 +11,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/usuarios', [UserController::class, 'index'])
         ->middleware('can:'.Permissions::LIST_USER->value)
         ->name('users');
+
+    Route::post('/users', [UserController::class, 'store'])
+        ->middleware('can:'.Permissions::CREATE_USER->value)
+        ->name('users.store');
 });
 
 require __DIR__.'/auth.php';
