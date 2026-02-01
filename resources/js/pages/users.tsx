@@ -1,4 +1,4 @@
-import { Head, Link, usePage } from '@inertiajs/react';
+import { Head, usePage } from '@inertiajs/react';
 import { format } from 'date-fns';
 import {
     BadgeCheckIcon,
@@ -44,7 +44,6 @@ import { PATHS } from '@/constants/paths';
 import AppLayout from '@/layouts/app-layout';
 import { cn } from '@/lib/utils';
 import { users } from '@/routes';
-import { create, edit } from '@/routes/users';
 import type { BreadcrumbItem, User } from '@/types';
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -86,16 +85,9 @@ export default function Users() {
                             filtros y exportación.
                         </p>
                     </div>
-                    <Button
-                        className="fixed right-1 bottom-1 size-12 rounded-full p-4 lg:static lg:h-9 lg:w-auto lg:rounded-md"
-                        asChild
-                    >
-                        <Link href={create()}>
-                            <PlusIcon className="size-5 lg:size-4" />
-                            <span className="hidden lg:inline">
-                                Nuevo usuario
-                            </span>
-                        </Link>
+                    <Button className="fixed right-4 bottom-4 size-12 rounded-full p-4 lg:static lg:h-9 lg:w-auto lg:rounded-md">
+                        <PlusIcon className="size-5 lg:size-4" />
+                        <span className="hidden lg:inline">Nuevo usuario</span>
                     </Button>
                 </div>
 
@@ -164,11 +156,8 @@ export default function Users() {
                                         <Button
                                             size="icon-sm"
                                             variant="outline"
-                                            asChild
                                         >
-                                            <Link href={edit(userView.id)}>
-                                                <EditIcon />
-                                            </Link>
+                                            <EditIcon />
                                         </Button>
 
                                         <DropdownMenu>
@@ -186,15 +175,6 @@ export default function Users() {
                                                         variant="link"
                                                         className="group w-full cursor-default justify-normal text-left font-light hover:no-underline active:bg-accent"
                                                         size="sm"
-                                                        onClick={() =>
-                                                            navigator.clipboard.writeText(
-                                                                window.location
-                                                                    .origin +
-                                                                    edit(
-                                                                        userView.id,
-                                                                    ).url,
-                                                            )
-                                                        }
                                                     >
                                                         <span className="group-focus:hidden">
                                                             <Link2Icon className="text-muted-foreground" />
