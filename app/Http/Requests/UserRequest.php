@@ -18,6 +18,7 @@ class UserRequest extends FormRequest
     public function rules(): array
     {
         $user = $this->route('user');
+
         return $this->userRules($user?->id);
     }
 

@@ -37,6 +37,4 @@ trait PasswordValidationRules
             'password' => 'contraseña',
         ];
     }
-
-
 }

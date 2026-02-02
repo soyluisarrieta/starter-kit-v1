@@ -55,7 +55,7 @@ class SocialiteController extends Controller
             ?? 'Usuario';
 
         $lastName = $ssoUser->user['family_name'] ?? $name;
-        
+
         // find or create user
         $user = User::query()
             ->where('sso_id', $ssoUser->getId())
