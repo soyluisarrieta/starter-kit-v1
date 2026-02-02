@@ -35,7 +35,7 @@ export default function UserSheetDetails({ user }: UserSheetDetailsProps) {
         : undefined;
 
     return (
-        <Sheet onOpenChange={userSheetView.toggle} open={userSheetView.isOpen}>
+        <Sheet {...userSheetView}>
             <SheetContent aria-describedby={undefined}>
                 <SheetHeader className="relative">
                     <div

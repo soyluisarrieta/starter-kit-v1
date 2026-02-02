@@ -27,7 +27,7 @@ export default function UserForm({ user }: UserFormProps) {
     const onSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        const onSuccess = () => userDialogForm.toggle(false);
+        const onSuccess = () => userDialogForm.onOpenChange(false);
 
         if (user) {
             put(update(user.id).url, { onSuccess });
@@ -91,7 +91,7 @@ export default function UserForm({ user }: UserFormProps) {
 
             <div className="flex justify-end gap-2">
                 <Button
-                    onClick={() => userDialogForm.toggle(false)}
+                    onClick={() => userDialogForm.onOpenChange(false)}
                     variant="outline"
                     type="button"
                     disabled={processing}

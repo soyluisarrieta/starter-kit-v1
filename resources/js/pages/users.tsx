@@ -52,7 +52,7 @@ export default function Users() {
                         className="fixed right-4 bottom-4 size-12 rounded-full p-4 lg:static lg:h-9 lg:w-auto lg:rounded-md"
                         onClick={() => {
                             setSelectedUser(null);
-                            userDialogForm.toggle(true);
+                            userDialogForm.onOpenChange(true);
                         }}
                     >
                         <PlusIcon className="size-5 lg:size-4" />
@@ -67,10 +67,7 @@ export default function Users() {
             <UserViewSheet user={selectedUser} />
 
             {/* Create or edit user */}
-            <Dialog
-                onOpenChange={userDialogForm.toggle}
-                open={userDialogForm.isOpen}
-            >
+            <Dialog {...userDialogForm}>
                 <DialogContent>
                     <DialogHeader className="mb-2">
                         <DialogTitle>
@@ -90,11 +87,10 @@ export default function Users() {
             <ConfirmDialog
                 title={`¿Eliminar usuario "${selectedUser?.name}"?`}
                 description="Una vez eliminado el usuario, todos sus datos serán eliminados permanentemente."
-                open={deleteDialog.isOpen}
-                onOpenChange={deleteDialog.toggle}
                 passwordRequired
                 method="delete"
                 url={selectedUser && destroy(selectedUser.id).url}
+                {...deleteDialog}
             />
         </AppLayout>
     );

@@ -19,7 +19,7 @@ export default function UserTable({ selectUser }: UserTableProps) {
 
     const handleView = (row: User) => {
         selectUser(row);
-        userSheetView.toggle(true);
+        userSheetView.onOpenChange(true);
     };
 
     const handleDelete = (rows: User[]) => {
@@ -50,7 +50,7 @@ export default function UserTable({ selectUser }: UserTableProps) {
                     label: 'Editar',
                     icon: <EditIcon className="mr-2 size-4" />,
                     onClick: (row) => {
-                        userDialogForm.toggle(true);
+                        userDialogForm.onOpenChange(true);
                         selectUser(row);
                     },
                 },
@@ -65,7 +65,7 @@ export default function UserTable({ selectUser }: UserTableProps) {
                     label: 'Eliminar',
                     icon: <TrashIcon className="mr-2 size-4" />,
                     onClick: (row) => {
-                        deleteDialog.toggle(true);
+                        deleteDialog.onOpenChange(true);
                         selectUser(row);
                     },
                 },
