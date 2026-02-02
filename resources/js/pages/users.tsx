@@ -1,33 +1,10 @@
-import { Head, usePage } from '@inertiajs/react';
-import { format } from 'date-fns';
-import {
-    BadgeCheckIcon,
-    EditIcon,
-    MailIcon,
-    PlusIcon,
-    MoreVerticalIcon,
-    TrashIcon,
-    ShieldIcon,
-    Link2Icon,
-    CheckIcon,
-    EyeIcon,
-    CopyIcon,
-} from 'lucide-react';
-import { useCallback, useState } from 'react';
+import { Head } from '@inertiajs/react';
+import { PlusIcon } from 'lucide-react';
+import { useState } from 'react';
 import { ConfirmDialog } from '@/components/commons/confirm-dialog';
-import {
-    userColumns,
-    userResponsiveColumns,
-} from '@/components/features/user/data-table/user-columns';
-import {
-    userBulkActions,
-    userFilterConfigs,
-} from '@/components/features/user/data-table/user-configs';
 import UserForm from '@/components/features/user/user-form';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Badge } from '@/components/ui/badge';
+import UserViewSheet from '@/components/features/user/user-view-sheet';
 import { Button } from '@/components/ui/button';
-import { DataTable } from '@/components/ui/data-table';
 import {
     Dialog,
     DialogContent,
@@ -35,29 +12,12 @@ import {
     DialogHeader,
     DialogTitle,
 } from '@/components/ui/dialog';
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuGroup,
-    DropdownMenuItem,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { Separator } from '@/components/ui/separator';
-import {
-    Sheet,
-    SheetContent,
-    SheetHeader,
-    SheetTitle,
-} from '@/components/ui/sheet';
-import { PATHS } from '@/constants/paths';
 import { useDialog } from '@/hooks/use-dialog';
 import AppLayout from '@/layouts/app-layout';
-import { cn } from '@/lib/utils';
 import { users } from '@/routes';
 import { destroy } from '@/routes/users';
 import type { BreadcrumbItem, User } from '@/types';
-import type { DataTableRowAction } from '@/types/data-table';
+import UserDataTable from '@/components/features/user/data-table/user-data-table';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -70,53 +30,7 @@ export default function Users() {
     const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
     const userDialogForm = useDialog('user-dialog-form');
-    const userSheetView = useDialog('user-sheet-view');
     const deleteDialog = useDialog('delete-dialog');
-
-    const { users } = usePage<{ users: User[] }>().props;
-
-    const handleDelete = useCallback((rows: User[]) => {
-        console.log(
-            '[Eliminar] Usuarios seleccionados:',
-            rows.map((r) => r.id),
-        );
-    }, []);
-
-    const handleView = (row: User) => {
-        setSelectedUser(row);
-        userSheetView.toggle(true);
-    };
-
-    const userRowActions: DataTableRowAction<User>[] = [
-        {
-            label: 'Ver detalles',
-            icon: <EyeIcon className="mr-2 size-4" />,
-            onClick: handleView,
-        },
-        {
-            label: 'Editar',
-            icon: <EditIcon className="mr-2 size-4" />,
-            onClick: (row) => {
-                userDialogForm.toggle(true);
-                setSelectedUser(row);
-            },
-        },
-        {
-            label: 'Copiar email',
-            icon: <CopyIcon className="mr-2 size-4" />,
-            onClick: (row) => {
-                navigator.clipboard.writeText(row.email);
-            },
-        },
-        {
-            label: 'Eliminar',
-            icon: <TrashIcon className="mr-2 size-4" />,
-            onClick: (row) => {
-                deleteDialog.toggle(true);
-                setSelectedUser(row);
-            },
-        },
-    ];
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -146,163 +60,11 @@ export default function Users() {
                     </Button>
                 </div>
 
-                <DataTable
-                    data={users}
-                    columns={userColumns({ onView: handleView })}
-                    searchableColumns={['name', 'last_name', 'email', 'roles']}
-                    filterConfigs={userFilterConfigs}
-                    responsiveColumns={userResponsiveColumns}
-                    rowActions={userRowActions}
-                    bulkActions={userBulkActions}
-                    onDelete={handleDelete}
-                    exportFilename="usuarios"
-                    searchPlaceholder="Buscar usuarios..."
-                />
+                <UserDataTable selectUser={setSelectedUser} />
             </main>
 
             {/* View user */}
-            <Sheet
-                onOpenChange={userSheetView.toggle}
-                open={userSheetView.isOpen}
-            >
-                <SheetContent aria-describedby={undefined}>
-                    <SheetHeader className="relative">
-                        <div
-                            className={cn(
-                                'absolute inset-0 -z-10 overflow-hidden rounded-b-xl',
-                                !selectedUser?.avatar && 'bg-muted',
-                            )}
-                        >
-                            <div
-                                className="absolute inset-0 bg-cover bg-center blur-2xl saturate-200"
-                                style={{
-                                    backgroundImage: `url(${PATHS.avatars}/${selectedUser?.avatar})`,
-                                }}
-                            />
-                        </div>
-                        <SheetTitle className="text-shadow-xl relative text-xl font-medium opacity-100 text-shadow-black/10">
-                            Detalles
-                        </SheetTitle>
-                        <Avatar className="mt-4 -mb-10 size-24 rounded-full outline-4 -outline-offset-1 outline-background">
-                            <AvatarImage
-                                src={`${PATHS.avatars}/${selectedUser?.avatar}`}
-                                alt={selectedUser?.name}
-                            />
-                            <AvatarFallback>
-                                {selectedUser?.name[0]}
-                            </AvatarFallback>
-                        </Avatar>
-                        {selectedUser && (
-                            <div className="absolute right-4 bottom-3">
-                                {selectedUser.roles.map((role) => (
-                                    <Badge key={role}>{role}</Badge>
-                                ))}
-                            </div>
-                        )}
-                    </SheetHeader>
-
-                    <div className="mt-6 flex flex-1 flex-col gap-y-6 px-4">
-                        <div className="flex flex-col justify-center">
-                            <div className="flex justify-between gap-3">
-                                <h3 className="text-2xl font-medium">
-                                    <span>
-                                        {selectedUser?.name}{' '}
-                                        {selectedUser?.last_name}
-                                    </span>
-                                    <small className="ml-1 text-lg text-muted-foreground">
-                                        #{selectedUser?.id}
-                                    </small>
-                                </h3>
-                                {selectedUser?.id && (
-                                    <div className="space-x-1">
-                                        <Button
-                                            size="icon-sm"
-                                            variant="outline"
-                                        >
-                                            <EditIcon />
-                                        </Button>
-
-                                        <DropdownMenu>
-                                            <DropdownMenuTrigger asChild>
-                                                <Button
-                                                    size="icon-sm"
-                                                    variant="outline"
-                                                >
-                                                    <MoreVerticalIcon />
-                                                </Button>
-                                            </DropdownMenuTrigger>
-                                            <DropdownMenuContent align="end">
-                                                <DropdownMenuGroup>
-                                                    <Button
-                                                        variant="link"
-                                                        className="group w-full cursor-default justify-normal text-left font-light hover:no-underline active:bg-accent"
-                                                        size="sm"
-                                                    >
-                                                        <span className="group-focus:hidden">
-                                                            <Link2Icon className="text-muted-foreground" />
-                                                        </span>
-                                                        <span className="hidden group-focus:inline-block">
-                                                            <CheckIcon className="text-green-500/80" />
-                                                        </span>
-                                                        Copiar link
-                                                    </Button>
-                                                    <DropdownMenuItem>
-                                                        <EditIcon /> Editar
-                                                    </DropdownMenuItem>
-                                                    <DropdownMenuItem>
-                                                        <ShieldIcon /> Cambiar
-                                                        rol
-                                                    </DropdownMenuItem>
-                                                </DropdownMenuGroup>
-                                                <DropdownMenuGroup>
-                                                    <DropdownMenuSeparator />
-                                                    <DropdownMenuItem className="hover:bg-destructive/70!">
-                                                        <TrashIcon /> Eliminar
-                                                    </DropdownMenuItem>
-                                                </DropdownMenuGroup>
-                                            </DropdownMenuContent>
-                                        </DropdownMenu>
-                                    </div>
-                                )}
-                            </div>
-                            <p className="text-sm text-muted-foreground">
-                                {selectedUser?.email}
-                            </p>
-                        </div>
-
-                        <Separator />
-
-                        <div className="space-y-3">
-                            <h3 className="text-lg font-medium">
-                                Información de contacto
-                            </h3>
-                            <div className="[&>p]:font-light">
-                                <div className="flex items-center gap-1.5 text-muted-foreground">
-                                    <MailIcon className="size-3.5" />
-                                    <span className="text-sm">
-                                        Correo electrónico
-                                    </span>
-                                </div>
-                                <span>{selectedUser?.email}</span>
-                                {selectedUser?.email_verified_at && (
-                                    <span title="Correo verificado">
-                                        <BadgeCheckIcon className="mb-px ml-1 inline size-4 fill-blue-400 text-background" />
-                                    </span>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="border-t px-4 py-2 text-xs text-muted-foreground/50">
-                        Última actualización:{' '}
-                        {selectedUser?.updated_at &&
-                            format(
-                                new Date(selectedUser.updated_at),
-                                'dd/MM/yyyy - HH:mm a',
-                            )}
-                    </div>
-                </SheetContent>
-            </Sheet>
+            <UserViewSheet user={selectedUser} />
 
             {/* Create or edit user */}
             <Dialog

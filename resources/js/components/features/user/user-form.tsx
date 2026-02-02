@@ -27,12 +27,12 @@ export default function UserForm({ user }: UserFormProps) {
     const onSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
+        const onSuccess = () => userDialogForm.toggle(false);
+
         if (user) {
-            put(update(user.id).url);
+            put(update(user.id).url, { onSuccess });
         } else {
-            post(store().url, {
-                onSuccess: () => userDialogForm.toggle(false),
-            });
+            post(store().url, { onSuccess });
         }
     };
 
