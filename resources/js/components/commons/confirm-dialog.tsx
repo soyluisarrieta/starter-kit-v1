@@ -1,6 +1,6 @@
 import { useForm } from '@inertiajs/react';
 import { LoaderIcon } from 'lucide-react';
-import type { ReactNode } from 'react';
+import { type ReactNode } from 'react';
 import { Button } from '@/components/ui/button';
 import {
     Dialog,
@@ -14,7 +14,7 @@ import {
 import { Input } from '@/components/ui/input';
 import InputError from '@/components/ui/input-error';
 
-interface ConfirmDialogProps {
+interface ConfirmDialogProps<TData> {
     open?: boolean;
     onOpenChange?: (open: boolean) => void;
     title: string;
@@ -22,10 +22,11 @@ interface ConfirmDialogProps {
     passwordRequired?: boolean;
     method: 'post' | 'put' | 'delete';
     url: string | null;
+    data?: TData;
     children?: ReactNode;
 }
 
-export function ConfirmDialog({
+export function ConfirmDialog<TData>({
     open,
     onOpenChange,
     title,
@@ -33,8 +34,9 @@ export function ConfirmDialog({
     passwordRequired,
     method,
     url,
+    data: additionalData,
     children,
-}: ConfirmDialogProps) {
+}: ConfirmDialogProps<TData>) {
     const {
         data,
         setData,
@@ -42,6 +44,7 @@ export function ConfirmDialog({
         errors,
         reset,
         clearErrors,
+        transform,
         [method]: send,
     } = useForm({
         password: '',
@@ -53,6 +56,13 @@ export function ConfirmDialog({
 
         if (!url) return;
         clearErrors('password');
+
+        if (additionalData) {
+            transform((formData) => ({
+                ...formData,
+                ...additionalData,
+            }));
+        }
 
         send(url, {
             preserveScroll: true,
@@ -106,7 +116,6 @@ export function ConfirmDialog({
                         <Button
                             type="submit"
                             variant="destructive"
-                            onClick={onSubmit}
                             disabled={processing}
                         >
                             {processing && (
