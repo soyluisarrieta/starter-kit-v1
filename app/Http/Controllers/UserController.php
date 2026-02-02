@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CurrentPasswordRequest;
+use App\Http\Requests\DestroyMultipleUsersRequest;
 use App\Http\Requests\UserRequest;
 use App\Models\User;
 use Inertia\Inertia;
@@ -21,7 +22,8 @@ class UserController extends Controller
                 'roles' => $user->roles->pluck('name')->toArray(),
                 'created_at' => $user->created_at,
                 'updated_at' => $user->updated_at,
-            ]);
+            ]
+        );
 
         return Inertia::render('users', compact('users'));
     }
@@ -31,7 +33,6 @@ class UserController extends Controller
         $user = $request->validated();
         $user['password'] = bcrypt('qweqwe123');
         User::create($user);
-
         Inertia::flash('success', 'Usuario creado exitosamente');
 
         return to_route('users');
@@ -40,7 +41,6 @@ class UserController extends Controller
     public function update(UserRequest $request, User $user)
     {
         $user->update($request->validated());
-
         Inertia::flash('success', 'Usuario actualizado exitosamente');
 
         return to_route('users');
@@ -49,8 +49,16 @@ class UserController extends Controller
     public function destroy(User $user, CurrentPasswordRequest $_)
     {
         $user->delete();
-
         Inertia::flash('success', 'Usuario eliminado exitosamente');
+
+        return to_route('users');
+    }
+
+    public function destroyMultiple(DestroyMultipleUsersRequest $request)
+    {
+        $userIds = $request->validated('ids');
+        User::whereIn('id', $userIds)->delete();
+        Inertia::flash('success', 'Usuarios eliminados exitosamente');
 
         return to_route('users');
     }

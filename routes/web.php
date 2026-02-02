@@ -23,6 +23,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/users/{user}', [UserController::class, 'destroy'])
         ->middleware('can:'.Permissions::DELETE_USER->value)
         ->name('users.destroy');
+
+    Route::post('/users/multiple/destroy', [UserController::class, 'destroyMultiple'])
+        ->middleware('can:'.Permissions::DELETE_USER->value)
+        ->name('users.destroyMultiple');
 });
 
 require __DIR__.'/auth.php';

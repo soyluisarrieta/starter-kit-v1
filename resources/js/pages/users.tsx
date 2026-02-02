@@ -15,7 +15,7 @@ import {
 import { useDialog } from '@/hooks/use-dialog';
 import AppLayout from '@/layouts/app-layout';
 import { users } from '@/routes';
-import { destroy } from '@/routes/users';
+import { destroy, destroyMultiple } from '@/routes/users';
 import type { BreadcrumbItem, User } from '@/types';
 import UserDataTable from '@/components/features/user/data-table/user-data-table';
 
@@ -27,10 +27,11 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 export default function Users() {
-    const [selectedUser, setSelectedUser] = useState<User | null>(null);
+    const [selectedUsers, setSelectedUsers] = useState<User[]>([]);
 
     const userDialogForm = useDialog('user-dialog-form');
     const deleteDialog = useDialog('delete-dialog');
+    const deleteMultipleDialog = useDialog('delete-multiple-dialog');
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -51,7 +52,7 @@ export default function Users() {
                     <Button
                         className="fixed right-4 bottom-4 size-12 rounded-full p-4 lg:static lg:h-9 lg:w-auto lg:rounded-md"
                         onClick={() => {
-                            setSelectedUser(null);
+                            setSelectedUsers([]);
                             userDialogForm.onOpenChange(true);
                         }}
                     >
@@ -60,37 +61,48 @@ export default function Users() {
                     </Button>
                 </div>
 
-                <UserDataTable selectUser={setSelectedUser} />
+                <UserDataTable setSelectedUsers={setSelectedUsers} />
             </main>
 
             {/* View user */}
-            <UserViewSheet user={selectedUser} />
+            <UserViewSheet user={selectedUsers[0] ?? null} />
 
             {/* Create or edit user */}
             <Dialog {...userDialogForm}>
                 <DialogContent>
                     <DialogHeader className="mb-2">
                         <DialogTitle>
-                            {selectedUser ? 'Editar' : 'Crear'} usuario
+                            {selectedUsers.length ? 'Editar' : 'Crear'} usuario
                         </DialogTitle>
                         <DialogDescription>
-                            {selectedUser
+                            {selectedUsers.length
                                 ? 'Actualiza la información del usuario.'
                                 : 'Completa la información para crear el usuario.'}
                         </DialogDescription>
                     </DialogHeader>
-                    <UserForm user={selectedUser} />
+                    <UserForm user={selectedUsers[0] ?? null} />
                 </DialogContent>
             </Dialog>
 
-            {/* Delete user */}
+            {/* Delete an user */}
             <ConfirmDialog
-                title={`¿Eliminar usuario "${selectedUser?.name}"?`}
+                title={`¿Eliminar usuario "${selectedUsers[0]?.name}"?`}
                 description="Una vez eliminado el usuario, todos sus datos serán eliminados permanentemente."
                 passwordRequired
                 method="delete"
-                url={selectedUser && destroy(selectedUser.id).url}
+                url={selectedUsers[0] ? destroy(selectedUsers[0].id).url : null}
                 {...deleteDialog}
+            />
+
+            {/* Delete users */}
+            <ConfirmDialog
+                title={`¿Eliminar ${selectedUsers.length} usuarios seleccionados?`}
+                description="Una vez eliminados los usuarios, todos sus datos serán eliminados permanentemente."
+                passwordRequired
+                method="post"
+                url={destroyMultiple().url}
+                data={{ ids: selectedUsers.map(({ id }) => id) }}
+                {...deleteMultipleDialog}
             />
         </AppLayout>
     );
