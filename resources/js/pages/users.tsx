@@ -109,7 +109,7 @@ export default function Users() {
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Usuarios" />
 
-            <main className="px-4 py-10">
+            <main className="main-container px-4 py-10">
                 <div className="mb-8 flex items-center justify-between">
                     <div className="flex-1">
                         <h1 className="text-3xl font-bold tracking-tight">
