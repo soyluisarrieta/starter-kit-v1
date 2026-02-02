@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CurrentPasswordRequest;
-use App\Http\Requests\DestroyMultipleUsersRequest;
-use App\Http\Requests\UserRequest;
+use App\Http\Requests\User\DestroyMultipleUsersRequest;
+use App\Http\Requests\User\UserRequest;
 use App\Models\User;
 use Inertia\Inertia;
 
