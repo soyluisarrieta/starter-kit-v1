@@ -25,4 +25,18 @@ trait PasswordValidationRules
     {
         return ['required', 'string', 'current_password'];
     }
+
+    /**
+     * Get the attributes used to validate password.
+     *
+     * @return array<string, string>
+     */
+    protected function passwordAttributes(): array
+    {
+        return [
+            'password' => 'contraseña',
+        ];
+    }
+
+
 }
