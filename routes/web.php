@@ -15,6 +15,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/users', [UserController::class, 'store'])
         ->middleware('can:'.Permissions::CREATE_USER->value)
         ->name('users.store');
+
+    Route::put('/users/{user}', [UserController::class, 'update'])
+        ->middleware('can:'.Permissions::UPDATE_USER->value)
+        ->name('users.update');
 });
 
 require __DIR__.'/auth.php';

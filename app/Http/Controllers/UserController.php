@@ -30,6 +30,16 @@ class UserController extends Controller
         $user = $request->validated();
         $user['password'] = bcrypt("qweqwe123");
         User::create($user);
+
+        Inertia::flash('success', 'Usuario creado exitosamente');
+        return to_route("users");
+    }
+
+    public function update(UserRequest $request, User $user)
+    {
+        $user->update($request->validated());
+
+        Inertia::flash('success', 'Usuario actualizado exitosamente');
         return to_route("users");
     }
 }

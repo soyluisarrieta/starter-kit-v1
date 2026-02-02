@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import InputError from '@/components/ui/input-error';
 import { Label } from '@/components/ui/label';
 import { useDialog } from '@/hooks/use-dialog';
-import { store } from '@/routes/users';
+import { store, update } from '@/routes/users';
 import type { User } from '@/types';
 
 interface UserFormProps {
@@ -16,7 +16,7 @@ interface UserFormProps {
 export default function UserForm({ user }: UserFormProps) {
     const userDialogForm = useDialog('user-dialog-form');
 
-    const { post, data, setData, errors, processing } = useForm({
+    const { post, put, data, setData, errors, processing } = useForm({
         name: user?.name || '',
         last_name: user?.last_name || '',
         email: user?.email || '',
@@ -25,9 +25,14 @@ export default function UserForm({ user }: UserFormProps) {
     // Save user
     const onSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        post(store().url, {
-            onSuccess: () => userDialogForm.toggle(false),
-        });
+
+        if (user) {
+            put(update(user.id).url);
+        } else {
+            post(store().url, {
+                onSuccess: () => userDialogForm.toggle(false),
+            });
+        }
     };
 
     return (
