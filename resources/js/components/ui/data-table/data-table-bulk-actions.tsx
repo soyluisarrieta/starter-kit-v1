@@ -6,7 +6,7 @@ import {
     FileText,
     Trash2,
 } from 'lucide-react';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { Button } from '@/components/ui/button';
 import {
     DropdownMenu,
@@ -38,6 +38,10 @@ export function DataTableBulkActions<TData extends object>({
 }: DataTableBulkActionsProps<TData>) {
     const rowSelection = useDataTableStore((state) => state.rowSelection);
     const setRowSelection = useDataTableStore((state) => state.setRowSelection);
+
+    useEffect(() => {
+        setRowSelection({});
+    }, [data, setRowSelection]);
 
     const selectedRows = useMemo(() => {
         const selectedIndices = Object.keys(rowSelection).filter(
@@ -76,7 +80,6 @@ export function DataTableBulkActions<TData extends object>({
     const handleDelete = () => {
         if (onDelete && selectedRows.length > 0) {
             onDelete(selectedRows);
-            setRowSelection({});
         }
     };
 
