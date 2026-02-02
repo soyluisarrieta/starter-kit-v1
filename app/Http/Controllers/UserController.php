@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CurrentPasswordRequest;
 use App\Http\Requests\UserRequest;
 use App\Models\User;
 use Inertia\Inertia;
@@ -41,5 +42,13 @@ class UserController extends Controller
 
         Inertia::flash('success', 'Usuario actualizado exitosamente');
         return to_route("users");
+    }
+
+    public function destroy(User $user, CurrentPasswordRequest $_)
+    {
+        $user->delete();
+
+        Inertia::flash('success', 'Usuario eliminado exitosamente');
+        return to_route('users');
     }
 }

@@ -19,6 +19,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::put('/users/{user}', [UserController::class, 'update'])
         ->middleware('can:'.Permissions::UPDATE_USER->value)
         ->name('users.update');
+
+    Route::delete('/users/{user}', [UserController::class, 'destroy'])
+        ->middleware('can:'.Permissions::DELETE_USER->value)
+        ->name('users.destroy');
 });
 
 require __DIR__.'/auth.php';

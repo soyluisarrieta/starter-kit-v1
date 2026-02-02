@@ -14,6 +14,7 @@ import {
     CopyIcon,
 } from 'lucide-react';
 import { useCallback, useState } from 'react';
+import { ConfirmDialog } from '@/components/commons/confirm-dialog';
 import {
     userColumns,
     userResponsiveColumns,
@@ -54,6 +55,7 @@ import { useDialog } from '@/hooks/use-dialog';
 import AppLayout from '@/layouts/app-layout';
 import { cn } from '@/lib/utils';
 import { users } from '@/routes';
+import { destroy } from '@/routes/users';
 import type { BreadcrumbItem, User } from '@/types';
 import type { DataTableRowAction } from '@/types/data-table';
 
@@ -66,8 +68,11 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 export default function Users() {
     const [selectedUser, setSelectedUser] = useState<User | null>(null);
+
     const userDialogForm = useDialog('user-dialog-form');
     const userSheetView = useDialog('user-sheet-view');
+    const deleteDialog = useDialog('delete-dialog');
+
     const { users } = usePage<{ users: User[] }>().props;
 
     const handleDelete = useCallback((rows: User[]) => {
@@ -101,6 +106,14 @@ export default function Users() {
             icon: <CopyIcon className="mr-2 size-4" />,
             onClick: (row) => {
                 navigator.clipboard.writeText(row.email);
+            },
+        },
+        {
+            label: 'Eliminar',
+            icon: <TrashIcon className="mr-2 size-4" />,
+            onClick: (row) => {
+                deleteDialog.toggle(true);
+                setSelectedUser(row);
             },
         },
     ];
@@ -310,6 +323,17 @@ export default function Users() {
                     <UserForm user={selectedUser} />
                 </DialogContent>
             </Dialog>
+
+            {/* Delete user */}
+            <ConfirmDialog
+                title={`¿Eliminar usuario "${selectedUser?.name}"?`}
+                description="Una vez eliminado el usuario, todos sus datos serán eliminados permanentemente."
+                open={deleteDialog.isOpen}
+                onOpenChange={deleteDialog.toggle}
+                passwordRequired
+                method="delete"
+                url={selectedUser && destroy(selectedUser.id).url}
+            />
         </AppLayout>
     );
 }
