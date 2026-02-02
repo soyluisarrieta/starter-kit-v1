@@ -1,5 +1,5 @@
 import { useForm } from '@inertiajs/react';
-import { SaveIcon } from 'lucide-react';
+import { LoaderIcon, SaveIcon } from 'lucide-react';
 import { type FormEvent } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -15,8 +15,9 @@ interface UserFormProps {
 
 export default function UserForm({ user }: UserFormProps) {
     const userDialogForm = useDialog('user-dialog-form');
+    const isCreation = !user;
 
-    const { post, put, data, setData, errors, processing } = useForm({
+    const { post, put, data, setData, errors, processing, isDirty } = useForm({
         name: user?.name || '',
         last_name: user?.last_name || '',
         email: user?.email || '',
@@ -44,12 +45,13 @@ export default function UserForm({ user }: UserFormProps) {
                         id="name"
                         name="name"
                         type="text"
-                        autoFocus={!user}
+                        autoFocus={isCreation}
                         tabIndex={1}
                         value={data.name}
                         onChange={(e) => setData('name', e.target.value)}
                         disabled={processing}
                         placeholder="Nombre"
+                        required
                     />
                     <InputError message={errors.name} />
                 </div>
@@ -65,6 +67,7 @@ export default function UserForm({ user }: UserFormProps) {
                         onChange={(e) => setData('last_name', e.target.value)}
                         disabled={processing}
                         placeholder="Apellido"
+                        required
                     />
                     <InputError message={errors.last_name} />
                 </div>
@@ -81,6 +84,7 @@ export default function UserForm({ user }: UserFormProps) {
                     onChange={(e) => setData('email', e.target.value)}
                     disabled={processing}
                     placeholder="email@ejemplo.com"
+                    required
                 />
                 <InputError message={errors.email} />
             </div>
@@ -90,11 +94,17 @@ export default function UserForm({ user }: UserFormProps) {
                     onClick={() => userDialogForm.toggle(false)}
                     variant="outline"
                     type="button"
+                    disabled={processing}
                 >
                     Cancelar
                 </Button>
-                <Button type="submit">
-                    <SaveIcon /> Guardar
+                <Button type="submit" disabled={processing || !isDirty}>
+                    {processing ? (
+                        <LoaderIcon className="animate-spin" />
+                    ) : (
+                        <SaveIcon />
+                    )}
+                    {isCreation ? 'Guardar' : 'Actualizar'}
                 </Button>
             </div>
         </form>
