@@ -2,6 +2,7 @@ import { Head } from '@inertiajs/react';
 import { PlusIcon } from 'lucide-react';
 import { useState } from 'react';
 import { ConfirmDialog } from '@/components/commons/confirm-dialog';
+import UserDataTable from '@/components/features/user/user-data-table';
 import UserForm from '@/components/features/user/user-form';
 import UserViewSheet from '@/components/features/user/user-view-sheet';
 import { Button } from '@/components/ui/button';
@@ -17,7 +18,6 @@ import AppLayout from '@/layouts/app-layout';
 import { users } from '@/routes';
 import { destroy, destroyMultiple } from '@/routes/users';
 import type { BreadcrumbItem, User } from '@/types';
-import UserDataTable from '@/components/features/user/data-table/user-data-table';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {

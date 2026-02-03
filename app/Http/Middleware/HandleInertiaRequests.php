@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Enums\Roles;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -44,6 +45,12 @@ class HandleInertiaRequests extends Middleware
                 'permissions' => $request->user()?->getAllPermissions()->pluck('name') ?? [],
             ],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
+            'meta' => [
+                'roles' => array_map(fn (Roles $role) => [
+                    'label' => $role->label(),
+                    'value' => $role->value,
+                ], Roles::cases()),
+            ],
         ];
     }
 }

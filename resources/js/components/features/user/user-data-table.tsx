@@ -1,17 +1,21 @@
 import { usePage } from '@inertiajs/react';
 import { CopyIcon, EditIcon, EyeIcon, TrashIcon } from 'lucide-react';
+import {
+    userColumns,
+    userResponsiveColumns,
+} from '@/components/features/user/user-columns';
 import { DataTable } from '@/components/ui/data-table';
 import { useDialog } from '@/hooks/use-dialog';
-import type { User } from '@/types';
-import { userColumns, userResponsiveColumns } from './user-columns';
-import { userFilterConfigs } from './user-configs';
+import type { SharedData, User } from '@/types';
+
+type UserPageProps = SharedData & { users: User[] };
 
 interface UserTableProps {
     setSelectedUsers: (user: User[]) => void;
 }
 
 export default function UserTable({ setSelectedUsers }: UserTableProps) {
-    const { users } = usePage<{ users: User[] }>().props;
+    const { users, meta } = usePage<UserPageProps>().props;
 
     const userDialogForm = useDialog('user-dialog-form');
     const userSheetView = useDialog('user-sheet-view');
@@ -42,12 +46,24 @@ export default function UserTable({ setSelectedUsers }: UserTableProps) {
         <DataTable
             data={users}
             columns={userColumns({ onView: handleView })}
-            filterConfigs={userFilterConfigs}
             responsiveColumns={userResponsiveColumns}
             exportFilename="usuarios"
             searchPlaceholder="Buscar usuarios..."
             searchableColumns={['name', 'last_name', 'email', 'roles']}
             onDelete={handleDeleteMultiple}
+            filterConfigs={[
+                {
+                    columnId: 'roles',
+                    label: 'Rol',
+                    type: 'multiValue',
+                    options: meta.roles,
+                },
+                {
+                    columnId: 'created_at',
+                    label: 'Fecha Registro',
+                    type: 'dateRange',
+                },
+            ]}
             rowActions={[
                 {
                     label: 'Ver detalles',

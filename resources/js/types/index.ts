@@ -9,5 +9,8 @@ export type SharedData = {
     name: string;
     auth: Auth;
     sidebarOpen: boolean;
+    meta: {
+        roles: { label: string; value: string }[];
+    };
     [key: string]: unknown;
 };
