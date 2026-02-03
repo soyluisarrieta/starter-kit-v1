@@ -48,6 +48,7 @@ interface DataTableProps<TData extends object> {
     enableRowSelection?: boolean;
     enableExport?: boolean;
     enableColumnToggle?: boolean;
+    enablePagination?: boolean;
     pageSizeOptions?: number[];
     exportFilename?: string;
     searchPlaceholder?: string;
@@ -65,6 +66,7 @@ export function DataTable<TData extends object>({
     enableRowSelection = true,
     enableExport = true,
     enableColumnToggle = true,
+    enablePagination = true,
     pageSizeOptions = [10, 20, 30, 50, 100],
     exportFilename = 'datos',
     searchPlaceholder = 'Buscar...',
@@ -173,7 +175,9 @@ export function DataTable<TData extends object>({
         onRowSelectionChange: setRowSelection,
         getCoreRowModel: getCoreRowModel(),
         getSortedRowModel: getSortedRowModel(),
-        getPaginationRowModel: getPaginationRowModel(),
+        getPaginationRowModel: enablePagination
+            ? getPaginationRowModel()
+            : undefined,
         getFilteredRowModel: getFilteredRowModel(),
         manualFiltering: true,
         enableRowSelection,
@@ -186,12 +190,16 @@ export function DataTable<TData extends object>({
     });
 
     useEffect(() => {
-        table.setPageIndex(pageIndex);
-    }, [table, pageIndex]);
+        if (enablePagination) {
+            table.setPageIndex(pageIndex);
+        }
+    }, [table, pageIndex, enablePagination]);
 
     useEffect(() => {
-        table.setPageSize(pageSize);
-    }, [table, pageSize]);
+        if (enablePagination) {
+            table.setPageSize(pageSize);
+        }
+    }, [table, pageSize, enablePagination]);
 
     const hasData = data.length > 0;
     const hasFilteredData = filteredData.length > 0;
@@ -291,10 +299,12 @@ export function DataTable<TData extends object>({
                 </Table>
             </div>
 
-            <DataTablePagination
-                table={table}
-                pageSizeOptions={pageSizeOptions}
-            />
+            {enablePagination && (
+                <DataTablePagination
+                    table={table}
+                    pageSizeOptions={pageSizeOptions}
+                />
+            )}
         </div>
     );
 }
