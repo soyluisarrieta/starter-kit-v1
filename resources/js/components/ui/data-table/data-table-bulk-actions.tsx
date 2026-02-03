@@ -5,8 +5,10 @@ import {
     FileSpreadsheet,
     FileText,
     Trash2,
+    XIcon,
 } from 'lucide-react';
-import { useMemo } from 'react';
+import type { ReactNode } from 'react';
+import { useEffect, useMemo } from 'react';
 import { Button } from '@/components/ui/button';
 import {
     DropdownMenu,
@@ -38,6 +40,10 @@ export function DataTableBulkActions<TData extends object>({
 }: DataTableBulkActionsProps<TData>) {
     const rowSelection = useDataTableStore((state) => state.rowSelection);
     const setRowSelection = useDataTableStore((state) => state.setRowSelection);
+
+    useEffect(() => {
+        setRowSelection({});
+    }, [data, setRowSelection]);
 
     const selectedRows = useMemo(() => {
         const selectedIndices = Object.keys(rowSelection).filter(
@@ -76,7 +82,6 @@ export function DataTableBulkActions<TData extends object>({
     const handleDelete = () => {
         if (onDelete && selectedRows.length > 0) {
             onDelete(selectedRows);
-            setRowSelection({});
         }
     };
 
@@ -87,56 +92,29 @@ export function DataTableBulkActions<TData extends object>({
     return (
         <div className="flex items-center gap-2">
             {enableExport && (
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button
-                            variant="outline"
-                            size="sm"
-                            className="h-8 bg-transparent"
-                        >
-                            <Download className="size-4 xl:mr-2" />
-                            <span className="hidden xl:block">Exportar</span>
-                            {hasSelection && `(${countSelection})`}
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                        <DropdownMenuItem onClick={() => handleExport('pdf')}>
-                            <FileText className="mr-2 size-4" />
-                            Exportar a PDF
-                        </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => handleExport('csv')}>
-                            <FileText className="mr-2 size-4" />
-                            Exportar a CSV
-                        </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => handleExport('excel')}>
-                            <FileSpreadsheet className="mr-2 size-4" />
-                            Exportar a Excel
-                        </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => handleExport('json')}>
-                            <FileJson className="mr-2 size-4" />
-                            Exportar a JSON
-                        </DropdownMenuItem>
-
-                        <DropdownMenuSeparator />
-
-                        <DropdownMenuItem
-                            disabled
-                            className="text-xs text-muted-foreground"
-                        >
-                            Exportando{' '}
-                            {countSelection
-                                ? `${countSelection} fila${plural}`
-                                : 'todo'}
-                        </DropdownMenuItem>
-                    </DropdownMenuContent>
-                </DropdownMenu>
+                <ExportDropdownMenu
+                    handleExport={handleExport}
+                    countSelection={countSelection}
+                >
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        className="h-8 bg-transparent"
+                    >
+                        <Download className="size-4" />
+                        <span className="hidden xl:block">Exportar</span>
+                        {hasSelection && `(${countSelection})`}
+                    </Button>
+                </ExportDropdownMenu>
             )}
 
             {hasSelection && (
-                <div className="fixed bottom-0 left-1/2 z-10 flex -translate-1/2 items-center gap-2 rounded-md border border-muted bg-muted/40 p-2 backdrop-blur-xl">
-                    <span className="px-2 text-sm text-muted-foreground">
-                        {countSelection} seleccionado{plural}
-                    </span>
+                <div className="fixed bottom-0 left-1/2 z-10 flex -translate-1/2 items-center gap-2 rounded-md border border-muted bg-background/60 p-2 backdrop-blur-xl">
+                    <div className="flex items-center">
+                        <span className="mr-1 ml-2 text-sm whitespace-nowrap text-muted-foreground">
+                            {countSelection} seleccionado{plural}
+                        </span>
+                    </div>
 
                     {customActions.map((action, index) => (
                         <Button
@@ -148,35 +126,99 @@ export function DataTableBulkActions<TData extends object>({
                             }
                             size="sm"
                             onClick={() => action.onClick(selectedRows)}
-                            className="h-8"
                         >
                             {action.icon}
                             {action.label}
                         </Button>
                     ))}
 
+                    {enableExport && (
+                        <ExportDropdownMenu
+                            handleExport={handleExport}
+                            countSelection={countSelection}
+                        >
+                            <Button
+                                variant="secondary"
+                                size="sm"
+                                title="Exportar seleccionados"
+                            >
+                                <Download className="size-4" />
+                                <span>Exportar</span>
+                            </Button>
+                        </ExportDropdownMenu>
+                    )}
+
                     {onDelete && (
                         <Button
                             variant="destructive"
                             size="sm"
+                            title="Eliminar seleccionados"
                             onClick={handleDelete}
-                            className="h-8"
                         >
                             <Trash2 className="size-4" />
-                            Eliminar
+                            <span className="hidden xl:block">Eliminar</span>
                         </Button>
                     )}
 
                     <Button
                         variant="ghost"
-                        size="sm"
+                        size="icon-sm"
+                        title="Cancelar selección"
                         onClick={handleClearSelection}
-                        className="h-8"
                     >
-                        Cancelar
+                        <XIcon />
                     </Button>
                 </div>
             )}
         </div>
+    );
+}
+
+interface ExportDropdownMenuProps {
+    handleExport: (format: ExportFormat) => void;
+    countSelection: number;
+    children: ReactNode;
+}
+
+function ExportDropdownMenu({
+    handleExport,
+    countSelection,
+    children,
+}: ExportDropdownMenuProps) {
+    const plural = countSelection > 1 ? 's' : '';
+    return (
+        <DropdownMenu>
+            <DropdownMenuTrigger asChild>{children}</DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+                <DropdownMenuItem onClick={() => handleExport('pdf')}>
+                    <FileText className="mr-2 size-4" />
+                    Exportar a PDF
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => handleExport('csv')}>
+                    <FileText className="mr-2 size-4" />
+                    Exportar a CSV
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => handleExport('excel')}>
+                    <FileSpreadsheet className="mr-2 size-4" />
+                    Exportar a Excel
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => handleExport('json')}>
+                    <FileJson className="mr-2 size-4" />
+                    Exportar a JSON
+                </DropdownMenuItem>
+
+                <DropdownMenuSeparator />
+
+                <DropdownMenuItem
+                    disabled
+                    className="text-xs text-muted-foreground"
+                >
+                    Exportando{' '}
+                    {countSelection
+                        ? `${countSelection} fila${plural}`
+                        : 'todo'}
+                </DropdownMenuItem>
+            </DropdownMenuContent>
+        </DropdownMenu>
     );
 }

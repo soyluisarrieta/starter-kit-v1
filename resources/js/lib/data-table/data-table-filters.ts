@@ -51,13 +51,17 @@ export function matchesDateRangeFilter<TData>(
     if (Number.isNaN(date.getTime())) return false;
 
     if (from && to) {
-        return date >= from && date <= to;
+        const endOfDay = new Date(to);
+        endOfDay.setHours(23, 59, 59, 999);
+        return date >= from && date <= endOfDay;
     }
     if (from) {
         return date >= from;
     }
     if (to) {
-        return date <= to;
+        const endOfDay = new Date(to);
+        endOfDay.setHours(23, 59, 59, 999);
+        return date <= endOfDay;
     }
 
     return true;

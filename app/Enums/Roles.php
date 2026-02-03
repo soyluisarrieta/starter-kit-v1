@@ -19,15 +19,15 @@ enum Roles: string
     {
         return match ($this) {
             self::SUPER_ADMIN => [
-                Permissions::LIST_USER->value,
-                Permissions::VIEW_USER->value,
-                Permissions::CREATE_USER->value,
-                Permissions::UPDATE_USER->value,
-                Permissions::DELETE_USER->value,
+                Permissions::LIST_USERS->value,
+                Permissions::VIEW_USERS->value,
+                Permissions::CREATE_USERS->value,
+                Permissions::UPDATE_USERS->value,
+                Permissions::DELETE_USERS->value,
             ],
             self::ADMIN => [
-                Permissions::LIST_USER->value,
-                Permissions::VIEW_USER->value,
+                Permissions::LIST_USERS->value,
+                Permissions::VIEW_USERS->value,
             ],
         };
     }
