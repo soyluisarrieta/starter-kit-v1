@@ -275,7 +275,7 @@ export function DateRangeFilter({
                 <Calendar
                     mode="range"
                     selected={
-                        dateRange.from && dateRange.to
+                        dateRange.from
                             ? { from: dateRange.from, to: dateRange.to }
                             : undefined
                     }
@@ -310,7 +310,7 @@ export function DateRangeFilter({
                 <Calendar
                     mode="range"
                     selected={
-                        dateRange.from && dateRange.to
+                        dateRange.from
                             ? { from: dateRange.from, to: dateRange.to }
                             : undefined
                     }
