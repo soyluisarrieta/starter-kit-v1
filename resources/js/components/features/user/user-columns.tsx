@@ -1,10 +1,12 @@
 import type { ColumnDef } from '@tanstack/react-table';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
+import { ShieldCheckIcon } from 'lucide-react';
+import type { UserData } from '@/components/features/user/user-data-table';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { PATHS } from '@/constants/paths';
-import type { User } from '@/types';
+import type { Role } from '@/types';
 import type { ResponsiveColumnConfig } from '@/types/data-table';
 
 export const userResponsiveColumns: ResponsiveColumnConfig[] = [
@@ -15,10 +17,14 @@ export const userResponsiveColumns: ResponsiveColumnConfig[] = [
 ];
 
 interface UserColumnsProps {
-    onView: (user: User) => void;
+    onView: (user: UserData) => void;
+    roles: Role[];
 }
 
-export function userColumns({ onView }: UserColumnsProps): ColumnDef<User>[] {
+export function userColumns({
+    onView,
+    roles,
+}: UserColumnsProps): ColumnDef<UserData>[] {
     return [
         {
             id: 'name',
@@ -76,19 +82,28 @@ export function userColumns({ onView }: UserColumnsProps): ColumnDef<User>[] {
             ),
         },
         {
-            accessorKey: 'roles',
+            id: 'roles',
+            accessorFn: ({ roles: rolesIds }) =>
+                rolesIds.map((id) => roles.find((role) => role.id === id)),
             header: 'Roles',
-            filterFn: (row, _columnId, filterValue: string[]) => {
-                const roles = row.getValue<string[]>('roles');
-                return filterValue.some((value) => roles.includes(value));
-            },
+            size: 0,
             cell: ({ row }) => {
-                const roles = row.getValue<string[]>('roles');
+                const userRoles = row.getValue<Role[]>('roles');
+
                 return (
                     <div className="flex flex-wrap gap-1">
-                        {roles.map((rol) => (
-                            <Badge key={rol} variant="outline">
-                                {rol}
+                        {userRoles.map(({ id, label, hex_color }) => (
+                            <Badge
+                                key={id}
+                                className="border-none"
+                                variant="outline"
+                                style={{
+                                    backgroundColor: hex_color + '1A',
+                                    color: hex_color,
+                                }}
+                            >
+                                <ShieldCheckIcon />
+                                {label}
                             </Badge>
                         ))}
                     </div>

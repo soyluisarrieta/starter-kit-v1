@@ -6,16 +6,21 @@ import {
 } from '@/components/features/user/user-columns';
 import { DataTable } from '@/components/ui/data-table';
 import { useDialog } from '@/hooks/use-dialog';
-import type { SharedData, User } from '@/types';
+import type { Role, SharedData, User } from '@/types';
 
-type UserPageProps = SharedData & { users: User[] };
+export type UserData = User & { roles: Role['id'][] };
+
+interface UserPageProps extends SharedData {
+    users: UserData[];
+    readonly roles: Role[];
+}
 
 interface UserTableProps {
     setSelectedUsers: (user: User[]) => void;
 }
 
 export default function UserTable({ setSelectedUsers }: UserTableProps) {
-    const { users, meta } = usePage<UserPageProps>().props;
+    const { users, roles } = usePage<UserPageProps>().props;
 
     const userDialogForm = useDialog('user-dialog-form');
     const userSheetView = useDialog('user-sheet-view');
@@ -45,18 +50,21 @@ export default function UserTable({ setSelectedUsers }: UserTableProps) {
     return (
         <DataTable
             data={users}
-            columns={userColumns({ onView: handleView })}
+            columns={userColumns({ onView: handleView, roles })}
             responsiveColumns={userResponsiveColumns}
             exportFilename="usuarios"
             searchPlaceholder="Buscar usuarios..."
-            searchableColumns={['name', 'last_name', 'email', 'roles']}
+            searchableColumns={['name', 'last_name', 'email']}
             onDelete={handleDeleteMultiple}
             filterConfigs={[
                 {
                     columnId: 'roles',
                     label: 'Rol',
                     type: 'multiValue',
-                    options: meta.roles,
+                    options: roles.map(({ id, label }) => ({
+                        value: id.toString(),
+                        label: label,
+                    })),
                 },
                 {
                     columnId: 'created_at',
