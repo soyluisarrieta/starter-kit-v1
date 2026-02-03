@@ -10,8 +10,16 @@ enum Roles: string
     public function label(): string
     {
         return match ($this) {
-            self::SUPER_ADMIN => 'Super Administrador',
+            self::SUPER_ADMIN => 'Super Admin',
             self::ADMIN => 'Administrador',
+        };
+    }
+
+    public function hexColor(): string
+    {
+        return match ($this) {
+            self::SUPER_ADMIN => '#AD46FF',
+            self::ADMIN => '#2B7FFF',
         };
     }
 

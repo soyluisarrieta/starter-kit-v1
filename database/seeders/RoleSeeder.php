@@ -13,10 +13,18 @@ class RoleSeeder extends Seeder
      */
     public function run(): void
     {
-        Role::create(['name' => Roles::SUPER_ADMIN->value])
+        Role::create([
+            'name' => Roles::SUPER_ADMIN->value,
+            'label' => Roles::SUPER_ADMIN->label(),
+            'hex_color' => Roles::SUPER_ADMIN->hexColor(),
+        ])
             ->givePermissionTo(Roles::SUPER_ADMIN->permissions());
 
-        Role::create(['name' => Roles::ADMIN->value])
+        Role::create([
+            'name' => Roles::ADMIN->value,
+            'label' => Roles::ADMIN->label(),
+            'hex_color' => Roles::ADMIN->hexColor(),
+        ])
             ->givePermissionTo(Roles::ADMIN->permissions());
     }
 }
