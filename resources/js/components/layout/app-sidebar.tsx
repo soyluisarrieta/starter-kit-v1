@@ -32,7 +32,7 @@ const footerNavItems: NavItem[] = [
 ];
 
 export function AppSidebar() {
-    const { canListUser } = useCan([USER_PERMISSIONS.LIST]);
+    const { canListUsers } = useCan([USER_PERMISSIONS.LIST]);
 
     const mainNavItems: NavItem[] = [
         {
@@ -44,7 +44,7 @@ export function AppSidebar() {
             title: 'Usuarios',
             href: users(),
             icon: UserIcon,
-            hasPermission: canListUser,
+            hasPermission: canListUsers,
         },
     ];
     return (

@@ -1,9 +1,9 @@
 import type { PermissionDef } from '@/types';
 
 export const USER_PERMISSIONS = {
-    LIST: { key: 'canListUser', value: 'list:user' },
-    VIEW: { key: 'canViewUser', value: 'view:user' },
-    CREATE: { key: 'canCreateUser', value: 'create:user' },
-    EDIT: { key: 'canEditUser', value: 'edit:user' },
-    DELETE: { key: 'canDeleteUser', value: 'delete:user' },
+    LIST: { key: 'canListUsers', value: 'list:users' },
+    VIEW: { key: 'canViewUsers', value: 'view:users' },
+    CREATE: { key: 'canCreateUsers', value: 'create:users' },
+    EDIT: { key: 'canEditUsers', value: 'edit:users' },
+    DELETE: { key: 'canDeleteUsers', value: 'delete:users' },
 } as const satisfies Record<string, PermissionDef>;

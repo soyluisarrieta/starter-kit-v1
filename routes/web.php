@@ -9,23 +9,23 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/', fn () => Inertia::render('dashboard'))->name('dashboard');
 
     Route::get('/usuarios', [UserController::class, 'index'])
-        ->middleware('can:'.Permissions::LIST_USER->value)
+        ->middleware('can:'.Permissions::LIST_USERS->value)
         ->name('users');
 
     Route::post('/users', [UserController::class, 'store'])
-        ->middleware('can:'.Permissions::CREATE_USER->value)
+        ->middleware('can:'.Permissions::CREATE_USERS->value)
         ->name('users.store');
 
     Route::put('/users/{user}', [UserController::class, 'update'])
-        ->middleware('can:'.Permissions::UPDATE_USER->value)
+        ->middleware('can:'.Permissions::UPDATE_USERS->value)
         ->name('users.update');
 
     Route::delete('/users/{user}', [UserController::class, 'destroy'])
-        ->middleware('can:'.Permissions::DELETE_USER->value)
+        ->middleware('can:'.Permissions::DELETE_USERS->value)
         ->name('users.destroy');
 
     Route::post('/users/multiple/destroy', [UserController::class, 'destroyMultiple'])
-        ->middleware('can:'.Permissions::DELETE_USER->value)
+        ->middleware('can:'.Permissions::DELETE_USERS->value)
         ->name('users.destroyMultiple');
 });
 

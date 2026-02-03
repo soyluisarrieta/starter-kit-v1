@@ -4,20 +4,20 @@ namespace App\Enums;
 
 enum Permissions: string
 {
-    case LIST_USER = 'list:user';
-    case VIEW_USER = 'view:user';
-    case CREATE_USER = 'create:user';
-    case UPDATE_USER = 'update:user';
-    case DELETE_USER = 'delete:user';
+    case LIST_USERS = 'list:users';
+    case VIEW_USERS = 'view:users';
+    case CREATE_USERS = 'create:users';
+    case UPDATE_USERS = 'update:users';
+    case DELETE_USERS = 'delete:users';
 
     public function label(): string
     {
         return match ($this) {
-            self::LIST_USER => 'Listar Usuarios',
-            self::VIEW_USER => 'Ver Usuario',
-            self::CREATE_USER => 'Crear Usuario',
-            self::UPDATE_USER => 'Actualizar Usuario',
-            self::DELETE_USER => 'Eliminar Usuario',
+            self::LIST_USERS => 'Listar Usuarios',
+            self::VIEW_USERS => 'Ver Usuarios',
+            self::CREATE_USERS => 'Crear Usuarios',
+            self::UPDATE_USERS => 'Actualizar Usuarios',
+            self::DELETE_USERS => 'Eliminar Usuarios',
         };
     }
 }
