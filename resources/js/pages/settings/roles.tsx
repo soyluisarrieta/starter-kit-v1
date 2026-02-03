@@ -11,7 +11,7 @@ import type { BreadcrumbItem, Role, SharedData } from '@/types';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Roles y permisos',
+        title: 'Roles',
         href: editRoles().url,
     },
 ];
@@ -66,16 +66,16 @@ export default function Roles() {
     ];
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Roles y permisos" />
+            <Head title="Roles" />
 
-            <h1 className="sr-only">Roles y permisos</h1>
+            <h1 className="sr-only">Roles</h1>
 
             <SettingsLayout>
                 <div className="space-y-6">
                     <Heading
                         variant="small"
-                        title="Roles y permisos"
-                        description="Configura los roles y permisos del sistema"
+                        title="Roles"
+                        description="Configura los roles del sistema"
                     />
                 </div>
 

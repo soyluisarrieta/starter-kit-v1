@@ -7,9 +7,9 @@ import { useCurrentUrl } from '@/hooks/use-current-url';
 import { cn, toUrl } from '@/lib/utils';
 import { edit as editAppearance } from '@/routes/appearance';
 import { edit as editProfile } from '@/routes/profile';
+import { edit as editRoles } from '@/routes/roles';
 import { edit as editPassword } from '@/routes/user-password';
 import type { NavItem } from '@/types';
-import { edit as editRoles } from '@/routes/roles';
 
 const sidebarNavItems: NavItem[] = [
     {
@@ -28,7 +28,7 @@ const sidebarNavItems: NavItem[] = [
         icon: null,
     },
     {
-        title: 'Roles y permisos',
+        title: 'Roles',
         href: editRoles(),
         icon: null,
     },
