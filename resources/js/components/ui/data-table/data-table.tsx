@@ -19,6 +19,7 @@ import {
 } from '@/components/ui/table';
 import { useResponsiveColumns } from '@/hooks/use-responsive-columns';
 import { filterData } from '@/lib/data-table/data-table-filters';
+import { cn } from '@/lib/utils';
 import { useDataTableStore } from '@/stores/data-table-store';
 import type {
     ColumnFilterConfig,
@@ -237,9 +238,14 @@ export function DataTable<TData extends object>({
                                 key={headerGroup.id}
                                 className="bg-muted/50"
                             >
-                                {headerGroup.headers.map((header) => (
+                                {headerGroup.headers.map((header, index) => (
                                     <TableHead
                                         key={header.id}
+                                        className={cn(
+                                            index === 0 &&
+                                                header.id !== 'select' &&
+                                                'pl-2',
+                                        )}
                                         style={{
                                             width:
                                                 header.getSize() !== 150

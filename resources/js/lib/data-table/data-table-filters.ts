@@ -29,7 +29,7 @@ export function matchesMultiValueFilter<TData>(
     if (cellValue == null) return false;
 
     if (Array.isArray(cellValue)) {
-        return values.some((v) => cellValue.includes(v));
+        return values.some((v) => cellValue.some((cv) => String(cv) === v));
     }
 
     return values.includes(String(cellValue));

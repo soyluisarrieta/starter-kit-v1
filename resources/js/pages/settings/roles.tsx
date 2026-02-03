@@ -6,8 +6,8 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { DataTable } from '@/components/ui/data-table';
 import AppLayout from '@/layouts/app-layout';
 import SettingsLayout from '@/layouts/settings/layout';
-import type { BreadcrumbItem, Role, SharedData } from '@/types';
 import { edit as editRoles } from '@/routes/roles';
+import type { BreadcrumbItem, Role, SharedData } from '@/types';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
