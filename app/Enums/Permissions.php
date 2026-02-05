@@ -4,18 +4,18 @@ namespace App\Enums;
 
 enum Permissions: string
 {
-    case LIST_USERS = 'list:users';
-    case VIEW_USERS = 'view:users';
-    case CREATE_USERS = 'create:users';
-    case UPDATE_USERS = 'update:users';
-    case DELETE_USERS = 'delete:users';
+    case LIST_USERS = 'users.list';
+    case VIEW_USERS = 'users.view';
+    case CREATE_USERS = 'users.create';
+    case UPDATE_USERS = 'users.update';
+    case DELETE_USERS = 'users.delete';
 
-    case READ_ROLES = 'read:roles';
-    case CREATE_ROLES = 'create:roles';
-    case UPDATE_ROLES = 'update:roles';
-    case DELETE_ROLES = 'delete:roles';
+    case READ_ROLES = 'roles.read';
+    case CREATE_ROLES = 'roles.create';
+    case UPDATE_ROLES = 'roles.update';
+    case DELETE_ROLES = 'roles.delete';
 
-    case VIEW_DASHBOARD = 'view:dashboard';
+    case VIEW_DASHBOARD = 'dashboard.view';
 
     public function label(): string
     {
@@ -33,36 +33,5 @@ enum Permissions: string
 
             self::VIEW_DASHBOARD => 'Acceder al panel de control',
         };
-    }
-
-    public static function getGroupedPermissions()
-    {
-        $groups = [
-            'user-management' => [
-                self::LIST_USERS,
-                self::VIEW_USERS,
-                self::CREATE_USERS,
-                self::UPDATE_USERS,
-                self::DELETE_USERS,
-            ],
-            'role-management' => [
-                self::READ_ROLES,
-                self::CREATE_ROLES,
-                self::UPDATE_ROLES,
-                self::DELETE_ROLES,
-            ],
-            'others' => [
-                self::VIEW_DASHBOARD,
-            ],
-        ];
-
-        foreach ($groups as $key => $permissions) {
-            $groups[$key] = array_map(fn (self $permission) => [
-                'label' => $permission->label(),
-                'value' => $permission->value,
-            ], $permissions);
-        }
-
-        return $groups;
     }
 }

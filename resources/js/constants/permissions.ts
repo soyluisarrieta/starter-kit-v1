@@ -1,20 +1,20 @@
 import type { PermissionDef } from '@/types';
 
 export const USER_PERMISSIONS = {
-    LIST: { key: 'canListUsers', value: 'list:users' },
-    VIEW: { key: 'canViewUsers', value: 'view:users' },
-    CREATE: { key: 'canCreateUsers', value: 'create:users' },
-    UPDATE: { key: 'canUpdateUsers', value: 'update:users' },
-    DELETE: { key: 'canDeleteUsers', value: 'delete:users' },
+    LIST: { key: 'canListUsers', value: 'users.list' },
+    VIEW: { key: 'canViewUsers', value: 'users.view' },
+    CREATE: { key: 'canCreateUsers', value: 'users.create' },
+    UPDATE: { key: 'canUpdateUsers', value: 'users.update' },
+    DELETE: { key: 'canDeleteUsers', value: 'users.delete' },
 } as const satisfies Record<string, PermissionDef>;
 
 export const ROLE_PERMISSIONS = {
-    LIST: { key: 'canReadRoles', value: 'read:roles' },
-    CREATE: { key: 'canCreateRoles', value: 'create:roles' },
-    UPDATE: { key: 'canUpdateRoles', value: 'update:roles' },
-    DELETE: { key: 'canDeleteRoles', value: 'delete:roles' },
+    LIST: { key: 'canReadRoles', value: 'roles.read' },
+    CREATE: { key: 'canCreateRoles', value: 'roles.create' },
+    UPDATE: { key: 'canUpdateRoles', value: 'roles.update' },
+    DELETE: { key: 'canDeleteRoles', value: 'roles.delete' },
 } as const satisfies Record<string, PermissionDef>;
 
 export const OTHERS_PERMISSIONS = {
-    VIEW_DASHBOARD: { key: 'canViewDashboard', value: 'view:dashboard' },
+    VIEW_DASHBOARD: { key: 'canViewDashboard', value: 'dashboard.view' },
 } as const satisfies Record<string, PermissionDef>;
