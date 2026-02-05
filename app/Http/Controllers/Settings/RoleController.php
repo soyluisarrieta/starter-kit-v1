@@ -15,23 +15,16 @@ class RoleController extends Controller
      */
     public function index()
     {
-        $roles = Role::all()->makeHidden(['permissions', 'guard_name']);
+        $roles = Role::all()
+            ->makeHidden(['permissions', 'guard_name'])
+            ->map(fn ($role) => [
+                ...$role->toArray(),
+                'permissionIds' => $role->permissions->pluck('id'),
+            ]);
 
         $permissions = Permission::select('id', 'name', 'label')->get();
 
-        $data = $permissions->map(fn ($permission) => [
-            'id' => $permission->id,
-            'key' => $permission->name,
-            'label' => $permission->label,
-            'roles' => $roles->mapWithKeys(fn ($role) => [
-                $role->name => $role->permissions->contains(
-                    'name',
-                    $permission->name
-                ),
-            ]),
-        ]);
-
-        return Inertia::render('settings/roles', compact('data', 'roles'));
+        return Inertia::render('settings/roles', compact('roles', 'permissions'));
     }
 
     /**
