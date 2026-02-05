@@ -28,7 +28,6 @@ enum Roles: string
         return match ($this) {
             self::SUPER_ADMIN => array_column(Permissions::cases(), 'value'),
             self::ADMIN => [
-                Permissions::LIST_USERS->value,
                 Permissions::VIEW_DASHBOARD->value,
             ],
         };

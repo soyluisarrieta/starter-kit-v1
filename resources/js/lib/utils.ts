@@ -9,3 +9,7 @@ export function cn(...inputs: ClassValue[]) {
 export function toUrl(url: NonNullable<InertiaLinkProps['href']>): string {
     return typeof url === 'string' ? url : url.url;
 }
+
+export function toPascalCase(str: string): string {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+}
