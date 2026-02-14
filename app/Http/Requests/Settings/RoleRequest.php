@@ -24,6 +24,7 @@ class RoleRequest extends FormRequest
     {
         return [
             'label' => 'required|string|max:70|unique:roles,label,'.$this->route('role'),
+            'hex_color' => 'required|string|max:7|regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/',
         ];
     }
 
@@ -31,6 +32,7 @@ class RoleRequest extends FormRequest
     {
         return [
             'label' => 'nombre del rol',
+            'hex_color' => 'color del rol',
         ];
     }
 }

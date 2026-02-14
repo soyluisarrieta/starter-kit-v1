@@ -37,7 +37,6 @@ class RoleController extends Controller
         $data = $request->validated();
 
         $data['name'] = Str::slug($data['label']);
-        $data['hex_color'] = '#f0f0f0';
 
         Role::create($data);
 
@@ -61,10 +60,12 @@ class RoleController extends Controller
     {
         $data = $request->validate([
             'label' => 'required|string|max:70|unique:roles,label,'.$role->id,
+            'hex_color' => ['required', 'string', 'max:7', 'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
         ]);
 
         $role->update([
             'label' => $data['label'],
+            'hex_color' => $data['hex_color'],
         ]);
 
         Inertia::flash('success', 'Rol actualizado correctamente');
