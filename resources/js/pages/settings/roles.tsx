@@ -1,4 +1,4 @@
-import { Head, usePage } from '@inertiajs/react';
+import { Head, router, usePage } from '@inertiajs/react';
 import { useMemo } from 'react';
 import RoleTable from '@/components/features/settings/role-table';
 import Heading from '@/components/layout/heading';
@@ -63,7 +63,20 @@ export default function Roles() {
         role,
         value,
     }: onChangePermissionProps) => {
-        console.log('UPDATE: ', { permission, role, value });
+        return new Promise<void>((resolve, reject) => {
+            router.put(
+                `/settings/roles/${role.id}`,
+                {
+                    permission: permission.name,
+                    enabled: value,
+                },
+                {
+                    preserveScroll: true,
+                    onFinish: () => resolve(),
+                    onError: () => reject(),
+                },
+            );
+        });
     };
 
     return (

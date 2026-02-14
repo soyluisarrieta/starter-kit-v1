@@ -10,6 +10,7 @@ import type { LucideIcon } from 'lucide-react';
 import { ChevronRightIcon } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { Checkbox } from '@/components/ui/checkbox';
+import { Spinner } from '@/components/ui/spinner';
 import {
     Table,
     TableBody,
@@ -53,7 +54,7 @@ type RowData = GroupRow | PermissionRow;
 interface RoleTableProps {
     permissionGroups: GroupedPermission[];
     roles: Array<Role & { permissionIds: PermissionId[] }>;
-    onChangePermission: (data: onChangePermissionProps) => void;
+    onChangePermission: (data: onChangePermissionProps) => Promise<void>;
 }
 
 export default function RoleTable({
@@ -62,6 +63,9 @@ export default function RoleTable({
     onChangePermission,
 }: RoleTableProps) {
     const [expanded, setExpanded] = useState<ExpandedState>({});
+    const [loadingPermissions, setLoadingPermissions] = useState<Set<string>>(
+        new Set(),
+    );
 
     // Data for table
     const data: RowData[] = useMemo(() => {
@@ -98,6 +102,29 @@ export default function RoleTable({
         }));
     }, [permissionGroups, roles]);
 
+    const handlePermissionChange = async (
+        permission: Permission,
+        role: Role,
+        value: boolean,
+    ) => {
+        const key = `${role.id}-${permission.id}`;
+        setLoadingPermissions((prev) => new Set(prev).add(key));
+
+        try {
+            await onChangePermission({
+                permission,
+                role,
+                value,
+            });
+        } finally {
+            setLoadingPermissions((prev) => {
+                const next = new Set(prev);
+                next.delete(key);
+                return next;
+            });
+        }
+    };
+
     // Columns for roles
     const roleColumns: ColumnDef<RowData>[] = roles.map((role) => ({
         id: role.id.toString(),
@@ -107,19 +134,28 @@ export default function RoleTable({
         cell: ({ row: { original } }) => {
             const permission = original.isGroup ? null : original.permission;
             if (!permission) return null;
+
             const value = original.roleValues[role.id];
+            const isLoading = loadingPermissions.has(
+                `${role.id}-${permission.id}`,
+            );
+
             return (
                 <div className="flex items-center justify-center">
-                    <Checkbox
-                        checked={value}
-                        onCheckedChange={() => {
-                            onChangePermission({
-                                permission,
-                                role,
-                                value,
-                            });
-                        }}
-                    />
+                    {isLoading ? (
+                        <Spinner className="ml-2" />
+                    ) : (
+                        <Checkbox
+                            checked={value}
+                            onCheckedChange={(checked) =>
+                                handlePermissionChange(
+                                    permission,
+                                    role,
+                                    checked as boolean,
+                                )
+                            }
+                        />
+                    )}
                 </div>
             );
         },
@@ -162,7 +198,6 @@ export default function RoleTable({
         ...roleColumns,
     ];
 
-    // eslint-disable-next-line react-hooks/incompatible-library
     const table = useReactTable({
         data: data,
         columns,

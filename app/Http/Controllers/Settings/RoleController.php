@@ -46,9 +46,30 @@ class RoleController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Role $role)
     {
-        //
+        $data = $request->validate([
+            'permission' => 'required|string|exists:permissions,name',
+            'enabled' => 'required|boolean',
+        ]);
+
+        $permissionName = $data['permission'];
+
+        // Obtener el modelo Permission
+        $permission = Permission::where('name', $permissionName)->firstOrFail();
+
+        if ($request->boolean('enabled')) {
+            $role->givePermissionTo($permission);
+        } else {
+            $role->revokePermissionTo($permission);
+        }
+
+        $negationPrefix = $request->boolean('enabled') ? '' : 'no';
+        $message = "El {$role->label} ahora {$negationPrefix} puede \"{$permission->label}\"";
+
+        Inertia::flash('success', $message);
+
+        return back();
     }
 
     /**

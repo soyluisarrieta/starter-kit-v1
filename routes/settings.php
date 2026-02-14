@@ -28,4 +28,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('ajustes/roles', [RoleController::class, 'index'])
         ->name('roles.edit');
+
+    Route::put('settings/roles/{role}', [RoleController::class, 'update'])
+        ->name('roles.update');
 });
