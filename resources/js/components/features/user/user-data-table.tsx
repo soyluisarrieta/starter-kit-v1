@@ -1,4 +1,3 @@
-import { usePage } from '@inertiajs/react';
 import { CopyIcon, EditIcon, EyeIcon, TrashIcon } from 'lucide-react';
 import {
     userColumns,
@@ -6,43 +5,40 @@ import {
 } from '@/components/features/user/user-columns';
 import { DataTable } from '@/components/ui/data-table';
 import { useDialog } from '@/hooks/use-dialog';
-import type { Role, SharedData, User } from '@/types';
+import type { Role, UserWithRoles } from '@/types';
 
-export type UserData = User & { roles: Role['id'][] };
-
-interface UserPageProps extends SharedData {
-    users: UserData[];
+interface UserTableProps {
+    setSelectedUsers: (user: UserWithRoles[]) => void;
+    users: UserWithRoles[];
     readonly roles: Role[];
 }
 
-interface UserTableProps {
-    setSelectedUsers: (user: User[]) => void;
-}
-
-export default function UserTable({ setSelectedUsers }: UserTableProps) {
-    const { users, roles } = usePage<UserPageProps>().props;
-
+export default function UserTable({
+    setSelectedUsers,
+    users,
+    roles,
+}: UserTableProps) {
     const userDialogForm = useDialog('user-dialog-form');
     const userSheetView = useDialog('user-sheet-view');
     const deleteDialog = useDialog('delete-dialog');
     const deleteMultipleDialog = useDialog('delete-multiple-dialog');
 
-    const handleView = (row: User) => {
+    const handleView = (row: UserWithRoles) => {
         setSelectedUsers([row]);
         userSheetView.onOpenChange(true);
     };
 
-    const handleEdit = (row: User) => {
+    const handleEdit = (row: UserWithRoles) => {
         userDialogForm.onOpenChange(true);
         setSelectedUsers([row]);
     };
 
-    const handleDelete = (row: User) => {
+    const handleDelete = (row: UserWithRoles) => {
         deleteDialog.onOpenChange(true);
         setSelectedUsers([row]);
     };
 
-    const handleDeleteMultiple = (rows: User[]) => {
+    const handleDeleteMultiple = (rows: UserWithRoles[]) => {
         setSelectedUsers(rows);
         deleteMultipleDialog.onOpenChange(true);
     };

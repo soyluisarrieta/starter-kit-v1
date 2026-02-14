@@ -1,4 +1,4 @@
-import { Head } from '@inertiajs/react';
+import { Head, usePage } from '@inertiajs/react';
 import { PlusIcon } from 'lucide-react';
 import { useState } from 'react';
 import { ConfirmDialog } from '@/components/commons/confirm-dialog';
@@ -17,7 +17,7 @@ import { useDialog } from '@/hooks/use-dialog';
 import AppLayout from '@/layouts/app-layout';
 import { users } from '@/routes';
 import { destroy, destroyMultiple } from '@/routes/users';
-import type { BreadcrumbItem, User } from '@/types';
+import type { BreadcrumbItem, Role, SharedData, UserWithRoles } from '@/types';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -26,8 +26,14 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
+interface UserPageProps extends SharedData {
+    users: UserWithRoles[];
+    readonly roles: Role[];
+}
+
 export default function Users() {
-    const [selectedUsers, setSelectedUsers] = useState<User[]>([]);
+    const { users, roles } = usePage<UserPageProps>().props;
+    const [selectedUsers, setSelectedUsers] = useState<UserWithRoles[]>([]);
 
     const userDialogForm = useDialog('user-dialog-form');
     const deleteDialog = useDialog('delete-dialog');
@@ -61,11 +67,15 @@ export default function Users() {
                     </Button>
                 </div>
 
-                <UserDataTable setSelectedUsers={setSelectedUsers} />
+                <UserDataTable
+                    setSelectedUsers={setSelectedUsers}
+                    users={users}
+                    roles={roles}
+                />
             </main>
 
             {/* View user */}
-            <UserViewSheet user={selectedUsers[0] ?? null} />
+            <UserViewSheet roles={roles} user={selectedUsers[0]} />
 
             {/* Create or edit user */}
             <Dialog {...userDialogForm}>
@@ -80,7 +90,7 @@ export default function Users() {
                                 : 'Completa la información para crear el usuario.'}
                         </DialogDescription>
                     </DialogHeader>
-                    <UserForm user={selectedUsers[0] ?? null} />
+                    <UserForm user={selectedUsers[0]} />
                 </DialogContent>
             </Dialog>
 

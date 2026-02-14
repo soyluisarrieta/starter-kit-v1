@@ -2,10 +2,10 @@ import type { ColumnDef } from '@tanstack/react-table';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { ShieldCheckIcon } from 'lucide-react';
-import type { UserData } from '@/components/features/user/user-data-table';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { PATHS } from '@/constants/paths';
+import type { UserWithRoles } from '@/types';
 import type { Role } from '@/types';
 import type { ResponsiveColumnConfig } from '@/types/data-table';
 
@@ -17,14 +17,14 @@ export const userResponsiveColumns: ResponsiveColumnConfig[] = [
 ];
 
 interface UserColumnsProps {
-    onView: (user: UserData) => void;
+    onView: (user: UserWithRoles) => void;
     roles: Role[];
 }
 
 export function userColumns({
     onView,
     roles,
-}: UserColumnsProps): ColumnDef<UserData>[] {
+}: UserColumnsProps): ColumnDef<UserWithRoles>[] {
     return [
         {
             id: 'name',
@@ -83,8 +83,8 @@ export function userColumns({
         },
         {
             id: 'roles',
-            accessorFn: ({ roles: rolesIds }) =>
-                rolesIds.map((id) => roles.find((role) => role.id === id)),
+            accessorFn: ({ roleIds }) =>
+                roleIds.map((id) => roles.find((role) => role.id === id)),
             header: 'Roles',
             size: 0,
             cell: ({ row }) => {

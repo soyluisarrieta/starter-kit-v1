@@ -19,13 +19,14 @@ import {
 import { PATHS } from '@/constants/paths';
 import { useDialog } from '@/hooks/use-dialog';
 import { cn } from '@/lib/utils';
-import type { User } from '@/types';
+import type { Role, UserWithRoles } from '@/types';
 
-interface UserSheetDetailsProps {
-    user: User | null;
+interface UserViewSheetProps {
+    user: UserWithRoles | null;
+    roles: Role[];
 }
 
-export default function UserSheetDetails({ user }: UserSheetDetailsProps) {
+export default function UserViewSheet({ user, roles }: UserViewSheetProps) {
     const userSheetView = useDialog('user-sheet-view');
 
     if (!user) return null;
@@ -60,9 +61,12 @@ export default function UserSheetDetails({ user }: UserSheetDetailsProps) {
                     </Avatar>
                     {user && (
                         <div className="absolute right-4 bottom-3">
-                            {user.roles.map((role) => (
-                                <Badge key={role}>{role}</Badge>
-                            ))}
+                            {user.roleIds.map((id) => {
+                                const role = roles.find(
+                                    (role) => role.id === id,
+                                );
+                                return <Badge key={id}>{role?.label}</Badge>;
+                            })}
                         </div>
                     )}
                 </SheetHeader>
