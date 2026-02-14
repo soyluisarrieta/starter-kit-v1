@@ -17,7 +17,8 @@ class RoleController extends Controller
      */
     public function index()
     {
-        $roles = Role::all()
+        $roles = Role::where('name', '!=', 'super-admin')
+            ->get()
             ->makeHidden(['permissions', 'guard_name'])
             ->map(fn ($role) => [
                 ...$role->toArray(),
@@ -58,6 +59,11 @@ class RoleController extends Controller
      */
     public function update(RoleRequest $request, Role $role)
     {
+        if ($role->name === 'super-admin') {
+            Inertia::flash('error', 'No se puede actualizar el rol de super administrador.');
+            return back();
+        }
+
         $data = $request->validated();
 
         $role->update($data);
@@ -69,6 +75,11 @@ class RoleController extends Controller
 
     public function updatePermission(Request $request, Role $role)
     {
+        if ($role->name === 'super-admin') {
+            Inertia::flash('error', 'No se puede modificar permisos del super administrador.');
+            return back();
+        }
+
         $data = $request->validate([
             'permission' => 'required|string|exists:permissions,name',
             'enabled' => 'required|boolean',
