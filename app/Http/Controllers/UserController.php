@@ -14,12 +14,10 @@ class UserController extends Controller
     public function index()
     {
         $roles = Role::select('id', 'name', 'label', 'hex_color')->get();
-        $users = User::with('roles')->get()->map(
-            fn (User $user) => [
-                ...$user->toArray(),
-                'roles' => $user->roles->pluck('id')->toArray(),
-            ]
-        );
+        $users = User::with('roles')->get()->map(fn (User $user) => [
+            ...$user->makeHidden('roles')->toArray(),
+            'roleIds' => $user->roles->pluck('id')->toArray(),
+        ]);
 
         return Inertia::render('users', compact('users', 'roles'));
     }
