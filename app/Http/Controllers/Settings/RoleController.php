@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Settings;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Settings\RoleRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
@@ -30,9 +32,18 @@ class RoleController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(RoleRequest $request)
     {
-        //
+        $data = $request->validated();
+
+        $data['name'] = Str::slug($data['label']);
+        $data['hex_color'] = '#f0f0f0';
+
+        Role::create($data);
+
+        Inertia::flash('success', 'Nuevo rol ha sido creado');
+
+        return back();
     }
 
     /**
