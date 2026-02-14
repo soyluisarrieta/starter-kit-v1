@@ -1,5 +1,11 @@
 import { useForm } from '@inertiajs/react';
-import { CheckIcon, LoaderIcon, SaveIcon, ShieldCheckIcon } from 'lucide-react';
+import {
+    CheckIcon,
+    LoaderIcon,
+    SaveIcon,
+    ShieldCheckIcon,
+    Trash2Icon,
+} from 'lucide-react';
 import { type FormEvent } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -25,6 +31,7 @@ const PREDEFINED_COLORS = [
 
 export default function RoleForm({ role }: { role?: Role }) {
     const roleDialogForm = useDialog('role-dialog-form');
+    const deleteDialog = useDialog('delete-dialog');
 
     const { post, put, data, setData, errors, processing, isDirty } = useForm({
         label: role?.label ?? '',
@@ -133,23 +140,40 @@ export default function RoleForm({ role }: { role?: Role }) {
                 </div>
             </div>
 
-            <div className="flex justify-end gap-2">
-                <Button
-                    onClick={() => roleDialogForm.onOpenChange(false)}
-                    variant="outline"
-                    type="button"
-                    disabled={processing}
-                >
-                    Cancelar
-                </Button>
-                <Button type="submit" disabled={processing || !isDirty}>
-                    {processing ? (
-                        <LoaderIcon className="animate-spin" />
-                    ) : (
-                        <SaveIcon />
-                    )}
-                    Guardar
-                </Button>
+            <div className="flex justify-between gap-2">
+                {role && deleteDialog && (
+                    <Button
+                        onClick={() => {
+                            roleDialogForm.onOpenChange(false);
+                            deleteDialog.onOpenChange(true);
+                        }}
+                        className="text-foreground hover:bg-destructive/60!"
+                        variant="ghost"
+                        type="button"
+                        disabled={processing}
+                    >
+                        <Trash2Icon />
+                        Eliminar
+                    </Button>
+                )}
+                <div className="ml-auto flex gap-2">
+                    <Button
+                        onClick={() => roleDialogForm.onOpenChange(false)}
+                        variant="outline"
+                        type="button"
+                        disabled={processing}
+                    >
+                        Cancelar
+                    </Button>
+                    <Button type="submit" disabled={processing || !isDirty}>
+                        {processing ? (
+                            <LoaderIcon className="animate-spin" />
+                        ) : (
+                            <SaveIcon />
+                        )}
+                        Guardar
+                    </Button>
+                </div>
             </div>
         </form>
     );

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Settings;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CurrentPasswordRequest;
 use App\Http\Requests\Settings\RoleRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -61,6 +62,7 @@ class RoleController extends Controller
     {
         if ($role->name === 'super-admin') {
             Inertia::flash('error', 'No se puede actualizar el rol de super administrador.');
+
             return back();
         }
 
@@ -77,6 +79,7 @@ class RoleController extends Controller
     {
         if ($role->name === 'super-admin') {
             Inertia::flash('error', 'No se puede modificar permisos del super administrador.');
+
             return back();
         }
 
@@ -107,8 +110,26 @@ class RoleController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Role $role, CurrentPasswordRequest $_)
     {
-        //
+        if ($role->name === 'super-admin') {
+            Inertia::flash('error', 'No se puede eliminar el rol de super administrador.');
+
+            return back();
+        }
+
+        $totalRoles = Role::where('name', '!=', 'super-admin')->count();
+
+        if ($totalRoles <= 1) {
+            Inertia::flash('error', 'No se puede eliminar el último rol.');
+
+            return back();
+        }
+
+        $role->delete();
+
+        Inertia::flash('success', 'Rol eliminado correctamente');
+
+        return back();
     }
 }

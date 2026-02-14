@@ -1,6 +1,7 @@
 import { Head, router, usePage } from '@inertiajs/react';
 import { PlusIcon } from 'lucide-react';
 import { useMemo, useState } from 'react';
+import { ConfirmDialog } from '@/components/commons/confirm-dialog';
 import RoleForm from '@/components/features/settings/role-form';
 import RoleTable from '@/components/features/settings/role-table';
 import Heading from '@/components/layout/heading';
@@ -16,7 +17,6 @@ import { PERMISSION_GROUPS } from '@/constants/permissions';
 import { useDialog } from '@/hooks/use-dialog';
 import AppLayout from '@/layouts/app-layout';
 import SettingsLayout from '@/layouts/settings/layout';
-import { edit as editRoles } from '@/routes/roles';
 import type {
     BreadcrumbItem,
     GroupedPermission,
@@ -27,6 +27,7 @@ import type {
     Role,
     SharedData,
 } from '@/types';
+import { destroy, edit as editRoles } from '@/routes/roles';
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Roles', href: editRoles().url },
@@ -42,8 +43,9 @@ interface PageProps extends SharedData {
 
 export default function Roles() {
     const { roles, permissions } = usePage<PageProps>().props;
-    const roleDialogForm = useDialog('role-dialog-form');
     const [editingRole, setEditingRole] = useState<Role>();
+    const roleDialogForm = useDialog('role-dialog-form');
+    const deleteDialog = useDialog('delete-dialog');
 
     // Group permissions
     const permissionGroups = useMemo(() => {
@@ -145,6 +147,16 @@ export default function Roles() {
                     <RoleForm role={editingRole} />
                 </DialogContent>
             </Dialog>
+
+            {/* Delete role */}
+            <ConfirmDialog
+                title={`¿Eliminar rol "${editingRole?.label}"?`}
+                description="Una vez eliminado el rol, los usuarios perderán los permisos asociados a este rol."
+                passwordRequired
+                method="delete"
+                url={editingRole ? destroy(editingRole.id).url : null}
+                {...deleteDialog}
+            />
         </AppLayout>
     );
 }

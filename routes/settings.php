@@ -37,4 +37,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::put('settings/roles/{role}/permissions', [RoleController::class, 'updatePermission'])
         ->name('roles.update-permissions');
+
+    Route::delete('settings/roles/{role}', [RoleController::class, 'destroy'])
+        ->name('roles.destroy');
 });
