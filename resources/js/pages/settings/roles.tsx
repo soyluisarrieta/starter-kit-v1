@@ -1,94 +1,91 @@
 import { Head, usePage } from '@inertiajs/react';
-import type { ColumnDef } from '@tanstack/react-table';
-import { UserIcon } from 'lucide-react';
+import { useMemo } from 'react';
+import RoleTable from '@/components/features/settings/role-table';
 import Heading from '@/components/layout/heading';
-import { Checkbox } from '@/components/ui/checkbox';
-import { DataTable } from '@/components/ui/data-table';
+import { PERMISSION_GROUPS } from '@/constants/permissions';
 import AppLayout from '@/layouts/app-layout';
 import SettingsLayout from '@/layouts/settings/layout';
 import { edit as editRoles } from '@/routes/roles';
-import type { BreadcrumbItem, Role, SharedData } from '@/types';
+import type {
+    BreadcrumbItem,
+    GroupedPermission,
+    GroupedPermissionId,
+    onChangePermissionProps,
+    Permission,
+    PermissionId,
+    Role,
+    SharedData,
+} from '@/types';
 
 const breadcrumbs: BreadcrumbItem[] = [
-    {
-        title: 'Roles',
-        href: editRoles().url,
-    },
+    { title: 'Roles', href: editRoles().url },
 ];
 
-interface PermissionRow {
-    id: number;
-    key: string;
-    label: string;
-    roles: Record<string, boolean>;
-}
+type PermissionGroups = Record<GroupedPermissionId, GroupedPermission>;
 
+// Page component
 interface PageProps extends SharedData {
-    data: PermissionRow[];
-    roles: Role[];
+    roles: Array<Role & { permissionIds: PermissionId[] }>;
+    permissions: Permission[];
 }
 
 export default function Roles() {
-    const { data, roles } = usePage<PageProps>().props;
+    const { roles, permissions } = usePage<PageProps>().props;
 
-    const columns: ColumnDef<PermissionRow>[] = [
-        {
-            accessorKey: 'label',
-            header: 'Permiso',
-            minSize: 1000,
-        },
-        ...roles.map(
-            (role): ColumnDef<PermissionRow> => ({
-                id: role.id.toString(),
-                header: () => (
-                    <div
-                        className="flex items-center justify-center gap-1 rounded-md px-2 py-1"
-                        style={{
-                            backgroundColor: `${role.hex_color}1A`,
-                            color: role.hex_color,
-                        }}
-                    >
-                        <UserIcon size={14} />
-                        <span className="text-xs font-medium">
-                            {role.label}
-                        </span>
-                    </div>
-                ),
-                accessorFn: (row) => row.roles[role.name],
-                enableSorting: false,
-                cell: ({ getValue }) => (
-                    <div className="flex items-center justify-center">
-                        <Checkbox checked={Boolean(getValue())} />
-                    </div>
-                ),
-            }),
-        ),
-    ];
+    // Group permissions
+    const permissionGroups = useMemo(() => {
+        const groups: Partial<PermissionGroups> = {};
+
+        for (const permission of permissions) {
+            const prefix = permission.name.split('.')[0];
+            const key = (
+                prefix in PERMISSION_GROUPS ? prefix : 'others'
+            ) as GroupedPermissionId;
+
+            if (!groups[key]) {
+                const permiGroup = PERMISSION_GROUPS[key];
+                groups[key] = {
+                    id: key,
+                    title: permiGroup.title,
+                    icon: permiGroup.icon,
+                    permissions: [],
+                };
+            }
+            groups[key]!.permissions.push(permission);
+        }
+
+        return Object.values(groups);
+    }, [permissions]);
+
+    // Handle permission change
+    const onChangePermission = ({
+        permission,
+        role,
+        value,
+    }: onChangePermissionProps) => {
+        console.log('UPDATE: ', { permission, role, value });
+    };
+
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Roles" />
-
-            <h1 className="sr-only">Roles</h1>
 
             <SettingsLayout>
                 <div className="space-y-6">
                     <Heading
                         variant="small"
-                        title="Roles"
-                        description="Configura los roles del sistema"
+                        title="Roles registrados"
+                        description="Configura los roles y permisos del sistema"
                     />
                 </div>
 
-                <DataTable
-                    data={data}
-                    columns={columns}
-                    enableExport={false}
-                    enableColumnToggle={false}
-                    enableRowSelection={false}
-                    enablePagination={false}
-                    searchableColumns={['label']}
-                    searchPlaceholder="Buscar roles..."
-                />
+                <div className="rounded-lg border border-border bg-card shadow-sm">
+                    <RoleTable
+                        permissionGroups={permissionGroups}
+                        roles={roles}
+                        onChangePermission={onChangePermission}
+                    />
+                </div>
             </SettingsLayout>
         </AppLayout>
     );

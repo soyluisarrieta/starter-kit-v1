@@ -1,4 +1,11 @@
-import type { Permission } from '@/types';
+import { UsersIcon, UserCogIcon, BriefcaseIcon } from 'lucide-react';
+import type { Permission, PermissionGroupConfig } from '@/types';
+
+export const PERMISSION_GROUPS = {
+    users: { title: 'Gestión de usuarios', icon: UsersIcon },
+    roles: { title: 'Gestión de roles', icon: UserCogIcon },
+    others: { title: 'Otros', icon: BriefcaseIcon },
+} satisfies Record<string, PermissionGroupConfig>;
 
 type PermissionDef = Record<string, Permission['name']>;
 
