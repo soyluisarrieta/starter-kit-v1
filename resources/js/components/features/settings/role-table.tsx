@@ -170,19 +170,16 @@ export default function RoleTable({
                 if (row.original.isGroup) {
                     const Icon = row.original.icon;
                     return (
-                        <button
-                            onClick={() => row.toggleExpanded()}
-                            className="flex w-full cursor-pointer items-center gap-2 px-2 py-4 text-left font-semibold"
-                        >
+                        <div className="flex w-full min-w-72 cursor-pointer items-center gap-2 px-2 py-4 text-left font-semibold">
                             <ChevronRightIcon
                                 className={cn(
                                     'h-4 w-4 transition-transform',
                                     row.getIsExpanded() && 'rotate-90',
                                 )}
                             />
-                            <Icon className="h-5 w-5 text-blue-500" />
+                            <Icon className="size-4 text-blue-500" />
                             {row.original.title}
-                        </button>
+                        </div>
                     );
                 }
 
@@ -245,12 +242,12 @@ export default function RoleTable({
                                     ? 'cursor-pointer bg-muted/20 hover:bg-muted/40'
                                     : 'cursor-auto hover:bg-muted/20',
                             )}
+                            onClick={() => isGroup && row.toggleExpanded()}
                         >
                             {row.getVisibleCells().map((cell) => (
                                 <TableCell
                                     key={cell.id}
                                     className={cn('py-3', isGroup && 'p-0')}
-                                    colSpan={isGroup ? roles.length + 1 : 1}
                                 >
                                     {flexRender(
                                         cell.column.columnDef.cell,

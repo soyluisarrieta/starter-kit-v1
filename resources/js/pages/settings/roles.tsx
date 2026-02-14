@@ -95,7 +95,7 @@ export default function Roles() {
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Roles" />
 
-            <SettingsLayout>
+            <SettingsLayout className="max-w-fit">
                 <div className="mb-6 space-y-6">
                     <Heading
                         variant="small"
