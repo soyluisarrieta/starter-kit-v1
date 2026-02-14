@@ -7,8 +7,9 @@ import {
 import type { ExpandedState } from '@tanstack/react-table';
 import type { ColumnDef } from '@tanstack/react-table';
 import type { LucideIcon } from 'lucide-react';
-import { ChevronRightIcon } from 'lucide-react';
+import { ChevronRightIcon, ShieldCheckIcon } from 'lucide-react';
 import { useMemo, useState } from 'react';
+import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Spinner } from '@/components/ui/spinner';
 import {
@@ -129,7 +130,17 @@ export default function RoleTable({
     const roleColumns: ColumnDef<RowData>[] = roles.map((role) => ({
         id: role.id.toString(),
         header: () => (
-            <div className="text-center font-semibold">{role.label}</div>
+            <Badge
+                className="border-none"
+                variant="outline"
+                style={{
+                    backgroundColor: role.hex_color + '1A',
+                    color: role.hex_color,
+                }}
+            >
+                <ShieldCheckIcon />
+                {role.label}
+            </Badge>
         ),
         cell: ({ row: { original } }) => {
             const permission = original.isGroup ? null : original.permission;
@@ -170,7 +181,7 @@ export default function RoleTable({
                 if (row.original.isGroup) {
                     const Icon = row.original.icon;
                     return (
-                        <div className="flex w-full min-w-72 cursor-pointer items-center gap-2 px-2 py-4 text-left font-semibold">
+                        <div className="flex w-full min-w-80 cursor-pointer items-center gap-2 px-2 py-4 text-left font-semibold">
                             <ChevronRightIcon
                                 className={cn(
                                     'h-4 w-4 transition-transform',
@@ -215,8 +226,7 @@ export default function RoleTable({
                                 key={header.id}
                                 className={cn(
                                     'border-b bg-muted/50',
-                                    header.id !== 'actions' &&
-                                        'w-32 text-center',
+                                    header.id !== 'actions' && 'text-center',
                                 )}
                             >
                                 {header.isPlaceholder
