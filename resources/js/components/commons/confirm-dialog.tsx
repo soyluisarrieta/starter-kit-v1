@@ -74,7 +74,13 @@ export function ConfirmDialog<TData>({
     };
 
     return (
-        <Dialog open={open} onOpenChange={onOpenChange}>
+        <Dialog
+            open={open}
+            onOpenChange={() => {
+                onOpenChange?.(false);
+                reset('password');
+            }}
+        >
             {children && <DialogTrigger asChild>{children}</DialogTrigger>}
 
             <DialogContent>
