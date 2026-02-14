@@ -56,17 +56,11 @@ class RoleController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Role $role)
+    public function update(RoleRequest $request, Role $role)
     {
-        $data = $request->validate([
-            'label' => 'required|string|max:70|unique:roles,label,'.$role->id,
-            'hex_color' => ['required', 'string', 'max:7', 'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
-        ]);
+        $data = $request->validated();
 
-        $role->update([
-            'label' => $data['label'],
-            'hex_color' => $data['hex_color'],
-        ]);
+        $role->update($data);
 
         Inertia::flash('success', 'Rol actualizado correctamente');
 

@@ -23,8 +23,8 @@ class RoleRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'label' => 'required|string|max:70|unique:roles,label,'.$this->route('role'),
-            'hex_color' => 'required|string|max:7|regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/',
+            'label' => ['required', 'string', 'max:70', 'unique:roles,label,'.($this->route('role')?->id)],
+            'hex_color' => ['required', 'string', 'max:7', 'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
         ];
     }
 

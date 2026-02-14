@@ -18,8 +18,8 @@ enum Roles: string
     public function hexColor(): string
     {
         return match ($this) {
-            self::SUPER_ADMIN => '#AD46FF',
-            self::ADMIN => '#2B7FFF',
+            self::SUPER_ADMIN => '#DA335D',
+            self::ADMIN => '#6366F1',
         };
     }
 
