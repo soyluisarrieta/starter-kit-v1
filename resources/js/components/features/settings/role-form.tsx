@@ -5,13 +5,13 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import InputError from '@/components/ui/input-error';
 import { useDialog } from '@/hooks/use-dialog';
-import { store } from '@/routes/roles';
+import type { Role } from '@/types';
 
-export default function RoleForm() {
+export default function RoleForm({ role }: { role?: Role }) {
     const roleDialogForm = useDialog('role-dialog-form');
 
-    const { post, data, setData, errors, processing, isDirty } = useForm({
-        label: '',
+    const { post, put, data, setData, errors, processing, isDirty } = useForm({
+        label: role?.label ?? '',
     });
 
     // Save user
@@ -20,7 +20,11 @@ export default function RoleForm() {
 
         const onSuccess = () => roleDialogForm.onOpenChange(false);
 
-        post(store().url, { onSuccess });
+        if (role) {
+            put(`/settings/roles/${role.id}`, { onSuccess });
+        } else {
+            post('/settings/roles', { onSuccess });
+        }
     };
 
     return (

@@ -34,4 +34,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::put('settings/roles/{role}', [RoleController::class, 'update'])
         ->name('roles.update');
+
+    Route::put('settings/roles/{role}/permissions', [RoleController::class, 'updatePermission'])
+        ->name('roles.update-permissions');
 });

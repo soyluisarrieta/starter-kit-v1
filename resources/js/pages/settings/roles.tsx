@@ -1,6 +1,6 @@
 import { Head, router, usePage } from '@inertiajs/react';
 import { PlusIcon } from 'lucide-react';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import RoleForm from '@/components/features/settings/role-form';
 import RoleTable from '@/components/features/settings/role-table';
 import Heading from '@/components/layout/heading';
@@ -43,6 +43,7 @@ interface PageProps extends SharedData {
 export default function Roles() {
     const { roles, permissions } = usePage<PageProps>().props;
     const roleDialogForm = useDialog('role-dialog-form');
+    const [editingRole, setEditingRole] = useState<Role>();
 
     // Group permissions
     const permissionGroups = useMemo(() => {
@@ -77,7 +78,7 @@ export default function Roles() {
     }: onChangePermissionProps) => {
         return new Promise<void>((resolve, reject) => {
             router.put(
-                `/settings/roles/${role.id}`,
+                `/settings/roles/${role.id}/permissions`,
                 {
                     permission: permission.name,
                     enabled: value,
@@ -103,7 +104,12 @@ export default function Roles() {
                         description="Configura los roles y permisos del sistema"
                     />
 
-                    <Button onClick={() => roleDialogForm.onOpenChange(true)}>
+                    <Button
+                        onClick={() => {
+                            setEditingRole(undefined);
+                            roleDialogForm.onOpenChange(true);
+                        }}
+                    >
                         <PlusIcon /> Crear rol
                     </Button>
                 </div>
@@ -113,6 +119,10 @@ export default function Roles() {
                         permissionGroups={permissionGroups}
                         roles={roles}
                         onChangePermission={onChangePermission}
+                        onEditRole={(role) => {
+                            setEditingRole(role);
+                            roleDialogForm.onOpenChange(true);
+                        }}
                     />
                 </div>
             </SettingsLayout>
@@ -121,12 +131,18 @@ export default function Roles() {
             <Dialog {...roleDialogForm}>
                 <DialogContent>
                     <DialogHeader className="mb-2">
-                        <DialogTitle>Crear nuevo rol de usuario</DialogTitle>
+                        <DialogTitle>
+                            {editingRole
+                                ? 'Editar rol de usuario'
+                                : 'Crear nuevo rol de usuario'}
+                        </DialogTitle>
                         <DialogDescription>
-                            Ingresa el nombre para el nuevo rol:
+                            {editingRole
+                                ? 'Modifica el nombre del rol seleccionado:'
+                                : 'Ingresa el nombre para el nuevo rol:'}
                         </DialogDescription>
                     </DialogHeader>
-                    <RoleForm />
+                    <RoleForm role={editingRole} />
                 </DialogContent>
             </Dialog>
         </AppLayout>

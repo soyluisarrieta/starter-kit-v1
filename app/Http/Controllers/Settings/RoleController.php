@@ -60,6 +60,21 @@ class RoleController extends Controller
     public function update(Request $request, Role $role)
     {
         $data = $request->validate([
+            'label' => 'required|string|max:70|unique:roles,label,'.$role->id,
+        ]);
+
+        $role->update([
+            'label' => $data['label'],
+        ]);
+
+        Inertia::flash('success', 'Rol actualizado correctamente');
+
+        return back();
+    }
+
+    public function updatePermission(Request $request, Role $role)
+    {
+        $data = $request->validate([
             'permission' => 'required|string|exists:permissions,name',
             'enabled' => 'required|boolean',
         ]);

@@ -56,12 +56,14 @@ interface RoleTableProps {
     permissionGroups: GroupedPermission[];
     roles: Array<Role & { permissionIds: PermissionId[] }>;
     onChangePermission: (data: onChangePermissionProps) => Promise<void>;
+    onEditRole: (role: Role) => void;
 }
 
 export default function RoleTable({
     permissionGroups,
     roles,
     onChangePermission,
+    onEditRole,
 }: RoleTableProps) {
     const [expanded, setExpanded] = useState<ExpandedState>({});
     const [loadingPermissions, setLoadingPermissions] = useState<Set<string>>(
@@ -131,7 +133,8 @@ export default function RoleTable({
         id: role.id.toString(),
         header: () => (
             <Badge
-                className="border-none"
+                onClick={() => onEditRole(role)}
+                className="cursor-pointer border-none hover:bg-muted"
                 variant="outline"
                 style={{
                     backgroundColor: role.hex_color + '1A',
