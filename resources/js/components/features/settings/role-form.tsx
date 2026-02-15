@@ -29,7 +29,12 @@ const PREDEFINED_COLORS = [
     '#ec4899', // Pink
 ];
 
-export default function RoleForm({ role }: { role?: Role }) {
+interface RoleFormProps {
+    role?: Role;
+    isLastRole: boolean;
+}
+
+export default function RoleForm({ role, isLastRole }: RoleFormProps) {
     const roleDialogForm = useDialog('role-dialog-form');
     const deleteDialog = useDialog('delete-dialog');
 
@@ -150,7 +155,12 @@ export default function RoleForm({ role }: { role?: Role }) {
                         className="text-foreground hover:bg-destructive/60!"
                         variant="ghost"
                         type="button"
-                        disabled={processing}
+                        disabled={processing || isLastRole}
+                        title={
+                            isLastRole
+                                ? 'No se puede eliminar el último rol'
+                                : undefined
+                        }
                     >
                         <Trash2Icon />
                         Eliminar

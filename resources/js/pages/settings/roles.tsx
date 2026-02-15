@@ -144,7 +144,10 @@ export default function Roles() {
                                 : 'Ingresa el nombre para el nuevo rol:'}
                         </DialogDescription>
                     </DialogHeader>
-                    <RoleForm role={editingRole} />
+                    <RoleForm
+                        role={editingRole}
+                        isLastRole={roles.length <= 1}
+                    />
                 </DialogContent>
             </Dialog>
 
