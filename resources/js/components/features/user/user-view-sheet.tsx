@@ -17,6 +17,8 @@ import {
     SheetTitle,
 } from '@/components/ui/sheet';
 import { PATHS } from '@/constants/paths';
+import { USER_PERMISSIONS } from '@/constants/permissions';
+import { useCan } from '@/hooks/use-can';
 import { useDialog } from '@/hooks/use-dialog';
 import { cn } from '@/lib/utils';
 import type { Role, UserWithRoles } from '@/types';
@@ -28,6 +30,10 @@ interface UserViewSheetProps {
 
 export default function UserViewSheet({ user, roles }: UserViewSheetProps) {
     const userSheetView = useDialog('user-sheet-view');
+    const { canUpdate, canDelete } = useCan([
+        USER_PERMISSIONS.UPDATE,
+        USER_PERMISSIONS.DELETE,
+    ]);
 
     if (!user) return null;
 
@@ -82,11 +88,16 @@ export default function UserViewSheet({ user, roles }: UserViewSheetProps) {
                                     #{user.id}
                                 </small>
                             </h3>
-                            {user.id && (
+                            {user.id && (canUpdate || canDelete) && (
                                 <div className="space-x-1">
-                                    <Button size="icon-sm" variant="outline">
-                                        <EditIcon />
-                                    </Button>
+                                    {canUpdate && (
+                                        <Button
+                                            size="icon-sm"
+                                            variant="outline"
+                                        >
+                                            <EditIcon />
+                                        </Button>
+                                    )}
 
                                     <UserDropdownMenu>
                                         <Button

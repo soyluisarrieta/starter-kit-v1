@@ -4,6 +4,8 @@ import {
     userResponsiveColumns,
 } from '@/components/features/user/user-columns';
 import { DataTable } from '@/components/ui/data-table';
+import { USER_PERMISSIONS } from '@/constants/permissions';
+import { useCan } from '@/hooks/use-can';
 import { useDialog } from '@/hooks/use-dialog';
 import type { Role, UserWithRoles } from '@/types';
 
@@ -18,6 +20,11 @@ export default function UserTable({
     users,
     roles,
 }: UserTableProps) {
+    const { canView, canUpdate, canDelete } = useCan([
+        USER_PERMISSIONS.VIEW,
+        USER_PERMISSIONS.UPDATE,
+        USER_PERMISSIONS.DELETE,
+    ]);
     const userDialogForm = useDialog('user-dialog-form');
     const userSheetView = useDialog('user-sheet-view');
     const deleteDialog = useDialog('delete-dialog');
@@ -51,7 +58,7 @@ export default function UserTable({
             exportFilename="usuarios"
             searchPlaceholder="Buscar usuarios..."
             searchableColumns={['name', 'last_name', 'email']}
-            onDelete={handleDeleteMultiple}
+            onDelete={canDelete ? handleDeleteMultiple : undefined}
             filterConfigs={[
                 {
                     columnId: 'roles',
@@ -69,16 +76,24 @@ export default function UserTable({
                 },
             ]}
             rowActions={[
-                {
-                    label: 'Ver detalles',
-                    icon: <EyeIcon className="mr-2 size-4" />,
-                    onClick: handleView,
-                },
-                {
-                    label: 'Editar',
-                    icon: <EditIcon className="mr-2 size-4" />,
-                    onClick: handleEdit,
-                },
+                ...(canView
+                    ? [
+                          {
+                              label: 'Ver detalles',
+                              icon: <EyeIcon className="mr-2 size-4" />,
+                              onClick: handleView,
+                          },
+                      ]
+                    : []),
+                ...(canUpdate
+                    ? [
+                          {
+                              label: 'Editar',
+                              icon: <EditIcon className="mr-2 size-4" />,
+                              onClick: handleEdit,
+                          },
+                      ]
+                    : []),
                 {
                     label: 'Copiar email',
                     icon: <CopyIcon className="mr-2 size-4" />,
@@ -86,11 +101,16 @@ export default function UserTable({
                         navigator.clipboard.writeText(row.email);
                     },
                 },
-                {
-                    label: 'Eliminar',
-                    icon: <TrashIcon className="mr-2 size-4" />,
-                    onClick: handleDelete,
-                },
+                ...(canDelete
+                    ? [
+                          {
+                              label: 'Eliminar',
+                              icon: <TrashIcon className="mr-2 size-4" />,
+                              onClick: handleDelete,
+                              variant: 'destructive' as const,
+                          },
+                      ]
+                    : []),
             ]}
         />
     );

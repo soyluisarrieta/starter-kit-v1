@@ -17,6 +17,7 @@ import { PERMISSION_GROUPS } from '@/constants/permissions';
 import { useDialog } from '@/hooks/use-dialog';
 import AppLayout from '@/layouts/app-layout';
 import SettingsLayout from '@/layouts/settings/layout';
+import { destroy, edit as editRoles } from '@/routes/roles';
 import type {
     BreadcrumbItem,
     GroupedPermission,
@@ -27,7 +28,6 @@ import type {
     Role,
     SharedData,
 } from '@/types';
-import { destroy, edit as editRoles } from '@/routes/roles';
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Roles', href: editRoles().url },

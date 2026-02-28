@@ -3,6 +3,8 @@ import type { PropsWithChildren } from 'react';
 import Heading from '@/components/layout/heading';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
+import { ROLE_PERMISSIONS } from '@/constants/permissions';
+import { useCan } from '@/hooks/use-can';
 import { useCurrentUrl } from '@/hooks/use-current-url';
 import { cn, toUrl } from '@/lib/utils';
 import { edit as editAppearance } from '@/routes/appearance';
@@ -11,7 +13,7 @@ import { edit as editRoles } from '@/routes/roles';
 import { edit as editPassword } from '@/routes/user-password';
 import type { NavItem } from '@/types';
 
-const sidebarNavItems: NavItem[] = [
+const baseNavItems: NavItem[] = [
     {
         title: 'Perfil',
         href: editProfile(),
@@ -27,11 +29,6 @@ const sidebarNavItems: NavItem[] = [
         href: editAppearance(),
         icon: null,
     },
-    {
-        title: 'Roles',
-        href: editRoles(),
-        icon: null,
-    },
 ];
 
 export default function SettingsLayout({
@@ -39,6 +36,20 @@ export default function SettingsLayout({
     children,
 }: PropsWithChildren & { className?: string }) {
     const { isCurrentUrl } = useCurrentUrl();
+    const { canRead: canReadRoles } = useCan([ROLE_PERMISSIONS.LIST]);
+
+    const sidebarNavItems: NavItem[] = [
+        ...baseNavItems,
+        ...(canReadRoles
+            ? [
+                  {
+                      title: 'Roles',
+                      href: editRoles(),
+                      icon: null,
+                  } satisfies NavItem,
+              ]
+            : []),
+    ];
 
     // When server-side rendering, we only render the layout on the client...
     if (typeof window === 'undefined') {
