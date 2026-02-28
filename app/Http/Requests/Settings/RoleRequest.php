@@ -12,7 +12,7 @@ class RoleRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return $this->user()->can(Permissions::CREATE_ROLES->value);
+        return $this->user()->can(Permissions::MANAGE_ROLES->value);
     }
 
     /**

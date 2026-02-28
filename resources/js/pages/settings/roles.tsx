@@ -13,7 +13,8 @@ import {
     DialogHeader,
     DialogTitle,
 } from '@/components/ui/dialog';
-import { PERMISSION_GROUPS } from '@/constants/permissions';
+import { OTHERS_PERMISSIONS, PERMISSION_GROUPS } from '@/constants/permissions';
+import { useCan } from '@/hooks/use-can';
 import { useDialog } from '@/hooks/use-dialog';
 import AppLayout from '@/layouts/app-layout';
 import SettingsLayout from '@/layouts/settings/layout';
@@ -46,6 +47,9 @@ export default function Roles() {
     const [editingRole, setEditingRole] = useState<Role>();
     const roleDialogForm = useDialog('role-dialog-form');
     const deleteDialog = useDialog('delete-dialog');
+    const { canManage: canManageRoles } = useCan([
+        OTHERS_PERMISSIONS.MANAGE_ROLES,
+    ]);
 
     // Group permissions
     const permissionGroups = useMemo(() => {
@@ -106,14 +110,16 @@ export default function Roles() {
                         description="Configura los roles y permisos del sistema"
                     />
 
-                    <Button
-                        onClick={() => {
-                            setEditingRole(undefined);
-                            roleDialogForm.onOpenChange(true);
-                        }}
-                    >
-                        <PlusIcon /> Crear rol
-                    </Button>
+                    {canManageRoles && (
+                        <Button
+                            onClick={() => {
+                                setEditingRole(undefined);
+                                roleDialogForm.onOpenChange(true);
+                            }}
+                        >
+                            <PlusIcon /> Crear rol
+                        </Button>
+                    )}
                 </div>
 
                 <div className="rounded-lg border border-border bg-card shadow-sm">
@@ -152,14 +158,16 @@ export default function Roles() {
             </Dialog>
 
             {/* Delete role */}
-            <ConfirmDialog
-                title={`¿Eliminar rol "${editingRole?.label}"?`}
-                description="Una vez eliminado el rol, los usuarios perderán los permisos asociados a este rol."
-                passwordRequired
-                method="delete"
-                url={editingRole ? destroy(editingRole.id).url : null}
-                {...deleteDialog}
-            />
+            {canManageRoles && (
+                <ConfirmDialog
+                    title={`¿Eliminar rol "${editingRole?.label}"?`}
+                    description="Una vez eliminado el rol, los usuarios perderán los permisos asociados a este rol."
+                    passwordRequired
+                    method="delete"
+                    url={editingRole ? destroy(editingRole.id).url : null}
+                    {...deleteDialog}
+                />
+            )}
         </AppLayout>
     );
 }

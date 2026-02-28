@@ -10,10 +10,7 @@ enum Permissions: string
     case UPDATE_USERS = 'users.update';
     case DELETE_USERS = 'users.delete';
 
-    case READ_ROLES = 'roles.read';
-    case CREATE_ROLES = 'roles.create';
-    case UPDATE_ROLES = 'roles.update';
-    case DELETE_ROLES = 'roles.delete';
+    case MANAGE_ROLES = 'roles.manage';
 
     case VIEW_DASHBOARD = 'dashboard.view';
 
@@ -26,10 +23,7 @@ enum Permissions: string
             self::UPDATE_USERS => 'Editar detalles de usuario',
             self::DELETE_USERS => 'Eliminar usuarios',
 
-            self::READ_ROLES => 'Ver lista de roles y permisos',
-            self::CREATE_ROLES => 'Crear nuevos roles y asignar permisos',
-            self::UPDATE_ROLES => 'Editar nombre de rol y permisos',
-            self::DELETE_ROLES => 'Eliminar roles del sistema',
+            self::MANAGE_ROLES => 'Gestionar roles y permisos',
 
             self::VIEW_DASHBOARD => 'Acceder al panel de control',
         };

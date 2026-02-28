@@ -3,7 +3,7 @@ import type { PropsWithChildren } from 'react';
 import Heading from '@/components/layout/heading';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { ROLE_PERMISSIONS } from '@/constants/permissions';
+import { OTHERS_PERMISSIONS } from '@/constants/permissions';
 import { useCan } from '@/hooks/use-can';
 import { useCurrentUrl } from '@/hooks/use-current-url';
 import { cn, toUrl } from '@/lib/utils';
@@ -36,7 +36,9 @@ export default function SettingsLayout({
     children,
 }: PropsWithChildren & { className?: string }) {
     const { isCurrentUrl } = useCurrentUrl();
-    const { canRead: canReadRoles } = useCan([ROLE_PERMISSIONS.LIST]);
+    const { canManage: canReadRoles } = useCan([
+        OTHERS_PERMISSIONS.MANAGE_ROLES,
+    ]);
 
     const sidebarNavItems: NavItem[] = [
         ...baseNavItems,

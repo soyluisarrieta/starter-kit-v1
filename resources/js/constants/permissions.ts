@@ -17,13 +17,7 @@ export const USER_PERMISSIONS = {
     DELETE: 'users.delete',
 } as const satisfies PermissionDef;
 
-export const ROLE_PERMISSIONS = {
-    LIST: 'roles.read',
-    CREATE: 'roles.create',
-    UPDATE: 'roles.update',
-    DELETE: 'roles.delete',
-} as const satisfies PermissionDef;
-
 export const OTHERS_PERMISSIONS = {
     VIEW_DASHBOARD: 'dashboard.view',
+    MANAGE_ROLES: 'roles.manage',
 } as const satisfies PermissionDef;
