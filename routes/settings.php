@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\Permissions;
 use App\Http\Controllers\Settings\PasswordController;
 use App\Http\Controllers\Settings\ProfileController;
 use App\Http\Controllers\Settings\RoleController;
@@ -26,18 +27,20 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return Inertia::render('settings/appearance');
     })->name('appearance.edit');
 
-    Route::get('ajustes/roles', [RoleController::class, 'index'])
-        ->name('roles.edit');
+    Route::middleware('can:' . Permissions::MANAGE_ROLES->value)->group(function () {
+        Route::get('ajustes/roles', [RoleController::class, 'index'])
+            ->name('roles.edit');
 
-    Route::post('settings/roles', [RoleController::class, 'store'])
-        ->name('roles.store');
+        Route::post('settings/roles', [RoleController::class, 'store'])
+            ->name('roles.store');
 
-    Route::put('settings/roles/{role}', [RoleController::class, 'update'])
-        ->name('roles.update');
+        Route::put('settings/roles/{role}', [RoleController::class, 'update'])
+            ->name('roles.update');
 
-    Route::put('settings/roles/{role}/permissions', [RoleController::class, 'updatePermission'])
-        ->name('roles.update-permissions');
+        Route::put('settings/roles/{role}/permissions', [RoleController::class, 'updatePermission'])
+            ->name('roles.update-permissions');
 
-    Route::delete('settings/roles/{role}', [RoleController::class, 'destroy'])
-        ->name('roles.destroy');
+        Route::delete('settings/roles/{role}', [RoleController::class, 'destroy'])
+            ->name('roles.destroy');
+    });
 });
