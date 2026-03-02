@@ -5,7 +5,6 @@ import DataTable from '@/components/commons/data-table/data-table';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { PATHS } from '@/constants/paths';
 import { useDialog } from '@/hooks/use-dialog';
-import { useInitials } from '@/hooks/use-initials';
 import type { UserWithRoles } from '@/types';
 
 interface UserTableProps {
@@ -14,7 +13,6 @@ interface UserTableProps {
 }
 
 export default function UserTable({ setSelectedUsers, users }: UserTableProps) {
-    const getInitials = useInitials();
     const userSheetView = useDialog('user-sheet-view');
 
     const handleView = (row: UserWithRoles) => {
@@ -26,6 +24,8 @@ export default function UserTable({ setSelectedUsers, users }: UserTableProps) {
         {
             key: 'id',
             label: 'ID',
+            className: 'w-0 pr-0 text-muted-foreground',
+            align: 'center',
         },
         {
             key: 'name',
@@ -41,8 +41,9 @@ export default function UserTable({ setSelectedUsers, users }: UserTableProps) {
                             onClick={() => handleView(row)}
                         >
                             <AvatarImage src={avatarUrl} alt={row.name} />
-                            <AvatarFallback className="rounded-lg bg-neutral-200 text-black dark:bg-neutral-700 dark:text-white">
-                                {getInitials(row.name)}
+                            <AvatarFallback className="rounded-lg bg-neutral-200 text-black uppercase dark:bg-neutral-700 dark:text-white">
+                                {row.name.charAt(0)}
+                                {row.last_name.charAt(0)}
                             </AvatarFallback>
                         </Avatar>
 
@@ -69,6 +70,8 @@ export default function UserTable({ setSelectedUsers, users }: UserTableProps) {
         {
             key: 'created_at',
             label: 'Creado',
+            className: 'w-0',
+            align: 'center',
             cell: ({ row }) => (
                 <div className="text-sm">
                     {format(row.created_at, 'MMM d, yyyy')}
@@ -82,6 +85,8 @@ export default function UserTable({ setSelectedUsers, users }: UserTableProps) {
         {
             key: 'updated_at',
             label: 'Actualizado',
+            className: 'w-0',
+            align: 'center',
             cell: ({ row }) => (
                 <div className="text-sm">
                     {format(row.updated_at, 'MMM d, yyyy')}
