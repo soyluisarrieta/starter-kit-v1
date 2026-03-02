@@ -1,23 +1,26 @@
 import { format } from 'date-fns';
-import { VerifiedIcon } from 'lucide-react';
+import { ShieldCheckIcon, VerifiedIcon } from 'lucide-react';
 import DataTable from '@/components/commons/data-table/data-table';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
 import { PATHS } from '@/constants/paths';
 import { useDialog } from '@/hooks/use-dialog';
 import { users as usersRoute } from '@/routes';
-import type { UserWithRoles } from '@/types';
+import type { Role, UserWithRoles } from '@/types';
 import type { ColumnDef, Paginated, QueryParams } from '@/types/data-table';
 
 interface UserTableProps {
     setSelectedUsers: (user: UserWithRoles[]) => void;
     users: Paginated<UserWithRoles>;
     queryParams: QueryParams;
+    roles: Role[];
 }
 
 export default function UserTable({
     setSelectedUsers,
     users,
     queryParams,
+    roles,
 }: UserTableProps) {
     const userSheetView = useDialog('user-sheet-view');
 
@@ -25,6 +28,8 @@ export default function UserTable({
         setSelectedUsers([row]);
         userSheetView.onOpenChange(true);
     };
+
+    const rolesMap = new Map(roles.map((role) => [role.id, role]));
 
     const columns: ColumnDef<UserWithRoles>[] = [
         {
@@ -69,6 +74,42 @@ export default function UserTable({
                                 )}
                             </small>
                         </div>
+                    </div>
+                );
+            },
+        },
+        {
+            key: 'roleIds',
+            label: 'Roles',
+            className: 'w-0',
+            align: 'center',
+            cell: ({ row }) => {
+                const userRoles = row.roleIds
+                    .map((id) => rolesMap.get(id))
+                    .filter((role): role is Role => Boolean(role));
+
+                if (!userRoles.length) {
+                    return <small className="text-muted-foreground">—</small>;
+                }
+
+                return (
+                    <div className="flex flex-wrap gap-1">
+                        {userRoles.map(({ id, hex_color, label }) => {
+                            return (
+                                <Badge
+                                    key={row.id + id}
+                                    className="border-none"
+                                    variant="outline"
+                                    style={{
+                                        backgroundColor: hex_color + '1A',
+                                        color: hex_color,
+                                    }}
+                                >
+                                    <ShieldCheckIcon />
+                                    {label}
+                                </Badge>
+                            );
+                        })}
                     </div>
                 );
             },

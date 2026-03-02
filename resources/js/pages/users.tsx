@@ -65,7 +65,7 @@ export default function Users({ users, roles, queryParams }: UsersProps) {
 
                     {canCreate && (
                         <Button
-                            className="fixed right-4 bottom-4 size-12 rounded-full p-4 lg:static lg:h-9 lg:w-auto lg:rounded-md"
+                            className="fixed right-4 bottom-4 z-10 size-12 rounded-full p-4 lg:static lg:h-9 lg:w-auto lg:rounded-md"
                             onClick={() => {
                                 setSelectedUsers([]);
                                 userDialogForm.onOpenChange(true);
@@ -83,6 +83,7 @@ export default function Users({ users, roles, queryParams }: UsersProps) {
                     users={users}
                     queryParams={queryParams}
                     setSelectedUsers={setSelectedUsers}
+                    roles={roles}
                 />
             </main>
 

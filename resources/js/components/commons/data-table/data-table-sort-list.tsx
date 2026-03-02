@@ -29,7 +29,7 @@ export default function DataTableSortList({
         <>
             <Link
                 className={cn(
-                    'flex items-center space-x-2 text-xs font-bold',
+                    'inline-flex items-center space-x-2 text-xs font-bold',
                     isActived && 'text-primary',
                 )}
                 href={route}
