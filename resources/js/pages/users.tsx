@@ -1,5 +1,5 @@
 import type { PageProps } from '@inertiajs/core';
-import { Head, usePage } from '@inertiajs/react';
+import { Head } from '@inertiajs/react';
 import { PlusIcon } from 'lucide-react';
 import { useState } from 'react';
 import { ConfirmDialog } from '@/components/commons/confirm-dialog';
@@ -21,6 +21,7 @@ import AppLayout from '@/layouts/app-layout';
 import { users } from '@/routes';
 import { destroy, destroyMultiple } from '@/routes/users';
 import type { BreadcrumbItem, Role, UserWithRoles } from '@/types';
+import type { PaginatedResponse, QueryParams } from '@/types/data-table';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -29,13 +30,13 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-interface UserPageProps extends PageProps {
-    users: UserWithRoles[];
+interface UsersProps extends PageProps {
+    users: PaginatedResponse<UserWithRoles>;
     readonly roles: Role[];
+    queryParams: QueryParams;
 }
 
-export default function Users() {
-    const { users, roles } = usePage<UserPageProps>().props;
+export default function Users({ users, roles, queryParams }: UsersProps) {
     const [selectedUsers, setSelectedUsers] = useState<UserWithRoles[]>([]);
     const { canCreate, canDelete } = useCan([
         USER_PERMISSIONS.CREATE,
@@ -78,7 +79,11 @@ export default function Users() {
                     )}
                 </div>
 
-                <UserTable setSelectedUsers={setSelectedUsers} users={users} />
+                <UserTable
+                    users={users}
+                    queryParams={queryParams}
+                    setSelectedUsers={setSelectedUsers}
+                />
             </main>
 
             {/* View user */}

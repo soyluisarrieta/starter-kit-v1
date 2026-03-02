@@ -6,20 +6,30 @@ use App\Http\Requests\CurrentPasswordRequest;
 use App\Http\Requests\User\DestroyMultipleUsersRequest;
 use App\Http\Requests\User\UserRequest;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $roles = Role::select('id', 'name', 'label', 'hex_color')->get();
-        $users = User::with('roles')->get()->map(fn (User $user) => [
-            ...$user->makeHidden('roles')->toArray(),
-            'roleIds' => $user->roles->pluck('id')->toArray(),
-        ]);
+        $queryParams = $request->only(['search']);
 
-        return Inertia::render('users', compact('users', 'roles'));
+        $search = $queryParams['search'] ?? '';
+
+        $users = User::with('roles')
+            ->search($search)
+            ->paginate()
+            ->withQueryString()
+            ->through(fn(User $user) => [
+                ...$user->makeHidden('roles')->toArray(),
+                'roleIds' => $user->roles->pluck('id')->toArray(),
+            ]);
+
+        $roles = Role::select('id', 'name', 'label', 'hex_color')->get();
+
+        return Inertia::render('users', compact('users', 'roles', 'queryParams'));
     }
 
     public function store(UserRequest $request)

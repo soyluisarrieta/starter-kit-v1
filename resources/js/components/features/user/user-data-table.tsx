@@ -1,18 +1,28 @@
 import { format } from 'date-fns';
 import { VerifiedIcon } from 'lucide-react';
-import type { ColumnDef } from '@/components/commons/data-table/data-table';
 import DataTable from '@/components/commons/data-table/data-table';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { PATHS } from '@/constants/paths';
 import { useDialog } from '@/hooks/use-dialog';
+import { users as usersRoute } from '@/routes';
 import type { UserWithRoles } from '@/types';
+import type {
+    ColumnDef,
+    PaginatedResponse,
+    QueryParams,
+} from '@/types/data-table';
 
 interface UserTableProps {
     setSelectedUsers: (user: UserWithRoles[]) => void;
-    users: UserWithRoles[];
+    users: PaginatedResponse<UserWithRoles>;
+    queryParams: QueryParams;
 }
 
-export default function UserTable({ setSelectedUsers, users }: UserTableProps) {
+export default function UserTable({
+    setSelectedUsers,
+    users,
+    queryParams,
+}: UserTableProps) {
     const userSheetView = useDialog('user-sheet-view');
 
     const handleView = (row: UserWithRoles) => {
@@ -99,5 +109,15 @@ export default function UserTable({ setSelectedUsers, users }: UserTableProps) {
         },
     ];
 
-    return <DataTable columns={columns} data={users} />;
+    return (
+        <DataTable
+            columns={columns}
+            data={users.data}
+            route={usersRoute()}
+            queryParams={queryParams}
+            options={{
+                search: { placeholder: 'Buscar usuarios...' },
+            }}
+        />
+    );
 }
