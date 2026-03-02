@@ -113,6 +113,7 @@ export default function UserTable({
         <DataTable
             columns={columns}
             data={users.data}
+            links={users.links}
             route={usersRoute()}
             queryParams={queryParams}
             options={{

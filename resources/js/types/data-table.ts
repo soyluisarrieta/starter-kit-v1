@@ -11,10 +11,24 @@ export interface ColumnDef<TData> {
 
 export interface QueryParams {
     search?: string;
+    perPage?: string;
+    sortBy?: string;
+    sortOrder?: string;
 }
 
 export interface DataTableSearchInput {
     enabled?: boolean;
     placeholder?: string;
     className?: string;
+}
+
+export interface PaginationLink {
+    active: boolean;
+    label: string;
+    url: string;
+}
+
+export interface PaginatedResponse<TData> {
+    data: TData[];
+    links: PaginationLink[];
 }

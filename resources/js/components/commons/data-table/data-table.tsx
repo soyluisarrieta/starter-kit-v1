@@ -1,5 +1,7 @@
 import { useForm } from '@inertiajs/react';
 import DataTableInputSearch from '@/components/commons/data-table/data-table-input-search';
+import DataTablePagination from '@/components/commons/data-table/data-table-pagination';
+import DataTableSortList from '@/components/commons/data-table/data-table-sort-list';
 import {
     Table,
     TableBody,
@@ -12,12 +14,12 @@ import { cn } from '@/lib/utils';
 import type {
     ColumnDef,
     DataTableSearchInput,
+    PaginatedResponse,
     QueryParams,
 } from '@/types/data-table';
 import type { RouteDefinition } from '@/wayfinder';
 
-interface DataTableProps<TData> {
-    data: TData[];
+interface DataTableProps<TData> extends PaginatedResponse<TData> {
     columns: ColumnDef<TData>[];
     route: RouteDefinition<'get'>;
     queryParams: QueryParams;
@@ -29,12 +31,16 @@ interface DataTableProps<TData> {
 export default function DataTable<TData extends object>({
     data,
     columns,
+    links,
     route,
     queryParams,
     options,
 }: DataTableProps<TData>) {
     const { data: query, setData: setQuery } = useForm({
         search: queryParams.search || '',
+        perPage: queryParams.perPage,
+        sortBy: queryParams.sortBy,
+        sortOrder: queryParams.sortOrder,
     });
 
     return (
@@ -61,7 +67,15 @@ export default function DataTable<TData extends object>({
                                 )}
                                 style={{ textAlign: column.align }}
                             >
-                                {column.header ? column.header() : column.label}
+                                <DataTableSortList
+                                    queryParams={queryParams}
+                                    route={route}
+                                    field={column.key}
+                                >
+                                    {column.header
+                                        ? column.header()
+                                        : column.label}
+                                </DataTableSortList>
                             </TableHead>
                         ))}
                     </TableRow>
@@ -84,6 +98,13 @@ export default function DataTable<TData extends object>({
                     ))}
                 </TableBody>
             </Table>
+            <DataTablePagination
+                route={route}
+                links={links}
+                queryParams={queryParams}
+                currentPage={(query.perPage || 10).toString()}
+                onCurrentPageChange={(value) => setQuery('perPage', value)}
+            />
         </div>
     );
 }

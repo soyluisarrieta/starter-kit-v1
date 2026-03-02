@@ -14,13 +14,17 @@ class UserController extends Controller
 {
     public function index(Request $request)
     {
-        $queryParams = $request->only(['search']);
+        $queryParams = $request->only(['search', 'perPage', 'sortBy', 'sortOrder']);
 
         $search = $queryParams['search'] ?? '';
+        $perPage = $queryParams['perPage'] ?? 10;
+        $sortBy = $queryParams['sortBy'] ?? 'id';
+        $sortOrder = $queryParams['sortOrder'] ?? 'desc';
 
         $users = User::with('roles')
             ->search($search)
-            ->paginate()
+            ->orderBy($sortBy, $sortOrder)
+            ->paginate($perPage)
             ->withQueryString()
             ->through(fn(User $user) => [
                 ...$user->makeHidden('roles')->toArray(),
