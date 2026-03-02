@@ -1,4 +1,4 @@
-import type { ExportFormat } from '@/types/data-table';
+type ExportFormat = 'PDF' | 'CSV' | 'XLS' | 'JSON';
 
 interface ExportConfig {
     filename: string;
@@ -68,10 +68,10 @@ export function exportData<TData extends object>(
         ExportFormat,
         <T extends object>(data: T[], config: ExportConfig) => void
     > = {
-        pdf: exportToPDF,
-        csv: exportToCSV,
-        excel: exportToExcel,
-        json: exportToJSON,
+        PDF: exportToPDF,
+        CSV: exportToCSV,
+        XLS: exportToExcel,
+        JSON: exportToJSON,
     };
     exporters[format](data, config);
 }

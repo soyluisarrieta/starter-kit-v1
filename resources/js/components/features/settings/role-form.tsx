@@ -6,7 +6,7 @@ import {
     ShieldCheckIcon,
     Trash2Icon,
 } from 'lucide-react';
-import { type FormEvent } from 'react';
+import type { FormEvent } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';

@@ -7,9 +7,8 @@ import { Badge } from '@/components/ui/badge';
 import { PATHS } from '@/constants/paths';
 import type { UserWithRoles } from '@/types';
 import type { Role } from '@/types';
-import type { ResponsiveColumnConfig } from '@/types/data-table';
 
-export const userResponsiveColumns: ResponsiveColumnConfig[] = [
+export const userResponsiveColumns = [
     { columnId: 'last_name', minWidth: 1024 },
     { columnId: 'email', minWidth: 1024 },
     { columnId: 'created_at', minWidth: 768 },

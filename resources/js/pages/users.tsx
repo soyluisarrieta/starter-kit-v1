@@ -1,3 +1,4 @@
+import type { PageProps } from '@inertiajs/core';
 import { Head, usePage } from '@inertiajs/react';
 import { PlusIcon } from 'lucide-react';
 import { useState } from 'react';
@@ -19,7 +20,7 @@ import { useDialog } from '@/hooks/use-dialog';
 import AppLayout from '@/layouts/app-layout';
 import { users } from '@/routes';
 import { destroy, destroyMultiple } from '@/routes/users';
-import type { BreadcrumbItem, Role, SharedData, UserWithRoles } from '@/types';
+import type { BreadcrumbItem, Role, UserWithRoles } from '@/types';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -28,7 +29,7 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-interface UserPageProps extends SharedData {
+interface UserPageProps extends PageProps {
     users: UserWithRoles[];
     readonly roles: Role[];
 }

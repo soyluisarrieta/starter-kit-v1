@@ -1,6 +1,6 @@
 import { useForm } from '@inertiajs/react';
 import { LoaderIcon, SaveIcon } from 'lucide-react';
-import { type FormEvent } from 'react';
+import type { FormEvent } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import InputError from '@/components/ui/input-error';

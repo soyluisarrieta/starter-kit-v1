@@ -11,7 +11,6 @@ description: >
 
 ```ts
 // ✅ Type imports
-import type { ColumnDef } from '@tanstack/react-table';
 import type { BreadcrumbItem, Role } from '@/types';
 
 // ✅ Mixed imports

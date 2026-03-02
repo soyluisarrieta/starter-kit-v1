@@ -35,7 +35,7 @@ export default function SettingsLayout({
     className,
     children,
 }: PropsWithChildren & { className?: string }) {
-    const { isCurrentUrl } = useCurrentUrl();
+    const { isCurrentOrParentUrl } = useCurrentUrl();
     const { canManage: canReadRoles } = useCan([
         OTHERS_PERMISSIONS.MANAGE_ROLES,
     ]);
@@ -78,7 +78,7 @@ export default function SettingsLayout({
                                 variant="ghost"
                                 asChild
                                 className={cn('w-full justify-start', {
-                                    'bg-muted': isCurrentUrl(item.href),
+                                    'bg-muted': isCurrentOrParentUrl(item.href),
                                 })}
                             >
                                 <Link href={item.href}>

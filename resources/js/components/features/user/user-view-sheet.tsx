@@ -91,19 +91,13 @@ export default function UserViewSheet({ user, roles }: UserViewSheetProps) {
                             {user.id && (canUpdate || canDelete) && (
                                 <div className="space-x-1">
                                     {canUpdate && (
-                                        <Button
-                                            size="icon-sm"
-                                            variant="outline"
-                                        >
+                                        <Button size="icon" variant="outline">
                                             <EditIcon />
                                         </Button>
                                     )}
 
                                     <UserDropdownMenu>
-                                        <Button
-                                            size="icon-sm"
-                                            variant="outline"
-                                        >
+                                        <Button size="icon" variant="outline">
                                             <MoreVerticalIcon />
                                         </Button>
                                     </UserDropdownMenu>

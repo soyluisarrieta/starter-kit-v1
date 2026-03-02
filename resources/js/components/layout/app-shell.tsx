@@ -3,7 +3,6 @@ import type { ReactNode } from 'react';
 import { Toaster } from 'sonner';
 import { SidebarProvider } from '@/components/ui/sidebar';
 import { useFlashMessages } from '@/hooks/use-flash-message';
-import type { SharedData } from '@/types';
 
 type Props = {
     children: ReactNode;
@@ -13,7 +12,7 @@ type Props = {
 const SonnerToaster = () => <Toaster position="top-right" richColors />;
 
 export function AppShell({ children, variant = 'header' }: Props) {
-    const isOpen = usePage<SharedData>().props.sidebarOpen;
+    const isOpen = usePage().props.sidebarOpen;
 
     useFlashMessages();
 

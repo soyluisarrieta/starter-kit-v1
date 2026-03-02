@@ -14,7 +14,6 @@ description: >
 - **Routing**: Laravel Wayfinder (auto-generates TypeScript routes)
 - **State**: Zustand stores
 - **UI**: shadcn/ui + Tailwind CSS 4
-- **Tables**: TanStack Table v8
 - **Tooling**: Bun, Vite, TypeScript strict, ESLint, Prettier, Pint
 - **Testing**: PHPUnit
 
@@ -89,7 +88,7 @@ laravel-starter-kit/
 // ✅ Page with layout
 <AppLayout breadcrumbs={breadcrumbs}>
   <SettingsLayout>
-    <DataTable data={data} columns={columns} />
+    <div>Table</div>
   </SettingsLayout>
 </AppLayout>
 ```

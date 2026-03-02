@@ -7,12 +7,6 @@ description: >
 
 # React 19 - Skill
 
-## Available Skills
-
-| Skill | Description |
-| ----- | ----------- |
-| **[tanstack-table](./tanstack-table/SKILL.md)** | TanStack Table v8 advanced patterns |
-
 ## Ignored Paths
 
 Auto-generated, never modify:

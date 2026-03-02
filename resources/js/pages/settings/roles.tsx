@@ -1,3 +1,4 @@
+import type { PageProps } from '@inertiajs/core';
 import { Head, router, usePage } from '@inertiajs/react';
 import { PlusIcon } from 'lucide-react';
 import { useMemo, useState } from 'react';
@@ -27,7 +28,6 @@ import type {
     Permission,
     PermissionId,
     Role,
-    SharedData,
 } from '@/types';
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -37,13 +37,13 @@ const breadcrumbs: BreadcrumbItem[] = [
 type PermissionGroups = Record<GroupedPermissionId, GroupedPermission>;
 
 // Page component
-interface PageProps extends SharedData {
+interface RolePageProps extends PageProps {
     roles: Array<Role & { permissionIds: PermissionId[] }>;
     permissions: Permission[];
 }
 
 export default function Roles() {
-    const { roles, permissions } = usePage<PageProps>().props;
+    const { roles, permissions } = usePage<RolePageProps>().props;
     const [editingRole, setEditingRole] = useState<Role>();
     const roleDialogForm = useDialog('role-dialog-form');
     const deleteDialog = useDialog('delete-dialog');

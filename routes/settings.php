@@ -27,7 +27,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return Inertia::render('settings/appearance');
     })->name('appearance.edit');
 
-    Route::middleware('can:' . Permissions::MANAGE_ROLES->value)->group(function () {
+    Route::middleware('can:'.Permissions::MANAGE_ROLES->value)->group(function () {
         Route::get('ajustes/roles', [RoleController::class, 'index'])
             ->name('roles.edit');
 
