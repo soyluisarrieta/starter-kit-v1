@@ -2,35 +2,31 @@
 
 namespace App\Http\Controllers;
 
+use App\Concerns\HasDataTable;
 use App\Http\Requests\CurrentPasswordRequest;
+use App\Http\Requests\DataTableRequest;
 use App\Http\Requests\User\DestroyMultipleUsersRequest;
 use App\Http\Requests\User\UserRequest;
 use App\Models\User;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
-    public function index(Request $request)
+    use HasDataTable;
+
+    public function index(DataTableRequest $request)
     {
-        $queryParams = $request->only(['search', 'perPage', 'sortBy', 'sortOrder']);
-
-        $search = $queryParams['search'] ?? '';
-        $perPage = $queryParams['perPage'] ?? 10;
-        $sortBy = $queryParams['sortBy'] ?? 'id';
-        $sortOrder = $queryParams['sortOrder'] ?? 'desc';
-
-        $users = User::with('roles')
-            ->search($search)
-            ->orderBy($sortBy, $sortOrder)
-            ->paginate($perPage)
-            ->withQueryString()
+        $query = User::with('roles');
+        $sortableColumns = ['id', 'name', 'last_name', 'email', 'created_at', 'updated_at'];
+        $users = $this
+            ->applyDataTable($query, $request, $sortableColumns)
             ->through(fn (User $user) => [
                 ...$user->makeHidden('roles')->toArray(),
                 'roleIds' => $user->roles->pluck('id')->toArray(),
             ]);
 
+        $queryParams = $request->validated();
         $roles = Role::select('id', 'name', 'label', 'hex_color')->get();
 
         return Inertia::render('users', compact('users', 'roles', 'queryParams'));
