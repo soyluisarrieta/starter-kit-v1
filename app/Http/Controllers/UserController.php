@@ -26,7 +26,7 @@ class UserController extends Controller
             ->orderBy($sortBy, $sortOrder)
             ->paginate($perPage)
             ->withQueryString()
-            ->through(fn(User $user) => [
+            ->through(fn (User $user) => [
                 ...$user->makeHidden('roles')->toArray(),
                 'roleIds' => $user->roles->pluck('id')->toArray(),
             ]);

@@ -43,9 +43,8 @@ class User extends Authenticatable
 
     /**
      * Scope a query to search for users.
-     * 
-     * @param Builder $query
-     * @param mixed $value
+     *
+     * @param  mixed  $value
      * @return void
      */
     public function scopeSearch(Builder $query, ?string $value): Builder

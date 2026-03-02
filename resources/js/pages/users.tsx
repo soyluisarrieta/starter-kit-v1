@@ -37,6 +37,8 @@ interface UsersProps extends PageProps {
 }
 
 export default function Users({ users, roles, queryParams }: UsersProps) {
+    console.log(users);
+
     const [selectedUsers, setSelectedUsers] = useState<UserWithRoles[]>([]);
     const { canCreate, canDelete } = useCan([
         USER_PERMISSIONS.CREATE,
