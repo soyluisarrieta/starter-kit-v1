@@ -3,7 +3,7 @@ import { Form, Head, Link, router, usePage } from '@inertiajs/react';
 import { UploadIcon } from 'lucide-react';
 import { useRef } from 'react';
 import ProfileController from '@/actions/App/Http/Controllers/Settings/ProfileController';
-import DeleteUser from '@/components/features/account/delete-user';
+import DeleteUser from '@/components/features/settings/delete-user';
 import Heading from '@/components/layout/heading';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';

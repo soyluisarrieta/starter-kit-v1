@@ -1,4 +1,4 @@
-import { Head } from '@inertiajs/react';
+import { Head, usePage } from '@inertiajs/react';
 import { PlusIcon } from 'lucide-react';
 import { useState } from 'react';
 import { ConfirmDialog } from '@/components/commons/confirm-dialog';
@@ -13,11 +13,13 @@ import {
     DialogHeader,
     DialogTitle,
 } from '@/components/ui/dialog';
+import { USER_PERMISSIONS } from '@/constants/permissions';
+import { useCan } from '@/hooks/use-can';
 import { useDialog } from '@/hooks/use-dialog';
 import AppLayout from '@/layouts/app-layout';
 import { users } from '@/routes';
 import { destroy, destroyMultiple } from '@/routes/users';
-import type { BreadcrumbItem, User } from '@/types';
+import type { BreadcrumbItem, Role, SharedData, UserWithRoles } from '@/types';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -26,8 +28,18 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
+interface UserPageProps extends SharedData {
+    users: UserWithRoles[];
+    readonly roles: Role[];
+}
+
 export default function Users() {
-    const [selectedUsers, setSelectedUsers] = useState<User[]>([]);
+    const { users, roles } = usePage<UserPageProps>().props;
+    const [selectedUsers, setSelectedUsers] = useState<UserWithRoles[]>([]);
+    const { canCreate, canDelete } = useCan([
+        USER_PERMISSIONS.CREATE,
+        USER_PERMISSIONS.DELETE,
+    ]);
 
     const userDialogForm = useDialog('user-dialog-form');
     const deleteDialog = useDialog('delete-dialog');
@@ -49,23 +61,31 @@ export default function Users() {
                         </p>
                     </div>
 
-                    <Button
-                        className="fixed right-4 bottom-4 size-12 rounded-full p-4 lg:static lg:h-9 lg:w-auto lg:rounded-md"
-                        onClick={() => {
-                            setSelectedUsers([]);
-                            userDialogForm.onOpenChange(true);
-                        }}
-                    >
-                        <PlusIcon className="size-5 lg:size-4" />
-                        <span className="hidden lg:inline">Crear usuario</span>
-                    </Button>
+                    {canCreate && (
+                        <Button
+                            className="fixed right-4 bottom-4 size-12 rounded-full p-4 lg:static lg:h-9 lg:w-auto lg:rounded-md"
+                            onClick={() => {
+                                setSelectedUsers([]);
+                                userDialogForm.onOpenChange(true);
+                            }}
+                        >
+                            <PlusIcon className="size-5 lg:size-4" />
+                            <span className="hidden lg:inline">
+                                Crear usuario
+                            </span>
+                        </Button>
+                    )}
                 </div>
 
-                <UserDataTable setSelectedUsers={setSelectedUsers} />
+                <UserDataTable
+                    setSelectedUsers={setSelectedUsers}
+                    users={users}
+                    roles={roles}
+                />
             </main>
 
             {/* View user */}
-            <UserViewSheet user={selectedUsers[0] ?? null} />
+            <UserViewSheet roles={roles} user={selectedUsers[0]} />
 
             {/* Create or edit user */}
             <Dialog {...userDialogForm}>
@@ -80,30 +100,38 @@ export default function Users() {
                                 : 'Completa la información para crear el usuario.'}
                         </DialogDescription>
                     </DialogHeader>
-                    <UserForm user={selectedUsers[0] ?? null} />
+                    <UserForm user={selectedUsers[0]} />
                 </DialogContent>
             </Dialog>
 
             {/* Delete an user */}
-            <ConfirmDialog
-                title={`¿Eliminar usuario "${selectedUsers[0]?.name}"?`}
-                description="Una vez eliminado el usuario, todos sus datos serán eliminados permanentemente."
-                passwordRequired
-                method="delete"
-                url={selectedUsers[0] ? destroy(selectedUsers[0].id).url : null}
-                {...deleteDialog}
-            />
+            {canDelete && (
+                <ConfirmDialog
+                    title={`¿Eliminar usuario "${selectedUsers[0]?.name}"?`}
+                    description="Una vez eliminado el usuario, todos sus datos serán eliminados permanentemente."
+                    passwordRequired
+                    method="delete"
+                    url={
+                        selectedUsers[0]
+                            ? destroy(selectedUsers[0].id).url
+                            : null
+                    }
+                    {...deleteDialog}
+                />
+            )}
 
             {/* Delete users */}
-            <ConfirmDialog
-                title={`¿Eliminar ${selectedUsers.length} usuarios seleccionados?`}
-                description="Una vez eliminados los usuarios, todos sus datos serán eliminados permanentemente."
-                passwordRequired
-                method="post"
-                url={destroyMultiple().url}
-                data={{ ids: selectedUsers.map(({ id }) => id) }}
-                {...deleteMultipleDialog}
-            />
+            {canDelete && (
+                <ConfirmDialog
+                    title={`¿Eliminar ${selectedUsers.length} usuarios seleccionados?`}
+                    description="Una vez eliminados los usuarios, todos sus datos serán eliminados permanentemente."
+                    passwordRequired
+                    method="post"
+                    url={destroyMultiple().url}
+                    data={{ ids: selectedUsers.map(({ id }) => id) }}
+                    {...deleteMultipleDialog}
+                />
+            )}
         </AppLayout>
     );
 }

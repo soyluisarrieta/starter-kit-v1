@@ -3,17 +3,20 @@ import type { PropsWithChildren } from 'react';
 import Heading from '@/components/layout/heading';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
+import { OTHERS_PERMISSIONS } from '@/constants/permissions';
+import { useCan } from '@/hooks/use-can';
 import { useCurrentUrl } from '@/hooks/use-current-url';
 import { cn, toUrl } from '@/lib/utils';
 import { edit as editAppearance } from '@/routes/appearance';
-import { edit } from '@/routes/profile';
+import { edit as editProfile } from '@/routes/profile';
+import { edit as editRoles } from '@/routes/roles';
 import { edit as editPassword } from '@/routes/user-password';
 import type { NavItem } from '@/types';
 
-const sidebarNavItems: NavItem[] = [
+const baseNavItems: NavItem[] = [
     {
         title: 'Perfil',
-        href: edit(),
+        href: editProfile(),
         icon: null,
     },
     {
@@ -28,8 +31,27 @@ const sidebarNavItems: NavItem[] = [
     },
 ];
 
-export default function SettingsLayout({ children }: PropsWithChildren) {
+export default function SettingsLayout({
+    className,
+    children,
+}: PropsWithChildren & { className?: string }) {
     const { isCurrentUrl } = useCurrentUrl();
+    const { canManage: canReadRoles } = useCan([
+        OTHERS_PERMISSIONS.MANAGE_ROLES,
+    ]);
+
+    const sidebarNavItems: NavItem[] = [
+        ...baseNavItems,
+        ...(canReadRoles
+            ? [
+                  {
+                      title: 'Roles',
+                      href: editRoles(),
+                      icon: null,
+                  } satisfies NavItem,
+              ]
+            : []),
+    ];
 
     // When server-side rendering, we only render the layout on the client...
     if (typeof window === 'undefined') {
@@ -72,11 +94,11 @@ export default function SettingsLayout({ children }: PropsWithChildren) {
 
                 <Separator className="my-6 lg:hidden" />
 
-                <div className="flex-1 md:max-w-2xl">
-                    <section className="max-w-xl space-y-12">
-                        {children}
-                    </section>
-                </div>
+                <section
+                    className={cn('max-w-md flex-1 space-y-12', className)}
+                >
+                    {children}
+                </section>
             </div>
         </div>
     );

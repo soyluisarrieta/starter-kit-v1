@@ -7,25 +7,19 @@ use App\Http\Requests\User\DestroyMultipleUsersRequest;
 use App\Http\Requests\User\UserRequest;
 use App\Models\User;
 use Inertia\Inertia;
+use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
     public function index()
     {
-        $users = User::with('roles')->get()->map(
-            fn ($user) => [
-                'id' => $user->id,
-                'avatar' => $user->avatar,
-                'name' => $user->name,
-                'last_name' => $user->last_name,
-                'email' => $user->email,
-                'roles' => $user->roles->pluck('name')->toArray(),
-                'created_at' => $user->created_at,
-                'updated_at' => $user->updated_at,
-            ]
-        );
+        $roles = Role::select('id', 'name', 'label', 'hex_color')->get();
+        $users = User::with('roles')->get()->map(fn (User $user) => [
+            ...$user->makeHidden('roles')->toArray(),
+            'roleIds' => $user->roles->pluck('id')->toArray(),
+        ]);
 
-        return Inertia::render('users', compact('users'));
+        return Inertia::render('users', compact('users', 'roles'));
     }
 
     public function store(UserRequest $request)

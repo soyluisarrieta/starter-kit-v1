@@ -10,24 +10,25 @@ enum Roles: string
     public function label(): string
     {
         return match ($this) {
-            self::SUPER_ADMIN => 'Super Administrador',
+            self::SUPER_ADMIN => 'Super Admin',
             self::ADMIN => 'Administrador',
+        };
+    }
+
+    public function hexColor(): string
+    {
+        return match ($this) {
+            self::SUPER_ADMIN => '#DA335D',
+            self::ADMIN => '#6366F1',
         };
     }
 
     public function permissions(): array
     {
         return match ($this) {
-            self::SUPER_ADMIN => [
-                Permissions::LIST_USERS->value,
-                Permissions::VIEW_USERS->value,
-                Permissions::CREATE_USERS->value,
-                Permissions::UPDATE_USERS->value,
-                Permissions::DELETE_USERS->value,
-            ],
+            self::SUPER_ADMIN => array_column(Permissions::cases(), 'value'),
             self::ADMIN => [
-                Permissions::LIST_USERS->value,
-                Permissions::VIEW_USERS->value,
+                Permissions::VIEW_DASHBOARD->value,
             ],
         };
     }

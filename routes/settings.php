@@ -1,7 +1,9 @@
 <?php
 
+use App\Enums\Permissions;
 use App\Http\Controllers\Settings\PasswordController;
 use App\Http\Controllers\Settings\ProfileController;
+use App\Http\Controllers\Settings\RoleController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -24,4 +26,21 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('ajustes/apariencia', function () {
         return Inertia::render('settings/appearance');
     })->name('appearance.edit');
+
+    Route::middleware('can:' . Permissions::MANAGE_ROLES->value)->group(function () {
+        Route::get('ajustes/roles', [RoleController::class, 'index'])
+            ->name('roles.edit');
+
+        Route::post('settings/roles', [RoleController::class, 'store'])
+            ->name('roles.store');
+
+        Route::put('settings/roles/{role}', [RoleController::class, 'update'])
+            ->name('roles.update');
+
+        Route::put('settings/roles/{role}/permissions', [RoleController::class, 'updatePermission'])
+            ->name('roles.update-permissions');
+
+        Route::delete('settings/roles/{role}', [RoleController::class, 'destroy'])
+            ->name('roles.destroy');
+    });
 });
