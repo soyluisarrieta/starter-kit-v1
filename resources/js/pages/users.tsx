@@ -3,7 +3,7 @@ import { Head, usePage } from '@inertiajs/react';
 import { PlusIcon } from 'lucide-react';
 import { useState } from 'react';
 import { ConfirmDialog } from '@/components/commons/confirm-dialog';
-import UserDataTable from '@/components/features/user/user-data-table';
+import UserTable from '@/components/features/user/user-data-table';
 import UserForm from '@/components/features/user/user-form';
 import UserViewSheet from '@/components/features/user/user-view-sheet';
 import { Button } from '@/components/ui/button';
@@ -78,11 +78,7 @@ export default function Users() {
                     )}
                 </div>
 
-                <UserDataTable
-                    setSelectedUsers={setSelectedUsers}
-                    users={users}
-                    roles={roles}
-                />
+                <UserTable setSelectedUsers={setSelectedUsers} users={users} />
             </main>
 
             {/* View user */}

@@ -1,118 +1,98 @@
-// import { CopyIcon, EditIcon, EyeIcon, TrashIcon } from 'lucide-react';
-// import {
-//     userColumns,
-//     userResponsiveColumns,
-// } from '@/components/features/user/user-columns';
-// import { USER_PERMISSIONS } from '@/constants/permissions';
-// import { useCan } from '@/hooks/use-can';
-// import { useDialog } from '@/hooks/use-dialog';
-import type { Role, UserWithRoles } from '@/types';
+import { format } from 'date-fns';
+import { VerifiedIcon } from 'lucide-react';
+import type { ColumnDef } from '@/components/commons/data-table/data-table';
+import DataTable from '@/components/commons/data-table/data-table';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { PATHS } from '@/constants/paths';
+import { useDialog } from '@/hooks/use-dialog';
+import { useInitials } from '@/hooks/use-initials';
+import type { UserWithRoles } from '@/types';
 
 interface UserTableProps {
     setSelectedUsers: (user: UserWithRoles[]) => void;
     users: UserWithRoles[];
-    readonly roles: Role[];
 }
 
-export default function UserTable({
-    // setSelectedUsers,
-    users,
-    // roles,
-}: UserTableProps) {
-    // const { canView, canUpdate, canDelete } = useCan([
-    //     USER_PERMISSIONS.VIEW,
-    //     USER_PERMISSIONS.UPDATE,
-    //     USER_PERMISSIONS.DELETE,
-    // ]);
-    // const userDialogForm = useDialog('user-dialog-form');
-    // const userSheetView = useDialog('user-sheet-view');
-    // const deleteDialog = useDialog('delete-dialog');
-    // const deleteMultipleDialog = useDialog('delete-multiple-dialog');
+export default function UserTable({ setSelectedUsers, users }: UserTableProps) {
+    const getInitials = useInitials();
+    const userSheetView = useDialog('user-sheet-view');
 
-    // const handleView = (row: UserWithRoles) => {
-    //     setSelectedUsers([row]);
-    //     userSheetView.onOpenChange(true);
-    // };
+    const handleView = (row: UserWithRoles) => {
+        setSelectedUsers([row]);
+        userSheetView.onOpenChange(true);
+    };
 
-    // const handleEdit = (row: UserWithRoles) => {
-    //     userDialogForm.onOpenChange(true);
-    //     setSelectedUsers([row]);
-    // };
+    const columns: ColumnDef<UserWithRoles>[] = [
+        {
+            key: 'id',
+            label: 'ID',
+        },
+        {
+            key: 'name',
+            label: 'Nombre completo',
+            cell: ({ row }) => {
+                const avatarUrl = row.avatar
+                    ? `${PATHS.avatars}/${row.avatar}`
+                    : '';
+                return (
+                    <div className="flex items-center gap-2">
+                        <Avatar
+                            className="size-9 cursor-pointer overflow-hidden rounded-full"
+                            onClick={() => handleView(row)}
+                        >
+                            <AvatarImage src={avatarUrl} alt={row.name} />
+                            <AvatarFallback className="rounded-lg bg-neutral-200 text-black dark:bg-neutral-700 dark:text-white">
+                                {getInitials(row.name)}
+                            </AvatarFallback>
+                        </Avatar>
 
-    // const handleDelete = (row: UserWithRoles) => {
-    //     deleteDialog.onOpenChange(true);
-    //     setSelectedUsers([row]);
-    // };
+                        <div className="flex flex-col">
+                            <strong
+                                className="w-fit cursor-pointer text-base hover:underline"
+                                onClick={() => handleView(row)}
+                            >
+                                {row.name} {row.last_name}
+                            </strong>
+                            <small className="flex items-center gap-1 text-sm text-muted-foreground">
+                                {row.email}
+                                {row.email_verified_at && (
+                                    <div title="Correo electrónico verificado">
+                                        <VerifiedIcon className="size-3.5 text-primary/50" />
+                                    </div>
+                                )}
+                            </small>
+                        </div>
+                    </div>
+                );
+            },
+        },
+        {
+            key: 'created_at',
+            label: 'Creado',
+            cell: ({ row }) => (
+                <div className="text-sm">
+                    {format(row.created_at, 'MMM d, yyyy')}
+                    <br />
+                    <time className="text-xs text-muted-foreground">
+                        {format(row.created_at, 'hh:mm a')}
+                    </time>
+                </div>
+            ),
+        },
+        {
+            key: 'updated_at',
+            label: 'Actualizado',
+            cell: ({ row }) => (
+                <div className="text-sm">
+                    {format(row.updated_at, 'MMM d, yyyy')}
+                    <br />
+                    <time className="text-xs text-muted-foreground">
+                        {format(row.updated_at, 'hh:mm a')}
+                    </time>
+                </div>
+            ),
+        },
+    ];
 
-    // const handleDeleteMultiple = (rows: UserWithRoles[]) => {
-    //     setSelectedUsers(rows);
-    //     deleteMultipleDialog.onOpenChange(true);
-    // };
-
-    return <pre>{JSON.stringify(users, null, 2)}</pre>;
-
-    // return (
-    //     <DataTable
-    //         data={users}
-    //         columns={userColumns({ onView: handleView, roles })}
-    //         responsiveColumns={userResponsiveColumns}
-    //         exportFilename="usuarios"
-    //         searchPlaceholder="Buscar usuarios..."
-    //         searchableColumns={['name', 'last_name', 'email']}
-    //         onDelete={canDelete ? handleDeleteMultiple : undefined}
-    //         filterConfigs={[
-    //             {
-    //                 columnId: 'roles',
-    //                 label: 'Rol',
-    //                 type: 'multiValue',
-    //                 options: roles.map(({ id, label }) => ({
-    //                     value: id.toString(),
-    //                     label: label,
-    //                 })),
-    //             },
-    //             {
-    //                 columnId: 'created_at',
-    //                 label: 'Fecha Registro',
-    //                 type: 'dateRange',
-    //             },
-    //         ]}
-    //         rowActions={[
-    //             ...(canView
-    //                 ? [
-    //                       {
-    //                           label: 'Ver detalles',
-    //                           icon: <EyeIcon className="mr-2 size-4" />,
-    //                           onClick: handleView,
-    //                       },
-    //                   ]
-    //                 : []),
-    //             ...(canUpdate
-    //                 ? [
-    //                       {
-    //                           label: 'Editar',
-    //                           icon: <EditIcon className="mr-2 size-4" />,
-    //                           onClick: handleEdit,
-    //                       },
-    //                   ]
-    //                 : []),
-    //             {
-    //                 label: 'Copiar email',
-    //                 icon: <CopyIcon className="mr-2 size-4" />,
-    //                 onClick: (row) => {
-    //                     navigator.clipboard.writeText(row.email);
-    //                 },
-    //             },
-    //             ...(canDelete
-    //                 ? [
-    //                       {
-    //                           label: 'Eliminar',
-    //                           icon: <TrashIcon className="mr-2 size-4" />,
-    //                           onClick: handleDelete,
-    //                           variant: 'destructive' as const,
-    //                       },
-    //                   ]
-    //                 : []),
-    //         ]}
-    //     />
-    // );
+    return <DataTable columns={columns} data={users} />;
 }
