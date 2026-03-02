@@ -7,6 +7,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
+import { cleanQueryParams } from '@/lib/data-table/data-table-utils';
 import { cn } from '@/lib/utils';
 import type { PaginationLink, QueryParams } from '@/types/data-table';
 import type { RouteDefinition } from '@/wayfinder';
@@ -28,8 +29,11 @@ export default function DataTablePagination({
 }: DataTablePaginationProps) {
     const onPerPageChange = (value: string) => {
         onCurrentPageChange(value);
-        const queryString = { ...queryParams, perPage: value };
-        router.get(route, queryString, {
+        const newQueryParams = cleanQueryParams({
+            ...queryParams,
+            perPage: value,
+        });
+        router.get(route, newQueryParams, {
             preserveState: true,
             preserveScroll: true,
         });

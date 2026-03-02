@@ -4,6 +4,7 @@ import {
     ArrowDownWideNarrowIcon,
     ArrowUpWideNarrowIcon,
 } from 'lucide-react';
+import { cleanQueryParams } from '@/lib/data-table/data-table-utils';
 import { cn } from '@/lib/utils';
 import type { QueryParams } from '@/types/data-table';
 import type { RouteDefinition } from '@/wayfinder';
@@ -32,11 +33,11 @@ export default function DataTableSortList({
                     isActived && 'text-primary',
                 )}
                 href={route}
-                data={{
+                data={cleanQueryParams({
                     ...queryParams,
                     sortBy: field,
                     sortOrder: isSortAsc ? 'desc' : 'asc',
-                }}
+                })}
             >
                 <div>{children}</div>
                 {isActived ? (

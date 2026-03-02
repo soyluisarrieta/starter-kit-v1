@@ -2,6 +2,7 @@ import { router } from '@inertiajs/react';
 import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { cleanQueryParams } from '@/lib/data-table/data-table-utils';
 import { cn } from '@/lib/utils';
 import type { DataTableSearchInput, QueryParams } from '@/types/data-table';
 import type { RouteDefinition } from '@/wayfinder';
@@ -47,11 +48,11 @@ export default function DataTableInputSearch({
         }
 
         const newSearchTimeout = setTimeout(() => {
-            const queryString = {
+            const newQueryParams = cleanQueryParams({
                 ...queryParams,
                 search: inputSearch,
-            };
-            router.get(route, queryString, {
+            });
+            router.get(route, newQueryParams, {
                 preserveState: true,
                 preserveScroll: true,
             });
