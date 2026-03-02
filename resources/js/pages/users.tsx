@@ -21,7 +21,7 @@ import AppLayout from '@/layouts/app-layout';
 import { users } from '@/routes';
 import { destroy, destroyMultiple } from '@/routes/users';
 import type { BreadcrumbItem, Role, UserWithRoles } from '@/types';
-import type { PaginatedResponse, QueryParams } from '@/types/data-table';
+import type { Paginated, QueryParams } from '@/types/data-table';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -31,14 +31,12 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 interface UsersProps extends PageProps {
-    users: PaginatedResponse<UserWithRoles>;
+    users: Paginated<UserWithRoles>;
     readonly roles: Role[];
     queryParams: QueryParams;
 }
 
 export default function Users({ users, roles, queryParams }: UsersProps) {
-    console.log(users);
-
     const [selectedUsers, setSelectedUsers] = useState<UserWithRoles[]>([]);
     const { canCreate, canDelete } = useCan([
         USER_PERMISSIONS.CREATE,

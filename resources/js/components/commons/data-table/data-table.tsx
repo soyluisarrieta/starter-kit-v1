@@ -14,13 +14,15 @@ import { cn } from '@/lib/utils';
 import type {
     ColumnDef,
     DataTableSearchInput,
-    PaginatedResponse,
+    PaginationLink,
     QueryParams,
 } from '@/types/data-table';
 import type { RouteDefinition } from '@/wayfinder';
 
-interface DataTableProps<TData> extends PaginatedResponse<TData> {
+interface DataTableProps<TData> {
+    data: TData[];
     columns: ColumnDef<TData>[];
+    links: PaginationLink[];
     route: RouteDefinition<'get'>;
     queryParams: QueryParams;
     options?: {

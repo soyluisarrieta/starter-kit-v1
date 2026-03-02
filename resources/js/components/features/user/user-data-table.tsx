@@ -6,15 +6,11 @@ import { PATHS } from '@/constants/paths';
 import { useDialog } from '@/hooks/use-dialog';
 import { users as usersRoute } from '@/routes';
 import type { UserWithRoles } from '@/types';
-import type {
-    ColumnDef,
-    PaginatedResponse,
-    QueryParams,
-} from '@/types/data-table';
+import type { ColumnDef, Paginated, QueryParams } from '@/types/data-table';
 
 interface UserTableProps {
     setSelectedUsers: (user: UserWithRoles[]) => void;
-    users: PaginatedResponse<UserWithRoles>;
+    users: Paginated<UserWithRoles>;
     queryParams: QueryParams;
 }
 
