@@ -1,4 +1,6 @@
 import { Link, router } from '@inertiajs/react';
+import { useStore } from 'zustand';
+import { useShallow } from 'zustand/react/shallow';
 import { Label } from '@/components/ui/label';
 import {
     Select,
@@ -7,33 +9,32 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
+import type { DataTableInstance } from '@/hooks/use-data-table';
 import { cleanQueryParams } from '@/lib/data-table/data-table-utils';
 import { cn } from '@/lib/utils';
-import type { PaginationLink, QueryParams } from '@/types/data-table';
-import type { RouteDefinition } from '@/wayfinder';
+import type { DataTableStore } from '@/stores/data-table-store';
+import type { PaginationLink } from '@/types/data-table';
 
-interface DataTablePaginationProps {
+interface Props {
+    table: DataTableInstance;
     links: PaginationLink[];
-    route: RouteDefinition<'get'>;
-    queryParams: QueryParams;
-    currentPage: string;
-    onCurrentPageChange: (value: string) => void;
 }
 
-export default function DataTablePagination({
-    links,
-    route,
-    queryParams,
-    currentPage = '10',
-    onCurrentPageChange,
-}: DataTablePaginationProps) {
+export default function DataTablePagination({ table, links }: Props) {
+    const { perPage, setPerPage, route, query } = useStore(
+        table,
+        useShallow((s: DataTableStore) => ({
+            perPage: s.query.perPage,
+            setPerPage: s.setPerPage,
+            route: s.route,
+            query: s.query,
+        })),
+    );
+
     const onPerPageChange = (value: string) => {
-        onCurrentPageChange(value);
-        const newQueryParams = cleanQueryParams({
-            ...queryParams,
-            perPage: value,
-        });
-        router.get(route, newQueryParams, {
+        setPerPage(value);
+
+        router.get(route, cleanQueryParams({ ...query, perPage: value }), {
             preserveState: true,
             preserveScroll: true,
         });
@@ -43,9 +44,9 @@ export default function DataTablePagination({
         <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
                 <Label>Por Página</Label>
-                <Select value={currentPage} onValueChange={onPerPageChange}>
+                <Select value={perPage} onValueChange={onPerPageChange}>
                     <SelectTrigger>
-                        <SelectValue placeholder={currentPage} />
+                        <SelectValue placeholder={perPage} />
                     </SelectTrigger>
                     <SelectContent>
                         <SelectItem value="10">10</SelectItem>
@@ -55,6 +56,7 @@ export default function DataTablePagination({
                     </SelectContent>
                 </Select>
             </div>
+
             <div className="flex items-center justify-center gap-0.5">
                 {links.map((link, index) => (
                     <Link
@@ -66,9 +68,7 @@ export default function DataTablePagination({
                             link.active
                                 ? 'bg-foreground text-background'
                                 : 'bg-background text-foreground',
-                            !link.url
-                                ? 'pointer-events-none opacity-50'
-                                : 'hover:bg-foreground/10',
+                            !link.url && 'pointer-events-none opacity-50',
                         )}
                     />
                 ))}

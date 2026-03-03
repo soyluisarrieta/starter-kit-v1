@@ -4,52 +4,59 @@ import {
     ArrowDownWideNarrowIcon,
     ArrowUpWideNarrowIcon,
 } from 'lucide-react';
+import { useStore } from 'zustand';
+import { useShallow } from 'zustand/react/shallow';
+import type { DataTableInstance } from '@/hooks/use-data-table';
 import { cleanQueryParams } from '@/lib/data-table/data-table-utils';
 import { cn } from '@/lib/utils';
-import type { QueryParams } from '@/types/data-table';
-import type { RouteDefinition } from '@/wayfinder';
+import type { DataTableStore } from '@/stores/data-table-store';
 
-interface DataTableSortListProps {
-    queryParams: QueryParams;
-    route: RouteDefinition<'get'>;
+interface Props {
+    table: DataTableInstance;
     field: string;
     children: React.ReactNode;
 }
 
-export default function DataTableSortList({
-    queryParams,
-    route,
-    field,
-    children,
-}: DataTableSortListProps) {
-    const isActived = queryParams.sortBy === field;
-    const isSortAsc = isActived && (queryParams.sortOrder || 'desc') === 'asc';
+export default function DataTableSortList({ table, field, children }: Props) {
+    const { sortBy, sortOrder, route, query } = useStore(
+        table,
+        useShallow((s: DataTableStore) => ({
+            sortBy: s.query.sortBy,
+            sortOrder: s.query.sortOrder,
+            route: s.route,
+            query: s.query,
+        })),
+    );
+
+    const isActive = sortBy === field;
+    const isAsc = isActive && (sortOrder || 'desc') === 'asc';
 
     return (
-        <>
-            <Link
-                className={cn(
-                    'inline-flex items-center space-x-2 text-xs font-bold',
-                    isActived && 'text-primary',
-                )}
-                href={route}
-                data={cleanQueryParams({
-                    ...queryParams,
-                    sortBy: field,
-                    sortOrder: isSortAsc ? 'desc' : 'asc',
-                })}
-            >
-                <div>{children}</div>
-                {isActived ? (
-                    isSortAsc ? (
-                        <ArrowDownWideNarrowIcon className="size-4" />
-                    ) : (
-                        <ArrowUpWideNarrowIcon className="size-4" />
-                    )
+        <Link
+            className={cn(
+                'inline-flex items-center space-x-2 text-xs font-bold',
+                isActive && 'text-primary',
+            )}
+            href={route}
+            data={cleanQueryParams({
+                ...query,
+                sortBy: field,
+                sortOrder: isAsc ? 'desc' : 'asc',
+            })}
+            preserveState
+            preserveScroll
+        >
+            <div>{children}</div>
+
+            {isActive ? (
+                isAsc ? (
+                    <ArrowDownWideNarrowIcon className="size-4" />
                 ) : (
-                    <ArrowDownUpIcon className="size-4" />
-                )}
-            </Link>
-        </>
+                    <ArrowUpWideNarrowIcon className="size-4" />
+                )
+            ) : (
+                <ArrowDownUpIcon className="size-4" />
+            )}
+        </Link>
     );
 }

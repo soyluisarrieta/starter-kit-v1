@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 
-export interface QueryParams {
+export interface DataTableQuery {
     search?: string;
     perPage?: string;
     sortBy?: string;
@@ -19,7 +19,6 @@ export interface Paginated<TData> {
     current_page: number;
     per_page: number;
     total: number;
-    queryParams: QueryParams;
     last_page: number;
     from: number | null;
     to: number | null;

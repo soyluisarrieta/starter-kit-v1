@@ -1,64 +1,56 @@
 import { router } from '@inertiajs/react';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef } from 'react';
+import { useStore } from 'zustand';
+import { useShallow } from 'zustand/react/shallow';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import type { DataTableInstance } from '@/hooks/use-data-table';
 import { cleanQueryParams } from '@/lib/data-table/data-table-utils';
 import { cn } from '@/lib/utils';
-import type { DataTableSearchInput, QueryParams } from '@/types/data-table';
-import type { RouteDefinition } from '@/wayfinder';
+import type { DataTableStore } from '@/stores/data-table-store';
+import type { DataTableSearchInput } from '@/types/data-table';
 
-interface DataTableInputSearchProps extends DataTableSearchInput {
-    value: string;
-    onValueChange: (value: string) => void;
-    route: RouteDefinition<'get'>;
-    queryParams: QueryParams;
+interface Props extends DataTableSearchInput {
+    table: DataTableInstance;
 }
 
 export default function DataTableInputSearch({
-    value,
-    onValueChange,
-    route,
-    queryParams,
+    table,
     className,
     placeholder = 'Buscar...',
     enabled = true,
-}: DataTableInputSearchProps) {
-    const [searchTimeout, setSearchTimeout] = useState<NodeJS.Timeout | null>(
-        null,
+}: Props) {
+    const { search, setSearch, route, query } = useStore(
+        table,
+        useShallow((s: DataTableStore) => ({
+            search: s.query.search,
+            setSearch: s.setSearch,
+            route: s.route,
+            query: s.query,
+        })),
     );
 
-    // Clear timeout on unmount
+    const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
     useEffect(() => {
         return () => {
-            if (searchTimeout) {
-                clearTimeout(searchTimeout);
-            }
+            if (timeoutRef.current) clearTimeout(timeoutRef.current);
         };
-    }, [searchTimeout]);
+    }, []);
 
     if (!enabled) return null;
 
-    // Handle search input change
-    const handleSearch = (e?: React.ChangeEvent<HTMLInputElement>) => {
-        const inputSearch = e?.target.value ?? '';
-        onValueChange(inputSearch);
+    const handleSearch = (value: string) => {
+        setSearch(value);
 
-        if (searchTimeout) {
-            clearTimeout(searchTimeout);
-        }
+        if (timeoutRef.current) clearTimeout(timeoutRef.current);
 
-        const newSearchTimeout = setTimeout(() => {
-            const newQueryParams = cleanQueryParams({
-                ...queryParams,
-                search: inputSearch,
-            });
-            router.get(route, newQueryParams, {
+        timeoutRef.current = setTimeout(() => {
+            router.get(route, cleanQueryParams({ ...query, search: value }), {
                 preserveState: true,
                 preserveScroll: true,
             });
         }, 300);
-
-        setSearchTimeout(newSearchTimeout);
     };
 
     return (
@@ -67,16 +59,15 @@ export default function DataTableInputSearch({
                 id="search"
                 type="text"
                 name="search"
+                value={search}
+                onChange={(e) => handleSearch(e.target.value)}
                 placeholder={placeholder}
-                value={value}
-                onChange={handleSearch}
             />
-            {value && (
+            {search && (
                 <Button
-                    className="px-0 text-xs text-muted-foreground"
                     variant="link"
                     size="sm"
-                    onClick={() => handleSearch()}
+                    onClick={() => handleSearch('')}
                 >
                     Limpiar
                 </Button>

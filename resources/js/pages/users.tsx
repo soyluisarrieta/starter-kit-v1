@@ -16,24 +16,25 @@ import {
 } from '@/components/ui/dialog';
 import { USER_PERMISSIONS } from '@/constants/permissions';
 import { useCan } from '@/hooks/use-can';
+import { useDataTable } from '@/hooks/use-data-table';
 import { useDialog } from '@/hooks/use-dialog';
 import AppLayout from '@/layouts/app-layout';
-import { users } from '@/routes';
+import { users as usersRoute } from '@/routes';
 import { destroy, destroyMultiple } from '@/routes/users';
 import type { BreadcrumbItem, Role, UserWithRoles } from '@/types';
-import type { Paginated, QueryParams } from '@/types/data-table';
+import type { Paginated, DataTableQuery } from '@/types/data-table';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Usuarios',
-        href: users().url,
+        href: usersRoute().url,
     },
 ];
 
 interface UsersProps extends PageProps {
     users: Paginated<UserWithRoles>;
     readonly roles: Role[];
-    queryParams: QueryParams;
+    queryParams: DataTableQuery;
 }
 
 export default function Users({ users, roles, queryParams }: UsersProps) {
@@ -42,6 +43,11 @@ export default function Users({ users, roles, queryParams }: UsersProps) {
         USER_PERMISSIONS.CREATE,
         USER_PERMISSIONS.DELETE,
     ]);
+
+    const table = useDataTable({
+        route: usersRoute(),
+        queryParams,
+    });
 
     const userDialogForm = useDialog('user-dialog-form');
     const deleteDialog = useDialog('delete-dialog');
@@ -80,8 +86,9 @@ export default function Users({ users, roles, queryParams }: UsersProps) {
                 </div>
 
                 <UserTable
-                    users={{ ...users, queryParams }}
+                    users={users}
                     roles={roles}
+                    table={table}
                     setSelectedUsers={setSelectedUsers}
                 />
             </main>

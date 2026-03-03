@@ -4,20 +4,22 @@ import DataTable from '@/components/commons/data-table/data-table';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { PATHS } from '@/constants/paths';
+import type { DataTableInstance } from '@/hooks/use-data-table';
 import { useDialog } from '@/hooks/use-dialog';
-import { users as usersRoute } from '@/routes';
 import type { Role, UserWithRoles } from '@/types';
 import type { Paginated } from '@/types/data-table';
 
 interface UserTableProps {
     users: Paginated<UserWithRoles>;
     roles: Role[];
+    table: DataTableInstance;
     setSelectedUsers: (user: UserWithRoles[]) => void;
 }
 
 export default function UserTable({
     users,
     roles,
+    table,
     setSelectedUsers,
 }: UserTableProps) {
     const userSheetView = useDialog('user-sheet-view');
@@ -35,9 +37,8 @@ export default function UserTable({
 
     return (
         <DataTable
+            table={table}
             data={users}
-            route={usersRoute()}
-            queryParams={users.queryParams}
             options={{
                 search: { placeholder: 'Buscar usuarios...' },
             }}
