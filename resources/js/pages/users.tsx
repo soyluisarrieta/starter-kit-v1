@@ -80,10 +80,9 @@ export default function Users({ users, roles, queryParams }: UsersProps) {
                 </div>
 
                 <UserTable
-                    users={users}
-                    queryParams={queryParams}
-                    setSelectedUsers={setSelectedUsers}
+                    users={{ ...users, queryParams }}
                     roles={roles}
+                    setSelectedUsers={setSelectedUsers}
                 />
             </main>
 

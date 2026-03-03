@@ -14,16 +14,15 @@ import { cn } from '@/lib/utils';
 import type {
     ColumnDef,
     DataTableSearchInput,
-    PaginationLink,
+    Paginated,
     QueryParams,
 } from '@/types/data-table';
 import type { RouteDefinition } from '@/wayfinder';
 
 interface DataTableProps<TData> {
-    data: TData[];
-    columns: ColumnDef<TData>[];
-    links: PaginationLink[];
+    data: Paginated<TData>;
     route: RouteDefinition<'get'>;
+    columns: ColumnDef<TData>[];
     queryParams: QueryParams;
     options?: {
         search?: DataTableSearchInput;
@@ -31,18 +30,17 @@ interface DataTableProps<TData> {
 }
 
 export default function DataTable<TData extends object>({
-    data,
-    columns,
-    links,
+    data: table,
     route,
+    columns,
     queryParams,
     options,
 }: DataTableProps<TData>) {
     const { data: query, setData: setQuery } = useForm({
-        search: queryParams.search || '',
-        perPage: queryParams.perPage,
-        sortBy: queryParams.sortBy,
-        sortOrder: queryParams.sortOrder,
+        search: queryParams?.search || '',
+        perPage: queryParams?.perPage,
+        sortBy: queryParams?.sortBy,
+        sortOrder: queryParams?.sortOrder,
     });
 
     return (
@@ -54,6 +52,7 @@ export default function DataTable<TData extends object>({
                 value={query.search}
                 {...options?.search}
             />
+
             <Table>
                 <TableHeader>
                     <TableRow
@@ -84,7 +83,7 @@ export default function DataTable<TData extends object>({
                 </TableHeader>
 
                 <TableBody>
-                    {data.map((row, index) => (
+                    {table.data.map((row, index) => (
                         <TableRow key={index}>
                             {columns.map((column) => (
                                 <TableCell
@@ -100,10 +99,11 @@ export default function DataTable<TData extends object>({
                     ))}
                 </TableBody>
             </Table>
+
             <DataTablePagination
                 route={route}
-                links={links}
                 queryParams={queryParams}
+                links={table.links}
                 currentPage={(query.perPage || 10).toString()}
                 onCurrentPageChange={(value) => setQuery('perPage', value)}
             />

@@ -1,5 +1,12 @@
 import type { ReactNode } from 'react';
 
+export interface QueryParams {
+    search?: string;
+    perPage?: string;
+    sortBy?: string;
+    sortOrder?: string;
+}
+
 export interface PaginationLink {
     active: boolean;
     label: string;
@@ -12,6 +19,7 @@ export interface Paginated<TData> {
     current_page: number;
     per_page: number;
     total: number;
+    queryParams: QueryParams;
     last_page: number;
     from: number | null;
     to: number | null;
@@ -30,13 +38,6 @@ export interface ColumnDef<TData> {
     cell?: ({ row }: { row: TData }) => ReactNode;
     className?: string;
     align?: 'left' | 'center' | 'right';
-}
-
-export interface QueryParams {
-    search?: string;
-    perPage?: string;
-    sortBy?: string;
-    sortOrder?: string;
 }
 
 export interface DataTableSearchInput {
