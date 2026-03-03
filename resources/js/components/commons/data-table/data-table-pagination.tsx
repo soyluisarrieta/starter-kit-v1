@@ -9,21 +9,21 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
-import type { DataTableInstance } from '@/hooks/use-data-table';
 import { cleanQueryParams } from '@/lib/data-table/data-table-utils';
 import { cn } from '@/lib/utils';
-import type { DataTableStore } from '@/stores/data-table-store';
-import type { PaginationLink } from '@/types/data-table';
+import type { DTable, PaginationLink } from '@/types/data-table';
 
-interface Props {
-    table: DataTableInstance;
+interface DataTablePaginationProps {
     links: PaginationLink[];
 }
 
-export default function DataTablePagination({ table, links }: Props) {
+export default function DataTablePagination<TData>({
+    table,
+    links,
+}: DataTablePaginationProps & DTable<TData>) {
     const { perPage, setPerPage, route, query } = useStore(
         table,
-        useShallow((s: DataTableStore) => ({
+        useShallow((s) => ({
             perPage: s.query.perPage,
             setPerPage: s.setPerPage,
             route: s.route,

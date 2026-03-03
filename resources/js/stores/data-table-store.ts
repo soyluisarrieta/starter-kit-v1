@@ -9,27 +9,28 @@ export const DEFAULT_QUERY_PARAMS: DataTableQuery = {
     sortOrder: '',
 };
 
-export interface DataTableStore {
+export interface DataTableStore<TData> {
     route: RouteDefinition<'get'>;
     query: DataTableQuery;
+    target: TData | null;
 
     setSearch: (value: string) => void;
     setPerPage: (value: string) => void;
     setSort: (field: string, order: string) => void;
+    setTarget: (row: TData | null) => void;
 }
 
-export function createDataTableStore(
+export function createDataTableStore<TData>(
     route: RouteDefinition<'get'>,
     queryParams: DataTableQuery,
 ) {
-    const query = {
-        ...DEFAULT_QUERY_PARAMS,
-        ...queryParams,
-    };
-
-    return createStore<DataTableStore>((set) => ({
+    return createStore<DataTableStore<TData>>((set) => ({
         route,
-        query,
+        target: null,
+        query: {
+            ...DEFAULT_QUERY_PARAMS,
+            ...queryParams,
+        },
 
         setSearch: (search) =>
             set((state) => ({
@@ -44,6 +45,11 @@ export function createDataTableStore(
         setSort: (sortBy, sortOrder) =>
             set((state) => ({
                 query: { ...state.query, sortBy, sortOrder },
+            })),
+
+        setTarget: (target) =>
+            set(() => ({
+                target,
             })),
     }));
 }

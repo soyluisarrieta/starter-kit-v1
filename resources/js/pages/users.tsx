@@ -1,7 +1,6 @@
 import type { PageProps } from '@inertiajs/core';
 import { Head } from '@inertiajs/react';
 import { PlusIcon } from 'lucide-react';
-import { useState } from 'react';
 import { ConfirmDialog } from '@/components/commons/confirm-dialog';
 import UserTable from '@/components/features/user/user-data-table';
 import UserForm from '@/components/features/user/user-form';
@@ -38,16 +37,17 @@ interface UsersProps extends PageProps {
 }
 
 export default function Users({ users, roles, queryParams }: UsersProps) {
-    const [selectedUsers, setSelectedUsers] = useState<UserWithRoles[]>([]);
     const { canCreate, canDelete } = useCan([
         USER_PERMISSIONS.CREATE,
         USER_PERMISSIONS.DELETE,
     ]);
 
-    const table = useDataTable({
+    const table = useDataTable<UserWithRoles>({
         route: usersRoute(),
         queryParams,
     });
+
+    const { target: targetUser } = table;
 
     const userDialogForm = useDialog('user-dialog-form');
     const deleteDialog = useDialog('delete-dialog');
@@ -73,7 +73,7 @@ export default function Users({ users, roles, queryParams }: UsersProps) {
                         <Button
                             className="fixed right-4 bottom-4 z-10 size-12 rounded-full p-4 lg:static lg:h-9 lg:w-auto lg:rounded-md"
                             onClick={() => {
-                                setSelectedUsers([]);
+                                table.setTarget(null);
                                 userDialogForm.onOpenChange(true);
                             }}
                         >
@@ -85,46 +85,37 @@ export default function Users({ users, roles, queryParams }: UsersProps) {
                     )}
                 </div>
 
-                <UserTable
-                    users={users}
-                    roles={roles}
-                    table={table}
-                    setSelectedUsers={setSelectedUsers}
-                />
+                <UserTable users={users} roles={roles} table={table} />
             </main>
 
             {/* View user */}
-            <UserViewSheet roles={roles} user={selectedUsers[0]} />
+            <UserViewSheet roles={roles} user={targetUser} />
 
             {/* Create or edit user */}
             <Dialog {...userDialogForm}>
                 <DialogContent>
                     <DialogHeader className="mb-2">
                         <DialogTitle>
-                            {selectedUsers.length ? 'Editar' : 'Crear'} usuario
+                            {targetUser ? 'Editar' : 'Crear'} usuario
                         </DialogTitle>
                         <DialogDescription>
-                            {selectedUsers.length
+                            {targetUser
                                 ? 'Actualiza la información del usuario.'
                                 : 'Completa la información para crear el usuario.'}
                         </DialogDescription>
                     </DialogHeader>
-                    <UserForm user={selectedUsers[0]} />
+                    <UserForm user={targetUser} />
                 </DialogContent>
             </Dialog>
 
             {/* Delete an user */}
             {canDelete && (
                 <ConfirmDialog
-                    title={`¿Eliminar usuario "${selectedUsers[0]?.name}"?`}
+                    title={`¿Eliminar usuario "${targetUser?.name}"?`}
                     description="Una vez eliminado el usuario, todos sus datos serán eliminados permanentemente."
                     passwordRequired
                     method="delete"
-                    url={
-                        selectedUsers[0]
-                            ? destroy(selectedUsers[0].id).url
-                            : null
-                    }
+                    url={targetUser ? destroy(targetUser.id).url : null}
                     {...deleteDialog}
                 />
             )}
@@ -132,12 +123,12 @@ export default function Users({ users, roles, queryParams }: UsersProps) {
             {/* Delete users */}
             {canDelete && (
                 <ConfirmDialog
-                    title={`¿Eliminar ${selectedUsers.length} usuarios seleccionados?`}
+                    title="¿Eliminar usuarios seleccionados?"
                     description="Una vez eliminados los usuarios, todos sus datos serán eliminados permanentemente."
                     passwordRequired
                     method="post"
                     url={destroyMultiple().url}
-                    data={{ ids: selectedUsers.map(({ id }) => id) }}
+                    data={{ ids: [] }}
                     {...deleteMultipleDialog}
                 />
             )}

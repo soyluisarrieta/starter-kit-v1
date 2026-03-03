@@ -6,21 +6,23 @@ import {
 } from 'lucide-react';
 import { useStore } from 'zustand';
 import { useShallow } from 'zustand/react/shallow';
-import type { DataTableInstance } from '@/hooks/use-data-table';
 import { cleanQueryParams } from '@/lib/data-table/data-table-utils';
 import { cn } from '@/lib/utils';
-import type { DataTableStore } from '@/stores/data-table-store';
+import type { DTable } from '@/types/data-table';
 
-interface Props {
-    table: DataTableInstance;
+interface DataTableSortListProps {
     field: string;
     children: React.ReactNode;
 }
 
-export default function DataTableSortList({ table, field, children }: Props) {
+export default function DataTableSortList<TData>({
+    table,
+    field,
+    children,
+}: DataTableSortListProps & DTable<TData>) {
     const { sortBy, sortOrder, route, query } = useStore(
         table,
-        useShallow((s: DataTableStore) => ({
+        useShallow((s) => ({
             sortBy: s.query.sortBy,
             sortOrder: s.query.sortOrder,
             route: s.route,

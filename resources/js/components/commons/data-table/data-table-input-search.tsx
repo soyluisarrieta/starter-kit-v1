@@ -2,27 +2,21 @@ import { router } from '@inertiajs/react';
 import { useEffect, useRef } from 'react';
 import { useStore } from 'zustand';
 import { useShallow } from 'zustand/react/shallow';
+import type { DataTableSearchOptions } from '@/components/commons/data-table/data-table';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import type { DataTableInstance } from '@/hooks/use-data-table';
 import { cleanQueryParams } from '@/lib/data-table/data-table-utils';
 import { cn } from '@/lib/utils';
-import type { DataTableStore } from '@/stores/data-table-store';
-import type { DataTableSearchInput } from '@/types/data-table';
+import type { DTable } from '@/types/data-table';
 
-interface Props extends DataTableSearchInput {
-    table: DataTableInstance;
-}
-
-export default function DataTableInputSearch({
+export default function DataTableInputSearch<TData>({
     table,
     className,
     placeholder = 'Buscar...',
-    enabled = true,
-}: Props) {
+}: DataTableSearchOptions & DTable<TData>) {
     const { search, setSearch, route, query } = useStore(
         table,
-        useShallow((s: DataTableStore) => ({
+        useShallow((s) => ({
             search: s.query.search,
             setSearch: s.setSearch,
             route: s.route,
@@ -30,16 +24,15 @@ export default function DataTableInputSearch({
         })),
     );
 
-    const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
+    // Timeout for debounce
+    const timeoutRef = useRef<NodeJS.Timeout>(null);
     useEffect(() => {
         return () => {
             if (timeoutRef.current) clearTimeout(timeoutRef.current);
         };
     }, []);
 
-    if (!enabled) return null;
-
+    // Handle search with debounce
     const handleSearch = (value: string) => {
         setSearch(value);
 

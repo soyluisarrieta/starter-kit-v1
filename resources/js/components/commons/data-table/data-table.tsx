@@ -9,20 +9,19 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
-import type { DataTableInstance } from '@/hooks/use-data-table';
 import { cn } from '@/lib/utils';
-import type {
-    ColumnDef,
-    DataTableSearchInput,
-    Paginated,
-} from '@/types/data-table';
+import type { ColumnDef, DTable, Paginated } from '@/types/data-table';
 
-interface DataTableProps<TData> {
-    table: DataTableInstance;
+export interface DataTableSearchOptions {
+    placeholder?: string;
+    className?: string;
+}
+
+interface DataTableProps<TData> extends DTable<TData> {
     data: Paginated<TData>;
     columns: ColumnDef<TData>[];
     options?: {
-        search?: DataTableSearchInput;
+        search?: DataTableSearchOptions;
     };
 }
 

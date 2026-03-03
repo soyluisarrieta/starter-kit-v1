@@ -1,33 +1,29 @@
 import { format } from 'date-fns';
 import { ShieldCheckIcon, VerifiedIcon } from 'lucide-react';
+import { useStore } from 'zustand';
 import DataTable from '@/components/commons/data-table/data-table';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { PATHS } from '@/constants/paths';
-import type { DataTableInstance } from '@/hooks/use-data-table';
 import { useDialog } from '@/hooks/use-dialog';
 import type { Role, UserWithRoles } from '@/types';
+import type { DataTableInstance } from '@/types/data-table';
 import type { Paginated } from '@/types/data-table';
 
 interface UserTableProps {
     users: Paginated<UserWithRoles>;
     roles: Role[];
-    table: DataTableInstance;
-    setSelectedUsers: (user: UserWithRoles[]) => void;
+    table: DataTableInstance<UserWithRoles>;
 }
 
-export default function UserTable({
-    users,
-    roles,
-    table,
-    setSelectedUsers,
-}: UserTableProps) {
+export default function UserTable({ users, roles, table }: UserTableProps) {
+    const setTarget = useStore(table, (s) => s.setTarget);
     const userSheetView = useDialog('user-sheet-view');
 
     const actions = {
         view: {
             onClick: (row: UserWithRoles) => {
-                setSelectedUsers([row]);
+                setTarget(row);
                 userSheetView.onOpenChange(true);
             },
         },

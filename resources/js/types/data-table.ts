@@ -1,4 +1,11 @@
 import type { ReactNode } from 'react';
+import type { StoreApi } from 'zustand';
+import type { DataTableStore } from '@/stores/data-table-store';
+
+type DataTableStoreApi<T> = StoreApi<DataTableStore<T>>;
+export type DataTableInstance<T> = DataTableStoreApi<T> & DataTableStore<T>;
+
+export type DTable<TData> = { table: DataTableInstance<TData> };
 
 export interface DataTableQuery {
     search?: string;
@@ -37,10 +44,4 @@ export interface ColumnDef<TData> {
     cell?: ({ row }: { row: TData }) => ReactNode;
     className?: string;
     align?: 'left' | 'center' | 'right';
-}
-
-export interface DataTableSearchInput {
-    enabled?: boolean;
-    placeholder?: string;
-    className?: string;
 }
