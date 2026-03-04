@@ -1,9 +1,9 @@
-import { useEffect, useRef } from 'react';
 import { useStore } from 'zustand';
 import { useShallow } from 'zustand/react/shallow';
 import type { DataTableSearchOptions } from '@/components/commons/data-table/data-table';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { useDebouncedFn } from '@/hooks/use-debounce';
 import { cn } from '@/lib/utils';
 import type { DTable } from '@/types/data-table';
 
@@ -20,23 +20,13 @@ export default function DataTableInputSearch<TData>({
         })),
     );
 
-    // Timeout for debounce
-    const timeoutRef = useRef<NodeJS.Timeout>(null);
-    useEffect(() => {
-        return () => {
-            if (timeoutRef.current) clearTimeout(timeoutRef.current);
-        };
-    }, []);
+    const debouncedRefresh = useDebouncedFn((value: string) =>
+        table.refresh({ search: value }),
+    );
 
-    // Handle search with debounce
     const handleSearch = (value: string) => {
         setSearch(value);
-
-        if (timeoutRef.current) clearTimeout(timeoutRef.current);
-
-        timeoutRef.current = setTimeout(() => {
-            table.refresh({ search: value });
-        }, 300);
+        debouncedRefresh(value);
     };
 
     return (
