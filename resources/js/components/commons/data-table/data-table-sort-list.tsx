@@ -1,4 +1,3 @@
-import { Link } from '@inertiajs/react';
 import {
     ArrowDownUpIcon,
     ArrowDownWideNarrowIcon,
@@ -6,7 +5,6 @@ import {
 } from 'lucide-react';
 import { useStore } from 'zustand';
 import { useShallow } from 'zustand/react/shallow';
-import { cleanQueryParams } from '@/lib/data-table/data-table-utils';
 import { cn } from '@/lib/utils';
 import type { DTable } from '@/types/data-table';
 
@@ -20,33 +18,31 @@ export default function DataTableSortList<TData>({
     field,
     children,
 }: DataTableSortListProps & DTable<TData>) {
-    const { sortBy, sortOrder, route, query } = useStore(
+    const { sortBy, sortOrder } = useStore(
         table,
         useShallow((s) => ({
             sortBy: s.query.sortBy,
             sortOrder: s.query.sortOrder,
-            route: s.route,
-            query: s.query,
         })),
     );
 
     const isActive = sortBy === field;
     const isAsc = isActive && (sortOrder || 'desc') === 'asc';
 
+    const onSort = () => {
+        table.refresh({
+            sortBy: field,
+            sortOrder: isAsc ? 'desc' : 'asc',
+        });
+    };
+
     return (
-        <Link
+        <div
             className={cn(
-                'inline-flex items-center space-x-2 text-xs font-bold',
+                'inline-flex cursor-pointer items-center space-x-2 text-xs font-bold select-none',
                 isActive && 'text-primary',
             )}
-            href={route}
-            data={cleanQueryParams({
-                ...query,
-                sortBy: field,
-                sortOrder: isAsc ? 'desc' : 'asc',
-            })}
-            preserveState
-            preserveScroll
+            onClick={onSort}
         >
             <div>{children}</div>
 
@@ -59,6 +55,6 @@ export default function DataTableSortList<TData>({
             ) : (
                 <ArrowDownUpIcon className="size-4" />
             )}
-        </Link>
+        </div>
     );
 }

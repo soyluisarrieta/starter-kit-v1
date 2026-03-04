@@ -1,4 +1,4 @@
-import { Link, router } from '@inertiajs/react';
+import { Link } from '@inertiajs/react';
 import { useStore } from 'zustand';
 import { useShallow } from 'zustand/react/shallow';
 import { Label } from '@/components/ui/label';
@@ -9,7 +9,6 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
-import { cleanQueryParams } from '@/lib/data-table/data-table-utils';
 import { cn } from '@/lib/utils';
 import type { DTable, PaginationLink } from '@/types/data-table';
 
@@ -21,23 +20,17 @@ export default function DataTablePagination<TData>({
     table,
     links,
 }: DataTablePaginationProps & DTable<TData>) {
-    const { perPage, setPerPage, route, query } = useStore(
+    const { perPage, setPerPage } = useStore(
         table,
         useShallow((s) => ({
             perPage: s.query.perPage,
             setPerPage: s.setPerPage,
-            route: s.route,
-            query: s.query,
         })),
     );
 
     const onPerPageChange = (value: string) => {
         setPerPage(value);
-
-        router.get(route, cleanQueryParams({ ...query, perPage: value }), {
-            preserveState: true,
-            preserveScroll: true,
-        });
+        table.refresh({ perPage: value });
     };
 
     return (

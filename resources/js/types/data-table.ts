@@ -2,8 +2,10 @@ import type { ReactNode } from 'react';
 import type { StoreApi } from 'zustand';
 import type { DataTableStore } from '@/stores/data-table-store';
 
-type DataTableStoreApi<T> = StoreApi<DataTableStore<T>>;
-export type DataTableInstance<T> = DataTableStoreApi<T> & DataTableStore<T>;
+type DataTableCore<T> = StoreApi<DataTableStore<T>> & DataTableStore<T>;
+export interface DataTableInstance<T> extends DataTableCore<T> {
+    refresh: (params?: Partial<DataTableQuery>, url?: string) => void;
+}
 
 export type DTable<TData> = { table: DataTableInstance<TData> };
 

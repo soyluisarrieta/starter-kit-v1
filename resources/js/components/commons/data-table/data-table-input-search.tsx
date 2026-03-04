@@ -1,11 +1,9 @@
-import { router } from '@inertiajs/react';
 import { useEffect, useRef } from 'react';
 import { useStore } from 'zustand';
 import { useShallow } from 'zustand/react/shallow';
 import type { DataTableSearchOptions } from '@/components/commons/data-table/data-table';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { cleanQueryParams } from '@/lib/data-table/data-table-utils';
 import { cn } from '@/lib/utils';
 import type { DTable } from '@/types/data-table';
 
@@ -14,13 +12,11 @@ export default function DataTableInputSearch<TData>({
     className,
     placeholder = 'Buscar...',
 }: DataTableSearchOptions & DTable<TData>) {
-    const { search, setSearch, route, query } = useStore(
+    const { search, setSearch } = useStore(
         table,
         useShallow((s) => ({
             search: s.query.search,
             setSearch: s.setSearch,
-            route: s.route,
-            query: s.query,
         })),
     );
 
@@ -39,10 +35,7 @@ export default function DataTableInputSearch<TData>({
         if (timeoutRef.current) clearTimeout(timeoutRef.current);
 
         timeoutRef.current = setTimeout(() => {
-            router.get(route, cleanQueryParams({ ...query, search: value }), {
-                preserveState: true,
-                preserveScroll: true,
-            });
+            table.refresh({ search: value });
         }, 300);
     };
 
