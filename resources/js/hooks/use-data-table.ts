@@ -9,7 +9,9 @@ import type { DataTableInstance, DataTableQuery } from '@/types/data-table';
 import type { RouteDefinition } from '@/wayfinder';
 
 // Remove empty values
-const cleanQueryParams = (queryParams: Record<string, any>) =>
+const cleanQueryParams = (
+    queryParams: Record<string, string | number | boolean | null | undefined>,
+) =>
     Object.fromEntries(
         Object.entries(queryParams).filter(([, v]) => v !== '' && v != null),
     );

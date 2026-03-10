@@ -55,6 +55,8 @@ export default function DataTablePagination<TData>({
                     <Link
                         key={index}
                         href={link.url ?? '#'}
+                        preserveState
+                        preserveScroll
                         dangerouslySetInnerHTML={{ __html: link.label }}
                         className={cn(
                             'rounded border px-3 py-1 text-sm',
