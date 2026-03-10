@@ -1,3 +1,7 @@
+import {
+    DataTableHeaderCheckbox,
+    DataTableRowCheckbox,
+} from '@/components/commons/data-table/data-table-checkbox';
 import DataTableInputSearch from '@/components/commons/data-table/data-table-input-search';
 import DataTablePagination from '@/components/commons/data-table/data-table-pagination';
 import DataTableSortList from '@/components/commons/data-table/data-table-sort-list';
@@ -10,30 +14,45 @@ import {
     TableRow,
 } from '@/components/ui/table';
 import { cn } from '@/lib/utils';
-import type { ColumnDef, DTable, Paginated } from '@/types/data-table';
+import type { ColumnDef, DTable, Paginated, DataRow } from '@/types/data-table';
 
 export interface DataTableSearchOptions {
     placeholder?: string;
     className?: string;
 }
 
-interface DataTableProps<TData> extends DTable<TData> {
-    data: Paginated<TData>;
-    columns: ColumnDef<TData>[];
-    options?: {
-        search?: DataTableSearchOptions;
-    };
+interface DataTableOptions {
+    selectable?: boolean;
+    search?: DataTableSearchOptions;
 }
 
-export default function DataTable<TData extends object>({
+const DEFAULT_OPTIONS: DataTableOptions = {
+    selectable: true,
+    search: {
+        placeholder: 'Buscar...',
+    },
+};
+
+interface DataTableProps<TData extends DataRow> extends DTable<TData> {
+    data: Paginated<TData>;
+    columns: ColumnDef<TData>[];
+    options?: DataTableOptions;
+}
+
+export default function DataTable<TData extends DataRow>({
     table,
     data,
     columns,
     options,
 }: DataTableProps<TData>) {
+    const { selectable, search } = { ...DEFAULT_OPTIONS, ...options };
+
+    const showSelection = selectable;
+    const pageIds = showSelection ? data.data.map((row) => row.id) : [];
+
     return (
         <div className="space-y-2">
-            <DataTableInputSearch table={table} {...options?.search} />
+            <DataTableInputSearch table={table} {...search} />
 
             <Table>
                 <TableHeader>
@@ -41,6 +60,14 @@ export default function DataTable<TData extends object>({
                         className="border-0! [&>th]:first:rounded-l-lg [&>th]:last:rounded-r-lg"
                         style={{ fontSize: '0.8rem' }}
                     >
+                        {showSelection && (
+                            <TableHead className="w-0 bg-muted px-4">
+                                <DataTableHeaderCheckbox
+                                    table={table}
+                                    pageIds={pageIds}
+                                />
+                            </TableHead>
+                        )}
                         {columns.map((column) => (
                             <TableHead
                                 key={column.key}
@@ -66,6 +93,14 @@ export default function DataTable<TData extends object>({
                 <TableBody>
                     {data.data.map((row, index) => (
                         <TableRow key={index}>
+                            {showSelection && (
+                                <TableCell className="px-4">
+                                    <DataTableRowCheckbox
+                                        table={table}
+                                        rowId={row.id}
+                                    />
+                                </TableCell>
+                            )}
                             {columns.map((column) => (
                                 <TableCell
                                     key={column.key}

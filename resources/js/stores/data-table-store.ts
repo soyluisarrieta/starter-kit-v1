@@ -13,11 +13,15 @@ export interface DataTableStore<TData> {
     route: RouteDefinition<'get'>;
     query: DataTableQuery;
     target: TData | null;
+    selected: Set<string | number>;
 
     setSearch: (value: string) => void;
     setPerPage: (value: string) => void;
     setSort: (field: string, order: string) => void;
     setTarget: (row: TData | null) => void;
+    toggleSelected: (id: string | number) => void;
+    toggleAllOnPage: (ids: (string | number)[], checked: boolean) => void;
+    clearSelected: () => void;
 }
 
 export function createDataTableStore<TData>(
@@ -27,6 +31,7 @@ export function createDataTableStore<TData>(
     return createStore<DataTableStore<TData>>((set) => ({
         route,
         target: null,
+        selected: new Set<string | number>(),
         query: {
             ...DEFAULT_QUERY_PARAMS,
             ...queryParams,
@@ -51,5 +56,30 @@ export function createDataTableStore<TData>(
             set(() => ({
                 target,
             })),
+
+        toggleSelected: (id) =>
+            set((state) => {
+                const next = new Set(state.selected);
+                if (next.has(id)) {
+                    next.delete(id);
+                } else {
+                    next.add(id);
+                }
+                return { selected: next };
+            }),
+
+        toggleAllOnPage: (ids, checked) =>
+            set((state) => {
+                const next = new Set(state.selected);
+                if (checked) {
+                    ids.forEach((id) => next.add(id));
+                } else {
+                    ids.forEach((id) => next.delete(id));
+                }
+                return { selected: next };
+            }),
+
+        clearSelected: () =>
+            set(() => ({ selected: new Set<string | number>() })),
     }));
 }

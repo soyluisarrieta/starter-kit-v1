@@ -7,7 +7,12 @@ export interface DataTableInstance<T> extends DataTableCore<T> {
     refresh: (params?: Partial<DataTableQuery>, url?: string) => void;
 }
 
-export type DTable<TData> = { table: DataTableInstance<TData> };
+export type RowId = string | number;
+export type DataRow = { id: RowId };
+
+export type DTable<TData> = {
+    table: DataTableInstance<TData>;
+};
 
 export interface DataTableQuery {
     search?: string;
