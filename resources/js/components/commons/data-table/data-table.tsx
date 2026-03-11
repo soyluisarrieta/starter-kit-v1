@@ -1,3 +1,4 @@
+import { DataTableBulkActions } from '@/components/commons/data-table/data-table-bulk-actions';
 import {
     DataTableHeaderCheckbox,
     DataTableRowCheckbox,
@@ -14,7 +15,12 @@ import {
     TableRow,
 } from '@/components/ui/table';
 import { cn } from '@/lib/utils';
-import type { ColumnDef, DTable, DataRow } from '@/types/data-table';
+import type {
+    BulkActionsConfig,
+    ColumnDef,
+    DTable,
+    DataRow,
+} from '@/types/data-table';
 
 export interface DataTableSearchOptions {
     placeholder?: string;
@@ -22,12 +28,10 @@ export interface DataTableSearchOptions {
 }
 
 interface DataTableOptions {
-    selectable?: boolean;
     search?: DataTableSearchOptions;
 }
 
 const DEFAULT_OPTIONS: DataTableOptions = {
-    selectable: true,
     search: {
         placeholder: 'Buscar...',
     },
@@ -36,16 +40,19 @@ const DEFAULT_OPTIONS: DataTableOptions = {
 interface DataTableProps<TData extends DataRow> extends DTable<TData> {
     columns: ColumnDef<TData>[];
     options?: DataTableOptions;
+    bulkActions?: BulkActionsConfig;
 }
 
 export default function DataTable<TData extends DataRow>({
     table,
     columns,
     options,
+    bulkActions,
 }: DataTableProps<TData>) {
-    const { selectable, search } = { ...DEFAULT_OPTIONS, ...options };
+    const { search } = { ...DEFAULT_OPTIONS, ...options };
     const { data: rows, links } = table.data;
 
+    const selectable = Boolean(bulkActions);
     const pageIds = selectable ? rows.map((row) => row.id) : [];
 
     return (
@@ -115,6 +122,10 @@ export default function DataTable<TData extends DataRow>({
             </Table>
 
             <DataTablePagination table={table} links={links} />
+
+            {bulkActions && (
+                <DataTableBulkActions table={table} config={bulkActions} />
+            )}
         </div>
     );
 }

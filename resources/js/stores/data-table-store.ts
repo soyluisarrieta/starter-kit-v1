@@ -1,5 +1,5 @@
 import { createStore } from 'zustand';
-import type { DataTableQuery } from '@/types/data-table';
+import type { DataTableQuery, RowId } from '@/types/data-table';
 import type { RouteDefinition } from '@/wayfinder';
 
 export const DEFAULT_QUERY_PARAMS: DataTableQuery = {
@@ -13,14 +13,14 @@ export interface DataTableStore<TData> {
     route: RouteDefinition<'get'>;
     query: DataTableQuery;
     target: TData | null;
-    selected: Set<string | number>;
+    selected: Set<RowId>;
 
     setSearch: (value: string) => void;
     setPerPage: (value: string) => void;
     setSort: (field: string, order: string) => void;
     setTarget: (row: TData | null) => void;
-    toggleSelected: (id: string | number) => void;
-    toggleAllOnPage: (ids: (string | number)[], checked: boolean) => void;
+    toggleSelected: (id: RowId) => void;
+    toggleAllOnPage: (ids: RowId[], checked: boolean) => void;
     clearSelected: () => void;
 }
 
@@ -31,7 +31,7 @@ export function createDataTableStore<TData>(
     return createStore<DataTableStore<TData>>((set) => ({
         route,
         target: null,
-        selected: new Set<string | number>(),
+        selected: new Set(),
         query: {
             ...DEFAULT_QUERY_PARAMS,
             ...queryParams,
@@ -79,7 +79,6 @@ export function createDataTableStore<TData>(
                 return { selected: next };
             }),
 
-        clearSelected: () =>
-            set(() => ({ selected: new Set<string | number>() })),
+        clearSelected: () => set(() => ({ selected: new Set() })),
     }));
 }

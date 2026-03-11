@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import type { ComponentType, ReactNode } from 'react';
 import type { StoreApi } from 'zustand';
 import type { DataTableStore } from '@/stores/data-table-store';
 
@@ -53,4 +53,19 @@ export interface ColumnDef<TData> {
     cell?: ({ row }: { row: TData }) => ReactNode;
     className?: string;
     align?: 'left' | 'center' | 'right';
+}
+
+export interface CustomBulkAction {
+    label: string;
+    icon?: ComponentType<{ className?: string }>;
+    variant?: 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost';
+    onClick: (ids: RowId[]) => void;
+}
+
+export interface BulkActionsConfig {
+    delete?: ((ids: RowId[]) => void) | false;
+    export?:
+        | { columns: Array<{ id: string; header: string }>; filename: string }
+        | false;
+    actions?: CustomBulkAction[];
 }
