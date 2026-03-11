@@ -22,7 +22,9 @@ createInertiaApp({
         // Invalidate data-table cache after mutations so lists refresh automatically
         router.on('success', (event) => {
             if ((event as any).detail?.visit?.method !== 'get') {
-                void queryClient.invalidateQueries({ queryKey: ['data-table'] });
+                void queryClient.invalidateQueries({
+                    queryKey: ['data-table'],
+                });
             }
         });
 

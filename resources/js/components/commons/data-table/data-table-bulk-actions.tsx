@@ -41,14 +41,12 @@ export function DataTableBulkActions<TData>({
     const count = selected.size;
     if (count === 0) return null;
 
-    const selectedIds = Array.from(selected);
+    const selectedIds = Array.from(selected.keys());
 
     const handleExport = (format: ExportFormat) => {
         if (!config.export) return;
         const { columns, filename } = config.export;
-        const selectedData = table.data.data.filter((row) =>
-            selected.has(row.id),
-        );
+        const selectedData = Array.from(selected.values());
         exportData(format, selectedData, { columns, filename });
         clearSelected();
     };

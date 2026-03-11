@@ -2,26 +2,11 @@ import type { ComponentType, ReactNode } from 'react';
 import type { StoreApi } from 'zustand';
 import type { DataTableStore } from '@/stores/data-table-store';
 
-type DataTableCore<T> = StoreApi<DataTableStore<T>> & DataTableStore<T>;
-export interface DataTableInstance<T> extends DataTableCore<T> {
-    data: Paginated<T>;
-    isFetching: boolean;
-    refresh: (params?: Partial<DataTableQuery>) => void;
-}
-
 export type RowId = string | number;
-type DataRow = { id: RowId };
+export type DataRow<TData> = { id: RowId } & TData;
 
-export type DTable<TData> = {
-    table: DataTableInstance<TData & DataRow>;
-};
-
-export interface DataTableQuery {
-    search?: string;
-    perPage?: string;
-    sortBy?: string;
-    sortOrder?: string;
-    page?: number;
+export interface DTable<TData> {
+    table: DataTableInstance<TData>;
 }
 
 export interface PaginationLink {
@@ -31,7 +16,7 @@ export interface PaginationLink {
 }
 
 export interface Paginated<TData> {
-    data: (TData & DataRow)[];
+    data: DataRow<TData>[];
     current_page: number;
     per_page: number;
     total: number;
@@ -44,6 +29,23 @@ export interface Paginated<TData> {
     last_page_url: string;
     links: PaginationLink[];
     path: string;
+}
+
+export interface DataTableQuery {
+    search?: string;
+    perPage?: string;
+    sortBy?: string;
+    sortOrder?: string;
+    page?: number;
+}
+
+export interface DataTableInstance<TData>
+    extends
+        StoreApi<DataTableStore<DataRow<TData>>>,
+        DataTableStore<DataRow<TData>> {
+    data: Paginated<TData>;
+    isFetching: boolean;
+    refresh: (params?: Partial<DataTableQuery>) => void;
 }
 
 export interface ColumnDef<TData> {

@@ -1,5 +1,5 @@
 import { createStore } from 'zustand';
-import type { DataTableQuery, RowId } from '@/types/data-table';
+import type { DataRow, DataTableQuery, RowId } from '@/types/data-table';
 import type { RouteDefinition } from '@/wayfinder';
 
 export const DEFAULT_QUERY_PARAMS: DataTableQuery = {
@@ -13,14 +13,14 @@ export interface DataTableStore<TData> {
     route: RouteDefinition<'get'>;
     query: DataTableQuery;
     target: TData | null;
-    selected: Set<RowId>;
+    selected: Map<RowId, TData>;
 
     setSearch: (value: string) => void;
     setPerPage: (value: string) => void;
     setSort: (field: string, order: string) => void;
     setTarget: (row: TData | null) => void;
-    toggleSelected: (id: RowId) => void;
-    toggleAllOnPage: (ids: RowId[], checked: boolean) => void;
+    toggleSelected: (row: TData) => void;
+    toggleAllOnPage: (rows: TData[], checked: boolean) => void;
     clearSelected: () => void;
 }
 
@@ -28,10 +28,10 @@ export function createDataTableStore<TData>(
     route: RouteDefinition<'get'>,
     queryParams: DataTableQuery,
 ) {
-    return createStore<DataTableStore<TData>>((set) => ({
+    return createStore<DataTableStore<DataRow<TData>>>((set) => ({
         route,
         target: null,
-        selected: new Set(),
+        selected: new Map(),
         query: {
             ...DEFAULT_QUERY_PARAMS,
             ...queryParams,
@@ -57,28 +57,28 @@ export function createDataTableStore<TData>(
                 target,
             })),
 
-        toggleSelected: (id) =>
+        toggleSelected: (row) =>
             set((state) => {
-                const next = new Set(state.selected);
-                if (next.has(id)) {
-                    next.delete(id);
+                const next = new Map(state.selected);
+                if (next.has(row.id)) {
+                    next.delete(row.id);
                 } else {
-                    next.add(id);
+                    next.set(row.id, row);
                 }
                 return { selected: next };
             }),
 
-        toggleAllOnPage: (ids, checked) =>
+        toggleAllOnPage: (rows, checked) =>
             set((state) => {
-                const next = new Set(state.selected);
+                const next = new Map(state.selected);
                 if (checked) {
-                    ids.forEach((id) => next.add(id));
+                    rows.forEach((row) => next.set(row.id, row));
                 } else {
-                    ids.forEach((id) => next.delete(id));
+                    rows.forEach((row) => next.delete(row.id));
                 }
                 return { selected: next };
             }),
 
-        clearSelected: () => set(() => ({ selected: new Set() })),
+        clearSelected: () => set(() => ({ selected: new Map() })),
     }));
 }

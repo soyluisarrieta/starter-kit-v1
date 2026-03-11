@@ -1,22 +1,22 @@
 import { useStore } from 'zustand';
 import { useShallow } from 'zustand/react/shallow';
 import { Checkbox } from '@/components/ui/checkbox';
-import type { DTable, RowId } from '@/types/data-table';
+import type { DataRow, DTable } from '@/types/data-table';
 
 interface DataTableHeaderCheckboxProps<TData> extends DTable<TData> {
-    pageIds: RowId[];
+    pageRows: DataRow<TData>[];
 }
 
 export function DataTableHeaderCheckbox<TData>({
     table,
-    pageIds,
+    pageRows,
 }: DataTableHeaderCheckboxProps<TData>) {
     const { allChecked, isMixed, toggleAllOnPage } = useStore(
         table,
         useShallow((s) => {
-            const total = pageIds.length;
-            const selectedCount = pageIds.filter((id) =>
-                s.selected.has(id),
+            const total = pageRows.length;
+            const selectedCount = pageRows.filter((row) =>
+                s.selected.has(row.id),
             ).length;
             return {
                 allChecked: total > 0 && selectedCount === total,
@@ -31,7 +31,7 @@ export function DataTableHeaderCheckbox<TData>({
             className="border-muted-foreground"
             checked={allChecked ? true : isMixed ? 'indeterminate' : false}
             onCheckedChange={(checked) =>
-                toggleAllOnPage(pageIds, checked === true)
+                toggleAllOnPage(pageRows, checked === true)
             }
             aria-label="Seleccionar todos en esta página"
         />
@@ -39,17 +39,17 @@ export function DataTableHeaderCheckbox<TData>({
 }
 
 interface DataTableRowCheckboxProps<TData> extends DTable<TData> {
-    rowId: RowId;
+    row: DataRow<TData>;
 }
 
 export function DataTableRowCheckbox<TData>({
     table,
-    rowId,
+    row,
 }: DataTableRowCheckboxProps<TData>) {
     const { isSelected, toggleSelected } = useStore(
         table,
         useShallow((s) => ({
-            isSelected: s.selected.has(rowId),
+            isSelected: s.selected.has(row.id),
             toggleSelected: s.toggleSelected,
         })),
     );
@@ -57,7 +57,7 @@ export function DataTableRowCheckbox<TData>({
     return (
         <Checkbox
             checked={isSelected}
-            onCheckedChange={() => toggleSelected(rowId)}
+            onCheckedChange={() => toggleSelected(row)}
             aria-label="Seleccionar fila"
         />
     );

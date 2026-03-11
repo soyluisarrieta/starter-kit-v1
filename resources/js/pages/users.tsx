@@ -129,7 +129,7 @@ export default function Users({ users, roles, queryParams }: UsersProps) {
                     passwordRequired
                     method="post"
                     url={destroyMultiple().url}
-                    data={{ ids: Array.from(table.selected) }}
+                    data={{ ids: Array.from(table.selected.keys()) }}
                     onSuccess={() => table.clearSelected()}
                     {...deleteMultipleDialog}
                 />

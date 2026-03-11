@@ -48,7 +48,7 @@ export default function DataTable<TData>({
     const { data: rows, links } = table.data;
 
     const selectable = Boolean(bulkActions);
-    const pageIds = selectable ? rows.map((row) => row.id) : [];
+    const pageRows = selectable ? rows : [];
 
     return (
         <div className="space-y-2">
@@ -64,7 +64,7 @@ export default function DataTable<TData>({
                             <TableHead className="w-0 bg-muted px-4">
                                 <DataTableHeaderCheckbox
                                     table={table}
-                                    pageIds={pageIds}
+                                    pageRows={pageRows}
                                 />
                             </TableHead>
                         )}
@@ -97,7 +97,7 @@ export default function DataTable<TData>({
                                 <TableCell className="px-4">
                                     <DataTableRowCheckbox
                                         table={table}
-                                        rowId={row.id}
+                                        row={row}
                                     />
                                 </TableCell>
                             )}
