@@ -81,7 +81,7 @@ export function DataTableBulkActions<TData extends DataRow>({
                 <div className="mx-2 h-4 w-px bg-border" />
 
                 {config.export !== false && config.export && (
-                    <DropdownMenu>
+                    <DropdownMenu modal={false}>
                         <DropdownMenuTrigger asChild>
                             <Button variant="secondary" size="sm">
                                 <DownloadIcon className="size-4" />
