@@ -3,34 +3,29 @@ import {
     ArrowDownWideNarrowIcon,
     ArrowUpWideNarrowIcon,
 } from 'lucide-react';
-import { useStore } from 'zustand';
-import { useShallow } from 'zustand/react/shallow';
+import { useDataTableContext } from '@/components/commons/data-table/data-table-context';
 import { cn } from '@/lib/utils';
-import type { DTable } from '@/types/data-table';
 
 interface DataTableSortListProps {
     field: string;
     children: React.ReactNode;
 }
 
-export default function DataTableSortList<TData>({
-    table,
+export default function DataTableSortList({
     field,
     children,
-}: DataTableSortListProps & DTable<TData>) {
-    const { sortBy, sortOrder } = useStore(
-        table,
-        useShallow((s) => ({
-            sortBy: s.query.sortBy,
-            sortOrder: s.query.sortOrder,
-        })),
-    );
+}: DataTableSortListProps) {
+    const { sortBy, sortOrder, refresh } = useDataTableContext((s) => ({
+        sortBy: s.query.sortBy,
+        sortOrder: s.query.sortOrder,
+        refresh: s.refresh,
+    }));
 
     const isActive = sortBy === field;
     const isAsc = isActive && (sortOrder || 'desc') === 'asc';
 
     const onSort = () => {
-        table.refresh({
+        refresh({
             sortBy: field,
             sortOrder: isAsc ? 'desc' : 'asc',
         });

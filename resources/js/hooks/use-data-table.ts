@@ -1,4 +1,3 @@
-import { router } from '@inertiajs/react';
 import { useEffect, useState } from 'react';
 import { useStore } from 'zustand';
 import { useDataTableQuery } from '@/hooks/use-data-table-query';
@@ -55,33 +54,11 @@ export function useDataTable<TData>({
         initialData,
     });
 
-    // Helper: refresh data table
-    const refresh = (params?: Partial<DataTableQuery>) => {
-        const currentQuery = tableStore.getState().query;
-        const newQuery = { ...currentQuery, ...params };
-
-        const isPageOnly =
-            params !== undefined &&
-            Object.keys(params).length === 1 &&
-            'page' in params;
-
-        if (isPageOnly) {
-            tableStore.setState({ query: newQuery });
-        } else {
-            router.get(
-                route.url,
-                cleanQueryParams({ ...newQuery, page: undefined }),
-                { preserveState: true, preserveScroll: true },
-            );
-        }
-    };
-
     // build table instance
     const table: DataTableInstance<TData> = {
         ...tableStore,
         ...tableState,
         ...queryResult,
-        refresh,
     };
 
     return table;

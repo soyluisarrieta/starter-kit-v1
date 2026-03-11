@@ -1,30 +1,23 @@
-import { useStore } from 'zustand';
-import { useShallow } from 'zustand/react/shallow';
+import { useDataTableContext } from '@/components/commons/data-table/data-table-context';
 import { Checkbox } from '@/components/ui/checkbox';
-import type { DataRow, DTable } from '@/types/data-table';
+import type { BaseRow } from '@/types/data-table';
 
-interface DataTableHeaderCheckboxProps<TData> extends DTable<TData> {
-    pageRows: DataRow<TData>[];
+interface DataTableHeaderCheckboxProps {
+    pageRows: BaseRow[];
 }
 
-export function DataTableHeaderCheckbox<TData>({
-    table,
+export function DataTableHeaderCheckbox({
     pageRows,
-}: DataTableHeaderCheckboxProps<TData>) {
-    const { allChecked, isMixed, toggleAllOnPage } = useStore(
-        table,
-        useShallow((s) => {
-            const total = pageRows.length;
-            const selectedCount = pageRows.filter((row) =>
-                s.selected.has(row.id),
-            ).length;
-            return {
-                allChecked: total > 0 && selectedCount === total,
-                isMixed: selectedCount > 0 && selectedCount < total,
-                toggleAllOnPage: s.toggleAllOnPage,
-            };
-        }),
-    );
+}: DataTableHeaderCheckboxProps) {
+    const { selected, toggleAllOnPage } = useDataTableContext((s) => ({
+        selected: s.selected,
+        toggleAllOnPage: s.toggleAllOnPage,
+    }));
+
+    const total = pageRows.length;
+    const selectedCount = pageRows.filter((row) => selected.has(row.id)).length;
+    const allChecked = total > 0 && selectedCount === total;
+    const isMixed = selectedCount > 0 && selectedCount < total;
 
     return (
         <Checkbox
@@ -38,21 +31,15 @@ export function DataTableHeaderCheckbox<TData>({
     );
 }
 
-interface DataTableRowCheckboxProps<TData> extends DTable<TData> {
-    row: DataRow<TData>;
+interface DataTableRowCheckboxProps {
+    row: BaseRow;
 }
 
-export function DataTableRowCheckbox<TData>({
-    table,
-    row,
-}: DataTableRowCheckboxProps<TData>) {
-    const { isSelected, toggleSelected } = useStore(
-        table,
-        useShallow((s) => ({
-            isSelected: s.selected.has(row.id),
-            toggleSelected: s.toggleSelected,
-        })),
-    );
+export function DataTableRowCheckbox({ row }: DataTableRowCheckboxProps) {
+    const { isSelected, toggleSelected } = useDataTableContext((s) => ({
+        isSelected: s.selected.has(row.id),
+        toggleSelected: s.toggleSelected,
+    }));
 
     return (
         <Checkbox

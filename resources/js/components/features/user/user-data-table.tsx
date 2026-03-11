@@ -1,6 +1,5 @@
 import { format } from 'date-fns';
 import { ShieldCheckIcon, VerifiedIcon } from 'lucide-react';
-import { useStore } from 'zustand';
 import DataTable from '@/components/commons/data-table/data-table';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
@@ -19,7 +18,7 @@ interface UserTableProps {
 export default function UserTable({ roles, table }: UserTableProps) {
     const { canDelete } = useCan([USER_PERMISSIONS.DELETE]);
 
-    const setTarget = useStore(table, (s) => s.setTarget);
+    const { setTarget } = table;
     const userSheetView = useDialog('user-sheet-view');
     const deleteMultipleDialog = useDialog('delete-multiple-dialog');
 
@@ -51,10 +50,10 @@ export default function UserTable({ roles, table }: UserTableProps) {
     return (
         <DataTable
             table={table}
+            bulkActions={bulkActions}
             options={{
                 search: { placeholder: 'Buscar usuarios...' },
             }}
-            bulkActions={bulkActions}
             columns={[
                 {
                     key: 'id',

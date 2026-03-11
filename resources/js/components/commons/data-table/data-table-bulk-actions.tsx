@@ -7,8 +7,7 @@ import {
     Trash2Icon,
     XIcon,
 } from 'lucide-react';
-import { useStore } from 'zustand';
-import { useShallow } from 'zustand/react/shallow';
+import { useDataTableContext } from '@/components/commons/data-table/data-table-context';
 import { Button } from '@/components/ui/button';
 import {
     DropdownMenu,
@@ -17,26 +16,19 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { exportData } from '@/lib/data-table/data-table-export';
-import type { BulkActionsConfig, DataTableInstance } from '@/types/data-table';
+import type { BulkActionsConfig } from '@/types/data-table';
 
-interface DataTableBulkActionsProps<TData> {
-    table: DataTableInstance<TData>;
+interface DataTableBulkActionsProps {
     config: BulkActionsConfig;
 }
 
 type ExportFormat = 'PDF' | 'CSV' | 'XLS' | 'JSON';
 
-export function DataTableBulkActions<TData>({
-    table,
-    config,
-}: DataTableBulkActionsProps<TData>) {
-    const { selected, clearSelected } = useStore(
-        table,
-        useShallow((s) => ({
-            selected: s.selected,
-            clearSelected: s.clearSelected,
-        })),
-    );
+export function DataTableBulkActions({ config }: DataTableBulkActionsProps) {
+    const { selected, clearSelected } = useDataTableContext((s) => ({
+        selected: s.selected,
+        clearSelected: s.clearSelected,
+    }));
 
     const count = selected.size;
     if (count === 0) return null;

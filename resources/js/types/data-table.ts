@@ -3,11 +3,8 @@ import type { StoreApi } from 'zustand';
 import type { DataTableStore } from '@/stores/data-table-store';
 
 export type RowId = string | number;
-export type DataRow<TData> = { id: RowId } & TData;
-
-export interface DTable<TData> {
-    table: DataTableInstance<TData>;
-}
+export type BaseRow = { id: RowId };
+export type DataRow<TData> = BaseRow & TData;
 
 export interface PaginationLink {
     active: boolean;
@@ -39,13 +36,12 @@ export interface DataTableQuery {
     page?: number;
 }
 
+export type DataTableStoreApi<TData> = StoreApi<DataTableStore<DataRow<TData>>>;
+
 export interface DataTableInstance<TData>
-    extends
-        StoreApi<DataTableStore<DataRow<TData>>>,
-        DataTableStore<DataRow<TData>> {
+    extends DataTableStoreApi<TData>, DataTableStore<DataRow<TData>> {
     data: Paginated<TData>;
     isFetching: boolean;
-    refresh: (params?: Partial<DataTableQuery>) => void;
 }
 
 export interface ColumnDef<TData> {

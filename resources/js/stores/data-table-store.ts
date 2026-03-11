@@ -1,4 +1,6 @@
+import { router } from '@inertiajs/react';
 import { createStore } from 'zustand';
+import { cleanQueryParams } from '@/lib/data-table/clean-query-params';
 import type { DataRow, DataTableQuery, RowId } from '@/types/data-table';
 import type { RouteDefinition } from '@/wayfinder';
 
@@ -22,13 +24,14 @@ export interface DataTableStore<TData> {
     toggleSelected: (row: TData) => void;
     toggleAllOnPage: (rows: TData[], checked: boolean) => void;
     clearSelected: () => void;
+    refresh: (params?: Partial<DataTableQuery>) => void;
 }
 
 export function createDataTableStore<TData>(
     route: RouteDefinition<'get'>,
     queryParams: DataTableQuery,
 ) {
-    return createStore<DataTableStore<DataRow<TData>>>((set) => ({
+    return createStore<DataTableStore<DataRow<TData>>>((set, get) => ({
         route,
         target: null,
         selected: new Map(),
@@ -80,5 +83,25 @@ export function createDataTableStore<TData>(
             }),
 
         clearSelected: () => set(() => ({ selected: new Map() })),
+
+        refresh: (params) => {
+            const { query, route } = get();
+            const newQuery = { ...query, ...params };
+
+            const isPageOnly =
+                params !== undefined &&
+                Object.keys(params).length === 1 &&
+                'page' in params;
+
+            if (isPageOnly) {
+                set({ query: newQuery });
+            } else {
+                router.get(
+                    route.url,
+                    cleanQueryParams({ ...newQuery, page: undefined }),
+                    { preserveState: true, preserveScroll: true },
+                );
+            }
+        },
     }));
 }

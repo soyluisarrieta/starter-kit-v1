@@ -3,6 +3,7 @@ import {
     DataTableHeaderCheckbox,
     DataTableRowCheckbox,
 } from '@/components/commons/data-table/data-table-checkbox';
+import { DataTableProvider } from '@/components/commons/data-table/data-table-context';
 import DataTableInputSearch from '@/components/commons/data-table/data-table-input-search';
 import DataTablePagination from '@/components/commons/data-table/data-table-pagination';
 import DataTableSortList from '@/components/commons/data-table/data-table-sort-list';
@@ -15,7 +16,11 @@ import {
     TableRow,
 } from '@/components/ui/table';
 import { cn } from '@/lib/utils';
-import type { BulkActionsConfig, ColumnDef, DTable } from '@/types/data-table';
+import type {
+    BulkActionsConfig,
+    ColumnDef,
+    DataTableInstance,
+} from '@/types/data-table';
 
 export interface DataTableSearchOptions {
     placeholder?: string;
@@ -32,7 +37,8 @@ const DEFAULT_OPTIONS: DataTableOptions = {
     },
 };
 
-interface DataTableProps<TData> extends DTable<TData> {
+interface DataTableProps<TData> {
+    table: DataTableInstance<TData>;
     columns: ColumnDef<TData>[];
     options?: DataTableOptions;
     bulkActions?: BulkActionsConfig;
@@ -51,76 +57,69 @@ export default function DataTable<TData>({
     const pageRows = selectable ? rows : [];
 
     return (
-        <div className="space-y-2">
-            <DataTableInputSearch table={table} {...search} />
+        <DataTableProvider table={table}>
+            <div className="space-y-2">
+                <DataTableInputSearch {...search} />
 
-            <Table>
-                <TableHeader>
-                    <TableRow
-                        className="border-0! [&>th]:first:rounded-l-lg [&>th]:last:rounded-r-lg"
-                        style={{ fontSize: '0.8rem' }}
-                    >
-                        {selectable && (
-                            <TableHead className="w-0 bg-muted px-4">
-                                <DataTableHeaderCheckbox
-                                    table={table}
-                                    pageRows={pageRows}
-                                />
-                            </TableHead>
-                        )}
-                        {columns.map((column) => (
-                            <TableHead
-                                key={column.key}
-                                className={cn(
-                                    'bg-muted px-4 font-bold text-muted-foreground',
-                                    column.className,
-                                )}
-                                style={{ textAlign: column.align }}
-                            >
-                                <DataTableSortList
-                                    table={table}
-                                    field={column.key}
-                                >
-                                    {column.header
-                                        ? column.header()
-                                        : column.label}
-                                </DataTableSortList>
-                            </TableHead>
-                        ))}
-                    </TableRow>
-                </TableHeader>
-
-                <TableBody>
-                    {rows.map((row, index) => (
-                        <TableRow key={index}>
+                <Table>
+                    <TableHeader>
+                        <TableRow
+                            className="border-0! [&>th]:first:rounded-l-lg [&>th]:last:rounded-r-lg"
+                            style={{ fontSize: '0.8rem' }}
+                        >
                             {selectable && (
-                                <TableCell className="px-4">
-                                    <DataTableRowCheckbox
-                                        table={table}
-                                        row={row}
+                                <TableHead className="w-0 bg-muted px-4">
+                                    <DataTableHeaderCheckbox
+                                        pageRows={pageRows}
                                     />
-                                </TableCell>
+                                </TableHead>
                             )}
                             {columns.map((column) => (
-                                <TableCell
+                                <TableHead
                                     key={column.key}
-                                    className={cn('px-4', column.className)}
+                                    className={cn(
+                                        'bg-muted px-4 font-bold text-muted-foreground',
+                                        column.className,
+                                    )}
                                     style={{ textAlign: column.align }}
                                 >
-                                    {column.cell?.({ row }) ??
-                                        String(row[column.key])}
-                                </TableCell>
+                                    <DataTableSortList field={column.key}>
+                                        {column.header
+                                            ? column.header()
+                                            : column.label}
+                                    </DataTableSortList>
+                                </TableHead>
                             ))}
                         </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
+                    </TableHeader>
 
-            <DataTablePagination table={table} links={links} />
+                    <TableBody>
+                        {rows.map((row, index) => (
+                            <TableRow key={index}>
+                                {selectable && (
+                                    <TableCell className="px-4">
+                                        <DataTableRowCheckbox row={row} />
+                                    </TableCell>
+                                )}
+                                {columns.map((column) => (
+                                    <TableCell
+                                        key={column.key}
+                                        className={cn('px-4', column.className)}
+                                        style={{ textAlign: column.align }}
+                                    >
+                                        {column.cell?.({ row }) ??
+                                            String(row[column.key])}
+                                    </TableCell>
+                                ))}
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
 
-            {bulkActions && (
-                <DataTableBulkActions table={table} config={bulkActions} />
-            )}
-        </div>
+                <DataTablePagination links={links} />
+
+                {bulkActions && <DataTableBulkActions config={bulkActions} />}
+            </div>
+        </DataTableProvider>
     );
 }

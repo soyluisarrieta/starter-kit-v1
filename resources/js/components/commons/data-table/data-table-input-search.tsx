@@ -1,27 +1,22 @@
-import { useStore } from 'zustand';
-import { useShallow } from 'zustand/react/shallow';
 import type { DataTableSearchOptions } from '@/components/commons/data-table/data-table';
+import { useDataTableContext } from '@/components/commons/data-table/data-table-context';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useDebouncedFn } from '@/hooks/use-debounce';
 import { cn } from '@/lib/utils';
-import type { DTable } from '@/types/data-table';
 
-export default function DataTableInputSearch<TData>({
-    table,
+export default function DataTableInputSearch({
     className,
     placeholder = 'Buscar...',
-}: DataTableSearchOptions & DTable<TData>) {
-    const { search, setSearch } = useStore(
-        table,
-        useShallow((s) => ({
-            search: s.query.search,
-            setSearch: s.setSearch,
-        })),
-    );
+}: DataTableSearchOptions) {
+    const { search, setSearch, refresh } = useDataTableContext((s) => ({
+        search: s.query.search,
+        setSearch: s.setSearch,
+        refresh: s.refresh,
+    }));
 
     const debouncedRefresh = useDebouncedFn((value: string) =>
-        table.refresh({ search: value }),
+        refresh({ search: value }),
     );
 
     const handleSearch = (value: string) => {

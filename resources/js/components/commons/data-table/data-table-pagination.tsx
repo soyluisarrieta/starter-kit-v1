@@ -1,5 +1,4 @@
-import { useStore } from 'zustand';
-import { useShallow } from 'zustand/react/shallow';
+import { useDataTableContext } from '@/components/commons/data-table/data-table-context';
 import { Label } from '@/components/ui/label';
 import {
     Select,
@@ -9,7 +8,7 @@ import {
     SelectValue,
 } from '@/components/ui/select';
 import { cn } from '@/lib/utils';
-import type { DTable, PaginationLink } from '@/types/data-table';
+import type { PaginationLink } from '@/types/data-table';
 
 function getPageFromUrl(url: string): number {
     const match = url.match(/[?&]page=(\d+)/);
@@ -20,26 +19,23 @@ interface DataTablePaginationProps {
     links: PaginationLink[];
 }
 
-export default function DataTablePagination<TData>({
-    table,
+export default function DataTablePagination({
     links,
-}: DataTablePaginationProps & DTable<TData>) {
-    const { perPage, setPerPage } = useStore(
-        table,
-        useShallow((s) => ({
-            perPage: s.query.perPage,
-            setPerPage: s.setPerPage,
-        })),
-    );
+}: DataTablePaginationProps) {
+    const { perPage, setPerPage, refresh } = useDataTableContext((s) => ({
+        perPage: s.query.perPage,
+        setPerPage: s.setPerPage,
+        refresh: s.refresh,
+    }));
 
     const onPerPageChange = (value: string) => {
         setPerPage(value);
-        table.refresh({ perPage: value });
+        refresh({ perPage: value });
     };
 
     const onPageChange = (link: PaginationLink) => {
         if (!link.url) return;
-        table.refresh({ page: getPageFromUrl(link.url) });
+        refresh({ page: getPageFromUrl(link.url) });
     };
 
     return (
