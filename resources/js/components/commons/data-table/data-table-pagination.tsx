@@ -1,4 +1,3 @@
-import { Link } from '@inertiajs/react';
 import { useStore } from 'zustand';
 import { useShallow } from 'zustand/react/shallow';
 import { Label } from '@/components/ui/label';
@@ -11,6 +10,11 @@ import {
 } from '@/components/ui/select';
 import { cn } from '@/lib/utils';
 import type { DTable, PaginationLink } from '@/types/data-table';
+
+function getPageFromUrl(url: string): number {
+    const match = url.match(/[?&]page=(\d+)/);
+    return match ? parseInt(match[1], 10) : 1;
+}
 
 interface DataTablePaginationProps {
     links: PaginationLink[];
@@ -33,6 +37,11 @@ export default function DataTablePagination<TData>({
         table.refresh({ perPage: value });
     };
 
+    const onPageChange = (link: PaginationLink) => {
+        if (!link.url) return;
+        table.refresh({ page: getPageFromUrl(link.url) });
+    };
+
     return (
         <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
@@ -52,11 +61,10 @@ export default function DataTablePagination<TData>({
 
             <div className="flex items-center justify-center gap-0.5">
                 {links.map((link, index) => (
-                    <Link
+                    <button
                         key={index}
-                        href={link.url ?? '#'}
-                        preserveState
-                        preserveScroll
+                        disabled={!link.url || link.active}
+                        onClick={() => onPageChange(link)}
                         dangerouslySetInnerHTML={{ __html: link.label }}
                         className={cn(
                             'rounded border px-3 py-1 text-sm',

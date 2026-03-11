@@ -4,7 +4,9 @@ import type { DataTableStore } from '@/stores/data-table-store';
 
 type DataTableCore<T> = StoreApi<DataTableStore<T>> & DataTableStore<T>;
 export interface DataTableInstance<T> extends DataTableCore<T> {
-    refresh: (params?: Partial<DataTableQuery>, url?: string) => void;
+    data: Paginated<T>;
+    isFetching: boolean;
+    refresh: (params?: Partial<DataTableQuery>) => void;
 }
 
 export type RowId = string | number;
@@ -19,13 +21,13 @@ export interface DataTableQuery {
     perPage?: string;
     sortBy?: string;
     sortOrder?: string;
+    page?: number;
 }
 
 export interface PaginationLink {
     active: boolean;
     label: string;
     url: string | null;
-    page: number | null;
 }
 
 export interface Paginated<TData> {

@@ -45,6 +45,7 @@ export default function Users({ users, roles, queryParams }: UsersProps) {
     const table = useDataTable<UserWithRoles>({
         route: usersRoute(),
         queryParams,
+        initialData: users,
     });
 
     const { target: targetUser } = table;
@@ -85,7 +86,7 @@ export default function Users({ users, roles, queryParams }: UsersProps) {
                     )}
                 </div>
 
-                <UserTable users={users} roles={roles} table={table} />
+                <UserTable roles={roles} table={table} />
             </main>
 
             {/* View user */}

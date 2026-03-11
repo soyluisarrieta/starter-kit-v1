@@ -1,6 +1,6 @@
-import { createInertiaApp } from '@inertiajs/react';
-import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
+import { createInertiaApp, router } from '@inertiajs/react';
 import { QueryClientProvider } from '@tanstack/react-query';
+import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import '../css/app.css';
@@ -18,6 +18,13 @@ createInertiaApp({
         ),
     setup({ el, App, props }) {
         const root = createRoot(el);
+
+        // Invalidate data-table cache after mutations so lists refresh automatically
+        router.on('success', (event) => {
+            if ((event as any).detail?.visit?.method !== 'get') {
+                void queryClient.invalidateQueries({ queryKey: ['data-table'] });
+            }
+        });
 
         root.render(
             <StrictMode>

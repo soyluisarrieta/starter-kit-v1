@@ -14,7 +14,7 @@ import {
     TableRow,
 } from '@/components/ui/table';
 import { cn } from '@/lib/utils';
-import type { ColumnDef, DTable, Paginated, DataRow } from '@/types/data-table';
+import type { ColumnDef, DTable, DataRow } from '@/types/data-table';
 
 export interface DataTableSearchOptions {
     placeholder?: string;
@@ -34,21 +34,19 @@ const DEFAULT_OPTIONS: DataTableOptions = {
 };
 
 interface DataTableProps<TData extends DataRow> extends DTable<TData> {
-    data: Paginated<TData>;
     columns: ColumnDef<TData>[];
     options?: DataTableOptions;
 }
 
 export default function DataTable<TData extends DataRow>({
     table,
-    data,
     columns,
     options,
 }: DataTableProps<TData>) {
     const { selectable, search } = { ...DEFAULT_OPTIONS, ...options };
+    const { data: rows, links } = table.data;
 
-    const showSelection = selectable;
-    const pageIds = showSelection ? data.data.map((row) => row.id) : [];
+    const pageIds = selectable ? rows.map((row) => row.id) : [];
 
     return (
         <div className="space-y-2">
@@ -60,7 +58,7 @@ export default function DataTable<TData extends DataRow>({
                         className="border-0! [&>th]:first:rounded-l-lg [&>th]:last:rounded-r-lg"
                         style={{ fontSize: '0.8rem' }}
                     >
-                        {showSelection && (
+                        {selectable && (
                             <TableHead className="w-0 bg-muted px-4">
                                 <DataTableHeaderCheckbox
                                     table={table}
@@ -91,9 +89,9 @@ export default function DataTable<TData extends DataRow>({
                 </TableHeader>
 
                 <TableBody>
-                    {data.data.map((row, index) => (
+                    {rows.map((row, index) => (
                         <TableRow key={index}>
-                            {showSelection && (
+                            {selectable && (
                                 <TableCell className="px-4">
                                     <DataTableRowCheckbox
                                         table={table}
@@ -116,7 +114,7 @@ export default function DataTable<TData extends DataRow>({
                 </TableBody>
             </Table>
 
-            <DataTablePagination table={table} links={data.links} />
+            <DataTablePagination table={table} links={links} />
         </div>
     );
 }

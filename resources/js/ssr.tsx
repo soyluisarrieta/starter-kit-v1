@@ -1,7 +1,7 @@
 import { createInertiaApp } from '@inertiajs/react';
 import createServer from '@inertiajs/react/server';
-import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import ReactDOMServer from 'react-dom/server';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
@@ -18,7 +18,9 @@ createServer((page) =>
             ),
         setup: ({ App, props }) => {
             const ssrQueryClient = new QueryClient({
-                defaultOptions: { queries: { staleTime: 1000 * 60 * 5, retry: false } },
+                defaultOptions: {
+                    queries: { staleTime: 1000 * 60 * 5, retry: false },
+                },
             });
             return (
                 <QueryClientProvider client={ssrQueryClient}>

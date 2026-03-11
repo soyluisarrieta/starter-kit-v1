@@ -1,54 +1,86 @@
 import { router } from '@inertiajs/react';
 import { useEffect, useState } from 'react';
 import { useStore } from 'zustand';
+import { useDataTableQuery } from '@/hooks/use-data-table-query';
+import { cleanQueryParams } from '@/lib/data-table/clean-query-params';
+import { queryClient } from '@/lib/query-client';
 import {
     createDataTableStore,
     DEFAULT_QUERY_PARAMS,
 } from '@/stores/data-table-store';
-import type { DataTableInstance, DataTableQuery } from '@/types/data-table';
+import type {
+    DataTableInstance,
+    DataTableQuery,
+    Paginated,
+} from '@/types/data-table';
 import type { RouteDefinition } from '@/wayfinder';
 
-// Remove empty values
-const cleanQueryParams = (
-    queryParams: Record<string, string | number | boolean | null | undefined>,
-) =>
-    Object.fromEntries(
-        Object.entries(queryParams).filter(([, v]) => v !== '' && v != null),
-    );
-
-interface UseDataTableOptions {
+interface UseDataTableOptions<TData> {
     route: RouteDefinition<'get'>;
     queryParams: DataTableQuery;
+    initialData: Paginated<TData>;
 }
 
-export function useDataTable<T>({ route, queryParams }: UseDataTableOptions) {
-    const [tableStore] = useState(() =>
-        createDataTableStore<T>(route, queryParams),
-    );
+export function useDataTable<TData>({
+    route,
+    queryParams,
+    initialData,
+}: UseDataTableOptions<TData>) {
+    // init table store and seed query cache (once)
+    const [tableStore] = useState(() => {
+        const q = { ...DEFAULT_QUERY_PARAMS, ...queryParams };
+        queryClient.setQueryData(
+            ['data-table', route.url, cleanQueryParams(q)],
+            initialData,
+        );
+        return createDataTableStore<TData>(route, queryParams);
+    });
 
+    // sync cache and store data
     useEffect(() => {
-        const query = { ...DEFAULT_QUERY_PARAMS, ...queryParams };
-        tableStore.setState({ route, query });
-    }, [route, queryParams, tableStore]);
+        const q = { ...DEFAULT_QUERY_PARAMS, ...queryParams };
+        queryClient.setQueryData(
+            ['data-table', route.url, cleanQueryParams(q)],
+            initialData,
+        );
 
+        tableStore.setState({ route, query: q });
+    }, [route, queryParams, initialData, tableStore]);
+
+    // subscribe store and run table query
     const tableState = useStore(tableStore);
+    const queryResult = useDataTableQuery<TData>({
+        url: route.url,
+        query: tableState.query,
+        initialData,
+    });
 
-    // Refresh data table
-    const refresh = (params?: Partial<DataTableQuery>, url?: string) => {
+    // Helper: refresh data table
+    const refresh = (params?: Partial<DataTableQuery>) => {
         const currentQuery = tableStore.getState().query;
-        const finalQuery = { ...currentQuery, ...params };
-        const targetUrl = url || route;
+        const newQuery = { ...currentQuery, ...params };
 
-        const cleanQuery = cleanQueryParams(finalQuery);
-        router.get(targetUrl, cleanQuery, {
-            preserveState: true,
-            preserveScroll: true,
-        });
+        const isPageOnly =
+            params !== undefined &&
+            Object.keys(params).length === 1 &&
+            'page' in params;
+
+        if (isPageOnly) {
+            tableStore.setState({ query: newQuery });
+        } else {
+            router.get(
+                route.url,
+                cleanQueryParams({ ...newQuery, page: undefined }),
+                { preserveState: true, preserveScroll: true },
+            );
+        }
     };
 
-    const table: DataTableInstance<T> = {
+    // build table instance
+    const table: DataTableInstance<TData> = {
         ...tableStore,
         ...tableState,
+        ...queryResult,
         refresh,
     };
 

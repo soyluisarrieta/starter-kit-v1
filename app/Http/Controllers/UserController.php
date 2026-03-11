@@ -26,6 +26,10 @@ class UserController extends Controller
                 'roleIds' => $user->roles->pluck('id')->toArray(),
             ]);
 
+        if ($request->wantsJson()) {
+            return response()->json($users);
+        }
+
         $queryParams = $request->validated();
         $roles = Role::select('id', 'name', 'label', 'hex_color')->get();
 

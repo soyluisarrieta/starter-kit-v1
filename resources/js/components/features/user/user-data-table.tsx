@@ -8,15 +8,13 @@ import { PATHS } from '@/constants/paths';
 import { useDialog } from '@/hooks/use-dialog';
 import type { Role, UserWithRoles } from '@/types';
 import type { DataTableInstance } from '@/types/data-table';
-import type { Paginated } from '@/types/data-table';
 
 interface UserTableProps {
-    users: Paginated<UserWithRoles>;
     roles: Role[];
     table: DataTableInstance<UserWithRoles>;
 }
 
-export default function UserTable({ users, roles, table }: UserTableProps) {
+export default function UserTable({ roles, table }: UserTableProps) {
     const setTarget = useStore(table, (s) => s.setTarget);
     const userSheetView = useDialog('user-sheet-view');
 
@@ -34,7 +32,6 @@ export default function UserTable({ users, roles, table }: UserTableProps) {
     return (
         <DataTable
             table={table}
-            data={users}
             options={{
                 search: { placeholder: 'Buscar usuarios...' },
             }}
