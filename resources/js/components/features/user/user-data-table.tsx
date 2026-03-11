@@ -5,9 +5,11 @@ import DataTable from '@/components/commons/data-table/data-table';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { PATHS } from '@/constants/paths';
+import { USER_PERMISSIONS } from '@/constants/permissions';
+import { useCan } from '@/hooks/use-can';
 import { useDialog } from '@/hooks/use-dialog';
 import type { Role, UserWithRoles } from '@/types';
-import type { DataTableInstance } from '@/types/data-table';
+import type { BulkActionsConfig, DataTableInstance } from '@/types/data-table';
 
 interface UserTableProps {
     roles: Role[];
@@ -15,8 +17,25 @@ interface UserTableProps {
 }
 
 export default function UserTable({ roles, table }: UserTableProps) {
+    const { canDelete } = useCan([USER_PERMISSIONS.DELETE]);
+
     const setTarget = useStore(table, (s) => s.setTarget);
     const userSheetView = useDialog('user-sheet-view');
+    const deleteMultipleDialog = useDialog('delete-multiple-dialog');
+
+    const bulkActions: BulkActionsConfig = {
+        delete: canDelete && (() => deleteMultipleDialog.onOpenChange(true)),
+        export: {
+            columns: [
+                { id: 'id', header: 'ID' },
+                { id: 'name', header: 'Nombre' },
+                { id: 'last_name', header: 'Apellido' },
+                { id: 'email', header: 'Email' },
+                { id: 'created_at', header: 'Registro' },
+            ],
+            filename: 'usuarios',
+        },
+    };
 
     const actions = {
         view: {
@@ -35,6 +54,7 @@ export default function UserTable({ roles, table }: UserTableProps) {
             options={{
                 search: { placeholder: 'Buscar usuarios...' },
             }}
+            bulkActions={bulkActions}
             columns={[
                 {
                     key: 'id',

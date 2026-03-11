@@ -121,7 +121,7 @@ export default function Users({ users, roles, queryParams }: UsersProps) {
                 />
             )}
 
-            {/* Delete users */}
+            {/* Delete multiple users */}
             {canDelete && (
                 <ConfirmDialog
                     title="¿Eliminar usuarios seleccionados?"
@@ -129,7 +129,8 @@ export default function Users({ users, roles, queryParams }: UsersProps) {
                     passwordRequired
                     method="post"
                     url={destroyMultiple().url}
-                    data={{ ids: [] }}
+                    data={{ ids: Array.from(table.selected) }}
+                    onSuccess={() => table.clearSelected()}
                     {...deleteMultipleDialog}
                 />
             )}
