@@ -15,12 +15,7 @@ import {
     TableRow,
 } from '@/components/ui/table';
 import { cn } from '@/lib/utils';
-import type {
-    BulkActionsConfig,
-    ColumnDef,
-    DTable,
-    DataRow,
-} from '@/types/data-table';
+import type { BulkActionsConfig, ColumnDef, DTable } from '@/types/data-table';
 
 export interface DataTableSearchOptions {
     placeholder?: string;
@@ -37,13 +32,13 @@ const DEFAULT_OPTIONS: DataTableOptions = {
     },
 };
 
-interface DataTableProps<TData extends DataRow> extends DTable<TData> {
+interface DataTableProps<TData> extends DTable<TData> {
     columns: ColumnDef<TData>[];
     options?: DataTableOptions;
     bulkActions?: BulkActionsConfig;
 }
 
-export default function DataTable<TData extends DataRow>({
+export default function DataTable<TData>({
     table,
     columns,
     options,

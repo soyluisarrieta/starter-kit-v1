@@ -17,20 +17,16 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { exportData } from '@/lib/data-table/data-table-export';
-import type {
-    BulkActionsConfig,
-    DataRow,
-    DataTableInstance,
-} from '@/types/data-table';
+import type { BulkActionsConfig, DataTableInstance } from '@/types/data-table';
 
-interface DataTableBulkActionsProps<TData extends DataRow> {
+interface DataTableBulkActionsProps<TData> {
     table: DataTableInstance<TData>;
     config: BulkActionsConfig;
 }
 
 type ExportFormat = 'PDF' | 'CSV' | 'XLS' | 'JSON';
 
-export function DataTableBulkActions<TData extends DataRow>({
+export function DataTableBulkActions<TData>({
     table,
     config,
 }: DataTableBulkActionsProps<TData>) {

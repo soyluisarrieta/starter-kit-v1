@@ -10,10 +10,10 @@ export interface DataTableInstance<T> extends DataTableCore<T> {
 }
 
 export type RowId = string | number;
-export type DataRow = { id: RowId };
+type DataRow = { id: RowId };
 
 export type DTable<TData> = {
-    table: DataTableInstance<TData>;
+    table: DataTableInstance<TData & DataRow>;
 };
 
 export interface DataTableQuery {
@@ -31,7 +31,7 @@ export interface PaginationLink {
 }
 
 export interface Paginated<TData> {
-    data: TData[];
+    data: (TData & DataRow)[];
     current_page: number;
     per_page: number;
     total: number;
