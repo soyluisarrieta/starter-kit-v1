@@ -19,10 +19,10 @@ createInertiaApp({
     setup({ el, App, props }) {
         const root = createRoot(el);
 
-        // Invalidate data-table cache after mutations so lists refresh automatically
+        // Clear data-table cache after mutations so stale pages don't flash old data
         router.on('success', (event) => {
             if ((event as any).detail?.visit?.method !== 'get') {
-                void queryClient.invalidateQueries({
+                queryClient.removeQueries({
                     queryKey: ['data-table'],
                 });
             }
