@@ -44,14 +44,18 @@ export interface DataTableInstance<TData>
     isFetching: boolean;
 }
 
-export interface ColumnDef<TData> {
-    key: keyof TData & string;
-    label: string;
+type CellDef<TData> = ({ row }: { row: TData }) => ReactNode;
+
+interface ColumnDefBase<TData> {
     header?: () => ReactNode;
-    cell?: ({ row }: { row: TData }) => ReactNode;
+    cell?: CellDef<TData>;
     className?: string;
     align?: 'left' | 'center' | 'right';
 }
+
+export type ColumnDef<T> =
+    | (ColumnDefBase<T> & { key: keyof T & string; label: string })
+    | (ColumnDefBase<T> & { id: string; label?: string; cell: CellDef<T> });
 
 export interface CustomBulkAction {
     label: string;

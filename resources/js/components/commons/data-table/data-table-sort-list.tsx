@@ -7,7 +7,7 @@ import { useDataTableContext } from '@/components/commons/data-table/data-table-
 import { cn } from '@/lib/utils';
 
 interface DataTableSortListProps {
-    field: string;
+    field?: string;
     children: React.ReactNode;
 }
 
@@ -20,6 +20,8 @@ export default function DataTableSortList({
         sortOrder: s.query.sortOrder,
         refresh: s.refresh,
     }));
+
+    if (!field) return <>{children}</>;
 
     const isActive = sortBy === field;
     const isAsc = isActive && (sortOrder || 'desc') === 'asc';

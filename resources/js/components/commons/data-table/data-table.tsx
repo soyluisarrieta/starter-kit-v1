@@ -74,22 +74,30 @@ export default function DataTable<TData>({
                                     />
                                 </TableHead>
                             )}
-                            {columns.map((column) => (
-                                <TableHead
-                                    key={column.key}
-                                    className={cn(
-                                        'bg-muted px-4 font-bold text-muted-foreground',
-                                        column.className,
-                                    )}
-                                    style={{ textAlign: column.align }}
-                                >
-                                    <DataTableSortList field={column.key}>
-                                        {column.header
-                                            ? column.header()
-                                            : column.label}
-                                    </DataTableSortList>
-                                </TableHead>
-                            ))}
+                            {columns.map((column) => {
+                                const colId =
+                                    'key' in column ? column.key : column.id;
+                                return (
+                                    <TableHead
+                                        key={colId}
+                                        className={cn(
+                                            'bg-muted px-4 font-bold text-muted-foreground',
+                                            column.className,
+                                        )}
+                                        style={{ textAlign: column.align }}
+                                    >
+                                        <DataTableSortList
+                                            field={
+                                                'key' in column
+                                                    ? column.key
+                                                    : undefined
+                                            }
+                                        >
+                                            {column.header?.() ?? column.label}
+                                        </DataTableSortList>
+                                    </TableHead>
+                                );
+                            })}
                         </TableRow>
                     </TableHeader>
 
@@ -101,16 +109,27 @@ export default function DataTable<TData>({
                                         <DataTableRowCheckbox row={row} />
                                     </TableCell>
                                 )}
-                                {columns.map((column) => (
-                                    <TableCell
-                                        key={column.key}
-                                        className={cn('px-4', column.className)}
-                                        style={{ textAlign: column.align }}
-                                    >
-                                        {column.cell?.({ row }) ??
-                                            String(row[column.key])}
-                                    </TableCell>
-                                ))}
+                                {columns.map((column) => {
+                                    const colId =
+                                        'key' in column
+                                            ? column.key
+                                            : column.id;
+                                    return (
+                                        <TableCell
+                                            key={colId}
+                                            className={cn(
+                                                'px-4',
+                                                column.className,
+                                            )}
+                                            style={{ textAlign: column.align }}
+                                        >
+                                            {'key' in column
+                                                ? (column.cell?.({ row }) ??
+                                                  String(row[column.key]))
+                                                : column.cell({ row })}
+                                        </TableCell>
+                                    );
+                                })}
                             </TableRow>
                         ))}
                     </TableBody>
