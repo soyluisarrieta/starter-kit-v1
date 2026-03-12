@@ -43,7 +43,10 @@ export function useDataTable<TData>({
             initialData,
         );
 
-        tableStore.setState({ route, query: q });
+        tableStore.setState((state) => ({
+            route,
+            query: { ...q, search: state.query.search },
+        }));
     }, [route, queryParams, initialData, tableStore]);
 
     // subscribe store and run table query
