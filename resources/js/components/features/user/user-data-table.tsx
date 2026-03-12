@@ -1,8 +1,15 @@
 import { format } from 'date-fns';
-import { ShieldCheckIcon, VerifiedIcon } from 'lucide-react';
+import { MoreVerticalIcon, ShieldCheckIcon, VerifiedIcon } from 'lucide-react';
 import DataTable from '@/components/commons/data-table/data-table';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { PATHS } from '@/constants/paths';
 import { USER_PERMISSIONS } from '@/constants/permissions';
 import { useCan } from '@/hooks/use-can';
@@ -19,7 +26,10 @@ export default function UserTable({ roles, table }: UserTableProps) {
     const { canDelete } = useCan([USER_PERMISSIONS.DELETE]);
 
     const { setTarget } = table;
+
     const userSheetView = useDialog('user-sheet-view');
+    const userDialogForm = useDialog('user-dialog-form');
+    const deleteDialog = useDialog('delete-dialog');
     const deleteMultipleDialog = useDialog('delete-multiple-dialog');
 
     const bulkActions: BulkActionsConfig = {
@@ -37,13 +47,19 @@ export default function UserTable({ roles, table }: UserTableProps) {
     };
 
     const actions = {
-        view: {
-            onClick: (row: UserWithRoles) => {
-                setTarget(row);
-                userSheetView.onOpenChange(true);
-            },
+        view: (row) => {
+            setTarget(row);
+            userSheetView.onOpenChange(true);
         },
-    };
+        edit: (row) => {
+            setTarget(row);
+            userDialogForm.onOpenChange(true);
+        },
+        destroy: (row) => {
+            setTarget(row);
+            deleteDialog.onOpenChange(true);
+        },
+    } as const satisfies Record<string, (row: UserWithRoles) => void>;
 
     const rolesMap = new Map(roles.map((role) => [role.id, role]));
 
@@ -65,7 +81,7 @@ export default function UserTable({ roles, table }: UserTableProps) {
                     key: 'name',
                     label: 'Nombre completo',
                     cell: ({ row }) => {
-                        const onView = () => actions.view.onClick(row);
+                        const onView = () => actions.view(row);
                         const avatarUrl = row.avatar
                             ? `${PATHS.avatars}/${row.avatar}`
                             : '';
@@ -174,6 +190,36 @@ export default function UserTable({ roles, table }: UserTableProps) {
                                 {format(row.updated_at, 'hh:mm a')}
                             </time>
                         </div>
+                    ),
+                },
+                {
+                    id: 'actions',
+                    className: 'w-0',
+                    cell: ({ row }) => (
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button variant="ghost" size="icon">
+                                    <MoreVerticalIcon />
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent>
+                                <DropdownMenuItem
+                                    onClick={() => actions.view(row)}
+                                >
+                                    Ver
+                                </DropdownMenuItem>
+                                <DropdownMenuItem
+                                    onClick={() => actions.edit(row)}
+                                >
+                                    Editar
+                                </DropdownMenuItem>
+                                <DropdownMenuItem
+                                    onClick={() => actions.destroy(row)}
+                                >
+                                    Eliminar
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
                     ),
                 },
             ]}
