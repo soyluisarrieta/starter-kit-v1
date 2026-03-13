@@ -1,21 +1,27 @@
 import { format } from 'date-fns';
-import { MoreVerticalIcon, ShieldCheckIcon, VerifiedIcon } from 'lucide-react';
+import {
+    PencilIcon,
+    ShieldCheckIcon,
+    TrashIcon,
+    VerifiedIcon,
+    EyeIcon,
+} from 'lucide-react';
 import DataTable from '@/components/commons/data-table/data-table';
+import { DataTableRowActions } from '@/components/commons/data-table/data-table-row-actions';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
 import { PATHS } from '@/constants/paths';
 import { USER_PERMISSIONS } from '@/constants/permissions';
 import { useCan } from '@/hooks/use-can';
 import { useDialog } from '@/hooks/use-dialog';
+import { cn } from '@/lib/utils';
+import { useDialogStore } from '@/stores/dialog-store';
 import type { Role, UserWithRoles } from '@/types';
-import type { BulkActionsConfig, DataTableInstance } from '@/types/data-table';
+import type {
+    BulkActionsConfig,
+    DataTableInstance,
+    RowAction,
+} from '@/types/data-table';
 
 interface UserTableProps {
     roles: Role[];
@@ -23,13 +29,37 @@ interface UserTableProps {
 }
 
 export default function UserTable({ roles, table }: UserTableProps) {
-    const { canDelete } = useCan([USER_PERMISSIONS.DELETE]);
-
+    const { canView, canUpdate, canDelete } = useCan(USER_PERMISSIONS);
     const { setTarget } = table;
 
-    const userSheetView = useDialog('user-sheet-view');
-    const userDialogForm = useDialog('user-dialog-form');
-    const deleteDialog = useDialog('delete-dialog');
+    const toggleDialog = useDialogStore((s) => s.toggleDialog);
+    const openRowDialog = (row: UserWithRoles, dialogId: string) => {
+        setTarget(row);
+        toggleDialog(dialogId, true);
+    };
+
+    const rowActions: RowAction<UserWithRoles>[] = [
+        {
+            label: 'Ver',
+            icon: EyeIcon,
+            visible: canView,
+            onClick: (row) => openRowDialog(row, 'user-sheet-view'),
+        },
+        {
+            label: 'Editar',
+            icon: PencilIcon,
+            visible: canUpdate,
+            onClick: (row) => openRowDialog(row, 'user-dialog-form'),
+        },
+        {
+            label: 'Eliminar',
+            icon: TrashIcon,
+            visible: canDelete,
+            onClick: (row) => openRowDialog(row, 'delete-dialog'),
+            variant: 'destructive',
+        },
+    ];
+
     const deleteMultipleDialog = useDialog('delete-multiple-dialog');
 
     const bulkActions: BulkActionsConfig = {
@@ -45,21 +75,6 @@ export default function UserTable({ roles, table }: UserTableProps) {
             filename: 'usuarios',
         },
     };
-
-    const actions = {
-        view: (row) => {
-            setTarget(row);
-            userSheetView.onOpenChange(true);
-        },
-        edit: (row) => {
-            setTarget(row);
-            userDialogForm.onOpenChange(true);
-        },
-        destroy: (row) => {
-            setTarget(row);
-            deleteDialog.onOpenChange(true);
-        },
-    } as const satisfies Record<string, (row: UserWithRoles) => void>;
 
     const rolesMap = new Map(roles.map((role) => [role.id, role]));
 
@@ -81,14 +96,21 @@ export default function UserTable({ roles, table }: UserTableProps) {
                     key: 'name',
                     label: 'Nombre completo',
                     cell: ({ row }) => {
-                        const onView = () => actions.view(row);
+                        const onView = canView
+                            ? () => openRowDialog(row, 'user-sheet-view')
+                            : undefined;
+
                         const avatarUrl = row.avatar
                             ? `${PATHS.avatars}/${row.avatar}`
                             : '';
+
                         return (
                             <div className="flex items-center gap-2">
                                 <Avatar
-                                    className="size-9 cursor-pointer overflow-hidden rounded-full"
+                                    className={cn(
+                                        'size-9 overflow-hidden rounded-full',
+                                        canView && 'cursor-pointer',
+                                    )}
                                     onClick={onView}
                                 >
                                     <AvatarImage
@@ -103,7 +125,11 @@ export default function UserTable({ roles, table }: UserTableProps) {
 
                                 <div className="flex flex-col">
                                     <strong
-                                        className="w-fit cursor-pointer text-base hover:underline"
+                                        className={cn(
+                                            'w-fit text-base',
+                                            canView &&
+                                                'cursor-pointer hover:underline',
+                                        )}
                                         onClick={onView}
                                     >
                                         {row.name} {row.last_name}
@@ -196,30 +222,7 @@ export default function UserTable({ roles, table }: UserTableProps) {
                     id: 'actions',
                     className: 'w-0',
                     cell: ({ row }) => (
-                        <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                                <Button variant="ghost" size="icon">
-                                    <MoreVerticalIcon />
-                                </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent>
-                                <DropdownMenuItem
-                                    onClick={() => actions.view(row)}
-                                >
-                                    Ver
-                                </DropdownMenuItem>
-                                <DropdownMenuItem
-                                    onClick={() => actions.edit(row)}
-                                >
-                                    Editar
-                                </DropdownMenuItem>
-                                <DropdownMenuItem
-                                    onClick={() => actions.destroy(row)}
-                                >
-                                    Eliminar
-                                </DropdownMenuItem>
-                            </DropdownMenuContent>
-                        </DropdownMenu>
+                        <DataTableRowActions row={row} actions={rowActions} />
                     ),
                 },
             ]}
