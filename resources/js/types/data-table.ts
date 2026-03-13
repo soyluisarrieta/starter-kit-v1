@@ -57,6 +57,14 @@ export type ColumnDef<T> =
     | (ColumnDefBase<T> & { key: keyof T & string; label: string })
     | (ColumnDefBase<T> & { id: string; label?: string; cell: CellDef<T> });
 
+export interface RowAction<TData> {
+    label: string;
+    onClick: (row: TData) => void;
+    icon?: ComponentType<{ className?: string }>;
+    visible?: boolean;
+    variant?: 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost';
+}
+
 export interface CustomBulkAction {
     label: string;
     icon?: ComponentType<{ className?: string }>;
