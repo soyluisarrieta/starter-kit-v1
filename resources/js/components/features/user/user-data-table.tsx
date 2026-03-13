@@ -23,9 +23,11 @@ import type {
     RowAction,
 } from '@/types/data-table';
 
+type UserRow = UserWithRoles;
+
 interface UserTableProps {
     roles: Role[];
-    table: DataTableInstance<UserWithRoles>;
+    table: DataTableInstance<UserRow>;
 }
 
 export default function UserTable({ roles, table }: UserTableProps) {
@@ -33,12 +35,12 @@ export default function UserTable({ roles, table }: UserTableProps) {
     const { setTarget } = table;
 
     const toggleDialog = useDialogStore((s) => s.toggleDialog);
-    const openRowDialog = (row: UserWithRoles, dialogId: string) => {
+    const openRowDialog = (row: UserRow, dialogId: string) => {
         setTarget(row);
         toggleDialog(dialogId, true);
     };
 
-    const rowActions: RowAction<UserWithRoles>[] = [
+    const rowActions: RowAction<UserRow>[] = [
         {
             label: 'Ver',
             icon: EyeIcon,
@@ -61,7 +63,6 @@ export default function UserTable({ roles, table }: UserTableProps) {
     ];
 
     const deleteMultipleDialog = useDialog('delete-multiple-dialog');
-
     const bulkActions: BulkActionsConfig = {
         delete: canDelete && (() => deleteMultipleDialog.onOpenChange(true)),
         export: {
@@ -75,8 +76,6 @@ export default function UserTable({ roles, table }: UserTableProps) {
             filename: 'usuarios',
         },
     };
-
-    const rolesMap = new Map(roles.map((role) => [role.id, role]));
 
     return (
         <DataTable
@@ -95,98 +94,19 @@ export default function UserTable({ roles, table }: UserTableProps) {
                 {
                     key: 'name',
                     label: 'Nombre completo',
-                    cell: ({ row }) => {
-                        const onView = canView
-                            ? () => openRowDialog(row, 'user-sheet-view')
-                            : undefined;
-
-                        const avatarUrl = row.avatar
-                            ? `${PATHS.avatars}/${row.avatar}`
-                            : '';
-
-                        return (
-                            <div className="flex items-center gap-2">
-                                <Avatar
-                                    className={cn(
-                                        'size-9 overflow-hidden rounded-full',
-                                        canView && 'cursor-pointer',
-                                    )}
-                                    onClick={onView}
-                                >
-                                    <AvatarImage
-                                        src={avatarUrl}
-                                        alt={row.name}
-                                    />
-                                    <AvatarFallback className="rounded-lg bg-neutral-200 text-black uppercase dark:bg-neutral-700 dark:text-white">
-                                        {row.name.charAt(0)}
-                                        {row.last_name.charAt(0)}
-                                    </AvatarFallback>
-                                </Avatar>
-
-                                <div className="flex flex-col">
-                                    <strong
-                                        className={cn(
-                                            'w-fit text-base',
-                                            canView &&
-                                                'cursor-pointer hover:underline',
-                                        )}
-                                        onClick={onView}
-                                    >
-                                        {row.name} {row.last_name}
-                                    </strong>
-                                    <small className="flex items-center gap-1 text-sm text-muted-foreground">
-                                        {row.email}
-                                        {row.email_verified_at && (
-                                            <div title="Correo electrónico verificado">
-                                                <VerifiedIcon className="size-3.5 text-primary/50" />
-                                            </div>
-                                        )}
-                                    </small>
-                                </div>
-                            </div>
-                        );
-                    },
+                    cell: ({ row }) => (
+                        <NameCell
+                            row={row}
+                            onView={() => openRowDialog(row, 'user-sheet-view')}
+                        />
+                    ),
                 },
                 {
                     key: 'roleIds',
                     label: 'Roles',
                     className: 'w-0',
                     align: 'center',
-                    cell: ({ row }) => {
-                        const userRoles = row.roleIds
-                            .map((id) => rolesMap.get(id))
-                            .filter((role): role is Role => Boolean(role));
-
-                        if (!userRoles.length) {
-                            return (
-                                <small className="text-muted-foreground">
-                                    —
-                                </small>
-                            );
-                        }
-
-                        return (
-                            <div className="flex flex-wrap gap-1">
-                                {userRoles.map(({ id, hex_color, label }) => {
-                                    return (
-                                        <Badge
-                                            key={row.id + id}
-                                            className="border-none"
-                                            variant="outline"
-                                            style={{
-                                                backgroundColor:
-                                                    hex_color + '1A',
-                                                color: hex_color,
-                                            }}
-                                        >
-                                            <ShieldCheckIcon />
-                                            {label}
-                                        </Badge>
-                                    );
-                                })}
-                            </div>
-                        );
-                    },
+                    cell: ({ row }) => <RolesCell row={row} roles={roles} />,
                 },
                 {
                     key: 'created_at',
@@ -194,13 +114,7 @@ export default function UserTable({ roles, table }: UserTableProps) {
                     className: 'w-0',
                     align: 'center',
                     cell: ({ row }) => (
-                        <div className="text-sm">
-                            {format(row.created_at, 'MMM d, yyyy')}
-                            <br />
-                            <time className="text-xs text-muted-foreground">
-                                {format(row.created_at, 'hh:mm a')}
-                            </time>
-                        </div>
+                        <DateCell row={row} field="created_at" />
                     ),
                 },
                 {
@@ -209,13 +123,7 @@ export default function UserTable({ roles, table }: UserTableProps) {
                     className: 'w-0',
                     align: 'center',
                     cell: ({ row }) => (
-                        <div className="text-sm">
-                            {format(row.updated_at, 'MMM d, yyyy')}
-                            <br />
-                            <time className="text-xs text-muted-foreground">
-                                {format(row.updated_at, 'hh:mm a')}
-                            </time>
-                        </div>
+                        <DateCell row={row} field="updated_at" />
                     ),
                 },
                 {
@@ -227,5 +135,90 @@ export default function UserTable({ roles, table }: UserTableProps) {
                 },
             ]}
         />
+    );
+}
+
+// CELLS ——————————————————————————————————————————————————————————————————————
+
+function NameCell({ row, onView }: { row: UserRow; onView: () => void }) {
+    const { canView } = useCan([USER_PERMISSIONS.VIEW]);
+    const avatarUrl = row.avatar ? `${PATHS.avatars}/${row.avatar}` : '';
+    return (
+        <div className="flex items-center gap-2">
+            <Avatar
+                className={cn(
+                    'size-9 overflow-hidden rounded-full',
+                    canView && 'cursor-pointer',
+                )}
+                onClick={canView ? onView : undefined}
+            >
+                <AvatarImage src={avatarUrl} alt={row.name} />
+                <AvatarFallback className="rounded-lg bg-neutral-200 text-black uppercase dark:bg-neutral-700 dark:text-white">
+                    {row.name.charAt(0)}
+                    {row.last_name.charAt(0)}
+                </AvatarFallback>
+            </Avatar>
+            <div className="flex flex-col">
+                <strong
+                    className={cn(
+                        'w-fit text-base',
+                        canView && 'cursor-pointer hover:underline',
+                    )}
+                    onClick={canView ? onView : undefined}
+                >
+                    {row.name} {row.last_name}
+                </strong>
+                <small className="flex items-center gap-1 text-sm text-muted-foreground">
+                    {row.email}
+                    {row.email_verified_at && (
+                        <div title="Correo electrónico verificado">
+                            <VerifiedIcon className="size-3.5 text-primary/50" />
+                        </div>
+                    )}
+                </small>
+            </div>
+        </div>
+    );
+}
+
+function RolesCell({ row, roles }: { row: UserRow; roles: Role[] }) {
+    const rolesMap = new Map(roles.map((role) => [role.id, role]));
+    const userRoles = row.roleIds
+        .map((id) => rolesMap.get(id))
+        .filter((role): role is Role => Boolean(role));
+
+    if (!userRoles.length)
+        return <small className="text-muted-foreground">—</small>;
+
+    return (
+        <div className="flex flex-wrap gap-1">
+            {userRoles.map(({ id, hex_color, label }) => (
+                <Badge
+                    key={row.id + id}
+                    className="border-none"
+                    variant="outline"
+                    style={{
+                        backgroundColor: hex_color + '1A',
+                        color: hex_color,
+                    }}
+                >
+                    <ShieldCheckIcon />
+                    {label}
+                </Badge>
+            ))}
+        </div>
+    );
+}
+
+type FieldDateCell = 'created_at' | 'updated_at';
+function DateCell({ row, field }: { row: UserRow; field: FieldDateCell }) {
+    return (
+        <div className="text-sm">
+            {format(row[field], 'MMM d, yyyy')}
+            <br />
+            <time className="text-xs text-muted-foreground">
+                {format(row[field], 'hh:mm a')}
+            </time>
+        </div>
     );
 }
