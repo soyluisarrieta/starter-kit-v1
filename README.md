@@ -56,3 +56,13 @@ bun run format
 # PHPUnit
 php artisan test
 ```
+
+## Utiles
+
+```bash
+# Git merge Feature
+git switch main
+git merge --no-ff --no-edit BRANCH_NAME
+git branch -d BRANCH_NAME
+git push origin main
+```
