@@ -66,7 +66,6 @@ export default function DataTable<TData>({
         (c) => c.hideable !== false,
     ).length;
 
-
     return (
         <DataTableProvider table={table}>
             <div className="space-y-2">
@@ -97,7 +96,8 @@ export default function DataTable<TData>({
                                         className={cn(
                                             'bg-muted px-4 font-bold text-muted-foreground',
                                             column.fit && 'w-px',
-                                            column.sticky && 'sticky right-0 z-10',
+                                            column.sticky &&
+                                                'sticky right-0 z-10',
                                             column.className,
                                         )}
                                         style={{ textAlign: column.align }}
@@ -122,7 +122,7 @@ export default function DataTable<TData>({
 
                     <TableBody>
                         {rows.map((row, index) => (
-                            <TableRow key={index} className='group'>
+                            <TableRow key={index} className="group">
                                 {selectable && (
                                     <TableCell className="w-px px-4">
                                         <DataTableRowCheckbox row={row} />
@@ -137,9 +137,10 @@ export default function DataTable<TData>({
                                         <TableCell
                                             key={colId}
                                             className={cn(
-                                                'px-4 bg-background/97 group-hover:bg-muted/50',
+                                                'bg-background/97 px-4 group-hover:bg-muted/50',
                                                 column.fit && 'w-px',
-                                                column.sticky && 'sticky right-0 group-hover:bg-background/90 before:absolute before:inset-0 before:-z-10 group-hover:before:bg-muted/50',
+                                                column.sticky &&
+                                                    'sticky right-0 group-hover:bg-background/90 before:absolute before:inset-0 before:-z-10 group-hover:before:bg-muted/50',
                                                 column.className,
                                             )}
                                             style={{ textAlign: column.align }}

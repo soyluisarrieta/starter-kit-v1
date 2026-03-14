@@ -30,21 +30,23 @@ export function DataTableRowActions<TData>({
                         <MoreVerticalIcon />
                     </Button>
                 </DropdownMenuTrigger>
-            <DropdownMenuContent align='end'>
-                {visible.map((action) => (
-                    <DropdownMenuItem
-                        key={action.label}
-                        onClick={() => action.onClick(row)}
-                        className={cn(
-                            action.variant === 'destructive' &&
-                                'text-destructive focus:text-destructive',
-                        )}
-                    >
-                        {action.icon && <action.icon className="mr-2 size-4" />}
-                        {action.label}
-                    </DropdownMenuItem>
-                ))}
-            </DropdownMenuContent>
+                <DropdownMenuContent align="end">
+                    {visible.map((action) => (
+                        <DropdownMenuItem
+                            key={action.label}
+                            onClick={() => action.onClick(row)}
+                            className={cn(
+                                action.variant === 'destructive' &&
+                                    'text-destructive focus:text-destructive',
+                            )}
+                        >
+                            {action.icon && (
+                                <action.icon className="mr-2 size-4" />
+                            )}
+                            {action.label}
+                        </DropdownMenuItem>
+                    ))}
+                </DropdownMenuContent>
             </DropdownMenu>
         </div>
     );
