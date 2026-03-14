@@ -18,6 +18,7 @@ interface DataTableSortListProps {
     columnId: string;
     field?: string;
     totalColumns: number;
+    hideable?: boolean;
     children: React.ReactNode;
 }
 
@@ -25,6 +26,7 @@ export default function DataTableSortList({
     columnId,
     field,
     totalColumns,
+    hideable = true,
     children,
 }: DataTableSortListProps) {
     const { sortBy, sortOrder, refresh, hideColumn } = useDataTableContext(
@@ -93,16 +95,18 @@ export default function DataTableSortList({
                             <ChevronDownIcon className="size-4" />
                             Descendente
                         </DropdownMenuItem>
-                        <DropdownMenuSeparator />
+                        {hideable && <DropdownMenuSeparator />}
                     </>
                 )}
-                <DropdownMenuItem
-                    disabled={isLastVisible}
-                    onClick={() => hideColumn(columnId)}
-                >
-                    <EyeOffIcon className="size-4" />
-                    Ocultar columna
-                </DropdownMenuItem>
+                {hideable && (
+                    <DropdownMenuItem
+                        disabled={isLastVisible}
+                        onClick={() => hideColumn(columnId)}
+                    >
+                        <EyeOffIcon className="size-4" />
+                        Ocultar columna
+                    </DropdownMenuItem>
+                )}
             </DropdownMenuContent>
         </DropdownMenu>
     );

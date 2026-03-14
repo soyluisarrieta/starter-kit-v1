@@ -62,6 +62,10 @@ export default function DataTable<TData>({
         return !table.hiddenColumns.has(colId);
     });
 
+    const hideableVisibleCount = visibleColumns.filter(
+        (c) => c.hideable !== false,
+    ).length;
+
     return (
         <DataTableProvider table={table}>
             <div className="space-y-2">
@@ -102,7 +106,8 @@ export default function DataTable<TData>({
                                                     ? column.key
                                                     : undefined
                                             }
-                                            totalColumns={visibleColumns.length}
+                                            totalColumns={hideableVisibleCount}
+                                            hideable={column.hideable !== false}
                                         >
                                             {column.header?.() ?? column.label}
                                         </DataTableSortList>

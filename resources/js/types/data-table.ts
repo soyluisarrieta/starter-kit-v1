@@ -51,6 +51,7 @@ interface ColumnDefBase<TData> {
     cell?: CellDef<TData>;
     className?: string;
     align?: 'left' | 'center' | 'right';
+    hideable?: boolean;
 }
 
 export type ColumnDef<T> =

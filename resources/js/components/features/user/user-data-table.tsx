@@ -129,6 +129,7 @@ export default function UserTable({ roles, table }: UserTableProps) {
                 {
                     id: 'actions',
                     className: 'w-0',
+                    hideable: false,
                     cell: ({ row }) => (
                         <DataTableRowActions row={row} actions={rowActions} />
                     ),

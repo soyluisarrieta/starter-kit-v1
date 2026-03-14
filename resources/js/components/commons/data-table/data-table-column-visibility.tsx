@@ -21,7 +21,8 @@ export default function DataTableColumnVisibility<TData>({
         toggleColumn: s.toggleColumn,
     }));
 
-    const visibleCount = columns.length - hiddenColumns.size;
+    const hideableColumns = columns.filter((c) => c.hideable !== false);
+    const visibleCount = hideableColumns.length - hiddenColumns.size;
 
     return (
         <DropdownMenu>
@@ -32,7 +33,7 @@ export default function DataTableColumnVisibility<TData>({
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-                {columns.map((column) => {
+                {hideableColumns.map((column) => {
                     const colId = 'key' in column ? column.key : column.id;
                     const label = column.label ?? colId;
                     const isVisible = !hiddenColumns.has(colId);
