@@ -9,7 +9,8 @@
       "Bash(bun run:*)",
       "Bash(bunx tsc:*)",
       "Bash(git add:*)",
-      "Bash(del:*)"
+      "Bash(del:*)",
+      "Bash(git commit:*)"
     ]
   }
 }
