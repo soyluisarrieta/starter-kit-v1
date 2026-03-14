@@ -16,6 +16,7 @@ export interface DataTableStore<TData> {
     query: DataTableQuery;
     target: TData | null;
     selected: Map<RowId, TData>;
+    hiddenColumns: Set<string>;
 
     setSearch: (value: string) => void;
     setPerPage: (value: string) => void;
@@ -24,6 +25,8 @@ export interface DataTableStore<TData> {
     toggleSelected: (row: TData) => void;
     toggleAllOnPage: (rows: TData[], checked: boolean) => void;
     clearSelected: () => void;
+    hideColumn: (columnId: string) => void;
+    toggleColumn: (columnId: string) => void;
     refresh: (params?: Partial<DataTableQuery>) => void;
 }
 
@@ -35,6 +38,7 @@ export function createDataTableStore<TData>(
         route,
         target: null,
         selected: new Map(),
+        hiddenColumns: new Set(),
         query: {
             ...DEFAULT_QUERY_PARAMS,
             ...queryParams,
@@ -83,6 +87,24 @@ export function createDataTableStore<TData>(
             }),
 
         clearSelected: () => set(() => ({ selected: new Map() })),
+
+        hideColumn: (columnId) =>
+            set((state) => {
+                const next = new Set(state.hiddenColumns);
+                next.add(columnId);
+                return { hiddenColumns: next };
+            }),
+
+        toggleColumn: (columnId) =>
+            set((state) => {
+                const next = new Set(state.hiddenColumns);
+                if (next.has(columnId)) {
+                    next.delete(columnId);
+                } else {
+                    next.add(columnId);
+                }
+                return { hiddenColumns: next };
+            }),
 
         refresh: (params) => {
             const { query, route } = get();

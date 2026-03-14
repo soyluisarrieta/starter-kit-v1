@@ -3,6 +3,7 @@ import {
     DataTableHeaderCheckbox,
     DataTableRowCheckbox,
 } from '@/components/commons/data-table/data-table-checkbox';
+import DataTableColumnVisibility from '@/components/commons/data-table/data-table-column-visibility';
 import { DataTableProvider } from '@/components/commons/data-table/data-table-context';
 import DataTableInputSearch from '@/components/commons/data-table/data-table-input-search';
 import DataTablePagination from '@/components/commons/data-table/data-table-pagination';
@@ -56,10 +57,18 @@ export default function DataTable<TData>({
     const selectable = Boolean(bulkActions);
     const pageRows = selectable ? rows : [];
 
+    const visibleColumns = columns.filter((column) => {
+        const colId = 'key' in column ? column.key : column.id;
+        return !table.hiddenColumns.has(colId);
+    });
+
     return (
         <DataTableProvider table={table}>
             <div className="space-y-2">
-                <DataTableInputSearch {...search} />
+                <div className="flex items-center justify-between">
+                    <DataTableInputSearch {...search} />
+                    <DataTableColumnVisibility columns={columns} />
+                </div>
 
                 <Table>
                     <TableHeader>
@@ -74,7 +83,7 @@ export default function DataTable<TData>({
                                     />
                                 </TableHead>
                             )}
-                            {columns.map((column) => {
+                            {visibleColumns.map((column) => {
                                 const colId =
                                     'key' in column ? column.key : column.id;
                                 return (
@@ -87,6 +96,7 @@ export default function DataTable<TData>({
                                         style={{ textAlign: column.align }}
                                     >
                                         <DataTableSortList
+                                            columnId={colId}
                                             field={
                                                 'key' in column
                                                     ? column.key
@@ -109,7 +119,7 @@ export default function DataTable<TData>({
                                         <DataTableRowCheckbox row={row} />
                                     </TableCell>
                                 )}
-                                {columns.map((column) => {
+                                {visibleColumns.map((column) => {
                                     const colId =
                                         'key' in column
                                             ? column.key
