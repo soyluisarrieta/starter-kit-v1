@@ -53,7 +53,7 @@ export function AppSidebar() {
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton size="lg" asChild>
-                            <Link href={dashboard()} prefetch>
+                            <Link href={dashboard()} prefetch cacheFor="1m">
                                 <AppLogo />
                             </Link>
                         </SidebarMenuButton>

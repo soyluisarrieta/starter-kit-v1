@@ -38,6 +38,7 @@ export function UserMenuContent({ user }: Props) {
                         className="block w-full cursor-pointer"
                         href={edit()}
                         prefetch
+                        cacheFor="1m"
                         onClick={cleanup}
                     >
                         <Settings className="mr-2" />
