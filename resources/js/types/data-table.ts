@@ -53,6 +53,7 @@ interface ColumnDefBase<TData> {
     align?: 'left' | 'center' | 'right';
     hideable?: boolean;
     fit?: boolean;
+    sticky?: boolean;
 }
 
 export type ColumnDef<T> =

@@ -30,7 +30,7 @@ export function DataTableRowActions<TData>({
                         <MoreVerticalIcon />
                     </Button>
                 </DropdownMenuTrigger>
-            <DropdownMenuContent>
+            <DropdownMenuContent align='end'>
                 {visible.map((action) => (
                     <DropdownMenuItem
                         key={action.label}

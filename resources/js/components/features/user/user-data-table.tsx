@@ -129,8 +129,10 @@ export default function UserTable({ roles, table }: UserTableProps) {
                 },
                 {
                     id: 'actions',
+                    className: "px-2",
                     fit: true,
                     hideable: false,
+                    sticky: true,
                     cell: ({ row }) => (
                         <DataTableRowActions row={row} actions={rowActions} />
                     ),

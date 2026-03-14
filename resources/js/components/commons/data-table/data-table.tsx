@@ -97,6 +97,7 @@ export default function DataTable<TData>({
                                         className={cn(
                                             'bg-muted px-4 font-bold text-muted-foreground',
                                             column.fit && 'w-px',
+                                            column.sticky && 'sticky right-0 z-10',
                                             column.className,
                                         )}
                                         style={{ textAlign: column.align }}
@@ -138,6 +139,7 @@ export default function DataTable<TData>({
                                             className={cn(
                                                 'px-4',
                                                 column.fit && 'w-px',
+                                                column.sticky && 'sticky right-0 bg-background/97',
                                                 column.className,
                                             )}
                                             style={{ textAlign: column.align }}
