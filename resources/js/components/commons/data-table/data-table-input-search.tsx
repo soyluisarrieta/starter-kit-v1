@@ -1,9 +1,9 @@
-import type { DataTableSearchOptions } from '@/components/commons/data-table/data-table';
-import { useDataTableContext } from '@/components/commons/data-table/data-table-context';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useDebouncedFn } from '@/hooks/use-debounce';
 import { cn } from '@/lib/utils';
+import { useDataTableContext } from './data-table-context';
+import type { DataTableSearchOptions } from './types';
 
 export default function DataTableInputSearch({
     className,

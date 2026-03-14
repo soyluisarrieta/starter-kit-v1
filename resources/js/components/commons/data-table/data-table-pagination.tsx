@@ -1,5 +1,4 @@
 import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react';
-import { useDataTableContext } from '@/components/commons/data-table/data-table-context';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import {
@@ -9,6 +8,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
+import { useDataTableContext } from './data-table-context';
 
 interface DataTablePaginationProps {
     currentPage: number;

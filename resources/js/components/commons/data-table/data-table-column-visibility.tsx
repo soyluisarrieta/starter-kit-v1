@@ -1,5 +1,4 @@
 import { ColumnsIcon } from 'lucide-react';
-import { useDataTableContext } from '@/components/commons/data-table/data-table-context';
 import { Button } from '@/components/ui/button';
 import {
     DropdownMenu,
@@ -7,7 +6,9 @@ import {
     DropdownMenuContent,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import type { ColumnDef } from '@/types/data-table';
+import { useDataTableContext } from './data-table-context';
+import { getColumnId } from './lib/column-helpers';
+import type { ColumnDef } from './types';
 
 interface DataTableColumnVisibilityProps<TData> {
     columns: ColumnDef<TData>[];
@@ -34,7 +35,7 @@ export default function DataTableColumnVisibility<TData>({
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
                 {hideableColumns.map((column) => {
-                    const colId = 'key' in column ? column.key : column.id;
+                    const colId = getColumnId(column);
                     const label = column.label ?? colId;
                     const isVisible = !hiddenColumns.has(colId);
                     const isLastVisible = isVisible && visibleCount === 1;

@@ -7,7 +7,7 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
-import type { DataRow, RowAction } from '@/types/data-table';
+import type { DataRow, RowAction } from './types';
 
 interface DataTableRowActionsProps<TData> {
     row: DataRow<TData>;
@@ -37,7 +37,7 @@ export function DataTableRowActions<TData>({
                             onClick={() => action.onClick(row)}
                             className={cn(
                                 action.variant === 'destructive' &&
-                                    'text-destructive focus:text-destructive',
+                                'text-destructive focus:text-destructive',
                             )}
                         >
                             {action.icon && (

@@ -4,7 +4,6 @@ import {
     ChevronsUpDownIcon,
     EyeOffIcon,
 } from 'lucide-react';
-import { useDataTableContext } from '@/components/commons/data-table/data-table-context';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -13,6 +12,7 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
+import { useDataTableContext } from './data-table-context';
 
 interface DataTableSortListProps {
     columnId: string;

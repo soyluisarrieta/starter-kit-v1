@@ -1,32 +1,17 @@
-import { DataTableBulkActions } from '@/components/commons/data-table/data-table-bulk-actions';
-import {
-    DataTableHeaderCheckbox,
-    DataTableRowCheckbox,
-} from '@/components/commons/data-table/data-table-checkbox';
-import DataTableColumnVisibility from '@/components/commons/data-table/data-table-column-visibility';
-import { DataTableProvider } from '@/components/commons/data-table/data-table-context';
-import DataTableInputSearch from '@/components/commons/data-table/data-table-input-search';
-import DataTablePagination from '@/components/commons/data-table/data-table-pagination';
-import DataTableSortList from '@/components/commons/data-table/data-table-sort-list';
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from '@/components/ui/table';
-import { cn } from '@/lib/utils';
+import { Table } from '@/components/ui/table';
+import DataTableBody from './data-table-body';
+import { DataTableBulkActions } from './data-table-bulk-actions';
+import { DataTableProvider } from './data-table-context';
+import DataTableHead from './data-table-head';
+import DataTablePagination from './data-table-pagination';
+import DataTableToolbar from './data-table-toolbar';
+import { getColumnId } from './lib/column-helpers';
 import type {
     BulkActionsConfig,
     ColumnDef,
     DataTableInstance,
-} from '@/types/data-table';
-
-export interface DataTableSearchOptions {
-    placeholder?: string;
-    className?: string;
-}
+    DataTableSearchOptions,
+} from './types';
 
 interface DataTableOptions {
     search?: DataTableSearchOptions;
@@ -57,10 +42,9 @@ export default function DataTable<TData>({
     const selectable = Boolean(bulkActions);
     const pageRows = selectable ? rows : [];
 
-    const visibleColumns = columns.filter((column) => {
-        const colId = 'key' in column ? column.key : column.id;
-        return !table.hiddenColumns.has(colId);
-    });
+    const visibleColumns = columns.filter(
+        (column) => !table.hiddenColumns.has(getColumnId(column)),
+    );
 
     const hideableVisibleCount = visibleColumns.filter(
         (c) => c.hideable !== false,
@@ -69,92 +53,20 @@ export default function DataTable<TData>({
     return (
         <DataTableProvider table={table}>
             <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                    <DataTableInputSearch {...search} />
-                    <DataTableColumnVisibility columns={columns} />
-                </div>
+                <DataTableToolbar columns={columns} search={search} />
 
                 <Table>
-                    <TableHeader>
-                        <TableRow
-                            className="border-0! [&>th]:first:rounded-l-lg [&>th]:last:rounded-r-lg"
-                            style={{ fontSize: '0.8rem' }}
-                        >
-                            {selectable && (
-                                <TableHead className="w-px bg-muted px-4">
-                                    <DataTableHeaderCheckbox
-                                        pageRows={pageRows}
-                                    />
-                                </TableHead>
-                            )}
-                            {visibleColumns.map((column) => {
-                                const colId =
-                                    'key' in column ? column.key : column.id;
-                                return (
-                                    <TableHead
-                                        key={colId}
-                                        className={cn(
-                                            'bg-muted px-4 font-bold text-muted-foreground',
-                                            column.fit && 'w-px',
-                                            column.sticky &&
-                                            'sticky right-0 z-10',
-                                            column.className,
-                                        )}
-                                        style={{ textAlign: column.align }}
-                                    >
-                                        <DataTableSortList
-                                            columnId={colId}
-                                            field={
-                                                'key' in column
-                                                    ? column.key
-                                                    : undefined
-                                            }
-                                            totalColumns={hideableVisibleCount}
-                                            hideable={column.hideable !== false}
-                                        >
-                                            {column.header?.() ?? column.label}
-                                        </DataTableSortList>
-                                    </TableHead>
-                                );
-                            })}
-                        </TableRow>
-                    </TableHeader>
-
-                    <TableBody>
-                        {rows.map((row, index) => (
-                            <TableRow key={index} className="group">
-                                {selectable && (
-                                    <TableCell className="w-px px-4 bg-background/97 group-hover:bg-muted/50">
-                                        <DataTableRowCheckbox row={row} />
-                                    </TableCell>
-                                )}
-                                {visibleColumns.map((column) => {
-                                    const colId =
-                                        'key' in column
-                                            ? column.key
-                                            : column.id;
-                                    return (
-                                        <TableCell
-                                            key={colId}
-                                            className={cn(
-                                                'bg-background/97 px-4 group-hover:bg-muted/50',
-                                                column.fit && 'w-px',
-                                                column.sticky &&
-                                                'sticky right-0 group-hover:bg-background/90 before:absolute before:inset-0 before:-z-10 group-hover:before:bg-muted/50',
-                                                column.className,
-                                            )}
-                                            style={{ textAlign: column.align }}
-                                        >
-                                            {'key' in column
-                                                ? (column.cell?.({ row }) ??
-                                                    String(row[column.key]))
-                                                : column.cell({ row })}
-                                        </TableCell>
-                                    );
-                                })}
-                            </TableRow>
-                        ))}
-                    </TableBody>
+                    <DataTableHead
+                        visibleColumns={visibleColumns}
+                        selectable={selectable}
+                        pageRows={pageRows}
+                        hideableVisibleCount={hideableVisibleCount}
+                    />
+                    <DataTableBody
+                        rows={rows}
+                        visibleColumns={visibleColumns}
+                        selectable={selectable}
+                    />
                 </Table>
 
                 <DataTablePagination

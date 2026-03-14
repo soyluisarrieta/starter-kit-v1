@@ -2,12 +2,8 @@ import { createContext, useContext } from 'react';
 import type { ReactNode } from 'react';
 import { useStore } from 'zustand';
 import { useShallow } from 'zustand/react/shallow';
-import type { DataTableStore } from '@/stores/data-table-store';
-import type {
-    BaseRow,
-    DataTableInstance,
-    DataTableStoreApi,
-} from '@/types/data-table';
+import type { DataTableStore } from './store';
+import type { BaseRow, DataTableInstance, DataTableStoreApi } from './types';
 
 type ContextStore = DataTableStore<BaseRow>;
 

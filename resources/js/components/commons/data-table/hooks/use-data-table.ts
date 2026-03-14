@@ -1,18 +1,16 @@
 import { useEffect, useState } from 'react';
 import { useStore } from 'zustand';
-import { useDataTableQuery } from '@/hooks/use-data-table-query';
-import { cleanQueryParams } from '@/lib/data-table/clean-query-params';
 import { queryClient } from '@/lib/query-client';
+import type { RouteDefinition } from '@/wayfinder';
+import { cleanQueryParams } from '../lib/clean-query-params';
 import {
     createDataTableStore,
     DEFAULT_QUERY_PARAMS,
-} from '@/stores/data-table-store';
-import type {
-    DataTableInstance,
-    DataTableQuery,
-    Paginated,
-} from '@/types/data-table';
-import type { RouteDefinition } from '@/wayfinder';
+} from '../store/create-store';
+import type { DataTableInstance } from '../types/instance';
+import type { Paginated } from '../types/pagination';
+import type { DataTableQuery } from '../types/query';
+import { useDataTableQuery } from './use-data-table-query';
 
 interface UseDataTableOptions<TData> {
     route: RouteDefinition<'get'>;

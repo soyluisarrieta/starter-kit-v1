@@ -1,7 +1,8 @@
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
-import { cleanQueryParams } from '@/lib/data-table/clean-query-params';
-import { dataTableFetcher } from '@/lib/data-table/data-table-fetcher';
-import type { DataTableQuery, Paginated } from '@/types/data-table';
+import { cleanQueryParams } from '../lib/clean-query-params';
+import { dataTableFetcher } from '../lib/fetcher';
+import type { Paginated } from '../types/pagination';
+import type { DataTableQuery } from '../types/query';
 
 interface UseDataTableQueryOptions<TData> {
     url: string;

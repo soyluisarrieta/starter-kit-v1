@@ -1,4 +1,4 @@
-import type { DataTableQuery } from '@/types/data-table';
+import type { DataTableQuery } from '../types/query';
 
 export function cleanQueryParams(
     params: DataTableQuery,

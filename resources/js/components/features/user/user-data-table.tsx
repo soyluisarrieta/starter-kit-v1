@@ -6,8 +6,15 @@ import {
     VerifiedIcon,
     EyeIcon,
 } from 'lucide-react';
-import DataTable from '@/components/commons/data-table/data-table';
-import { DataTableRowActions } from '@/components/commons/data-table/data-table-row-actions';
+import {
+    DataTable,
+    DataTableRowActions,
+} from '@/components/commons/data-table';
+import type {
+    BulkActionsConfig,
+    DataTableInstance,
+    RowAction,
+} from '@/components/commons/data-table';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { PATHS } from '@/constants/paths';
@@ -17,11 +24,6 @@ import { useDialog } from '@/hooks/use-dialog';
 import { cn } from '@/lib/utils';
 import { useDialogStore } from '@/stores/dialog-store';
 import type { Role, UserWithRoles } from '@/types';
-import type {
-    BulkActionsConfig,
-    DataTableInstance,
-    RowAction,
-} from '@/types/data-table';
 
 type UserRow = UserWithRoles;
 
@@ -65,16 +67,6 @@ export default function UserTable({ roles, table }: UserTableProps) {
     const deleteMultipleDialog = useDialog('delete-multiple-dialog');
     const bulkActions: BulkActionsConfig = {
         delete: canDelete && (() => deleteMultipleDialog.onOpenChange(true)),
-        export: {
-            columns: [
-                { id: 'id', header: 'ID' },
-                { id: 'name', header: 'Nombre' },
-                { id: 'last_name', header: 'Apellido' },
-                { id: 'email', header: 'Email' },
-                { id: 'created_at', header: 'Registro' },
-            ],
-            filename: 'usuarios',
-        },
     };
 
     return (

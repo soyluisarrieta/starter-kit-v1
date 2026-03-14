@@ -2,6 +2,10 @@ import type { PageProps } from '@inertiajs/core';
 import { Head } from '@inertiajs/react';
 import { PlusIcon } from 'lucide-react';
 import { ConfirmDialog } from '@/components/commons/confirm-dialog';
+import {
+    useDataTable,
+} from '@/components/commons/data-table';
+import type { Paginated, DataTableQuery } from '@/components/commons/data-table';
 import UserTable from '@/components/features/user/user-data-table';
 import UserForm from '@/components/features/user/user-form';
 import UserViewSheet from '@/components/features/user/user-view-sheet';
@@ -15,13 +19,11 @@ import {
 } from '@/components/ui/dialog';
 import { USER_PERMISSIONS } from '@/constants/permissions';
 import { useCan } from '@/hooks/use-can';
-import { useDataTable } from '@/hooks/use-data-table';
 import { useDialog } from '@/hooks/use-dialog';
 import AppLayout from '@/layouts/app-layout';
 import { users as usersRoute } from '@/routes';
 import { destroy, destroyMultiple } from '@/routes/users';
 import type { BreadcrumbItem, Role, UserWithRoles } from '@/types';
-import type { Paginated, DataTableQuery } from '@/types/data-table';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {

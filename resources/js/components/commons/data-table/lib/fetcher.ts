@@ -1,5 +1,5 @@
 import axios from 'axios';
-import type { Paginated } from '@/types/data-table';
+import type { Paginated } from '../types/pagination';
 
 export async function dataTableFetcher<TData>(
     url: string,

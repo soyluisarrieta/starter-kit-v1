@@ -1,6 +1,6 @@
-import { useDataTableContext } from '@/components/commons/data-table/data-table-context';
 import { Checkbox } from '@/components/ui/checkbox';
-import type { BaseRow } from '@/types/data-table';
+import { useDataTableContext } from './data-table-context';
+import type { BaseRow } from './types';
 
 interface DataTableHeaderCheckboxProps {
     pageRows: BaseRow[];

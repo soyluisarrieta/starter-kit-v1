@@ -1,28 +1,14 @@
 import {
-    DownloadIcon,
-    FileIcon,
-    FileJsonIcon,
-    FileSpreadsheetIcon,
-    FileTextIcon,
     Trash2Icon,
     XIcon,
 } from 'lucide-react';
-import { useDataTableContext } from '@/components/commons/data-table/data-table-context';
 import { Button } from '@/components/ui/button';
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { exportData } from '@/lib/data-table/data-table-export';
-import type { BulkActionsConfig } from '@/types/data-table';
+import { useDataTableContext } from './data-table-context';
+import type { BulkActionsConfig } from './types';
 
 interface DataTableBulkActionsProps {
     config: BulkActionsConfig;
 }
-
-type ExportFormat = 'PDF' | 'CSV' | 'XLS' | 'JSON';
 
 export function DataTableBulkActions({ config }: DataTableBulkActionsProps) {
     const { selected, clearSelected } = useDataTableContext((s) => ({
@@ -34,14 +20,6 @@ export function DataTableBulkActions({ config }: DataTableBulkActionsProps) {
     if (count === 0) return null;
 
     const selectedIds = Array.from(selected.keys());
-
-    const handleExport = (format: ExportFormat) => {
-        if (!config.export) return;
-        const { columns, filename } = config.export;
-        const selectedData = Array.from(selected.values());
-        exportData(format, selectedData, { columns, filename });
-        clearSelected();
-    };
 
     const handleDelete = () => {
         if (!config.delete) return;
@@ -65,43 +43,6 @@ export function DataTableBulkActions({ config }: DataTableBulkActionsProps) {
                 </Button>
 
                 <div className="mx-2 h-4 w-px bg-border" />
-
-                {config.export !== false && config.export && (
-                    <DropdownMenu modal={false}>
-                        <DropdownMenuTrigger asChild>
-                            <Button variant="secondary" size="sm">
-                                <DownloadIcon className="size-4" />
-                                Exportar
-                            </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="center" side="top">
-                            <DropdownMenuItem
-                                onClick={() => handleExport('CSV')}
-                            >
-                                <FileTextIcon className="size-4" />
-                                CSV
-                            </DropdownMenuItem>
-                            <DropdownMenuItem
-                                onClick={() => handleExport('XLS')}
-                            >
-                                <FileSpreadsheetIcon className="size-4" />
-                                Excel
-                            </DropdownMenuItem>
-                            <DropdownMenuItem
-                                onClick={() => handleExport('PDF')}
-                            >
-                                <FileIcon className="size-4" />
-                                PDF
-                            </DropdownMenuItem>
-                            <DropdownMenuItem
-                                onClick={() => handleExport('JSON')}
-                            >
-                                <FileJsonIcon className="size-4" />
-                                JSON
-                            </DropdownMenuItem>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
-                )}
 
                 {config.delete !== false && config.delete && (
                     <Button
