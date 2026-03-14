@@ -8,7 +8,8 @@
       "Bash(cd \"D:/DEV/laravel-starter-kit\" && bunx tsc --noEmit 2>&1)",
       "Bash(bun run:*)",
       "Bash(bunx tsc:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(del:*)"
     ]
   }
 }

@@ -1,4 +1,6 @@
+import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react';
 import { useDataTableContext } from '@/components/commons/data-table/data-table-context';
+import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import {
     Select,
@@ -7,20 +9,15 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
-import { cn } from '@/lib/utils';
-import type { PaginationLink } from '@/types/data-table';
-
-function getPageFromUrl(url: string): number {
-    const match = url.match(/[?&]page=(\d+)/);
-    return match ? parseInt(match[1], 10) : 1;
-}
 
 interface DataTablePaginationProps {
-    links: PaginationLink[];
+    currentPage: number;
+    lastPage: number;
 }
 
 export default function DataTablePagination({
-    links,
+    currentPage,
+    lastPage,
 }: DataTablePaginationProps) {
     const { perPage, setPerPage, refresh } = useDataTableContext((s) => ({
         perPage: s.query.perPage,
@@ -33,14 +30,9 @@ export default function DataTablePagination({
         refresh({ perPage: value });
     };
 
-    const onPageChange = (link: PaginationLink) => {
-        if (!link.url) return;
-        refresh({ page: getPageFromUrl(link.url) });
-    };
-
     return (
-        <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
+        <div className="flex items-center justify-center sm:justify-between border-t-2 pt-3 -mt-2">
+            <div className="hidden sm:flex items-center gap-2">
                 <Label>Por Página</Label>
                 <Select value={perPage} onValueChange={onPerPageChange}>
                     <SelectTrigger>
@@ -55,22 +47,45 @@ export default function DataTablePagination({
                 </Select>
             </div>
 
-            <div className="flex items-center justify-center gap-0.5">
-                {links.map((link, index) => (
-                    <button
-                        key={index}
-                        disabled={!link.url || link.active}
-                        onClick={() => onPageChange(link)}
-                        dangerouslySetInnerHTML={{ __html: link.label }}
-                        className={cn(
-                            'rounded border px-3 py-1 text-sm',
-                            link.active
-                                ? 'bg-foreground text-background'
-                                : 'bg-background text-foreground',
-                            !link.url && 'pointer-events-none opacity-50',
-                        )}
-                    />
-                ))}
+            <div className="flex flex-col-reverse sm:flex-row items-center gap-3 sm:gap-6">
+                <span className="text-sm">
+                    Página {currentPage} de {lastPage}
+                </span>
+
+                <div className="flex items-center gap-1 [&>button]:px-5 [&>button]:sm:px-4">
+                    <Button
+                        variant="outline"
+                        size="icon"
+                        disabled={currentPage <= 1}
+                        onClick={() => refresh({ page: 1 })}
+                    >
+                        <ChevronsLeft className="size-4" />
+                    </Button>
+                    <Button
+                        variant="outline"
+                        size="icon"
+                        disabled={currentPage <= 1}
+                        onClick={() => refresh({ page: currentPage - 1 })}
+                    >
+                        <ChevronLeft className="size-4" />
+                    </Button>
+                    <Button
+                        variant="outline"
+                        size="icon"
+                        disabled={currentPage >= lastPage}
+                        onClick={() => refresh({ page: currentPage + 1 })}
+                    >
+                        <ChevronRight className="size-4" />
+                    </Button>
+                    <Button
+                        variant="outline"
+                        size="icon"
+                        disabled={currentPage >= lastPage}
+                        onClick={() => refresh({ page: lastPage })}
+                    >
+                        <ChevronsRight className="size-4" />
+                    </Button>
+                </div>
             </div>
         </div>
     );

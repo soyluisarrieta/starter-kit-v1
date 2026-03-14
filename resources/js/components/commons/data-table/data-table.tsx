@@ -52,7 +52,7 @@ export default function DataTable<TData>({
     bulkActions,
 }: DataTableProps<TData>) {
     const { search } = { ...DEFAULT_OPTIONS, ...options };
-    const { data: rows, links } = table.data;
+    const { data: rows, current_page, last_page } = table.data;
 
     const selectable = Boolean(bulkActions);
     const pageRows = selectable ? rows : [];
@@ -97,7 +97,7 @@ export default function DataTable<TData>({
                                             'bg-muted px-4 font-bold text-muted-foreground',
                                             column.fit && 'w-px',
                                             column.sticky &&
-                                                'sticky right-0 z-10',
+                                            'sticky right-0 z-10',
                                             column.className,
                                         )}
                                         style={{ textAlign: column.align }}
@@ -124,7 +124,7 @@ export default function DataTable<TData>({
                         {rows.map((row, index) => (
                             <TableRow key={index} className="group">
                                 {selectable && (
-                                    <TableCell className="w-px px-4">
+                                    <TableCell className="w-px px-4 bg-background/97 group-hover:bg-muted/50">
                                         <DataTableRowCheckbox row={row} />
                                     </TableCell>
                                 )}
@@ -140,14 +140,14 @@ export default function DataTable<TData>({
                                                 'bg-background/97 px-4 group-hover:bg-muted/50',
                                                 column.fit && 'w-px',
                                                 column.sticky &&
-                                                    'sticky right-0 group-hover:bg-background/90 before:absolute before:inset-0 before:-z-10 group-hover:before:bg-muted/50',
+                                                'sticky right-0 group-hover:bg-background/90 before:absolute before:inset-0 before:-z-10 group-hover:before:bg-muted/50',
                                                 column.className,
                                             )}
                                             style={{ textAlign: column.align }}
                                         >
                                             {'key' in column
                                                 ? (column.cell?.({ row }) ??
-                                                  String(row[column.key]))
+                                                    String(row[column.key]))
                                                 : column.cell({ row })}
                                         </TableCell>
                                     );
@@ -157,7 +157,10 @@ export default function DataTable<TData>({
                     </TableBody>
                 </Table>
 
-                <DataTablePagination links={links} />
+                <DataTablePagination
+                    currentPage={current_page}
+                    lastPage={last_page}
+                />
 
                 {bulkActions && <DataTableBulkActions config={bulkActions} />}
             </div>
