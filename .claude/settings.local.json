@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx tsc:*)",
+      "Bash(./node_modules/.bin/tsc:*)",
+      "Bash(cd \"D:/DEV/laravel-starter-kit\" && bunx tsc --noEmit 2>&1 | head -30)",
+      "Bash(cd \"D:/DEV/laravel-starter-kit\" && bunx tsc --noEmit 2>&1 | head -20)",
+      "Bash(cd \"D:/DEV/laravel-starter-kit\" && bunx tsc --noEmit 2>&1)",
+      "Bash(bun run:*)",
+      "Bash(bunx tsc:*)",
+      "Bash(git add:*)",
+      "Bash(del:*)",
+      "Bash(git commit:*)"
+    ]
+  }
+}

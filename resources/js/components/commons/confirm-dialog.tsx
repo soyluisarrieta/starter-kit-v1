@@ -17,6 +17,7 @@ import InputError from '@/components/ui/input-error';
 interface ConfirmDialogProps<TData> {
     open?: boolean;
     onOpenChange?: (open: boolean) => void;
+    onSuccess?: () => void;
     title: string;
     description?: string;
     passwordRequired?: boolean;
@@ -29,6 +30,7 @@ interface ConfirmDialogProps<TData> {
 export function ConfirmDialog<TData>({
     open,
     onOpenChange,
+    onSuccess: onSuccessCallback,
     title,
     description,
     passwordRequired,
@@ -69,6 +71,7 @@ export function ConfirmDialog<TData>({
             onSuccess: () => {
                 onOpenChange?.(false);
                 reset('password');
+                onSuccessCallback?.();
             },
         });
     };

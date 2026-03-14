@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -38,5 +39,32 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * Scope a query to search for users.
+     *
+     * @param  mixed  $value
+     * @return void
+     */
+    public function scopeSearch(Builder $query, ?string $value): Builder
+    {
+        $columns = [
+            'numeric' => ['id'],
+            'string' => ['name', 'last_name', 'email'],
+        ];
+
+        return $query->when($value, function (Builder $query, string $value) use ($columns) {
+            $query->where(function (Builder $query) use ($value, $columns) {
+
+                foreach ($columns['string'] as $column) {
+                    $query->orWhere($column, 'like', "%{$value}%");
+                }
+
+                foreach ($columns['numeric'] as $column) {
+                    $query->orWhere($column, $value);
+                }
+            });
+        });
     }
 }

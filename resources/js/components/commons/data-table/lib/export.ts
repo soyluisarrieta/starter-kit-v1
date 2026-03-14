@@ -8,10 +8,10 @@ interface ExportConfig {
 function formatDataForExport<TData extends object>(
     data: TData[],
     columns: ExportConfig['columns'],
-): Array<Record<string, unknown>> {
+): Array<Record<string, TData>> {
     return data.map((row) =>
-        columns.reduce<Record<string, unknown>>((acc, col) => {
-            acc[col.header] = (row as Record<string, unknown>)[col.id];
+        columns.reduce<Record<string, TData>>((acc, col) => {
+            acc[col.header] = (row as Record<string, TData>)[col.id];
             return acc;
         }, {}),
     );
