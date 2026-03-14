@@ -102,6 +102,7 @@ export default function DataTable<TData>({
                                                     ? column.key
                                                     : undefined
                                             }
+                                            totalColumns={visibleColumns.length}
                                         >
                                             {column.header?.() ?? column.label}
                                         </DataTableSortList>

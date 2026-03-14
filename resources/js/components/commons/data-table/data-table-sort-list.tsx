@@ -17,12 +17,14 @@ import { cn } from '@/lib/utils';
 interface DataTableSortListProps {
     columnId: string;
     field?: string;
+    totalColumns: number;
     children: React.ReactNode;
 }
 
 export default function DataTableSortList({
     columnId,
     field,
+    totalColumns,
     children,
 }: DataTableSortListProps) {
     const { sortBy, sortOrder, refresh, hideColumn } = useDataTableContext(
@@ -33,6 +35,8 @@ export default function DataTableSortList({
             hideColumn: s.hideColumn,
         }),
     );
+
+    const isLastVisible = totalColumns === 1;
 
     const sortable = Boolean(field);
     const isActive = sortable && sortBy === field;
@@ -92,7 +96,10 @@ export default function DataTableSortList({
                         <DropdownMenuSeparator />
                     </>
                 )}
-                <DropdownMenuItem onClick={() => hideColumn(columnId)}>
+                <DropdownMenuItem
+                    disabled={isLastVisible}
+                    onClick={() => hideColumn(columnId)}
+                >
                     <EyeOffIcon className="size-4" />
                     Ocultar columna
                 </DropdownMenuItem>

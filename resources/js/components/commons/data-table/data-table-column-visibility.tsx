@@ -21,6 +21,8 @@ export default function DataTableColumnVisibility<TData>({
         toggleColumn: s.toggleColumn,
     }));
 
+    const visibleCount = columns.length - hiddenColumns.size;
+
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -33,11 +35,14 @@ export default function DataTableColumnVisibility<TData>({
                 {columns.map((column) => {
                     const colId = 'key' in column ? column.key : column.id;
                     const label = column.label ?? colId;
+                    const isVisible = !hiddenColumns.has(colId);
+                    const isLastVisible = isVisible && visibleCount === 1;
 
                     return (
                         <DropdownMenuCheckboxItem
                             key={colId}
-                            checked={!hiddenColumns.has(colId)}
+                            checked={isVisible}
+                            disabled={isLastVisible}
                             onCheckedChange={() => toggleColumn(colId)}
                         >
                             {label}
