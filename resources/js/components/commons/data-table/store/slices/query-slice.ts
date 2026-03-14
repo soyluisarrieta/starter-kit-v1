@@ -51,14 +51,14 @@ export const createQuerySlice =
                     Object.keys(params).length === 1 &&
                     'page' in params;
 
-                if (isPageOnly) {
-                    set({ query: newQuery });
-                } else {
-                    router.get(
-                        route.url,
-                        cleanQueryParams({ ...newQuery, page: undefined }),
-                        { preserveState: true, preserveScroll: true },
-                    );
-                }
+                router.get(
+                    route.url,
+                    cleanQueryParams(
+                        isPageOnly
+                            ? newQuery
+                            : { ...newQuery, page: undefined },
+                    ),
+                    { preserveState: true, preserveScroll: true },
+                );
             },
         });
