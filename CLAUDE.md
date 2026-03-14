@@ -21,8 +21,23 @@ For manual loading, read the SKILL.md file directly.
 
 > **The AI MUST NOT load any skill until the prompt keywords match the skill's Trigger.**
 
-If the user makes a broad request:  
+If the user makes a broad request:
 → **The AI must show an index of relevant skills.**
 
-If the user asks for something specific:  
+If the user asks for something specific:
 → **The AI loads only that skill.**
+
+## Working with Claude
+
+### Code & Communication
+
+- Use **bun** exclusively (never npm, yarn)
+- TypeScript: Use `unknown` instead of `any`; use base constraint (e.g. `DataRow`) when appropriate
+- Keep responses brief and direct
+
+### Git & Commits
+
+- When user says "commit": Deploy AskUserQuestion with 2-3 message options + "Other" for free text
+- User's selection = auto-commit authorization (no confirmation needed)
+- Format: Title-only, conventional commits — `type(scope): message`
+- Messages must be equally clear; avoid vague variations
