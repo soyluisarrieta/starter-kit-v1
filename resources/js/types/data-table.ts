@@ -52,6 +52,7 @@ interface ColumnDefBase<TData> {
     className?: string;
     align?: 'left' | 'center' | 'right';
     hideable?: boolean;
+    fit?: boolean;
 }
 
 export type ColumnDef<T> =

@@ -88,7 +88,8 @@ export default function UserTable({ roles, table }: UserTableProps) {
                 {
                     key: 'id',
                     label: 'ID',
-                    className: 'w-0 pr-0 text-muted-foreground',
+                    fit: true,
+                    className: 'pr-0 text-muted-foreground',
                     align: 'center',
                 },
                 {
@@ -104,14 +105,14 @@ export default function UserTable({ roles, table }: UserTableProps) {
                 {
                     key: 'roleIds',
                     label: 'Roles',
-                    className: 'w-0',
+                    fit: true,
                     align: 'center',
                     cell: ({ row }) => <RolesCell row={row} roles={roles} />,
                 },
                 {
                     key: 'created_at',
                     label: 'Registro',
-                    className: 'w-0',
+                    fit: true,
                     align: 'center',
                     cell: ({ row }) => (
                         <DateCell row={row} field="created_at" />
@@ -120,7 +121,7 @@ export default function UserTable({ roles, table }: UserTableProps) {
                 {
                     key: 'updated_at',
                     label: 'Últ. Actualización',
-                    className: 'w-0',
+                    fit: true,
                     align: 'center',
                     cell: ({ row }) => (
                         <DateCell row={row} field="updated_at" />
@@ -128,7 +129,7 @@ export default function UserTable({ roles, table }: UserTableProps) {
                 },
                 {
                     id: 'actions',
-                    className: 'w-0',
+                    fit: true,
                     hideable: false,
                     cell: ({ row }) => (
                         <DataTableRowActions row={row} actions={rowActions} />

@@ -66,6 +66,7 @@ export default function DataTable<TData>({
         (c) => c.hideable !== false,
     ).length;
 
+
     return (
         <DataTableProvider table={table}>
             <div className="space-y-2">
@@ -81,7 +82,7 @@ export default function DataTable<TData>({
                             style={{ fontSize: '0.8rem' }}
                         >
                             {selectable && (
-                                <TableHead className="w-0 bg-muted px-4">
+                                <TableHead className="w-px bg-muted px-4">
                                     <DataTableHeaderCheckbox
                                         pageRows={pageRows}
                                     />
@@ -95,6 +96,7 @@ export default function DataTable<TData>({
                                         key={colId}
                                         className={cn(
                                             'bg-muted px-4 font-bold text-muted-foreground',
+                                            column.fit && 'w-px',
                                             column.className,
                                         )}
                                         style={{ textAlign: column.align }}
@@ -121,7 +123,7 @@ export default function DataTable<TData>({
                         {rows.map((row, index) => (
                             <TableRow key={index}>
                                 {selectable && (
-                                    <TableCell className="px-4">
+                                    <TableCell className="w-px px-4">
                                         <DataTableRowCheckbox row={row} />
                                     </TableCell>
                                 )}
@@ -135,6 +137,7 @@ export default function DataTable<TData>({
                                             key={colId}
                                             className={cn(
                                                 'px-4',
+                                                column.fit && 'w-px',
                                                 column.className,
                                             )}
                                             style={{ textAlign: column.align }}

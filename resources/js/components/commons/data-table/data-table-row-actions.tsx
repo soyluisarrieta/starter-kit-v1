@@ -23,12 +23,13 @@ export function DataTableRowActions<TData>({
     if (!visible.length) return null;
 
     return (
-        <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon">
-                    <MoreVerticalIcon />
-                </Button>
-            </DropdownMenuTrigger>
+        <div className="flex justify-end">
+            <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" size="icon">
+                        <MoreVerticalIcon />
+                    </Button>
+                </DropdownMenuTrigger>
             <DropdownMenuContent>
                 {visible.map((action) => (
                     <DropdownMenuItem
@@ -44,6 +45,7 @@ export function DataTableRowActions<TData>({
                     </DropdownMenuItem>
                 ))}
             </DropdownMenuContent>
-        </DropdownMenu>
+            </DropdownMenu>
+        </div>
     );
 }
