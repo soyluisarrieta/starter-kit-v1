@@ -41,3 +41,4 @@ If the user asks for something specific:
 - User's selection = auto-commit authorization (no confirmation needed)
 - Format: Title-only, conventional commits — `type(scope): message`
 - Messages must be equally clear; avoid vague variations
+- **Never** add `Co-Authored-By:` footers — keep commits clean
