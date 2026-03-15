@@ -10,7 +10,8 @@
       "Bash(bunx tsc:*)",
       "Bash(git add:*)",
       "Bash(del:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(find:*)"
     ]
   }
 }

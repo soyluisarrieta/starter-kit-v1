@@ -82,26 +82,8 @@ class SocialiteController extends Controller
                 ]);
             }
 
-            // download avatar if present
             $avatarUrl = $ssoUser->getAvatar() ?? $ssoUser->avatar ?? null;
-
-            if ($avatarUrl) {
-                try {
-                    $client = new Client;
-                    $image = $client->get($avatarUrl)->getBody()->getContents();
-                    $avatarName = Str::uuid().'.jpg';
-
-                    Storage::disk('public')->put("avatars/{$avatarName}", $image);
-
-                    if ($user->avatar) {
-                        Storage::disk('public')->delete("avatars/{$user->avatar}");
-                    }
-
-                    $user->avatar = $avatarName;
-                } catch (Exception $e) {
-                    Log::error("Avatar download error ({$provider}): {$e->getMessage()}");
-                }
-            }
+            $this->downloadAvatar($user, $avatarUrl, $provider);
 
             $user->save();
         }
@@ -110,5 +92,48 @@ class SocialiteController extends Controller
         Auth::login($user, true);
 
         return redirect()->route('dashboard');
+    }
+
+    /**
+     * Download and store user avatar from SSO provider
+     */
+    private function downloadAvatar(User $user, ?string $url, string $provider): void
+    {
+        if (! $url || ! str_starts_with($url, 'https://')) {
+            return;
+        }
+
+        try {
+            $response = (new Client([
+                'timeout' => 5,
+                'connect_timeout' => 3,
+            ]))->get($url);
+
+            $contentType = $response->getHeaderLine('Content-Type');
+            if (! str_starts_with($contentType, 'image/')) {
+                throw new Exception("Invalid Content-Type: {$contentType}");
+            }
+
+            $contentLength = $response->getHeaderLine('Content-Length');
+            if ($contentLength && (int) $contentLength > 2 * 1024 * 1024) {
+                throw new Exception('Avatar too large (Content-Length)');
+            }
+
+            $image = $response->getBody()->getContents();
+            if (strlen($image) > 2 * 1024 * 1024) {
+                throw new Exception('Avatar too large (body)');
+            }
+
+            $avatarName = Str::uuid().'.jpg';
+            Storage::disk('public')->put("avatars/{$avatarName}", $image);
+
+            if ($user->avatar) {
+                Storage::disk('public')->delete("avatars/{$user->avatar}");
+            }
+
+            $user->avatar = $avatarName;
+        } catch (Exception $e) {
+            Log::error("Avatar download error ({$provider}): {$e->getMessage()}");
+        }
     }
 }
