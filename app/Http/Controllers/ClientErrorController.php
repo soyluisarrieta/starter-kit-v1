@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ClientErrorRequest;
 use App\Models\ClientError;
+use App\Notifications\FrequentClientErrorNotification;
+use App\Notifications\NewClientErrorNotification;
+use Illuminate\Support\Facades\Notification;
 
 class ClientErrorController extends Controller
 {
@@ -23,7 +26,7 @@ class ClientErrorController extends Controller
                 'user_id' => auth()->id() ?? $error->user_id,
             ]);
         } else {
-            ClientError::create([
+            $error = ClientError::create([
                 'fingerprint' => $fingerprint,
                 'message' => $validated['message'],
                 'stack' => $validated['stack'] ?? '',
@@ -36,6 +39,29 @@ class ClientErrorController extends Controller
             ]);
         }
 
+        $this->notify($error);
+
         return response()->noContent();
+    }
+
+    private function notify(ClientError $error): void
+    {
+        $email = config('errors.notify_email');
+
+        if (! $email) {
+            return;
+        }
+
+        $notifiable = Notification::route('mail', $email);
+
+        if ($error->occurrences === 1) {
+            $notifiable->notify(new NewClientErrorNotification($error));
+        }
+
+        $threshold = config('errors.frequent_threshold', 10);
+
+        if ($error->occurrences === $threshold) {
+            $notifiable->notify(new FrequentClientErrorNotification($error));
+        }
     }
 }
