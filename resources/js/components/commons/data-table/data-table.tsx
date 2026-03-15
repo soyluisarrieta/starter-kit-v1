@@ -69,10 +69,12 @@ export default function DataTable<TData>({
                     />
                 </Table>
 
-                <DataTablePagination
-                    currentPage={current_page}
-                    lastPage={last_page}
-                />
+                {rows.length >= 1 && (
+                    <DataTablePagination
+                        currentPage={current_page}
+                        lastPage={last_page}
+                    />
+                )}
 
                 {bulkActions && <DataTableBulkActions config={bulkActions} />}
             </div>
