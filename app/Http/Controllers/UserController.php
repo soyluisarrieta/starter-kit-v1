@@ -8,6 +8,7 @@ use App\Http\Requests\DataTableRequest;
 use App\Http\Requests\User\DestroyMultipleUsersRequest;
 use App\Http\Requests\User\UserRequest;
 use App\Models\User;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Spatie\Permission\Models\Role;
 
@@ -42,7 +43,7 @@ class UserController extends Controller
     public function store(UserRequest $request)
     {
         $user = $request->validated();
-        $user['password'] = bcrypt('qweqwe123');
+        $user['password'] = Str::password(16);
         User::create($user);
         Inertia::flash('success', 'Usuario creado exitosamente');
 
