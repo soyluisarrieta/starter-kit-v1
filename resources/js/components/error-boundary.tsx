@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { Component } from 'react';
 import type { ErrorInfo, ReactNode } from 'react';
 
@@ -21,6 +22,13 @@ export class ErrorBoundary extends Component<Props, State> {
 
     componentDidCatch(error: Error, info: ErrorInfo): void {
         console.error('ErrorBoundary caught:', error, info);
+
+        axios.post('/client-errors', {
+            message: error.message,
+            url: window.location.href,
+            stack: error.stack ?? '',
+            component_stack: info.componentStack ?? null,
+        }).catch(() => {});
     }
 
     render() {

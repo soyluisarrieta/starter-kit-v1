@@ -14,17 +14,23 @@ class ClientErrorController extends Controller
     {
         $validated = $request->validated();
 
-        $cleanedStack = preg_replace('/:\d+:\d+/', '', $validated['stack'] ?? '');
-        $fingerprint = hash('sha256', $validated['message'] . $cleanedStack);
+        $fingerprint = hash('sha256', $validated['message']);
 
         $error = ClientError::where('fingerprint', $fingerprint)->first();
 
         if ($error) {
-            $error->update([
+            $data = [
                 'occurrences' => $error->occurrences + 1,
                 'last_seen_at' => now(),
                 'user_id' => auth()->id() ?? $error->user_id,
-            ]);
+            ];
+
+            if ($error->resolved_at) {
+                $data['resolved_at'] = null;
+                $data['reopened_at'] = now();
+            }
+
+            $error->update($data);
         } else {
             $error = ClientError::create([
                 'fingerprint' => $fingerprint,

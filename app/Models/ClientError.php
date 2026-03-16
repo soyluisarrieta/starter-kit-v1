@@ -16,6 +16,7 @@ class ClientError extends Model
             'first_seen_at' => 'datetime',
             'last_seen_at' => 'datetime',
             'resolved_at' => 'datetime',
+            'reopened_at' => 'datetime',
         ];
     }
 

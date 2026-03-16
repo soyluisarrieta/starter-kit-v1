@@ -78,20 +78,48 @@ class ClientErrorStoreTest extends TestCase
         $this->assertTrue($error->last_seen_at->gt($originalLastSeen));
     }
 
-    public function test_fingerprint_ignores_line_numbers(): void
+    public function test_duplicate_error_reopens_resolved_error(): void
+    {
+        $payload = $this->validPayload();
+
+        $this->postJson(route('client-errors.store'), $payload)->assertNoContent();
+
+        $error = ClientError::first();
+        $error->update(['resolved_at' => now()]);
+        $this->assertNotNull($error->fresh()->resolved_at);
+
+        $this->postJson(route('client-errors.store'), $payload)->assertNoContent();
+
+        $error->refresh();
+        $this->assertNull($error->resolved_at);
+        $this->assertNotNull($error->reopened_at);
+    }
+
+    public function test_duplicate_error_does_not_reopen_if_not_resolved(): void
+    {
+        $payload = $this->validPayload();
+
+        $this->postJson(route('client-errors.store'), $payload)->assertNoContent();
+        $this->postJson(route('client-errors.store'), $payload)->assertNoContent();
+
+        $error = ClientError::first();
+        $this->assertNull($error->reopened_at);
+    }
+
+    public function test_fingerprint_based_on_message_only(): void
     {
         $payload1 = $this->validPayload([
             'stack' => "Error: fail\n    at Component (http://localhost/app.js:100:10)",
         ]);
 
         $payload2 = $this->validPayload([
-            'stack' => "Error: fail\n    at Component (http://localhost/app.js:200:20)",
+            'stack' => "Error: fail\n    at OtherComponent (http://localhost/other.js:999:1)",
         ]);
 
         $this->postJson(route('client-errors.store'), $payload1)->assertNoContent();
         $this->postJson(route('client-errors.store'), $payload2)->assertNoContent();
 
-        // Same message + normalized stack → same fingerprint → 1 record
+        // Same message → same fingerprint → 1 record (stack differs but doesn't matter)
         $this->assertDatabaseCount('client_errors', 1);
     }
 

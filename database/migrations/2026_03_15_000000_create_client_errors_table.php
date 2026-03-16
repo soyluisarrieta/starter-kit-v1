@@ -20,6 +20,7 @@ return new class extends Migration
             $table->timestamp('first_seen_at');
             $table->timestamp('last_seen_at');
             $table->timestamp('resolved_at')->nullable();
+            $table->timestamp('reopened_at')->nullable();
             $table->timestamps();
 
             $table->index('resolved_at');
