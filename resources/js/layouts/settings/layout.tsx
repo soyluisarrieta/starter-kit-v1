@@ -8,6 +8,7 @@ import { useCan } from '@/hooks/use-can';
 import { useCurrentUrl } from '@/hooks/use-current-url';
 import { cn, toUrl } from '@/lib/utils';
 import { edit as editAppearance } from '@/routes/appearance';
+import { index as errorsIndex } from '@/routes/errors';
 import { edit as editProfile } from '@/routes/profile';
 import { edit as editRoles } from '@/routes/roles';
 import { edit as editPassword } from '@/routes/user-password';
@@ -39,17 +40,29 @@ export default function SettingsLayout({
     const { canManage: canReadRoles } = useCan([
         OTHERS_PERMISSIONS.MANAGE_ROLES,
     ]);
+    const { canManage: canManageErrors } = useCan([
+        OTHERS_PERMISSIONS.MANAGE_ERRORS,
+    ]);
 
     const sidebarNavItems: NavItem[] = [
         ...baseNavItems,
         ...(canReadRoles
             ? [
-                  {
-                      title: 'Roles',
-                      href: editRoles(),
-                      icon: null,
-                  } satisfies NavItem,
-              ]
+                {
+                    title: 'Roles',
+                    href: editRoles(),
+                    icon: null,
+                } satisfies NavItem,
+            ]
+            : []),
+        ...(canManageErrors
+            ? [
+                {
+                    title: 'Errores',
+                    href: errorsIndex(),
+                    icon: null,
+                } satisfies NavItem,
+            ]
             : []),
     ];
 

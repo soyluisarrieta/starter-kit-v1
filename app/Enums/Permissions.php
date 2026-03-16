@@ -14,6 +14,8 @@ enum Permissions: string
 
     case VIEW_DASHBOARD = 'dashboard.view';
 
+    case MANAGE_ERRORS = 'errors.manage';
+
     public function label(): string
     {
         return match ($this) {
@@ -26,6 +28,8 @@ enum Permissions: string
             self::MANAGE_ROLES => 'Gestionar roles y permisos',
 
             self::VIEW_DASHBOARD => 'Acceder al panel de control',
+
+            self::MANAGE_ERRORS => 'Gestionar errores de cliente',
         };
     }
 }
