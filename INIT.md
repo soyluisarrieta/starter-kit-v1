@@ -1,24 +1,20 @@
 # Inicialización del Proyecto
 
-> Instrucciones para el agente de IA. Ejecuta cada paso en orden y confirma antes de continuar.
+> Instrucciones para el agente de IA. Este archivo existe porque el proyecto fue creado
+> desde una plantilla de GitHub. Ejecuta cada paso en orden.
 
 ## Pasos
 
-1. **Eliminar tags git del starter kit** (solo local, no remoto):
-   ```
-   git tag -l | xargs git tag -d
-   ```
+1. **Actualizar versión** en `package.json`: cambiar `"version"` a `"0.1.0"`.
 
-2. **Actualizar versión** en `package.json`: cambiar `"version"` a `"0.1.0"`.
-
-3. **Eliminar `CHANGELOG.md`** si existe.
-
-4. **Limpiar `README.md`**: eliminar el bloque completo entre los comentarios HTML
+2. **Limpiar `README.md`**: eliminar el bloque completo entre los comentarios HTML
    `<!-- INICIO: SECCIÓN DE INICIALIZACIÓN -->` y `<!-- FIN: SECCIÓN DE INICIALIZACIÓN -->`,
    incluyendo los propios comentarios y la línea en blanco que los rodea.
 
-5. **Eliminar este archivo** (`INIT.md`).
+3. **Eliminar este archivo** (`INIT.md`).
 
-6. Informar al usuario que la inicialización está completa y que debe:
+4. Informar al usuario que la inicialización está completa y que debe:
    - Actualizar `README.md` con el nombre y descripción de su proyecto
-   - Ejecutar `bun run release` para generar el primer release
+   - Hacer el primer commit: `git add . && git commit -m "chore: initial commit"`
+   - Ejecutar `bun run release` para generar la primera versión (`v0.1.0`)
+   - Hacer push: `git push -u origin main`
