@@ -1,5 +1,6 @@
 {
     "$schema": "https://www.schemastore.org/package.json",
+    "version": "1.0.0",
     "private": true,
     "type": "module",
     "scripts": {
@@ -10,7 +11,8 @@
         "format:check": "prettier --check resources/",
         "lint": "eslint . --fix",
         "lint:check": "eslint .",
-        "types:check": "tsc --noEmit"
+        "types:check": "tsc --noEmit",
+        "release": "changelogen --release && git push --follow-tags"
     },
     "devDependencies": {
         "@eslint/js": "^9.19.0",
