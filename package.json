@@ -12,7 +12,7 @@
     "lint": "eslint . --fix",
     "lint:check": "eslint .",
     "types:check": "tsc --noEmit",
-    "release": "changelogen --release && git push --follow-tags",
+    "release": "bunx changelogen --release && git push --follow-tags",
     "prepare": "husky"
   },
   "devDependencies": {
