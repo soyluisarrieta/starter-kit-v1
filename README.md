@@ -1,11 +1,30 @@
-# Starter Kit
+# [Nombre del Proyecto]
 
-Starter kit moderno para construir aplicaciones full-stack con Laravel y React, enfocado en productividad, tipado estricto y buenas prácticas tanto en backend como en frontend.
+> **Descripción breve del proyecto** — reemplaza esta línea con una descripción clara de qué hace la aplicación.
 
-## Stack
+## 📋 Acerca de
+
+[Describe el propósito de la aplicación, sus características principales y el público objetivo. 2-3 párrafos máximo.]
+
+## ✨ Características del Proyecto
+
+- [x] **Data Tables Server-side** — tablas genéricas con paginación, búsqueda y ordenamiento, caching automático
+- [x] **Type-safe Routes** — rutas generadas automáticamente con Wayfinder, sin strings mágicos
+- [x] **Autenticación** — Laravel Fortify + Google OAuth integrado
+- [x] **Estado Reactivo** — Zustand para UI state + TanStack Query para caché
+- [x] **Componentes UI** — shadcn/ui + Radix UI, Tailwind CSS 4 con configuración strict
+- [x] **TypeScript Strict** — tipado strict en todo el stack, sin `any`
+- [x] **Testing** — PHPUnit en backend, estructura lista para testing
+- [ ] Nueva caracteristica
+- [ ] Nueva caracteristica
+- [ ] Nueva caracteristica
+- [ ] Nueva caracteristica
+- [ ] Nueva caracteristica
+
+## 🛠️ Stack
 
 - **Backend**: Laravel 12 (PHP 8.2+)
-- **Frontend**: React 19 + TypeScript, Inertia.js, Tailwind CSS
+- **Frontend**: React 19 + TypeScript, Inertia.js, Tailwind CSS 4
 - **Autenticación**: Laravel Fortify + Socialite (Google OAuth)
 - **UI**: Radix UI + componentes custom basados en shadcn/ui
 - **Estado**: Zustand (tablas), hooks de React (estado local)
@@ -16,45 +35,86 @@ Starter kit moderno para construir aplicaciones full-stack con Laravel y React, 
 <!-- Elimina esta sección después de inicializar el proyecto  -->
 <!-- ======================================================== -->
 
-## Inicialización del Proyecto
+## 🚀 Inicialización (Solo para plantilla)
 
-Al crear un nuevo proyecto basado en este starter kit, abre Claude Code y dile:
+Si el repositorio fue creado desde una plantilla GitHub:
 
-> "inicializa el proyecto siguiendo INIT.md"
+1. **Abre Claude Code** en la carpeta y solicita:
 
-Luego actualiza el README con la información de tu proyecto y ejecuta `bun run release`.
+   ```
+   inicializa el proyecto siguiendo INIT.md
+   ```
+
+2. **Actualiza este README**:
+   - Reemplaza `[Nombre del Proyecto]` con el nombre real
+   - Completa las secciones marcadas con `[...]`
+   - Documenta las características principales
+   - Actualiza requisitos e instrucciones específicas
+
+3. **Crea el primer release**:
+
+   ```bash
+   git add .
+   git commit -m "chore: initial commit"
+   bun run release
+   git push -u origin main
+   ```
 
 <!-- ======================================================== -->
 <!-- FIN: SECCIÓN DE INICIALIZACIÓN                           -->
 <!-- ======================================================== -->
 
-## Empezar
+## 📦 Instalación
 
-1. Clona el repositorio.
-2. Ejecuta la instalación inicial:
+### Requisitos
 
-    ```bash
-    composer setup
-    ```
+- PHP 8.2+
+- Composer
+- Node.js + Bun
+- [Otros requisitos específicos]
 
-3. Abre el archivo `.env` y configura:
+### Pasos
+
+1. Clona el repositorio:
+
+   ```bash
+   git clone <url-del-repositorio>
+   cd <nombre-del-proyecto>
+   ```
+
+2. Instala las dependencias:
+
+   ```bash
+   composer setup
+   ```
+
+3. Configura el archivo `.env`:
+
+   ```bash
+   cp .env.example .env
+   ```
+
    - Conexión a la base de datos
-   - `GOOGLE_CLIENT_ID`
-   - `GOOGLE_CLIENT_SECRET`
+   - `GOOGLE_CLIENT_ID` y `GOOGLE_CLIENT_SECRET`
+   - [Otras variables de entorno necesarias]
 
-4. Ejecuta las migraciones si es necesario:
+4. Ejecuta las migraciones:
 
-    ```bash
-    php artisan migrate
-    ```
+   ```bash
+   php artisan migrate
+   ```
 
-## Desarrollo
+## 🚀 Desarrollo
+
+### Iniciar el servidor
 
 ```bash
 composer run dev
 ```
 
-## Calidad de Código
+La aplicación estará disponible en `http://localhost`
+
+### Calidad de Código
 
 ```bash
 # Backend
@@ -67,14 +127,15 @@ bun run types
 bun run format
 ```
 
-## Testing
+### Testing
 
 ```bash
-# PHPUnit
 php artisan test
 ```
 
-## Releases
+## 📝 Releases
+
+El proyecto utiliza `bun run release` para versioning automático:
 
 ```bash
 # Patch (1.0.0 → 1.0.1)
@@ -87,12 +148,25 @@ bun run release -- --minor
 bun run release -- --major
 ```
 
-## Utiles
+## 📚 Documentación
 
-```bash
-# Git merge Feature
-git switch main
-git merge --no-ff --no-edit BRANCH_NAME
-git branch -d BRANCH_NAME
-git push origin main
-```
+- [Documentación del Backend](docs/backend.md) *(opcional)*
+- [Documentación del Frontend](docs/frontend.md) *(opcional)*
+
+## 🤝 Contribuciones
+
+[Describe cómo pueden contribuir otros desarrolladores, o indica que es un proyecto personal.]
+
+## 📄 Licencia
+
+[MIT, Apache 2.0, u otra licencia elegida]
+
+## 🔗 Enlaces Útiles
+
+- [Repositorio](https://github.com/usuario/proyecto)
+- [Issues](https://github.com/usuario/proyecto/issues)
+- [Demo en vivo](https://ejemplo.com) *(opcional)*
+
+---
+
+**Última actualización**: 2026-03-23
