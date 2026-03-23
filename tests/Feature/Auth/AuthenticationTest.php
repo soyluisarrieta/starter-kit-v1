@@ -1,69 +1,49 @@
 <?php
 
-namespace Tests\Feature\Auth;
-
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\RateLimiter;
-use Tests\TestCase;
 
-class AuthenticationTest extends TestCase
-{
-    use RefreshDatabase;
+it('login screen can be rendered', function () {
+    $this->get(route('login'))->assertOk();
+});
 
-    public function test_login_screen_can_be_rendered()
-    {
-        $response = $this->get(route('login'));
+it('users can authenticate using the login screen', function () {
+    $user = User::factory()->create();
 
-        $response->assertOk();
-    }
+    $this->post(route('login.store'), [
+        'email' => $user->email,
+        'password' => 'password',
+    ])->assertRedirect(route('dashboard', absolute: false));
 
-    public function test_users_can_authenticate_using_the_login_screen()
-    {
-        $user = User::factory()->create();
+    $this->assertAuthenticated();
+});
 
-        $response = $this->post(route('login.store'), [
-            'email' => $user->email,
-            'password' => 'password',
-        ]);
+it('users cannot authenticate with invalid password', function () {
+    $user = User::factory()->create();
 
-        $this->assertAuthenticated();
-        $response->assertRedirect(route('dashboard', absolute: false));
-    }
+    $this->post(route('login.store'), [
+        'email' => $user->email,
+        'password' => 'wrong-password',
+    ]);
 
-    public function test_users_can_not_authenticate_with_invalid_password()
-    {
-        $user = User::factory()->create();
+    $this->assertGuest();
+});
 
-        $this->post(route('login.store'), [
-            'email' => $user->email,
-            'password' => 'wrong-password',
-        ]);
+it('users can logout', function () {
+    $user = User::factory()->create();
 
-        $this->assertGuest();
-    }
+    $this->actingAs($user)->post(route('logout'))->assertRedirect(route('dashboard'));
 
-    public function test_users_can_logout()
-    {
-        $user = User::factory()->create();
+    $this->assertGuest();
+});
 
-        $response = $this->actingAs($user)->post(route('logout'));
+it('users are rate limited', function () {
+    $user = User::factory()->create();
 
-        $this->assertGuest();
-        $response->assertRedirect(route('dashboard'));
-    }
+    RateLimiter::increment(md5('login'.implode('|', [$user->email, '127.0.0.1'])), amount: 5);
 
-    public function test_users_are_rate_limited()
-    {
-        $user = User::factory()->create();
-
-        RateLimiter::increment(md5('login'.implode('|', [$user->email, '127.0.0.1'])), amount: 5);
-
-        $response = $this->post(route('login.store'), [
-            'email' => $user->email,
-            'password' => 'wrong-password',
-        ]);
-
-        $response->assertTooManyRequests();
-    }
-}
+    $this->post(route('login.store'), [
+        'email' => $user->email,
+        'password' => 'wrong-password',
+    ])->assertTooManyRequests();
+});

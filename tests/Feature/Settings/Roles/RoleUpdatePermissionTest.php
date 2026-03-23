@@ -1,107 +1,77 @@
 <?php
 
-namespace Tests\Feature\Settings\Roles;
-
 use App\Enums\Permissions;
 use App\Enums\Roles;
 use App\Models\User;
 use Database\Seeders\PermissionSeeder;
 use Database\Seeders\RoleSeeder;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Spatie\Permission\Models\Role;
-use Tests\TestCase;
 
-class RoleUpdatePermissionTest extends TestCase
-{
-    use RefreshDatabase;
+beforeEach(function () {
+    /** @var Tests\TestCase $this */
+    $this->seed(PermissionSeeder::class);
+    $this->seed(RoleSeeder::class);
+});
 
-    protected function setUp(): void
-    {
-        parent::setUp();
+it('guests are redirected to login', function () {
+    $role = Role::where('name', Roles::ADMIN->value)->first();
+    $this->put(route('roles.update-permissions', $role))->assertRedirect(route('login'));
+});
 
-        $this->seed(PermissionSeeder::class);
-        $this->seed(RoleSeeder::class);
-    }
+it('without permission returns 403', function () {
+    $role = Role::where('name', Roles::ADMIN->value)->first();
 
-    private function actingAsWithPermission(): static
-    {
-        $user = User::factory()->create();
-        $user->givePermissionTo(Permissions::MANAGE_ROLES->value);
+    $this->actingAs(User::factory()->create())
+        ->put(route('roles.update-permissions', $role), [
+            'permission' => Permissions::LIST_USERS->value,
+            'enabled' => true,
+        ])->assertForbidden();
+});
 
-        return $this->actingAs($user);
-    }
+it('enables permission', function () {
+    /** @var Role $role */
+    $role = Role::where('name', Roles::ADMIN->value)->first();
 
-    public function test_guests_redirected_to_login(): void
-    {
-        $role = Role::where('name', Roles::ADMIN->value)->first();
-        $this->put(route('roles.update-permissions', $role))->assertRedirect(route('login'));
-    }
+    actingAsManageRoles()->put(route('roles.update-permissions', $role), [
+        'permission' => Permissions::LIST_USERS->value,
+        'enabled' => true,
+    ]);
 
-    public function test_without_permission_returns_403(): void
-    {
-        $role = Role::where('name', Roles::ADMIN->value)->first();
+    expect($role->fresh()->hasPermissionTo(Permissions::LIST_USERS->value))->toBeTrue();
+});
 
-        $this->actingAs(User::factory()->create())
-            ->put(route('roles.update-permissions', $role), [
-                'permission' => Permissions::LIST_USERS->value,
-                'enabled' => true,
-            ])
-            ->assertForbidden();
-    }
+it('disables permission', function () {
+    /** @var Role $role */
+    $role = Role::where('name', Roles::ADMIN->value)->first();
+    $role->givePermissionTo(Permissions::LIST_USERS->value);
 
-    public function test_enable_permission(): void
-    {
-        /** @var Role $role */
-        $role = Role::where('name', Roles::ADMIN->value)->first();
+    actingAsManageRoles()->put(route('roles.update-permissions', $role), [
+        'permission' => Permissions::LIST_USERS->value,
+        'enabled' => false,
+    ]);
 
-        $this->actingAsWithPermission()
-            ->put(route('roles.update-permissions', $role), [
-                'permission' => Permissions::LIST_USERS->value,
-                'enabled' => true,
-            ]);
+    expect($role->fresh()->hasPermissionTo(Permissions::LIST_USERS->value))->toBeFalse();
+});
 
-        $this->assertTrue($role->fresh()->hasPermissionTo(Permissions::LIST_USERS->value));
-    }
+it('cannot modify super admin permissions', function () {
+    /** @var Role $superAdmin */
+    $superAdmin = Role::where('name', Roles::SUPER_ADMIN->value)->first();
+    $permissionCount = $superAdmin->permissions->count();
 
-    public function test_disable_permission(): void
-    {
-        /** @var Role $role */
-        $role = Role::where('name', Roles::ADMIN->value)->first();
-        $role->givePermissionTo(Permissions::LIST_USERS->value);
+    actingAsManageRoles()->put(route('roles.update-permissions', $superAdmin), [
+        'permission' => Permissions::LIST_USERS->value,
+        'enabled' => false,
+    ]);
 
-        $this->actingAsWithPermission()
-            ->put(route('roles.update-permissions', $role), [
-                'permission' => Permissions::LIST_USERS->value,
-                'enabled' => false,
-            ]);
+    expect($superAdmin->fresh()->permissions)->toHaveCount($permissionCount);
+});
 
-        $this->assertFalse($role->fresh()->hasPermissionTo(Permissions::LIST_USERS->value));
-    }
+it('validates permission exists', function () {
+    $role = Role::where('name', Roles::ADMIN->value)->first();
 
-    public function test_cannot_modify_super_admin_permissions(): void
-    {
-        /** @var Role $superAdmin */
-        $superAdmin = Role::where('name', Roles::SUPER_ADMIN->value)->first();
-        $permissionCount = $superAdmin->permissions->count();
-
-        $this->actingAsWithPermission()
-            ->put(route('roles.update-permissions', $superAdmin), [
-                'permission' => Permissions::LIST_USERS->value,
-                'enabled' => false,
-            ]);
-
-        $this->assertCount($permissionCount, $superAdmin->fresh()->permissions);
-    }
-
-    public function test_validates_permission_exists(): void
-    {
-        $role = Role::where('name', Roles::ADMIN->value)->first();
-
-        $this->actingAsWithPermission()
-            ->put(route('roles.update-permissions', $role), [
-                'permission' => 'nonexistent.permission',
-                'enabled' => true,
-            ])
-            ->assertSessionHasErrors('permission');
-    }
-}
+    actingAsManageRoles()
+        ->put(route('roles.update-permissions', $role), [
+            'permission' => 'nonexistent.permission',
+            'enabled' => true,
+        ])->assertSessionHasErrors('permission');
+});

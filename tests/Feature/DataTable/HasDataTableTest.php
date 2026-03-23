@@ -1,148 +1,116 @@
 <?php
 
-namespace Tests\Feature\DataTable;
-
 use App\Enums\Permissions;
 use App\Models\User;
 use Database\Seeders\PermissionSeeder;
 use Database\Seeders\RoleSeeder;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
 
-class HasDataTableTest extends TestCase
-{
-    use RefreshDatabase;
+beforeEach(function () {
+    /** @var Tests\TestCase $this */
+    $this->seed(PermissionSeeder::class);
+    $this->seed(RoleSeeder::class);
+});
 
-    protected function setUp(): void
-    {
-        parent::setUp();
+it('default sort is id desc', function () {
+    User::factory()->count(2)->create();
 
-        $this->seed(PermissionSeeder::class);
-        $this->seed(RoleSeeder::class);
-    }
+    $response = actingAsListUsers()->getJson(route('users'))->assertOk();
 
-    private function actingAsWithPermission(): static
-    {
-        $user = User::factory()->create();
-        $user->givePermissionTo(Permissions::LIST_USERS->value);
+    $ids = array_column($response->json('data'), 'id');
 
-        return $this->actingAs($user);
-    }
+    expect($ids[0])->toBeGreaterThan($ids[1]);
+});
 
-    public function test_default_sort_is_id_desc(): void
-    {
-        User::factory()->count(2)->create();
+it('sort by name asc', function () {
+    User::factory()->create(['name' => 'Zara']);
+    User::factory()->create(['name' => 'Alice']);
 
-        $response = $this->actingAsWithPermission()
-            ->getJson(route('users'))
-            ->assertOk();
+    $response = actingAsListUsers()
+        ->getJson(route('users', ['sortBy' => 'name', 'sortOrder' => 'asc']))
+        ->assertOk();
 
-        $ids = array_column($response->json('data'), 'id');
+    $names = array_column($response->json('data'), 'name');
 
-        // Default sort: id desc → last created first
-        $this->assertTrue($ids[0] > $ids[1]);
-    }
+    expect($names)->toBe(collect($names)->sort()->values()->all());
+});
 
-    public function test_sort_by_name_asc(): void
-    {
-        User::factory()->create(['name' => 'Zara']);
-        User::factory()->create(['name' => 'Alice']);
+it('invalid sort column falls back to default', function () {
+    User::factory()->count(3)->create();
 
-        $response = $this->actingAsWithPermission()
-            ->getJson(route('users', ['sortBy' => 'name', 'sortOrder' => 'asc']))
-            ->assertOk();
+    $response = actingAsListUsers()
+        ->getJson(route('users', ['sortBy' => 'nonexistent_column']))
+        ->assertOk();
 
-        $names = array_column($response->json('data'), 'name');
+    $ids = array_column($response->json('data'), 'id');
 
-        $this->assertEquals($names, collect($names)->sort()->values()->all());
-    }
+    expect($ids[0])->toBeGreaterThan($ids[1]);
+});
 
-    public function test_invalid_sort_column_falls_back_to_default(): void
-    {
-        User::factory()->count(3)->create();
+it('search filters by name', function () {
+    User::factory()->create(['name' => 'UniqueTestName']);
+    User::factory()->count(5)->create();
 
-        $response = $this->actingAsWithPermission()
-            ->getJson(route('users', ['sortBy' => 'nonexistent_column']))
-            ->assertOk();
+    $response = actingAsListUsers()
+        ->getJson(route('users', ['search' => 'UniqueTestName']))
+        ->assertOk();
 
-        // Falls back to id desc — should still return data without error
-        $ids = array_column($response->json('data'), 'id');
-        $this->assertTrue($ids[0] > $ids[1]);
-    }
+    $data = $response->json('data');
 
-    public function test_search_filters_by_name(): void
-    {
-        User::factory()->create(['name' => 'UniqueTestName']);
-        User::factory()->count(5)->create();
+    expect($data)->toHaveCount(1);
+    expect($data[0]['name'])->toBe('UniqueTestName');
+});
 
-        $response = $this->actingAsWithPermission()
-            ->getJson(route('users', ['search' => 'UniqueTestName']))
-            ->assertOk();
+it('search by numeric id', function () {
+    $target = User::factory()->create();
+    User::factory()->count(5)->create();
 
-        $data = $response->json('data');
+    $response = actingAsListUsers()
+        ->getJson(route('users', ['search' => $target->id]))
+        ->assertOk();
 
-        $this->assertCount(1, $data);
-        $this->assertEquals('UniqueTestName', $data[0]['name']);
-    }
+    $ids = array_column($response->json('data'), 'id');
 
-    public function test_search_by_numeric_id(): void
-    {
-        $target = User::factory()->create();
-        User::factory()->count(5)->create();
+    expect($ids)->toContain($target->id);
+});
 
-        $response = $this->actingAsWithPermission()
-            ->getJson(route('users', ['search' => $target->id]))
-            ->assertOk();
+it('per page limits results', function () {
+    User::factory()->count(15)->create();
 
-        $ids = array_column($response->json('data'), 'id');
+    $response = actingAsListUsers()
+        ->getJson(route('users', ['perPage' => 10]))
+        ->assertOk();
 
-        $this->assertContains($target->id, $ids);
-    }
+    expect($response->json('data'))->toHaveCount(10);
+});
 
-    public function test_per_page_limits_results(): void
-    {
-        User::factory()->count(15)->create();
+it('page 2 returns correct subset', function () {
+    User::factory()->count(15)->create();
 
-        $response = $this->actingAsWithPermission()
-            ->getJson(route('users', ['perPage' => 10]))
-            ->assertOk();
+    $actor = User::factory()->create();
+    $actor->givePermissionTo(Permissions::LIST_USERS->value);
 
-        $this->assertCount(10, $response->json('data'));
-    }
+    $page1 = $this->actingAs($actor)
+        ->getJson(route('users', ['perPage' => 10, 'page' => 1]))
+        ->assertOk();
 
-    public function test_page_2_returns_correct_subset(): void
-    {
-        User::factory()->count(15)->create();
+    $page2 = $this->actingAs($actor)
+        ->getJson(route('users', ['perPage' => 10, 'page' => 2]))
+        ->assertOk();
 
-        $actor = User::factory()->create();
-        $actor->givePermissionTo(Permissions::LIST_USERS->value);
+    $page1Ids = array_column($page1->json('data'), 'id');
+    $page2Ids = array_column($page2->json('data'), 'id');
 
-        $page1 = $this->actingAs($actor)
-            ->getJson(route('users', ['perPage' => 10, 'page' => 1]))
-            ->assertOk();
+    expect(array_intersect($page1Ids, $page2Ids))->toBeEmpty();
+    expect($page2Ids)->not->toBeEmpty();
+});
 
-        $page2 = $this->actingAs($actor)
-            ->getJson(route('users', ['perPage' => 10, 'page' => 2]))
-            ->assertOk();
+it('empty search returns all paginated', function () {
+    User::factory()->count(5)->create();
 
-        $page1Ids = array_column($page1->json('data'), 'id');
-        $page2Ids = array_column($page2->json('data'), 'id');
+    $response = actingAsListUsers()
+        ->getJson(route('users', ['search' => '']))
+        ->assertOk();
 
-        // Pages should have no overlap
-        $this->assertEmpty(array_intersect($page1Ids, $page2Ids));
-        // Page 2 should have the remaining users
-        $this->assertNotEmpty($page2Ids);
-    }
-
-    public function test_empty_search_returns_all_paginated(): void
-    {
-        User::factory()->count(5)->create();
-
-        $response = $this->actingAsWithPermission()
-            ->getJson(route('users', ['search' => '']))
-            ->assertOk();
-
-        // 5 created + 1 actor = 6
-        $this->assertEquals(6, $response->json('total'));
-    }
-}
+    // 5 created + 1 actor = 6
+    expect($response->json('total'))->toBe(6);
+});

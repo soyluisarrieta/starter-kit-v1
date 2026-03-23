@@ -1,74 +1,48 @@
 <?php
 
-namespace Tests\Feature\Users;
-
-use App\Enums\Permissions;
 use App\Models\User;
 use Database\Seeders\PermissionSeeder;
 use Database\Seeders\RoleSeeder;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
 
-class UserDestroyTest extends TestCase
-{
-    use RefreshDatabase;
+beforeEach(function () {
+    /** @var Tests\TestCase $this */
+    $this->seed(PermissionSeeder::class);
+    $this->seed(RoleSeeder::class);
+});
 
-    protected function setUp(): void
-    {
-        parent::setUp();
+it('guests are redirected to login', function () {
+    $user = User::factory()->create();
+    $this->delete(route('users.destroy', $user))->assertRedirect(route('login'));
+});
 
-        $this->seed(PermissionSeeder::class);
-        $this->seed(RoleSeeder::class);
-    }
+it('without permission returns 403', function () {
+    $target = User::factory()->create();
 
-    private function actingAsWithPermission(): static
-    {
-        $user = User::factory()->create();
-        $user->givePermissionTo(Permissions::DELETE_USERS->value);
+    $this->actingAs(User::factory()->create())
+        ->delete(route('users.destroy', $target), ['password' => 'password'])
+        ->assertForbidden();
+});
 
-        return $this->actingAs($user);
-    }
+it('with permission deletes user', function () {
+    $target = User::factory()->create();
 
-    public function test_guests_redirected_to_login(): void
-    {
-        $user = User::factory()->create();
-        $this->delete(route('users.destroy', $user))->assertRedirect(route('login'));
-    }
+    actingAsDeleteUsers()->delete(route('users.destroy', $target), ['password' => 'password']);
 
-    public function test_without_permission_returns_403(): void
-    {
-        $target = User::factory()->create();
+    $this->assertDatabaseMissing('users', ['id' => $target->id]);
+});
 
-        $this->actingAs(User::factory()->create())
-            ->delete(route('users.destroy', $target), ['password' => 'password'])
-            ->assertForbidden();
-    }
+it('requires current password', function () {
+    $target = User::factory()->create();
 
-    public function test_with_permission_deletes_user(): void
-    {
-        $target = User::factory()->create();
+    actingAsDeleteUsers()
+        ->delete(route('users.destroy', $target), [])
+        ->assertSessionHasErrors('password');
+});
 
-        $this->actingAsWithPermission()
-            ->delete(route('users.destroy', $target), ['password' => 'password']);
+it('rejects wrong password', function () {
+    $target = User::factory()->create();
 
-        $this->assertDatabaseMissing('users', ['id' => $target->id]);
-    }
-
-    public function test_requires_current_password(): void
-    {
-        $target = User::factory()->create();
-
-        $this->actingAsWithPermission()
-            ->delete(route('users.destroy', $target), [])
-            ->assertSessionHasErrors('password');
-    }
-
-    public function test_rejects_wrong_password(): void
-    {
-        $target = User::factory()->create();
-
-        $this->actingAsWithPermission()
-            ->delete(route('users.destroy', $target), ['password' => 'wrong-password'])
-            ->assertSessionHasErrors('password');
-    }
-}
+    actingAsDeleteUsers()
+        ->delete(route('users.destroy', $target), ['password' => 'wrong-password'])
+        ->assertSessionHasErrors('password');
+});

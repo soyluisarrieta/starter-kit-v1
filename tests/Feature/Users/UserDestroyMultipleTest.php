@@ -1,95 +1,63 @@
 <?php
 
-namespace Tests\Feature\Users;
-
-use App\Enums\Permissions;
 use App\Models\User;
 use Database\Seeders\PermissionSeeder;
 use Database\Seeders\RoleSeeder;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
 
-class UserDestroyMultipleTest extends TestCase
-{
-    use RefreshDatabase;
+beforeEach(function () {
+    /** @var Tests\TestCase $this */
+    $this->seed(PermissionSeeder::class);
+    $this->seed(RoleSeeder::class);
+});
 
-    protected function setUp(): void
-    {
-        parent::setUp();
+it('guests are redirected to login', function () {
+    $this->post(route('users.destroyMultiple'))->assertRedirect(route('login'));
+});
 
-        $this->seed(PermissionSeeder::class);
-        $this->seed(RoleSeeder::class);
+it('without permission returns 403', function () {
+    $target = User::factory()->create();
+
+    $this->actingAs(User::factory()->create())
+        ->post(route('users.destroyMultiple'), [
+            'ids' => [$target->id],
+            'password' => 'password',
+        ])->assertForbidden();
+});
+
+it('deletes selected users', function () {
+    $targets = User::factory()->count(3)->create();
+    $ids = $targets->pluck('id')->toArray();
+
+    actingAsDeleteUsers()->post(route('users.destroyMultiple'), [
+        'ids' => $ids,
+        'password' => 'password',
+    ]);
+
+    foreach ($ids as $id) {
+        $this->assertDatabaseMissing('users', ['id' => $id]);
     }
+});
 
-    private function actingAsWithPermission(): static
-    {
-        $user = User::factory()->create();
-        $user->givePermissionTo(Permissions::DELETE_USERS->value);
+it('requires password', function () {
+    $target = User::factory()->create();
 
-        return $this->actingAs($user);
-    }
+    actingAsDeleteUsers()
+        ->post(route('users.destroyMultiple'), ['ids' => [$target->id]])
+        ->assertSessionHasErrors('password');
+});
 
-    public function test_guests_redirected_to_login(): void
-    {
-        $this->post(route('users.destroyMultiple'))->assertRedirect(route('login'));
-    }
+it('validates ids exist', function () {
+    actingAsDeleteUsers()
+        ->post(route('users.destroyMultiple'), [
+            'ids' => [99999],
+            'password' => 'password',
+        ])->assertSessionHasErrors('ids.0');
+});
 
-    public function test_without_permission_returns_403(): void
-    {
-        $target = User::factory()->create();
-
-        $this->actingAs(User::factory()->create())
-            ->post(route('users.destroyMultiple'), [
-                'ids' => [$target->id],
-                'password' => 'password',
-            ])
-            ->assertForbidden();
-    }
-
-    public function test_deletes_selected_users(): void
-    {
-        $targets = User::factory()->count(3)->create();
-        $ids = $targets->pluck('id')->toArray();
-
-        $this->actingAsWithPermission()
-            ->post(route('users.destroyMultiple'), [
-                'ids' => $ids,
-                'password' => 'password',
-            ]);
-
-        foreach ($ids as $id) {
-            $this->assertDatabaseMissing('users', ['id' => $id]);
-        }
-    }
-
-    public function test_requires_password(): void
-    {
-        $target = User::factory()->create();
-
-        $this->actingAsWithPermission()
-            ->post(route('users.destroyMultiple'), [
-                'ids' => [$target->id],
-            ])
-            ->assertSessionHasErrors('password');
-    }
-
-    public function test_validates_ids_exist(): void
-    {
-        $this->actingAsWithPermission()
-            ->post(route('users.destroyMultiple'), [
-                'ids' => [99999],
-                'password' => 'password',
-            ])
-            ->assertSessionHasErrors('ids.0');
-    }
-
-    public function test_requires_at_least_one_id(): void
-    {
-        $this->actingAsWithPermission()
-            ->post(route('users.destroyMultiple'), [
-                'ids' => [],
-                'password' => 'password',
-            ])
-            ->assertSessionHasErrors('ids');
-    }
-}
+it('requires at least one id', function () {
+    actingAsDeleteUsers()
+        ->post(route('users.destroyMultiple'), [
+            'ids' => [],
+            'password' => 'password',
+        ])->assertSessionHasErrors('ids');
+});

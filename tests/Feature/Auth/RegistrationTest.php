@@ -1,32 +1,17 @@
 <?php
 
-namespace Tests\Feature\Auth;
+it('registration screen can be rendered', function () {
+    $this->get(route('register'))->assertOk();
+});
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
+it('new users can register', function () {
+    $this->post(route('register.store'), [
+        'name' => 'Test Name',
+        'last_name' => 'Test Last Name',
+        'email' => 'test@example.com',
+        'password' => 'password',
+        'password_confirmation' => 'password',
+    ])->assertRedirect(route('dashboard', absolute: false));
 
-class RegistrationTest extends TestCase
-{
-    use RefreshDatabase;
-
-    public function test_registration_screen_can_be_rendered()
-    {
-        $response = $this->get(route('register'));
-
-        $response->assertOk();
-    }
-
-    public function test_new_users_can_register()
-    {
-        $response = $this->post(route('register.store'), [
-            'name' => 'Test Name',
-            'last_name' => 'Test Last Name',
-            'email' => 'test@example.com',
-            'password' => 'password',
-            'password_confirmation' => 'password',
-        ]);
-
-        $this->assertAuthenticated();
-        $response->assertRedirect(route('dashboard', absolute: false));
-    }
-}
+    $this->assertAuthenticated();
+});

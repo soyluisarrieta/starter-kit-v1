@@ -1,173 +1,114 @@
 <?php
 
-namespace Tests\Feature\ClientErrors;
-
-use App\Enums\Permissions;
-use App\Models\ClientError;
 use App\Models\User;
 use Database\Seeders\PermissionSeeder;
 use Database\Seeders\RoleSeeder;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
 
-class ClientErrorDashboardTest extends TestCase
-{
-    use RefreshDatabase;
+beforeEach(function () {
+    /** @var Tests\TestCase $this */
+    $this->seed(PermissionSeeder::class);
+    $this->seed(RoleSeeder::class);
+});
 
-    protected function setUp(): void
-    {
-        parent::setUp();
+// --- Index ---
 
-        $this->seed(PermissionSeeder::class);
-        $this->seed(RoleSeeder::class);
-    }
+it('guests are redirected to login', function () {
+    $this->get(route('errors.index'))->assertRedirect(route('login'));
+});
 
-    private function actingAsWithPermission(): static
-    {
-        $user = User::factory()->create();
-        $user->givePermissionTo(Permissions::MANAGE_ERRORS->value);
+it('without permission returns 403', function () {
+    $this->actingAs(User::factory()->create())
+        ->get(route('errors.index'))
+        ->assertForbidden();
+});
 
-        return $this->actingAs($user);
-    }
+it('with permission returns ok', function () {
+    actingAsManageErrors()->get(route('errors.index'))->assertOk();
+});
 
-    private function createClientError(array $attributes = []): ClientError
-    {
-        return ClientError::create([
-            'fingerprint' => $attributes['fingerprint'] ?? fake()->sha256(),
-            'message' => $attributes['message'] ?? 'Test error',
-            'stack' => $attributes['stack'] ?? 'Error: Test\n    at Component',
-            'url' => $attributes['url'] ?? 'http://localhost/dashboard',
-            'first_seen_at' => $attributes['first_seen_at'] ?? now(),
-            'last_seen_at' => $attributes['last_seen_at'] ?? now(),
-            ...$attributes,
-        ]);
-    }
+it('json returns paginated errors', function () {
+    createClientError(['message' => 'Error A']);
+    createClientError(['message' => 'Error B']);
 
-    // --- Index ---
+    $response = actingAsManageErrors()
+        ->getJson(route('errors.index'))
+        ->assertOk()
+        ->assertJsonStructure(['data', 'current_page', 'per_page', 'total']);
 
-    public function test_guests_redirected_to_login(): void
-    {
-        $this->get(route('errors.index'))->assertRedirect(route('login'));
-    }
+    expect($response->json('total'))->toBe(2);
+});
 
-    public function test_without_permission_returns_403(): void
-    {
-        $this->actingAs(User::factory()->create())
-            ->get(route('errors.index'))
-            ->assertForbidden();
-    }
+it('json includes user name', function () {
+    $user = User::factory()->create(['name' => 'Jane']);
+    createClientError(['user_id' => $user->id]);
 
-    public function test_with_permission_returns_ok(): void
-    {
-        $this->actingAsWithPermission()
-            ->get(route('errors.index'))
-            ->assertOk();
-    }
+    $response = actingAsManageErrors()->getJson(route('errors.index'))->assertOk();
 
-    public function test_json_returns_paginated_errors(): void
-    {
-        $this->createClientError(['message' => 'Error A']);
-        $this->createClientError(['message' => 'Error B']);
+    expect($response->json('data.0.user.name'))->toBe('Jane');
+});
 
-        $response = $this->actingAsWithPermission()
-            ->getJson(route('errors.index'))
-            ->assertOk()
-            ->assertJsonStructure(['data', 'current_page', 'per_page', 'total']);
+it('default sort is last seen at desc', function () {
+    $old = createClientError(['last_seen_at' => now()->subHour()]);
+    $recent = createClientError(['last_seen_at' => now()]);
 
-        $this->assertEquals(2, $response->json('total'));
-    }
+    $response = actingAsManageErrors()->getJson(route('errors.index'))->assertOk();
 
-    public function test_json_includes_user_name(): void
-    {
-        $user = User::factory()->create(['name' => 'Jane']);
-        $this->createClientError(['user_id' => $user->id]);
+    $ids = array_column($response->json('data'), 'id');
+    expect($ids[0])->toBe($recent->id);
+});
 
-        $response = $this->actingAsWithPermission()
-            ->getJson(route('errors.index'))
-            ->assertOk();
+// --- Resolve ---
 
-        $this->assertEquals('Jane', $response->json('data.0.user.name'));
-    }
+it('resolve marks error as resolved', function () {
+    $error = createClientError();
 
-    public function test_default_sort_is_last_seen_at_desc(): void
-    {
-        $old = $this->createClientError(['last_seen_at' => now()->subHour()]);
-        $recent = $this->createClientError(['last_seen_at' => now()]);
+    actingAsManageErrors()->patch(route('errors.resolve', $error))->assertRedirect();
 
-        $response = $this->actingAsWithPermission()
-            ->getJson(route('errors.index'))
-            ->assertOk();
+    expect($error->fresh()->resolved_at)->not->toBeNull();
+});
 
-        $ids = array_column($response->json('data'), 'id');
-        $this->assertEquals($recent->id, $ids[0]);
-    }
+it('resolve clears reopened at', function () {
+    $error = createClientError(['reopened_at' => now()]);
 
-    // --- Resolve ---
+    actingAsManageErrors()->patch(route('errors.resolve', $error));
 
-    public function test_resolve_marks_error_as_resolved(): void
-    {
-        $error = $this->createClientError();
+    $error->refresh();
+    expect($error->resolved_at)->not->toBeNull();
+    expect($error->reopened_at)->toBeNull();
+});
 
-        $this->actingAsWithPermission()
-            ->patch(route('errors.resolve', $error))
-            ->assertRedirect();
+it('reopen sets reopened at', function () {
+    $error = createClientError(['resolved_at' => now()]);
 
-        $error->refresh();
-        $this->assertNotNull($error->resolved_at);
-    }
+    actingAsManageErrors()->patch(route('errors.resolve', $error));
 
-    public function test_resolve_clears_reopened_at(): void
-    {
-        $error = $this->createClientError(['reopened_at' => now()]);
+    $error->refresh();
+    expect($error->resolved_at)->toBeNull();
+    expect($error->reopened_at)->not->toBeNull();
+});
 
-        $this->actingAsWithPermission()
-            ->patch(route('errors.resolve', $error));
+it('resolve without permission returns 403', function () {
+    $error = createClientError();
 
-        $error->refresh();
-        $this->assertNotNull($error->resolved_at);
-        $this->assertNull($error->reopened_at);
-    }
+    $this->actingAs(User::factory()->create())
+        ->patch(route('errors.resolve', $error))
+        ->assertForbidden();
+});
 
-    public function test_reopen_sets_reopened_at(): void
-    {
-        $error = $this->createClientError(['resolved_at' => now()]);
+// --- Destroy ---
 
-        $this->actingAsWithPermission()
-            ->patch(route('errors.resolve', $error));
+it('destroy deletes error', function () {
+    $error = createClientError();
 
-        $error->refresh();
-        $this->assertNull($error->resolved_at);
-        $this->assertNotNull($error->reopened_at);
-    }
+    actingAsManageErrors()->delete(route('errors.destroy', $error))->assertRedirect();
 
-    public function test_resolve_without_permission_returns_403(): void
-    {
-        $error = $this->createClientError();
+    $this->assertDatabaseMissing('client_errors', ['id' => $error->id]);
+});
 
-        $this->actingAs(User::factory()->create())
-            ->patch(route('errors.resolve', $error))
-            ->assertForbidden();
-    }
+it('destroy without permission returns 403', function () {
+    $error = createClientError();
 
-    // --- Destroy ---
-
-    public function test_destroy_deletes_error(): void
-    {
-        $error = $this->createClientError();
-
-        $this->actingAsWithPermission()
-            ->delete(route('errors.destroy', $error))
-            ->assertRedirect();
-
-        $this->assertDatabaseMissing('client_errors', ['id' => $error->id]);
-    }
-
-    public function test_destroy_without_permission_returns_403(): void
-    {
-        $error = $this->createClientError();
-
-        $this->actingAs(User::factory()->create())
-            ->delete(route('errors.destroy', $error))
-            ->assertForbidden();
-    }
-}
+    $this->actingAs(User::factory()->create())
+        ->delete(route('errors.destroy', $error))
+        ->assertForbidden();
+});

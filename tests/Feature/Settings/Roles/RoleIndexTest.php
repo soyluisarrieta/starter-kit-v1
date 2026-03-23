@@ -1,62 +1,43 @@
 <?php
 
-namespace Tests\Feature\Settings\Roles;
-
 use App\Enums\Permissions;
 use App\Enums\Roles;
 use App\Models\User;
 use Database\Seeders\PermissionSeeder;
 use Database\Seeders\RoleSeeder;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
 
-class RoleIndexTest extends TestCase
-{
-    use RefreshDatabase;
+beforeEach(function () {
+    /** @var Tests\TestCase $this */
+    $this->seed(PermissionSeeder::class);
+    $this->seed(RoleSeeder::class);
+});
 
-    protected function setUp(): void
-    {
-        parent::setUp();
+it('guests are redirected to login', function () {
+    $this->get(route('roles.edit'))->assertRedirect(route('login'));
+});
 
-        $this->seed(PermissionSeeder::class);
-        $this->seed(RoleSeeder::class);
-    }
+it('without permission returns 403', function () {
+    $this->actingAs(User::factory()->create())
+        ->get(route('roles.edit'))
+        ->assertForbidden();
+});
 
-    public function test_guests_redirected_to_login(): void
-    {
-        $this->get(route('roles.edit'))->assertRedirect(route('login'));
-    }
+it('with permission returns ok', function () {
+    $user = User::factory()->create();
+    $user->givePermissionTo(Permissions::MANAGE_ROLES->value);
 
-    public function test_without_permission_returns_403(): void
-    {
-        $this->actingAs(User::factory()->create())
-            ->get(route('roles.edit'))
-            ->assertForbidden();
-    }
+    $this->actingAs($user)->get(route('roles.edit'))->assertOk();
+});
 
-    public function test_with_permission_returns_ok(): void
-    {
-        $user = User::factory()->create();
-        $user->givePermissionTo(Permissions::MANAGE_ROLES->value);
+it('response excludes super admin role', function () {
+    $user = User::factory()->create();
+    $user->givePermissionTo(Permissions::MANAGE_ROLES->value);
 
-        $this->actingAs($user)
-            ->get(route('roles.edit'))
-            ->assertOk();
-    }
+    $response = $this->actingAs($user)->get(route('roles.edit'))->assertOk();
 
-    public function test_response_excludes_super_admin_role(): void
-    {
-        $user = User::factory()->create();
-        $user->givePermissionTo(Permissions::MANAGE_ROLES->value);
+    $roleNames = collect($response->original->getData()['page']['props']['roles'])
+        ->pluck('name');
 
-        $response = $this->actingAs($user)
-            ->get(route('roles.edit'))
-            ->assertOk();
-
-        $roleNames = collect($response->original->getData()['page']['props']['roles'])
-            ->pluck('name');
-
-        $this->assertFalse($roleNames->contains(Roles::SUPER_ADMIN->value));
-        $this->assertTrue($roleNames->contains(Roles::ADMIN->value));
-    }
-}
+    expect($roleNames->contains(Roles::SUPER_ADMIN->value))->toBeFalse();
+    expect($roleNames->contains(Roles::ADMIN->value))->toBeTrue();
+});
