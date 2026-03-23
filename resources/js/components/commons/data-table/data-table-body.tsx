@@ -1,3 +1,4 @@
+import { InboxIcon } from 'lucide-react';
 import {
     TableBody,
     TableCell,
@@ -12,6 +13,7 @@ interface DataTableBodyProps<TData> {
     rows: DataRow<TData>[];
     visibleColumns: ColumnDef<TData>[];
     selectable: boolean;
+    emptyMessage?: string;
 }
 
 export default function DataTableBody<TData>({
@@ -19,6 +21,22 @@ export default function DataTableBody<TData>({
     visibleColumns,
     selectable,
 }: DataTableBodyProps<TData>) {
+    if (rows.length === 0) {
+        const colSpan = visibleColumns.length + (selectable ? 1 : 0);
+        return (
+            <TableBody>
+                <TableRow>
+                    <TableCell colSpan={colSpan} className="text-center text-muted-foreground/70 py-10">
+                        <div className='flex flex-col justify-center items-center pointer-events-none select-none'>
+                            <InboxIcon className='size-16 opacity-80' strokeWidth={0.4} />
+                            <p className='font-light'>Sin resultados</p>
+                        </div>
+                    </TableCell>
+                </TableRow>
+            </TableBody>
+        );
+    }
+
     return (
         <TableBody>
             {rows.map((row, index) => (

@@ -29,5 +29,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->name('users.destroyMultiple');
 });
 
+Route::post('/client-errors', [\App\Http\Controllers\ClientErrorController::class, 'store'])
+    ->middleware('throttle:10,1')
+    ->name('client-errors.store');
+
 require __DIR__.'/auth.php';
 require __DIR__.'/settings.php';

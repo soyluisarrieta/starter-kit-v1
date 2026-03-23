@@ -20,4 +20,5 @@ export const USER_PERMISSIONS = {
 export const OTHERS_PERMISSIONS = {
     VIEW_DASHBOARD: 'dashboard.view',
     MANAGE_ROLES: 'roles.manage',
+    MANAGE_ERRORS: 'errors.manage',
 } as const satisfies PermissionDef;

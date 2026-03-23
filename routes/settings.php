@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\Permissions;
+use App\Http\Controllers\Settings\ClientErrorController;
 use App\Http\Controllers\Settings\PasswordController;
 use App\Http\Controllers\Settings\ProfileController;
 use App\Http\Controllers\Settings\RoleController;
@@ -26,6 +27,17 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('ajustes/apariencia', function () {
         return Inertia::render('settings/appearance');
     })->name('appearance.edit');
+
+    Route::middleware('can:'.Permissions::MANAGE_ERRORS->value)->group(function () {
+        Route::get('ajustes/errores', [ClientErrorController::class, 'index'])
+            ->name('errors.index');
+
+        Route::patch('settings/errors/{error}', [ClientErrorController::class, 'resolve'])
+            ->name('errors.resolve');
+
+        Route::delete('settings/errors/{error}', [ClientErrorController::class, 'destroy'])
+            ->name('errors.destroy');
+    });
 
     Route::middleware('can:'.Permissions::MANAGE_ROLES->value)->group(function () {
         Route::get('ajustes/roles', [RoleController::class, 'index'])
