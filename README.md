@@ -11,6 +11,23 @@ Starter kit moderno para construir aplicaciones full-stack con Laravel y React, 
 - **Estado**: Zustand (tablas), hooks de React (estado local)
 - **Testing**: PHPUnit (backend)
 
+<!-- ======================================================== -->
+<!-- INICIO: SECCIÓN DE INICIALIZACIÓN                        -->
+<!-- Elimina esta sección después de inicializar el proyecto  -->
+<!-- ======================================================== -->
+
+## Inicialización del Proyecto
+
+Al crear un nuevo proyecto basado en este starter kit, abre Claude Code y dile:
+
+> "inicializa el proyecto siguiendo INIT.md"
+
+Luego actualiza el README con la información de tu proyecto y ejecuta `bun run release`.
+
+<!-- ======================================================== -->
+<!-- FIN: SECCIÓN DE INICIALIZACIÓN                           -->
+<!-- ======================================================== -->
+
 ## Empezar
 
 1. Clona el repositorio.
@@ -55,6 +72,19 @@ bun run format
 ```bash
 # PHPUnit
 php artisan test
+```
+
+## Releases
+
+```bash
+# Patch (1.0.0 → 1.0.1)
+bun run release
+
+# Minor (1.0.0 → 1.1.0)
+bun run release -- --minor
+
+# Major (1.0.0 → 2.0.0)
+bun run release -- --major
 ```
 
 ## Utiles
