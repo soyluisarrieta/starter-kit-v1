@@ -12,10 +12,11 @@ For manual loading, read the SKILL.md file directly.
 
 | Skill | Description |
 | ----- | ----------- |
-| **[react-19](docs/skills/react-19/SKILLmd)** | React 19 patterns, compiler, hooks (includes tanstack-table) |
-| **[typescript](docs/skills/typescript/SKILL.md)** | TypeScript strict config, types, path aliases |
-| **[laravel-12](docs/skills/laravel-12/SKILL.md)** | Laravel 12 patterns (includes validation) |
-| **[project-architecture](docs/skills/project-architecture/SKILL.md)** | Full-stack architecture overview |
+| **[react-19](.claude/skills/react-19/SKILL.md)** | React 19 patterns, compiler, hooks (includes tanstack-table) |
+| **[typescript](.claude/skills/typescript/SKILL.md)** | TypeScript strict config, types, path aliases |
+| **[laravel-12](.claude/skills/laravel-12/SKILL.md)** | Laravel 12 patterns (includes validation) |
+| **[project-architecture](.claude/skills/project-architecture/SKILL.md)** | Full-stack architecture overview |
+| **[git-workflow](.claude/skills/git-workflow/SKILL.md)** | Conventional commits, versioning, release process |
 
 ## Global Rules
 

@@ -47,7 +47,7 @@ laravel-starter-kit/
 │   ├── migrations/
 │   ├── seeders/
 │   └── factories/
-└── docs/skills/           # AI coding skills
+└── .claude/skills/        # AI coding skills
 ```
 
 ## Data Flow
