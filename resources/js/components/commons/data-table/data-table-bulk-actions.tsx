@@ -1,7 +1,4 @@
-import {
-    Trash2Icon,
-    XIcon,
-} from 'lucide-react';
+import { Trash2Icon, XIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useDataTableContext } from './data-table-context';
 import type { BulkActionsConfig } from './types';

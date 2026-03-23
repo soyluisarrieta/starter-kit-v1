@@ -63,7 +63,7 @@ export default function Errors({ errors, queryParams }: ErrorsPageProps) {
 
     const rowActions: RowAction<ClientError>[] = [
         {
-            label: (row) => row.resolved_at ? 'Reabrir' : 'Resolver',
+            label: (row) => (row.resolved_at ? 'Reabrir' : 'Resolver'),
             icon: CheckCircleIcon,
             visible: true,
             onClick: (row) => {
@@ -96,7 +96,7 @@ export default function Errors({ errors, queryParams }: ErrorsPageProps) {
                             cell: ({ row }) => (
                                 <button
                                     type="button"
-                                    className="max-w-xs truncate font-mono text-sm text-left hover:underline cursor-pointer"
+                                    className="max-w-xs cursor-pointer truncate text-left font-mono text-sm hover:underline"
                                     onClick={() => table.setTarget(row)}
                                 >
                                     {row.message}
@@ -174,9 +174,14 @@ export default function Errors({ errors, queryParams }: ErrorsPageProps) {
 
             <Sheet
                 open={!!table.target && !deleteDialog.open}
-                onOpenChange={(open) => { if (!open) table.setTarget(null); }}
+                onOpenChange={(open) => {
+                    if (!open) table.setTarget(null);
+                }}
             >
-                <SheetContent side="right" className="sm:max-w-5xl overflow-y-auto">
+                <SheetContent
+                    side="right"
+                    className="overflow-y-auto sm:max-w-5xl"
+                >
                     {table.target && (
                         <>
                             <SheetHeader>
@@ -188,38 +193,64 @@ export default function Errors({ errors, queryParams }: ErrorsPageProps) {
                                 </SheetDescription>
                             </SheetHeader>
 
-                            <div className="p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
-                                <DetailField label="URL" className="md:col-span-2" value={table.target.url} />
-                                <DetailField label="Usuario" value={table.target.user?.name ?? 'Guest'} />
-                                <DetailField label="Ocurrencias" value={String(table.target.occurrences)} />
+                            <div className="grid grid-cols-1 gap-2 p-4 md:grid-cols-2 lg:grid-cols-3">
+                                <DetailField
+                                    label="URL"
+                                    className="md:col-span-2"
+                                    value={table.target.url}
+                                />
+                                <DetailField
+                                    label="Usuario"
+                                    value={table.target.user?.name ?? 'Guest'}
+                                />
+                                <DetailField
+                                    label="Ocurrencias"
+                                    value={String(table.target.occurrences)}
+                                />
                                 <DetailField
                                     label="Primera vez"
-                                    value={format(table.target.first_seen_at, "dd/MM/yyyy HH:mm:ss", { locale: es })}
+                                    value={format(
+                                        table.target.first_seen_at,
+                                        'dd/MM/yyyy HH:mm:ss',
+                                        { locale: es },
+                                    )}
                                 />
                                 <DetailField
                                     label="Última vez"
-                                    value={format(table.target.last_seen_at, "dd/MM/yyyy HH:mm:ss", { locale: es })}
+                                    value={format(
+                                        table.target.last_seen_at,
+                                        'dd/MM/yyyy HH:mm:ss',
+                                        { locale: es },
+                                    )}
                                 />
                                 {table.target.resolved_at && (
                                     <DetailField
                                         label="Resuelto"
-                                        value={format(table.target.resolved_at, "dd/MM/yyyy HH:mm:ss", { locale: es })}
+                                        value={format(
+                                            table.target.resolved_at,
+                                            'dd/MM/yyyy HH:mm:ss',
+                                            { locale: es },
+                                        )}
                                     />
                                 )}
 
                                 {table.target.stack && (
-                                    <div className='md:col-span-full'>
-                                        <p className="mb-1 text-xs font-medium text-muted-foreground">Stack trace</p>
-                                        <pre className="whitespace-pre-wrap break-all rounded-md bg-muted/50 p-3 font-mono text-xs">
+                                    <div className="md:col-span-full">
+                                        <p className="mb-1 text-xs font-medium text-muted-foreground">
+                                            Stack trace
+                                        </p>
+                                        <pre className="rounded-md bg-muted/50 p-3 font-mono text-xs break-all whitespace-pre-wrap">
                                             {table.target.stack}
                                         </pre>
                                     </div>
                                 )}
 
                                 {table.target.component_stack && (
-                                    <div className='md:col-span-full'>
-                                        <p className="mb-1 text-xs font-medium text-muted-foreground">Component stack</p>
-                                        <pre className="whitespace-pre-wrap break-all rounded-md bg-muted/50 p-3 font-mono text-xs">
+                                    <div className="md:col-span-full">
+                                        <p className="mb-1 text-xs font-medium text-muted-foreground">
+                                            Component stack
+                                        </p>
+                                        <pre className="rounded-md bg-muted/50 p-3 font-mono text-xs break-all whitespace-pre-wrap">
                                             {table.target.component_stack}
                                         </pre>
                                     </div>
@@ -233,9 +264,17 @@ export default function Errors({ errors, queryParams }: ErrorsPageProps) {
     );
 }
 
-function DetailField({ label, value, className }: { label: string; value: string; className?: string }) {
+function DetailField({
+    label,
+    value,
+    className,
+}: {
+    label: string;
+    value: string;
+    className?: string;
+}) {
     return (
-        <div className={cn('rounded-md bg-muted/30 p-3 ', className)}>
+        <div className={cn('rounded-md bg-muted/30 p-3', className)}>
             <p className="text-xs font-medium text-muted-foreground">{label}</p>
             <p className="text-sm break-all">{value}</p>
         </div>

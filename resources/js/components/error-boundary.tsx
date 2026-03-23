@@ -23,12 +23,14 @@ export class ErrorBoundary extends Component<Props, State> {
     componentDidCatch(error: Error, info: ErrorInfo): void {
         console.error('ErrorBoundary caught:', error, info);
 
-        axios.post('/client-errors', {
-            message: error.message,
-            url: window.location.href,
-            stack: error.stack ?? '',
-            component_stack: info.componentStack ?? null,
-        }).catch(() => {});
+        axios
+            .post('/client-errors', {
+                message: error.message,
+                url: window.location.href,
+                stack: error.stack ?? '',
+                component_stack: info.componentStack ?? null,
+            })
+            .catch(() => {});
     }
 
     render() {
@@ -43,7 +45,8 @@ export class ErrorBoundary extends Component<Props, State> {
                         Algo sali&oacute; mal
                     </h2>
                     <p className="mb-6 text-sm text-muted-foreground">
-                        Ocurri&oacute; un error inesperado. Puedes intentar de nuevo o recargar la p&aacute;gina.
+                        Ocurri&oacute; un error inesperado. Puedes intentar de
+                        nuevo o recargar la p&aacute;gina.
                     </p>
                     <div className="flex justify-center gap-3">
                         <button

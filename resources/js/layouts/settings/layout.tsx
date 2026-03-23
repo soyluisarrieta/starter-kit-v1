@@ -48,21 +48,21 @@ export default function SettingsLayout({
         ...baseNavItems,
         ...(canReadRoles
             ? [
-                {
-                    title: 'Roles',
-                    href: editRoles(),
-                    icon: null,
-                } satisfies NavItem,
-            ]
+                  {
+                      title: 'Roles',
+                      href: editRoles(),
+                      icon: null,
+                  } satisfies NavItem,
+              ]
             : []),
         ...(canManageErrors
             ? [
-                {
-                    title: 'Errores',
-                    href: errorsIndex(),
-                    icon: null,
-                } satisfies NavItem,
-            ]
+                  {
+                      title: 'Errores',
+                      href: errorsIndex(),
+                      icon: null,
+                  } satisfies NavItem,
+              ]
             : []),
     ];
 

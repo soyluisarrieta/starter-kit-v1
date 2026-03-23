@@ -1,8 +1,4 @@
-import {
-    TableHead,
-    TableHeader,
-    TableRow,
-} from '@/components/ui/table';
+import { TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { cn } from '@/lib/utils';
 import { DataTableHeaderCheckbox } from './data-table-checkbox';
 import DataTableSortList from './data-table-sort-list';
@@ -48,9 +44,7 @@ export default function DataTableHead<TData>({
                         >
                             <DataTableSortList
                                 columnId={colId}
-                                field={
-                                    'key' in column ? column.key : undefined
-                                }
+                                field={'key' in column ? column.key : undefined}
                                 totalColumns={hideableVisibleCount}
                                 hideable={column.hideable !== false}
                             >

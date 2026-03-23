@@ -35,14 +35,17 @@ export function DataTableRowActions<TData>({
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                     {visible.map((action) => {
-                        const label = typeof action.label === 'function' ? action.label(row) : action.label;
+                        const label =
+                            typeof action.label === 'function'
+                                ? action.label(row)
+                                : action.label;
                         return (
                             <DropdownMenuItem
                                 key={label}
                                 onClick={() => action.onClick(row)}
                                 className={cn(
                                     action.variant === 'destructive' &&
-                                    'text-destructive focus:text-destructive',
+                                        'text-destructive focus:text-destructive',
                                 )}
                             >
                                 {action.icon && (

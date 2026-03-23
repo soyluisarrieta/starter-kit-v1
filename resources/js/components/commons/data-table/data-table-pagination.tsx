@@ -1,4 +1,9 @@
-import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react';
+import {
+    ChevronLeft,
+    ChevronRight,
+    ChevronsLeft,
+    ChevronsRight,
+} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import {
@@ -31,8 +36,8 @@ export default function DataTablePagination({
     };
 
     return (
-        <div className="flex items-center justify-center sm:justify-between border-t-2 pt-3 -mt-2">
-            <div className="hidden sm:flex items-center gap-2">
+        <div className="-mt-2 flex items-center justify-center border-t-2 pt-3 sm:justify-between">
+            <div className="hidden items-center gap-2 sm:flex">
                 <Label>Por Página</Label>
                 <Select value={perPage} onValueChange={onPerPageChange}>
                     <SelectTrigger>
@@ -47,7 +52,7 @@ export default function DataTablePagination({
                 </Select>
             </div>
 
-            <div className="flex flex-col-reverse sm:flex-row items-center gap-3 sm:gap-6">
+            <div className="flex flex-col-reverse items-center gap-3 sm:flex-row sm:gap-6">
                 <span className="text-sm">
                     Página {currentPage} de {lastPage}
                 </span>

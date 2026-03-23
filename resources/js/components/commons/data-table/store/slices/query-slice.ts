@@ -20,45 +20,43 @@ export const createQuerySlice =
         queryParams: DataTableQuery,
         defaultQueryParams: DataTableQuery,
     ): StateCreator<QuerySlice> =>
-        (set, get) => ({
-            route,
-            query: {
-                ...defaultQueryParams,
-                ...queryParams,
-            },
+    (set, get) => ({
+        route,
+        query: {
+            ...defaultQueryParams,
+            ...queryParams,
+        },
 
-            setSearch: (search) =>
-                set((state) => ({
-                    query: { ...state.query, search },
-                })),
+        setSearch: (search) =>
+            set((state) => ({
+                query: { ...state.query, search },
+            })),
 
-            setPerPage: (perPage) =>
-                set((state) => ({
-                    query: { ...state.query, perPage },
-                })),
+        setPerPage: (perPage) =>
+            set((state) => ({
+                query: { ...state.query, perPage },
+            })),
 
-            setSort: (sortBy, sortOrder) =>
-                set((state) => ({
-                    query: { ...state.query, sortBy, sortOrder },
-                })),
+        setSort: (sortBy, sortOrder) =>
+            set((state) => ({
+                query: { ...state.query, sortBy, sortOrder },
+            })),
 
-            refresh: (params) => {
-                const { query, route } = get();
-                const newQuery = { ...query, ...params };
+        refresh: (params) => {
+            const { query, route } = get();
+            const newQuery = { ...query, ...params };
 
-                const isPageOnly =
-                    params !== undefined &&
-                    Object.keys(params).length === 1 &&
-                    'page' in params;
+            const isPageOnly =
+                params !== undefined &&
+                Object.keys(params).length === 1 &&
+                'page' in params;
 
-                router.get(
-                    route.url,
-                    cleanQueryParams(
-                        isPageOnly
-                            ? newQuery
-                            : { ...newQuery, page: undefined },
-                    ),
-                    { preserveState: true, preserveScroll: true },
-                );
-            },
-        });
+            router.get(
+                route.url,
+                cleanQueryParams(
+                    isPageOnly ? newQuery : { ...newQuery, page: undefined },
+                ),
+                { preserveState: true, preserveScroll: true },
+            );
+        },
+    });
