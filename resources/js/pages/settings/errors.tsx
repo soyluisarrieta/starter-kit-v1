@@ -169,6 +169,7 @@ export default function Errors({ errors, queryParams }: ErrorsPageProps) {
                 description="El registro de este error será eliminado permanentemente."
                 method="delete"
                 url={table.target ? destroy(table.target.id).url : null}
+                onSuccess={() => table.setTarget(null)}
                 {...deleteDialog}
             />
 

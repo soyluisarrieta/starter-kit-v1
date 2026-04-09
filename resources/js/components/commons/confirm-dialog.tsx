@@ -56,7 +56,8 @@ export function ConfirmDialog<TData>({
     const onSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
-        if (!url) return;
+        // Guard against double-submit while a request is already in flight
+        if (processing || !url) return;
         clearErrors('password');
 
         if (additionalData) {
@@ -79,9 +80,12 @@ export function ConfirmDialog<TData>({
     return (
         <Dialog
             open={open}
-            onOpenChange={() => {
-                onOpenChange?.(false);
-                reset('password');
+            onOpenChange={(nextOpen) => {
+                // Block any state change while a request is in flight so the
+                // user can't dismiss the dialog mid-submit and trigger duplicates.
+                if (processing) return;
+                onOpenChange?.(nextOpen);
+                if (!nextOpen) reset('password');
             }}
         >
             {children && <DialogTrigger asChild>{children}</DialogTrigger>}
