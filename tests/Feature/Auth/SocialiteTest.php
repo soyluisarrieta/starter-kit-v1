@@ -65,6 +65,21 @@ it('callback rejects sso when email exists without sso link', function () {
     ]);
 });
 
+it('login view exposes flashed error from sso rejection', function () {
+    User::factory()->create(['email' => 'sso@example.com']);
+
+    socialiteMockDriver(socialiteMockUser());
+
+    $this->get(route('auth.sso.callback', 'google'));
+
+    $this->get(route('login'))
+        ->assertOk()
+        ->assertInertia(fn ($page) => $page
+            ->component('auth/login')
+            ->where('error', 'Ya existe una cuenta con este correo. Inicia sesión y vincula Google desde tu perfil.')
+        );
+});
+
 it('callback logs in existing sso user', function () {
     $existing = User::factory()->create([
         'email' => 'sso@example.com',

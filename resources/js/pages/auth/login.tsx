@@ -14,12 +14,14 @@ import { request } from '@/routes/password';
 
 type Props = {
     status?: string;
+    error?: string;
     canResetPassword: boolean;
     canRegister: boolean;
 };
 
 export default function Login({
     status,
+    error,
     canResetPassword,
     canRegister,
 }: Props) {
@@ -29,6 +31,15 @@ export default function Login({
             description="Ingresa tu correo y contraseña para acceder"
         >
             <Head title="Iniciar sesión" />
+
+            {error && (
+                <div
+                    role="alert"
+                    className="rounded-md border border-destructive/50 bg-destructive/10 px-4 py-3 text-sm text-destructive"
+                >
+                    {error}
+                </div>
+            )}
 
             <GoogleButton />
 
