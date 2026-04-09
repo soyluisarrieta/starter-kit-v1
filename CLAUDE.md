@@ -36,6 +36,15 @@ If the user asks for something specific:
 - TypeScript: Use `unknown` instead of `any`; use base constraint (e.g. `DataRow`) when appropriate
 - Keep responses brief and direct
 
+### Bilingual Convention (STRICT)
+
+> **Code in English, UI/UX in Spanish.** This is non-negotiable.
+
+- **English** — class/method/variable/function names, table/column names, route URIs and route names, validation rule keys, code comments, test descriptions, commit messages
+- **Spanish** — all user-visible text: button labels, headings, placeholders, validation attribute aliases (`lang/es/validation.php` → `attributes`), flash messages, toasts, email subjects/bodies, page titles, ErrorBoundary fallback text
+
+Quick check before committing: any user-visible string in English or any code symbol in Spanish are red flags.
+
 ### Git & Commits
 
 - When user says "commit": Deploy AskUserQuestion with 2-3 message options + "Other" for free text
