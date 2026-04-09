@@ -50,7 +50,7 @@ use Illuminate\Validation\Rule;
 
 trait UserValidationRules
 {
-    protected function userRules(?int $userId = null): array
+    protected function userRules(?string $userId = null): array
     {
         return [
             'name' => 'required|string|regex:/^[a-zA-Z\\s]+$/|min:3|max:25',
@@ -60,7 +60,7 @@ trait UserValidationRules
     }
 
     // ✅ Separate some property rules because it is used in multiple requests
-    protected function emailRules(?int $userId = null): array
+    protected function emailRules(?string $userId = null): array
     {
         return [
             'required',

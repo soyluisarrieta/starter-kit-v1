@@ -44,7 +44,7 @@ interface ClientError {
     first_seen_at: string;
     resolved_at: string | null;
     reopened_at: string | null;
-    user: { id: number; name: string; email: string } | null;
+    user: { id: string; name: string; email: string } | null;
 }
 
 interface ErrorsPageProps extends PageProps {

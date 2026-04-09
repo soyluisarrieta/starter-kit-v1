@@ -12,7 +12,7 @@ trait UserValidationRules
      *
      * @return array<string, array<int, \Illuminate\Contracts\Validation\Rule|array<mixed>|string>>
      */
-    protected function userRules(?int $userId = null): array
+    protected function userRules(?string $userId = null): array
     {
         return [
             'name' => 'required|string|regex:/^[a-zA-Z\s]+$/|min:3|max:25',
@@ -27,7 +27,7 @@ trait UserValidationRules
      *
      * @return array<int, \Illuminate\Contracts\Validation\Rule|array<mixed>|string>
      */
-    protected function emailRules(?int $userId = null): array
+    protected function emailRules(?string $userId = null): array
     {
         return [
             'required',

@@ -20,7 +20,7 @@ class DestroyMultipleUsersRequest extends FormRequest
         return [
             'password' => $this->currentPasswordRules(),
             'ids' => ['required', 'array', 'min:1'],
-            'ids.*' => ['required', 'integer', 'exists:users,id'],
+            'ids.*' => ['required', 'uuid', 'exists:users,id'],
         ];
     }
 

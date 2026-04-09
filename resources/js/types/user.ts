@@ -1,7 +1,7 @@
 import type { Role } from '@/types/roles-and-permissions';
 
 export interface User {
-    id: number;
+    id: string;
     name: string;
     last_name: string;
     avatar: string | null;
