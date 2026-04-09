@@ -37,28 +37,54 @@
 
 ## 🚀 Inicialización (Solo para plantilla)
 
-Si el repositorio fue creado desde una plantilla GitHub:
+Si el repositorio fue creado desde esta plantilla, sigue este checklist antes de empezar a desarrollar:
 
-1. **Abre Claude Code** en la carpeta y solicita:
+### Checklist pre-desarrollo
 
-   ```
-   inicializa el proyecto siguiendo INIT.md
-   ```
+- [ ] **Identidad del proyecto**
+  - [ ] Reemplazar `[Nombre del Proyecto]` y la descripción al inicio del README
+  - [ ] Actualizar `APP_NAME` en `.env`
+  - [ ] Cambiar el nombre en `composer.json` (`name`) y `package.json` (`name`)
+  - [ ] Actualizar `CHANGELOG.md` (eliminar histórico de la plantilla)
 
-2. **Actualiza este README**:
-   - Reemplaza `[Nombre del Proyecto]` con el nombre real
-   - Completa las secciones marcadas con `[...]`
-   - Documenta las características principales
-   - Actualiza requisitos e instrucciones específicas
+- [ ] **Tema visual**
+  - [ ] Definir colores en `resources/css/app.css` (bloque `@theme`) — ver `docs/theme.md`
+  - [ ] Definir tipografía en `resources/css/app.css` y `resources/views/app.blade.php`
+  - [ ] Reemplazar `public/favicon.ico`, `public/favicon.svg`, `public/apple-touch-icon.png`
 
-3. **Crea el primer release**:
+- [ ] **Base de datos**
+  - [ ] Configurar `DB_CONNECTION` y credenciales en `.env`
+  - [ ] Editar `database/seeders/UserSeeder.php` con el super admin real (cambiar email, nombre y contraseña por defecto)
+  - [ ] Revisar `database/seeders/PermissionSeeder.php` y `RoleSeeder.php` según las necesidades del proyecto
+  - [ ] Ejecutar `php artisan migrate:fresh --seed`
 
-   ```bash
-   git add .
-   git commit -m "chore: initial commit"
-   bun run release
-   git push -u origin main
-   ```
+- [ ] **Autenticación SSO (opcional)**
+  - [ ] Crear credenciales OAuth en Google Cloud Console
+  - [ ] Setear `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` y `GOOGLE_REDIRECT_URI` en `.env`
+  - [ ] Si no se usará SSO, eliminar el botón en `resources/js/pages/auth/login.tsx` y la ruta en `routes/auth.php`
+
+- [ ] **Mail**
+  - [ ] Configurar `MAIL_*` en `.env` (en local queda `MAIL_MAILER=log` por defecto)
+  - [ ] Cambiar `MAIL_FROM_ADDRESS` y `MAIL_FROM_NAME`
+
+- [ ] **Errores en producción (opcional)**
+  - [ ] Setear `ERRORS_NOTIFY_EMAIL` en `.env` para recibir notificaciones de errores frontend nuevos/frecuentes
+
+- [ ] **Repositorio**
+  - [ ] Reemplazar `git remote` con el del nuevo proyecto
+  - [ ] Crear primer commit limpio: `git add . && git commit -m "chore: initial commit"`
+  - [ ] Crear primer release: `bun run release`
+  - [ ] `git push -u origin main`
+
+### Validación
+
+Antes del primer commit funcional, verifica que todo arranca:
+
+```bash
+composer setup       # instala dependencias y prepara la BD
+composer run dev     # arranca server + queue + vite
+composer run ci:check  # lint + format + types + tests
+```
 
 <!-- ======================================================== -->
 <!-- FIN: SECCIÓN DE INICIALIZACIÓN                           -->
