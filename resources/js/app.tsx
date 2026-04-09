@@ -1,4 +1,5 @@
-import { createInertiaApp, router, type ResolvedComponent } from '@inertiajs/react';
+import { createInertiaApp, router } from '@inertiajs/react';
+import type { ResolvedComponent } from '@inertiajs/react';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { StrictMode } from 'react';
@@ -15,7 +16,9 @@ createInertiaApp({
     resolve: async (name) => {
         const mod = await resolvePageComponent<{ default: ResolvedComponent }>(
             `./pages/${name}.tsx`,
-            import.meta.glob<{ default: ResolvedComponent }>('./pages/**/*.tsx'),
+            import.meta.glob<{ default: ResolvedComponent }>(
+                './pages/**/*.tsx',
+            ),
         );
         return mod.default;
     },
