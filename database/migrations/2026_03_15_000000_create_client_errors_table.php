@@ -15,7 +15,7 @@ return new class extends Migration
             $table->text('stack');
             $table->text('component_stack')->nullable();
             $table->string('url');
-            $table->foreignId('user_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignUuid('user_id')->nullable()->constrained()->nullOnDelete();
             $table->unsignedInteger('occurrences')->default(1);
             $table->timestamp('first_seen_at');
             $table->timestamp('last_seen_at');

@@ -5,6 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -13,7 +14,7 @@ use Spatie\Permission\Traits\HasRoles;
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, HasRoles, Notifiable;
+    use HasFactory, HasRoles, HasUuids, Notifiable;
 
     protected $guarded = [];
 
@@ -50,20 +51,12 @@ class User extends Authenticatable
      */
     public function scopeSearch(Builder $query, ?string $value): Builder
     {
-        $columns = [
-            'numeric' => ['id'],
-            'string' => ['name', 'last_name', 'email'],
-        ];
+        $columns = ['id', 'name', 'last_name', 'email'];
 
         return $query->when($value, function (Builder $query, string $value) use ($columns) {
             $query->where(function (Builder $query) use ($value, $columns) {
-
-                foreach ($columns['string'] as $column) {
+                foreach ($columns as $column) {
                     $query->orWhere($column, 'like', "%{$value}%");
-                }
-
-                foreach ($columns['numeric'] as $column) {
-                    $query->orWhere($column, $value);
                 }
             });
         });
