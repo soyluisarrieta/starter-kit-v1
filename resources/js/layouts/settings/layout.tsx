@@ -8,6 +8,7 @@ import { useCan } from '@/hooks/use-can';
 import { useCurrentUrl } from '@/hooks/use-current-url';
 import { cn, toUrl } from '@/lib/utils';
 import { edit as editAppearance } from '@/routes/appearance';
+import { edit as editConnectedAccounts } from '@/routes/connected-accounts';
 import { index as errorsIndex } from '@/routes/errors';
 import { edit as editProfile } from '@/routes/profile';
 import { edit as editRoles } from '@/routes/roles';
@@ -23,6 +24,11 @@ const baseNavItems: NavItem[] = [
     {
         title: 'Contraseña',
         href: editPassword(),
+        icon: null,
+    },
+    {
+        title: 'Cuentas vinculadas',
+        href: editConnectedAccounts(),
         icon: null,
     },
     {

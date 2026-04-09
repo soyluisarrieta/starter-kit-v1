@@ -2,6 +2,7 @@
 
 use App\Enums\Permissions;
 use App\Http\Controllers\Settings\ClientErrorController;
+use App\Http\Controllers\Settings\ConnectedAccountController;
 use App\Http\Controllers\Settings\PasswordController;
 use App\Http\Controllers\Settings\ProfileController;
 use App\Http\Controllers\Settings\RoleController;
@@ -27,6 +28,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('ajustes/apariencia', function () {
         return Inertia::render('settings/appearance');
     })->name('appearance.edit');
+
+    Route::get('ajustes/cuentas-vinculadas', [ConnectedAccountController::class, 'edit'])
+        ->name('connected-accounts.edit');
+    Route::get('ajustes/cuentas-vinculadas/{provider}/vincular', [ConnectedAccountController::class, 'link'])
+        ->name('connected-accounts.link');
+    Route::get('ajustes/cuentas-vinculadas/{provider}/callback', [ConnectedAccountController::class, 'linkCallback'])
+        ->name('connected-accounts.link-callback');
+    Route::delete('ajustes/cuentas-vinculadas', [ConnectedAccountController::class, 'destroy'])
+        ->name('connected-accounts.destroy');
 
     Route::middleware('can:'.Permissions::MANAGE_ERRORS->value)->group(function () {
         Route::get('ajustes/errores', [ClientErrorController::class, 'index'])
