@@ -5,9 +5,10 @@ use App\Models\User;
 use Database\Seeders\PermissionSeeder;
 use Database\Seeders\RoleSeeder;
 use Spatie\Permission\Models\Role;
+use Tests\TestCase;
 
 beforeEach(function () {
-    /** @var Tests\TestCase $this */
+    /** @var TestCase $this */
     $this->seed(PermissionSeeder::class);
     $this->seed(RoleSeeder::class);
 });

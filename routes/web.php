@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\Permissions;
+use App\Http\Controllers\ClientErrorController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -29,7 +30,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->name('users.destroyMultiple');
 });
 
-Route::post('/client-errors', [\App\Http\Controllers\ClientErrorController::class, 'store'])
+Route::post('/client-errors', [ClientErrorController::class, 'store'])
     ->middleware('throttle:10,1')
     ->name('client-errors.store');
 

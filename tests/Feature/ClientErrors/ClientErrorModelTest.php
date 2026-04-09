@@ -2,6 +2,7 @@
 
 use App\Models\ClientError;
 use App\Models\User;
+use Illuminate\Database\QueryException;
 
 it('client error can be created', function () {
     $error = createClientError(['message' => 'Cannot read properties of undefined']);
@@ -17,7 +18,7 @@ it('fingerprint is unique', function () {
     createClientError(['fingerprint' => 'abc123']);
 
     expect(fn () => createClientError(['fingerprint' => 'abc123']))
-        ->toThrow(\Illuminate\Database\QueryException::class);
+        ->toThrow(QueryException::class);
 });
 
 it('user relationship', function () {
@@ -54,9 +55,9 @@ it('timestamps are cast to datetime', function () {
 
     $error->refresh();
 
-    expect($error->first_seen_at)->toBeInstanceOf(\DateTimeInterface::class);
-    expect($error->last_seen_at)->toBeInstanceOf(\DateTimeInterface::class);
-    expect($error->resolved_at)->toBeInstanceOf(\DateTimeInterface::class);
+    expect($error->first_seen_at)->toBeInstanceOf(DateTimeInterface::class);
+    expect($error->last_seen_at)->toBeInstanceOf(DateTimeInterface::class);
+    expect($error->resolved_at)->toBeInstanceOf(DateTimeInterface::class);
 });
 
 it('unresolved scope', function () {
