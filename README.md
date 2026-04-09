@@ -23,8 +23,8 @@
 
 ## 🛠️ Stack
 
-- **Backend**: Laravel 12 (PHP 8.2+)
-- **Frontend**: React 19 + TypeScript, Inertia.js, Tailwind CSS 4
+- **Backend**: Laravel 13 (PHP 8.3+)
+- **Frontend**: React 19 + TypeScript, Inertia.js 3, Tailwind CSS 4
 - **Autenticación**: Laravel Fortify + Socialite (Google OAuth)
 - **UI**: Radix UI + componentes custom basados en shadcn/ui
 - **Estado**: Zustand (tablas), hooks de React (estado local)
@@ -68,7 +68,7 @@ Si el repositorio fue creado desde una plantilla GitHub:
 
 ### Requisitos
 
-- PHP 8.2+
+- PHP 8.3+
 - Composer
 - Node.js + Bun
 - [Otros requisitos específicos]
@@ -169,4 +169,4 @@ bun run release -- --major
 
 ---
 
-**Última actualización**: 2026-03-23
+**Última actualización**: 2026-04-09
