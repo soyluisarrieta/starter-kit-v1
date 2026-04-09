@@ -31,11 +31,11 @@ it('redirects to provider', function () {
     $this->get(route('auth.sso.redirect', 'google'))->assertRedirect();
 });
 
-it('callback creates new user', function () {
+it('callback creates new sso user with null password and redirects to setup', function () {
     socialiteMockDriver(socialiteMockUser());
 
     $this->get(route('auth.sso.callback', 'google'))
-        ->assertRedirect(route('dashboard'));
+        ->assertRedirect(route('password.setup'));
 
     $this->assertDatabaseHas('users', [
         'email' => 'sso@example.com',
@@ -43,23 +43,26 @@ it('callback creates new user', function () {
         'sso_provider' => 'google',
         'name' => 'John',
         'last_name' => 'Doe',
+        'password_set_at' => null,
     ]);
 
     $this->assertAuthenticated();
 });
 
-it('callback links existing user by email', function () {
-    $existing = User::factory()->create(['email' => 'sso@example.com']);
+it('callback rejects sso when email exists without sso link', function () {
+    User::factory()->create(['email' => 'sso@example.com']);
 
     socialiteMockDriver(socialiteMockUser());
 
     $this->get(route('auth.sso.callback', 'google'))
-        ->assertRedirect(route('dashboard'));
+        ->assertRedirect(route('login'))
+        ->assertSessionHas('error');
 
-    $existing->refresh();
-    expect($existing->sso_id)->toBe('123456');
-    expect($existing->sso_provider)->toBe('google');
-    $this->assertAuthenticated();
+    $this->assertGuest();
+    $this->assertDatabaseMissing('users', [
+        'email' => 'sso@example.com',
+        'sso_id' => '123456',
+    ]);
 });
 
 it('callback logs in existing sso user', function () {
@@ -106,7 +109,7 @@ it('avatar download failure does not prevent user creation', function () {
     socialiteMockDriver(socialiteMockUser(['avatar' => 'https://invalid-url.test/avatar.jpg']));
 
     $this->get(route('auth.sso.callback', 'google'))
-        ->assertRedirect(route('dashboard'));
+        ->assertRedirect(route('password.setup'));
 
     $this->assertDatabaseHas('users', ['email' => 'sso@example.com']);
     $this->assertAuthenticated();

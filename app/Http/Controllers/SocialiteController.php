@@ -7,7 +7,6 @@ use Exception;
 use GuzzleHttp\Client;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -56,31 +55,30 @@ class SocialiteController extends Controller
 
         $lastName = $ssoUser->user['family_name'] ?? $name;
 
-        // find or create user
+        // find user by sso credentials
         $user = User::query()
             ->where('sso_id', $ssoUser->getId())
             ->where('sso_provider', $provider)
             ->first();
 
         if (! $user) {
-            $user = User::query()->where('email', $email)->first();
-
-            if ($user) {
-                $user->fill([
-                    'sso_id' => $ssoUser->getId(),
-                    'sso_provider' => $provider,
-                ]);
-            } else {
-                $user = new User([
-                    'sso_id' => $ssoUser->getId(),
-                    'sso_provider' => $provider,
-                    'name' => $name,
-                    'last_name' => $lastName,
-                    'email' => $email,
-                    'password' => Hash::make(Str::random(24)),
-                    'email_verified_at' => now(),
-                ]);
+            // block sso when an account already exists for this email without sso linked
+            if (User::query()->where('email', $email)->exists()) {
+                return redirect()
+                    ->route('login')
+                    ->with('error', 'Ya existe una cuenta con este correo. Inicia sesión y vincula '.ucfirst($provider).' desde tu perfil.');
             }
+
+            $user = new User([
+                'sso_id' => $ssoUser->getId(),
+                'sso_provider' => $provider,
+                'name' => $name,
+                'last_name' => $lastName,
+                'email' => $email,
+                'password' => Str::random(24),
+                'password_set_at' => null,
+                'email_verified_at' => now(),
+            ]);
 
             $avatarUrl = $ssoUser->getAvatar() ?? $ssoUser->avatar ?? null;
             $this->downloadAvatar($user, $avatarUrl, $provider);
@@ -90,6 +88,11 @@ class SocialiteController extends Controller
 
         // auto-login user
         Auth::login($user, true);
+
+        // force password setup for sso-only accounts
+        if ($user->password_set_at === null) {
+            return redirect()->route('password.setup');
+        }
 
         return redirect()->route('dashboard');
     }

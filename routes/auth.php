@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\SetupPasswordController;
 use App\Http\Controllers\SocialiteController;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
@@ -46,4 +47,12 @@ Route::group(['middleware' => config('fortify.middleware', ['web'])], function (
 Route::controller(SocialiteController::class)->group(function () {
     Route::get('auth/{provider}', 'redirectToProvider')->name('auth.sso.redirect');
     Route::get('auth/{provider}/callback', 'handleProviderCallback')->name('auth.sso.callback');
+});
+
+// Password setup (forced after SSO-only registration)
+Route::middleware(['web', 'auth'])->group(function () {
+    Route::get('configurar-contrasena', [SetupPasswordController::class, 'show'])
+        ->name('password.setup');
+    Route::post('configurar-contrasena', [SetupPasswordController::class, 'store'])
+        ->name('password.setup.store');
 });
