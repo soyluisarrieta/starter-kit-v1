@@ -18,6 +18,7 @@ class UserSeeder extends Seeder
             'last_name' => 'Arrieta',
             'email' => 'luisarrieta796@gmail.com',
             'password' => bcrypt('qweqwe123'),
+            'password_set_at' => now(),
         ])->assignRole(Roles::SUPER_ADMIN->value);
 
         User::firstOrCreate([
@@ -25,6 +26,7 @@ class UserSeeder extends Seeder
             'last_name' => 'Pistala',
             'email' => 'jpaola1017@gmail.com',
             'password' => bcrypt('qweqwe123'),
+            'password_set_at' => now(),
         ])->assignRole(Roles::ADMIN->value);
     }
 }

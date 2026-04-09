@@ -29,6 +29,7 @@ class CreateNewUser implements CreatesNewUsers
             'last_name' => $input['last_name'],
             'email' => $input['email'],
             'password' => $input['password'],
+            'password_set_at' => now(),
         ]);
     }
 }
