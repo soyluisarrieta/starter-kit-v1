@@ -39,6 +39,8 @@ interface ClientError {
     url: string;
     stack: string;
     component_stack: string | null;
+    user_agent: string | null;
+    environment: string | null;
     occurrences: number;
     last_seen_at: string;
     first_seen_at: string;
@@ -208,6 +210,19 @@ export default function Errors({ errors, queryParams }: ErrorsPageProps) {
                                     label="Ocurrencias"
                                     value={String(table.target.occurrences)}
                                 />
+                                {table.target.environment && (
+                                    <DetailField
+                                        label="Entorno"
+                                        value={table.target.environment}
+                                    />
+                                )}
+                                {table.target.user_agent && (
+                                    <DetailField
+                                        label="Navegador"
+                                        className="md:col-span-2"
+                                        value={table.target.user_agent}
+                                    />
+                                )}
                                 <DetailField
                                     label="Primera vez"
                                     value={format(

@@ -37,6 +37,38 @@ it('authenticated user is associated', function () {
     ]);
 });
 
+it('captures user agent and environment from server', function () {
+    $this->withHeader('User-Agent', 'TestBrowser/1.0')
+        ->postJson(route('client-errors.store'), clientErrorStorePayload())
+        ->assertNoContent();
+
+    $error = ClientError::first();
+    expect($error->user_agent)->toBe('TestBrowser/1.0');
+    expect($error->environment)->toBe(config('app.env'));
+});
+
+it('redacts sensitive query parameters from stored url', function () {
+    $this->postJson(route('client-errors.store'), clientErrorStorePayload([
+        'url' => 'https://app.test/dashboard?token=secret123&page=2&api_key=xyz',
+    ]))->assertNoContent();
+
+    $error = ClientError::first();
+    expect($error->url)->toContain('token=%5Bredacted%5D');
+    expect($error->url)->toContain('api_key=%5Bredacted%5D');
+    expect($error->url)->toContain('page=2');
+    expect($error->url)->not->toContain('secret123');
+    expect($error->url)->not->toContain('xyz');
+});
+
+it('preserves urls without query parameters', function () {
+    $this->postJson(route('client-errors.store'), clientErrorStorePayload([
+        'url' => 'https://app.test/dashboard',
+    ]))->assertNoContent();
+
+    $error = ClientError::first();
+    expect($error->url)->toBe('https://app.test/dashboard');
+});
+
 it('duplicate error increments occurrences', function () {
     $payload = clientErrorStorePayload();
 

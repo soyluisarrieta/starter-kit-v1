@@ -16,6 +16,8 @@ return new class extends Migration
             $table->text('component_stack')->nullable();
             $table->string('url');
             $table->foreignUuid('user_id')->nullable()->constrained()->nullOnDelete();
+            $table->string('user_agent', 512)->nullable();
+            $table->string('environment', 32)->nullable();
             $table->unsignedInteger('occurrences')->default(1);
             $table->timestamp('first_seen_at');
             $table->timestamp('last_seen_at');
