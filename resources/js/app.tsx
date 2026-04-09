@@ -1,4 +1,4 @@
-import { createInertiaApp, router } from '@inertiajs/react';
+import { createInertiaApp, router, type ResolvedComponent } from '@inertiajs/react';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { StrictMode } from 'react';
@@ -12,11 +12,13 @@ const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
 createInertiaApp({
     title: (title) => (title ? `${title} - ${appName}` : appName),
-    resolve: (name) =>
-        resolvePageComponent(
+    resolve: async (name) => {
+        const mod = await resolvePageComponent<{ default: ResolvedComponent }>(
             `./pages/${name}.tsx`,
-            import.meta.glob('./pages/**/*.tsx'),
-        ),
+            import.meta.glob<{ default: ResolvedComponent }>('./pages/**/*.tsx'),
+        );
+        return mod.default;
+    },
     setup({ el, App, props }) {
         const root = createRoot(el);
 
