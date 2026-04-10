@@ -1,12 +1,12 @@
 import { useForm } from '@inertiajs/react';
+import type { FormEvent } from 'react';
 import {
     CheckIcon,
     LoaderIcon,
     SaveIcon,
     ShieldCheckIcon,
-    Trash2Icon,
-} from 'lucide-react';
-import type { FormEvent } from 'react';
+    TrashIcon,
+} from '@/components/icons';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -162,7 +162,7 @@ export default function RoleForm({ role, isLastRole }: RoleFormProps) {
                                 : undefined
                         }
                     >
-                        <Trash2Icon />
+                        <TrashIcon />
                         Eliminar
                     </Button>
                 )}

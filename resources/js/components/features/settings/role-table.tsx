@@ -6,9 +6,9 @@ import {
 } from '@tanstack/react-table';
 import type { ExpandedState } from '@tanstack/react-table';
 import type { ColumnDef } from '@tanstack/react-table';
-import type { LucideIcon } from 'lucide-react';
-import { ChevronRightIcon, ShieldCheckIcon } from 'lucide-react';
 import { useMemo, useState } from 'react';
+import type { IconType } from '@/components/icons';
+import { ChevronRightIcon, ShieldCheckIcon } from '@/components/icons';
 import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Spinner } from '@/components/ui/spinner';
@@ -38,7 +38,7 @@ interface GroupRow extends BaseRow {
     isGroup: true;
     id: GroupedPermissionId;
     title: string;
-    icon: LucideIcon;
+    icon: IconType;
     subRows: PermissionRow[];
 }
 

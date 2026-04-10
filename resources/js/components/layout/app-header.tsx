@@ -1,5 +1,11 @@
 import { Link, usePage } from '@inertiajs/react';
-import { BookOpen, Folder, LayoutGrid, Menu, Search } from 'lucide-react';
+import {
+    BookOpenIcon,
+    FolderIcon,
+    LayoutGridIcon,
+    MenuIcon,
+    SearchIcon,
+} from '@/components/icons';
 import AppLogo from '@/components/layout/app-logo';
 import AppLogoIcon from '@/components/layout/app-logo-icon';
 import { Breadcrumbs } from '@/components/layout/breadcrumbs';
@@ -45,7 +51,7 @@ const mainNavItems: NavItem[] = [
     {
         title: 'Inicio',
         href: dashboard(),
-        icon: LayoutGrid,
+        icon: LayoutGridIcon,
     },
 ];
 
@@ -53,12 +59,12 @@ const rightNavItems: NavItem[] = [
     {
         title: 'Repositorio',
         href: 'https://github.com/laravel/react-starter-kit',
-        icon: Folder,
+        icon: FolderIcon,
     },
     {
         title: 'Documentación',
         href: 'https://laravel.com/docs/starter-kits#react',
-        icon: BookOpen,
+        icon: BookOpenIcon,
     },
 ];
 
@@ -86,7 +92,7 @@ export function AppHeader({ breadcrumbs = [] }: Props) {
                                     size="icon"
                                     className="mr-2 size-8.5"
                                 >
-                                    <Menu className="h-5 w-5" />
+                                    <MenuIcon className="h-5 w-5" />
                                 </Button>
                             </SheetTrigger>
                             <SheetContent
@@ -188,7 +194,7 @@ export function AppHeader({ breadcrumbs = [] }: Props) {
                                 size="icon"
                                 className="group h-9 w-9 cursor-pointer"
                             >
-                                <Search className="size-5 opacity-80 group-hover:opacity-100" />
+                                <SearchIcon className="size-5 opacity-80 group-hover:opacity-100" />
                             </Button>
                             <div className="ml-1 hidden gap-1 lg:flex">
                                 {rightNavItems.map((item) => (

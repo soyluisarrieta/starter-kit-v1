@@ -1,9 +1,9 @@
 import {
-    ChevronLeft,
-    ChevronRight,
-    ChevronsLeft,
-    ChevronsRight,
-} from 'lucide-react';
+    ChevronLeftIcon,
+    ChevronRightIcon,
+    ChevronsLeftIcon,
+    ChevronsRightIcon,
+} from '@/components/icons';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import {
@@ -64,7 +64,7 @@ export default function DataTablePagination({
                         disabled={currentPage <= 1}
                         onClick={() => refresh({ page: 1 })}
                     >
-                        <ChevronsLeft className="size-4" />
+                        <ChevronsLeftIcon className="size-4" />
                     </Button>
                     <Button
                         variant="outline"
@@ -72,7 +72,7 @@ export default function DataTablePagination({
                         disabled={currentPage <= 1}
                         onClick={() => refresh({ page: currentPage - 1 })}
                     >
-                        <ChevronLeft className="size-4" />
+                        <ChevronLeftIcon className="size-4" />
                     </Button>
                     <Button
                         variant="outline"
@@ -80,7 +80,7 @@ export default function DataTablePagination({
                         disabled={currentPage >= lastPage}
                         onClick={() => refresh({ page: currentPage + 1 })}
                     >
-                        <ChevronRight className="size-4" />
+                        <ChevronRightIcon className="size-4" />
                     </Button>
                     <Button
                         variant="outline"
@@ -88,7 +88,7 @@ export default function DataTablePagination({
                         disabled={currentPage >= lastPage}
                         onClick={() => refresh({ page: lastPage })}
                     >
-                        <ChevronsRight className="size-4" />
+                        <ChevronsRightIcon className="size-4" />
                     </Button>
                 </div>
             </div>

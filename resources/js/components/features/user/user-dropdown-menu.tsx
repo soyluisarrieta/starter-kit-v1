@@ -1,11 +1,11 @@
+import type { ReactNode } from 'react';
 import {
     CheckIcon,
     EditIcon,
-    Link2Icon,
+    LinkIcon,
     ShieldIcon,
     TrashIcon,
-} from 'lucide-react';
-import type { ReactNode } from 'react';
+} from '@/components/icons';
 import { Button } from '@/components/ui/button';
 import {
     DropdownMenu,
@@ -32,7 +32,7 @@ export default function UserDropdownMenu({ children }: UserDropdownMenuProps) {
                         size="sm"
                     >
                         <span className="group-focus:hidden">
-                            <Link2Icon className="text-muted-foreground" />
+                            <LinkIcon className="text-muted-foreground" />
                         </span>
                         <span className="hidden group-focus:inline-block">
                             <CheckIcon className="text-green-500/80" />

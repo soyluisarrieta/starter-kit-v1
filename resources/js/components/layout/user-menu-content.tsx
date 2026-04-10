@@ -1,5 +1,5 @@
 import { Link, router } from '@inertiajs/react';
-import { LogOut, Settings } from 'lucide-react';
+import { LogOutIcon, SettingsIcon } from '@/components/icons';
 import { UserInfo } from '@/components/layout/user-info';
 import {
     DropdownMenuGroup,
@@ -41,7 +41,7 @@ export function UserMenuContent({ user }: Props) {
                         cacheFor="1m"
                         onClick={cleanup}
                     >
-                        <Settings className="mr-2" />
+                        <SettingsIcon className="mr-2" />
                         Configuración
                     </Link>
                 </DropdownMenuItem>
@@ -55,7 +55,7 @@ export function UserMenuContent({ user }: Props) {
                     onClick={handleLogout}
                     data-test="logout-button"
                 >
-                    <LogOut className="mr-2" />
+                    <LogOutIcon className="mr-2" />
                     Cerrar sesión
                 </Link>
             </DropdownMenuItem>

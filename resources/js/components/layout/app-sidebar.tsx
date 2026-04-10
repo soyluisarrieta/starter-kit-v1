@@ -1,5 +1,10 @@
 import { Link } from '@inertiajs/react';
-import { BookOpen, Folder, HomeIcon, UserIcon } from 'lucide-react';
+import {
+    BookOpenIcon,
+    FolderIcon,
+    HomeIcon,
+    UserIcon,
+} from '@/components/icons';
 import AppLogo from '@/components/layout/app-logo';
 import { NavFooter } from '@/components/layout/nav-footer';
 import { NavMain } from '@/components/layout/nav-main';
@@ -22,12 +27,12 @@ const footerNavItems: NavItem[] = [
     {
         title: 'Repositorio',
         href: 'https://github.com/laravel/react-starter-kit',
-        icon: Folder,
+        icon: FolderIcon,
     },
     {
         title: 'Documentación',
         href: 'https://laravel.com/docs/starter-kits#react',
-        icon: BookOpen,
+        icon: BookOpenIcon,
     },
 ];
 

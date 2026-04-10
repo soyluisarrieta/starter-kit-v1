@@ -1,4 +1,4 @@
-import { UsersIcon, UserCogIcon, BriefcaseIcon } from 'lucide-react';
+import { UsersIcon, UserCogIcon, BriefcaseIcon } from '@/components/icons';
 import type { Permission, PermissionGroupConfig } from '@/types';
 
 export const PERMISSION_GROUPS = {

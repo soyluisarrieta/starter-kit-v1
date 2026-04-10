@@ -1,10 +1,10 @@
 import type { PageProps } from '@inertiajs/core';
 import { Head, router, usePage } from '@inertiajs/react';
-import { PlusIcon } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { ConfirmDialog } from '@/components/commons/confirm-dialog';
 import RoleForm from '@/components/features/settings/role-form';
 import RoleTable from '@/components/features/settings/role-table';
+import { PlusIcon } from '@/components/icons';
 import Heading from '@/components/layout/heading';
 import { Button } from '@/components/ui/button';
 import {

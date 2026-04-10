@@ -1,12 +1,5 @@
 import { format } from 'date-fns';
 import {
-    PencilIcon,
-    ShieldCheckIcon,
-    TrashIcon,
-    VerifiedIcon,
-    EyeIcon,
-} from 'lucide-react';
-import {
     DataTable,
     DataTableRowActions,
 } from '@/components/commons/data-table';
@@ -15,6 +8,13 @@ import type {
     DataTableInstance,
     RowAction,
 } from '@/components/commons/data-table';
+import {
+    PencilIcon,
+    ShieldCheckIcon,
+    TrashIcon,
+    VerifiedIcon,
+    EyeIcon,
+} from '@/components/icons';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { PATHS } from '@/constants/paths';

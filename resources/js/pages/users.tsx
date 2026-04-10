@@ -1,6 +1,5 @@
 import type { PageProps } from '@inertiajs/core';
 import { Head } from '@inertiajs/react';
-import { PlusIcon } from 'lucide-react';
 import { ConfirmDialog } from '@/components/commons/confirm-dialog';
 import { useDataTable } from '@/components/commons/data-table';
 import type {
@@ -10,6 +9,7 @@ import type {
 import UserTable from '@/components/features/user/user-data-table';
 import UserForm from '@/components/features/user/user-form';
 import UserViewSheet from '@/components/features/user/user-view-sheet';
+import { PlusIcon } from '@/components/icons';
 import { Button } from '@/components/ui/button';
 import {
     Dialog,

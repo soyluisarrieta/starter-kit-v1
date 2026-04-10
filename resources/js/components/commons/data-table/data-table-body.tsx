@@ -1,4 +1,4 @@
-import { InboxIcon } from 'lucide-react';
+import { InboxIcon } from '@/components/icons';
 import { TableBody, TableCell, TableRow } from '@/components/ui/table';
 import { cn } from '@/lib/utils';
 import { DataTableRowCheckbox } from './data-table-checkbox';

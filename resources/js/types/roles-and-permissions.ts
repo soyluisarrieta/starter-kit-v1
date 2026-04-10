@@ -1,4 +1,4 @@
-import type { LucideIcon } from 'lucide-react';
+import type { IconType } from '@/components/icons';
 import type { PERMISSION_GROUPS } from '@/constants/permissions';
 
 export interface Role {
@@ -18,7 +18,7 @@ export interface Permission {
 
 export interface PermissionGroupConfig {
     title: string;
-    icon: LucideIcon;
+    icon: IconType;
 }
 
 export type PermissionId = number;
@@ -34,7 +34,7 @@ export type GroupedPermissionId = keyof typeof PERMISSION_GROUPS;
 export interface GroupedPermission {
     id: GroupedPermissionId;
     title: string;
-    icon: LucideIcon;
+    icon: IconType;
     permissions: Permission[];
 }
 

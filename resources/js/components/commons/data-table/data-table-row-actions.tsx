@@ -1,4 +1,4 @@
-import { MoreVerticalIcon } from 'lucide-react';
+import { MoreVerticalIcon } from '@/components/icons';
 import { Button } from '@/components/ui/button';
 import {
     DropdownMenu,

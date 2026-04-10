@@ -3,7 +3,7 @@ import {
     ChevronUpIcon,
     ChevronsUpDownIcon,
     EyeOffIcon,
-} from 'lucide-react';
+} from '@/components/icons';
 import {
     DropdownMenu,
     DropdownMenuContent,

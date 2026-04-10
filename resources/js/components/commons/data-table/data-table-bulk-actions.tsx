@@ -1,4 +1,4 @@
-import { Trash2Icon, XIcon } from 'lucide-react';
+import { TrashIcon, XIcon } from '@/components/icons';
 import { Button } from '@/components/ui/button';
 import { useDataTableContext } from './data-table-context';
 import type { BulkActionsConfig } from './types';
@@ -47,7 +47,7 @@ export function DataTableBulkActions({ config }: DataTableBulkActionsProps) {
                         size="sm"
                         onClick={handleDelete}
                     >
-                        <Trash2Icon className="size-4" />
+                        <TrashIcon className="size-4" />
                         Eliminar
                     </Button>
                 )}

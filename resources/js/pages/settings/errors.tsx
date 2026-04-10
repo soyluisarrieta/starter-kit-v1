@@ -2,7 +2,6 @@ import type { PageProps } from '@inertiajs/core';
 import { Head, router } from '@inertiajs/react';
 import { format, formatDistanceToNow } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { CheckCircleIcon, TrashIcon } from 'lucide-react';
 import { ConfirmDialog } from '@/components/commons/confirm-dialog';
 import {
     DataTable,
@@ -14,6 +13,7 @@ import type {
     Paginated,
     RowAction,
 } from '@/components/commons/data-table';
+import { CheckCircleIcon, TrashIcon } from '@/components/icons';
 import { Badge } from '@/components/ui/badge';
 import {
     Sheet,

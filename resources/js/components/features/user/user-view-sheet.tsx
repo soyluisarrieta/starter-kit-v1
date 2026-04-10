@@ -1,11 +1,11 @@
 import { format } from 'date-fns';
+import UserDropdownMenu from '@/components/features/user/user-dropdown-menu';
 import {
     BadgeCheckIcon,
     EditIcon,
     MailIcon,
     MoreVerticalIcon,
-} from 'lucide-react';
-import UserDropdownMenu from '@/components/features/user/user-dropdown-menu';
+} from '@/components/icons';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';

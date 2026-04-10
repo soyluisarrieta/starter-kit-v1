@@ -1,6 +1,6 @@
 import { useForm } from '@inertiajs/react';
-import { LoaderIcon } from 'lucide-react';
 import type { ReactNode } from 'react';
+import { LoaderIcon } from '@/components/icons';
 import { Button } from '@/components/ui/button';
 import {
     Dialog,
