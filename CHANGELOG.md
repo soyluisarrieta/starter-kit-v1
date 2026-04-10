@@ -1,6 +1,70 @@
 # Changelog
 
 
+## v1.2.0
+
+[compare changes](https://github.com/soyluisarrieta/laravel-starter-kit/compare/v1.1.0...v1.2.0)
+
+### 🚀 Enhancements
+
+- **users:** Migrate users.id from bigint to uuid ([3d32fa6](https://github.com/soyluisarrieta/laravel-starter-kit/commit/3d32fa6))
+- **users:** Add password_set_at column to track password ownership ([bd69b21](https://github.com/soyluisarrieta/laravel-starter-kit/commit/bd69b21))
+- **auth:** Force password setup after sso registration and block duplicate emails ([cd1b30e](https://github.com/soyluisarrieta/laravel-starter-kit/commit/cd1b30e))
+- **settings:** Add connected accounts page to link and unlink google sso ([5fbb404](https://github.com/soyluisarrieta/laravel-starter-kit/commit/5fbb404))
+- **theme:** Apply paylus color palette and document tokens ([3c5b2e1](https://github.com/soyluisarrieta/laravel-starter-kit/commit/3c5b2e1))
+- **errors:** Capture user agent and environment, redact sensitive url params ([53dae8d](https://github.com/soyluisarrieta/laravel-starter-kit/commit/53dae8d))
+
+### 🩹 Fixes
+
+- **release:** Use bunx to invoke changelogen ([d400f4a](https://github.com/soyluisarrieta/laravel-starter-kit/commit/d400f4a))
+- **auth:** Surface flashed error on login page after sso rejection ([c3206f6](https://github.com/soyluisarrieta/laravel-starter-kit/commit/c3206f6))
+- **errors:** Clear stale target after delete and guard confirm dialog against double submit ([b182d13](https://github.com/soyluisarrieta/laravel-starter-kit/commit/b182d13))
+- **ci:** Add axios dependency and build step to ci:check ([c627254](https://github.com/soyluisarrieta/laravel-starter-kit/commit/c627254))
+
+### 💅 Refactors
+
+- **icons:** Migrate from lucide to heroicons 2 outline via barrel ([c0fb026](https://github.com/soyluisarrieta/laravel-starter-kit/commit/c0fb026))
+
+### 📖 Documentation
+
+- **init:** Simplify for GitHub template workflow ([9963c2f](https://github.com/soyluisarrieta/laravel-starter-kit/commit/9963c2f))
+- Enhance readme with kit features and project template ([3185938](https://github.com/soyluisarrieta/laravel-starter-kit/commit/3185938))
+- Create pending list ([d9e3167](https://github.com/soyluisarrieta/laravel-starter-kit/commit/d9e3167))
+- Update pending list ([29d5330](https://github.com/soyluisarrieta/laravel-starter-kit/commit/29d5330))
+- Update pending list ([ad75b33](https://github.com/soyluisarrieta/laravel-starter-kit/commit/ad75b33))
+- Post-laravel-13 cleanup (readme, pendientes, env, spatie config) ([c4d5689](https://github.com/soyluisarrieta/laravel-starter-kit/commit/c4d5689))
+- **claude:** Add bilingual rule (code en, ui es) ([1ff05bb](https://github.com/soyluisarrieta/laravel-starter-kit/commit/1ff05bb))
+- **readme:** Add pre-development checklist for new projects from template ([a7f45a7](https://github.com/soyluisarrieta/laravel-starter-kit/commit/a7f45a7))
+- Clear pendientes list ([58a35bc](https://github.com/soyluisarrieta/laravel-starter-kit/commit/58a35bc))
+
+### 🏡 Chore
+
+- **skills:** Move skills to .claude and add git-workflow ([9d7e523](https://github.com/soyluisarrieta/laravel-starter-kit/commit/9d7e523))
+- **inertia:** Migrate config and blade to inertia v3 conventions ([e1fbebb](https://github.com/soyluisarrieta/laravel-starter-kit/commit/e1fbebb))
+- **frontend:** Bump @inertiajs/react and vite to v3/v8 for inertia v3 compat ([985a25d](https://github.com/soyluisarrieta/laravel-starter-kit/commit/985a25d))
+- **users:** Align validation rules and types with uuid user id ([a25c13c](https://github.com/soyluisarrieta/laravel-starter-kit/commit/a25c13c))
+
+### ✅ Tests
+
+- **backend:** Migrate from PHPUnit to Pest ([3d7db20](https://github.com/soyluisarrieta/laravel-starter-kit/commit/3d7db20))
+- **frontend:** Add Vitest and React Testing Library ([3247430](https://github.com/soyluisarrieta/laravel-starter-kit/commit/3247430))
+- Add data-table slice and utility tests ([f7ede70](https://github.com/soyluisarrieta/laravel-starter-kit/commit/f7ede70))
+
+### 🎨 Styles
+
+- **frontend:** Apply prettier formatting ([691e93f](https://github.com/soyluisarrieta/laravel-starter-kit/commit/691e93f))
+- **js:** Split inertia type imports and remove unused eslint directive ([bf162d5](https://github.com/soyluisarrieta/laravel-starter-kit/commit/bf162d5))
+- **php:** Apply pint fully_qualified_strict_types and ordered_imports ([fdfcf43](https://github.com/soyluisarrieta/laravel-starter-kit/commit/fdfcf43))
+
+### 🤖 CI
+
+- Run pest and js tests in workflow ([dfa3d5b](https://github.com/soyluisarrieta/laravel-starter-kit/commit/dfa3d5b))
+
+### ❤️ Contributors
+
+- Luis Arrieta <luisarrieta796@gmail.com>
+- Luis Arrieta Avilez ([@soyluisarrieta](https://github.com/soyluisarrieta))
+
 ## v1.1.0
 
 
